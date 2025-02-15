@@ -33,6 +33,7 @@ import { underStandard } from "../lib";
  * pull: The item to pull, or a list of options to pull.
  * name: If a list of options is given, what to use for the task (& sim) name.
  * description: Extra text to include in the sim message.
+ * priority: The number of turns this pull would save or generate.
  */
 type PullSpec = {
   optional?: boolean;
@@ -41,6 +42,7 @@ type PullSpec = {
   post?: () => void;
   description?: string;
   price?: number;
+  priority: number;
 } & ({ pull: Item } | { pull: Item[] | (() => Item | Item[] | undefined); name: string });
 
 export const pulls: PullSpec[] = [
@@ -59,6 +61,7 @@ export const pulls: PullSpec[] = [
       if (myDaycount() > 1 && myAdventures() > 5) return undefined;
       return true;
     },
+    priority: 200,
   },
   {
     pull: $item`Ol' Scratch's salad fork`,
@@ -69,10 +72,12 @@ export const pulls: PullSpec[] = [
       return true;
     },
     price: 400000,
+    priority: 60,
   },
   {
     pull: $item`crepe paper parachute cape`,
     optional: true,
+    priority: 10,
   },
   {
     pull: $item`Frosty's frosty mug`,
@@ -83,11 +88,13 @@ export const pulls: PullSpec[] = [
       return true;
     },
     price: 200000,
+    priority: 100,
   },
   {
     pull: $item`Bowl of Infinite Jelly`,
     useful: () => myFullness() === 0,
     optional: true,
+    priority: 40,
   },
   {
     pull: $item`milk of magnesium`,
@@ -98,44 +105,53 @@ export const pulls: PullSpec[] = [
       if (myDaycount() > 1 && myAdventures() > 5) return undefined;
       return true;
     },
+    priority: 5,
   },
   // Hero keys
   {
     pull: $item`daily dungeon malware`,
     useful: () => keyStrategy.useful(Keys.Malware),
+    priority: 1002,
   },
   {
     name: "Key Zappable",
     pull: () => keyStrategy.getZapChoice(0),
     useful: () => keyStrategy.useful(Keys.Zap),
     duplicate: true,
+    priority: 1001,
   },
   {
     name: "Key Zappable 2",
     pull: () => keyStrategy.getZapChoice(1),
     useful: () => keyStrategy.useful(Keys.Zap2),
     duplicate: true,
+    priority: 1000,
   },
   // Other adventure pulls
   {
     pull: $item`mafia thumb ring`,
     optional: true,
+    priority: 12,
   },
   {
     pull: $item`carnivorous potted plant`,
     optional: true,
+    priority: 2,
   },
   // Survivability pulls
   {
     pull: $item`nurse's hat`,
+    priority: 100,
   },
   {
     pull: $item`sea salt scrubs`,
     useful: () => have($skill`Torso Awareness`),
+    priority: 99,
   },
   {
     pull: $item`hopping socks`, // +max MP item
     useful: () => !have($skill`Torso Awareness`) && !have($item`SpinMaster™ lathe`),
+    priority: 98,
   },
   // General pulls
   {
@@ -143,6 +159,7 @@ export const pulls: PullSpec[] = [
     useful: () => args.minor.lgr,
     optional: true,
     description: 'Farming currency; see the argument "lgr"',
+    priority: 90,
   },
   {
     name: "Ore",
@@ -160,6 +177,7 @@ export const pulls: PullSpec[] = [
       return itemAmount(Item.get(get("trapperOre"))) < 3 && step("questL08Trapper") < 2;
     },
     duplicate: true,
+    priority: 80,
   },
   {
     pull: $item`1,970 carat gold`,
@@ -176,6 +194,7 @@ export const pulls: PullSpec[] = [
       if (step("questL11Black") > 2) return false;
       return undefined;
     },
+    priority: 70,
   },
   {
     pull: $item`1952 Mickey Mantle card`,
@@ -184,11 +203,13 @@ export const pulls: PullSpec[] = [
       if (step("questL11Black") >= 2 && myTurncount() >= 200) return true;
       return undefined;
     },
+    priority: 69,
   },
   {
     pull: $items`Greatest American Pants, navel ring of navel gazing, peppermint parasol`,
     optional: true,
     name: "Runaway IoTM",
+    priority: 10.01,
   },
   {
     pull: $items`aquaviolet jub-jub bird, charpuce jub-jub bird, crimsilion jub-jub bird, stomp box`,
@@ -209,6 +230,7 @@ export const pulls: PullSpec[] = [
         cliExecute("set _commaRunDone = true");
       }
     },
+    priority: 10,
   },
   {
     pull: $item`ring of conflict`, // Last chance for -5% combat frequency
@@ -217,8 +239,9 @@ export const pulls: PullSpec[] = [
       !have($item`Space Trip safety headphones`) &&
       storageAmount($item`Space Trip safety headphones`) === 0 &&
       !have($item`protonic accelerator pack`),
+    priority: 5,
   },
-  { pull: $item`antique machete` },
+  { pull: $item`antique machete`, priority: 12 },
   {
     pull: $item`book of matches`,
     useful: () =>
@@ -227,9 +250,10 @@ export const pulls: PullSpec[] = [
         have($skill`Map the Monsters`) &&
         have($familiar`Melodramedary`)
       ),
+    priority: 10
   },
-  { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2 },
-  { pull: $item`Buddy Bjorn`, useful: () => yellowSubmarinePossible(true), optional: true },
+  { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2, priority: 9.01 },
+  { pull: $item`Buddy Bjorn`, useful: () => yellowSubmarinePossible(true), optional: true, priority: 9 },
   {
     pull: $item`killing jar`,
     useful: () => {
@@ -240,15 +264,17 @@ export const pulls: PullSpec[] = [
         get("desertExploration") < 100
       );
     },
+    priority: 8,
   },
-  { pull: $item`old patched suit-pants`, optional: true },
+  { pull: $item`old patched suit-pants`, optional: true, priority: 5.05 },
   {
     pull: $item`transparent pants`,
     optional: true,
     useful: () => !have($item`designer sweatpants`),
+    priority: 5.04,
   },
-  { pull: $item`deck of lewd playing cards`, optional: true },
-  { pull: $item`gravy boat`, useful: () => !underStandard() },
+  { pull: $item`deck of lewd playing cards`, optional: true, priority: 5.03 },
+  { pull: $item`gravy boat`, useful: () => !underStandard(), priority: 5.02 },
   {
     pull: $item`Mohawk wig`,
     useful: () => {
@@ -256,8 +282,9 @@ export const pulls: PullSpec[] = [
       if (have($item`S.O.C.K.`)) return true; // If one didn't drop naturally
       return undefined;
     },
+    priority: 5.01,
   },
-  { pull: $item`11-leaf clover`, duplicate: true, useful: () => get("zeppelinProtestors") < 80 },
+  { pull: $item`11-leaf clover`, duplicate: true, useful: () => get("zeppelinProtestors") < 80, priority: 5 },
   {
     pull: $item`wet stew`,
     useful: () =>
@@ -265,9 +292,11 @@ export const pulls: PullSpec[] = [
       !have($item`wet stunt nut stew`) &&
       !have($item`wet stew`) &&
       (!have($item`lion oil`) || !have($item`bird rib`)),
+    priority: 5
   },
   {
     pull: $item`Flash Liquidizer Ultra Dousing Accessory`,
+    priority: 4
   },
   {
     pull: $item`Shore Inc. Ship Trip Scrip`,
@@ -286,6 +315,7 @@ export const pulls: PullSpec[] = [
       return scripNeeded > 0;
     },
     optional: true,
+    priority: 3
   },
 ];
 
