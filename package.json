@@ -1,0 +1,55 @@
+{
+  "name": "loopsmol",
+  "version": "0.1.0",
+  "description": "Shrunken Adventurer script",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node --no-warnings --loader ts-node/esm/transpile-only ./build.mjs",
+    "check": "tsc",
+    "lint": "eslint src && prettier --check .",
+    "lint:fix": "eslint src --fix && prettier --check --write ."
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/node": "^20.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "esbuild": "^0.24.2",
+    "esbuild-plugin-babel": "^0.2.3",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-libram": "^0.4.21",
+    "prettier": "^2.3.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "core-js": "^3.16.4",
+    "garbo-lib": "^0.0.6",
+    "grimoire-kolmafia": "^0.3.26",
+    "kolmafia": "^5.28301.0",
+    "libram": "^0.9.31",
+    "mafia-shared-relay": "^0.0.7",
+    "node": "^21.1.0"
+  },
+  "author": "Kasekopf",
+  "license": "ISC",
+  "repository": "https://github.com/Kasekopf/loopsmol",
+  "keywords": [
+    "KoLMafia",
+    "JS",
+    "TS"
+  ],
+  "bugs": {
+    "url": "https://github.com/Kasekopf/loopsmol/issues"
+  },
+  "homepage": "https://github.com/Kasekopf/loopsmol",
+  "private": true,
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}
