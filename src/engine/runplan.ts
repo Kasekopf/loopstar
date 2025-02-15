@@ -16,7 +16,8 @@ export class RunPlan {
     quests: Quest[],
     summonStrategy: SummonStrategy,
     pullStrategy: PullStrategy,
-    keyStrategy: KeyStrategy) {
+    keyStrategy: KeyStrategy
+  ) {
     this.quests = quests;
     this.summonStrategy = summonStrategy;
     this.pullStrategy = pullStrategy;
@@ -30,11 +31,7 @@ export class RunPlan {
   }
 
   getTasks(): Task[] {
-    const quests = [
-      ...this.quests,
-      this.summonStrategy.getQuest(),
-      this.pullStrategy.getQuest(),
-    ]
+    const quests = [...this.quests, this.summonStrategy.getQuest(), this.pullStrategy.getQuest()];
     const tasks = prioritize(getTasks(quests));
     for (const task of tasks) {
       if (task.limit.soft) {

@@ -45,9 +45,4 @@ const allQuests: Quest[] = [
   DigitalQuest,
 ];
 
-export const basePlan: RunPlan = new RunPlan(
-  allQuests,
-  summonStrategy,
-  pullStrategy,
-  keyStrategy,
-)
+export const basePlan: RunPlan = new RunPlan(allQuests, summonStrategy, pullStrategy, keyStrategy);

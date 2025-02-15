@@ -518,7 +518,7 @@ export class PullStrategy implements QuestStrategy {
           freeaction: true,
         },
       ],
-    }
+    };
   }
 }
 
