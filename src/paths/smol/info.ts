@@ -5,6 +5,7 @@ import { Engine } from "../../engine/engine";
 import { runChoice, visitUrl } from "kolmafia";
 import { SmolDietQuest } from "./tasks";
 import { RunPlan } from "../../engine/runplan";
+import { smolPulls } from "./pulls";
 
 export class SmolInfo implements PathInfo {
   getPath() {
@@ -13,6 +14,7 @@ export class SmolInfo implements PathInfo {
 
   getPlan(plan: RunPlan): RunPlan {
     plan.quests.concat(SmolDietQuest);
+    plan.pullStrategy.add(smolPulls);
     return plan;
   }
 

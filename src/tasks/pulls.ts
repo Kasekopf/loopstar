@@ -5,10 +5,6 @@ import {
   isUnrestricted,
   Item,
   itemAmount,
-  myAdventures,
-  myDaycount,
-  myFullness,
-  myInebriety,
   myMeat,
   myTurncount,
   pullsRemaining,
@@ -35,7 +31,7 @@ import { underStandard } from "../lib";
  * description: Extra text to include in the sim message.
  * priority: The number of turns this pull would save or generate.
  */
-type PullSpec = {
+export type PullSpec = {
   optional?: boolean;
   useful?: () => boolean | undefined;
   duplicate?: boolean;
@@ -46,66 +42,10 @@ type PullSpec = {
 } & ({ pull: Item } | { pull: Item[] | (() => Item | Item[] | undefined); name: string });
 
 export const pulls: PullSpec[] = [
-  // Food
-  {
-    name: "Cookbookbat Food of Legend",
-    pull: () => {
-      const result: Item[] = [];
-      if (!get("calzoneOfLegendEaten")) result.push($item`Calzone of Legend`);
-      if (!get("pizzaOfLegendEaten")) result.push($item`Pizza of Legend`);
-      if (!get("deepDishOfLegendEaten")) result.push($item`Deep Dish of Legend`);
-      return result;
-    },
-    useful: () => {
-      if (myFullness() >= 1) return false;
-      if (myDaycount() > 1 && myAdventures() > 5) return undefined;
-      return true;
-    },
-    priority: 200,
-  },
-  {
-    pull: $item`Ol' Scratch's salad fork`,
-    useful: () => {
-      if (args.smol.skipfork) return false;
-      if (myFullness() >= 1) return false;
-      if (myDaycount() > 1 && myAdventures() > 5) return undefined;
-      return true;
-    },
-    price: 400000,
-    priority: 60,
-  },
   {
     pull: $item`crepe paper parachute cape`,
     optional: true,
     priority: 10,
-  },
-  {
-    pull: $item`Frosty's frosty mug`,
-    useful: () => {
-      if (args.smol.skipmug) return false;
-      if (myInebriety() >= 1) return false;
-      if (myDaycount() > 1 && myAdventures() > 5) return undefined;
-      return true;
-    },
-    price: 200000,
-    priority: 100,
-  },
-  {
-    pull: $item`Bowl of Infinite Jelly`,
-    useful: () => myFullness() === 0,
-    optional: true,
-    priority: 40,
-  },
-  {
-    pull: $item`milk of magnesium`,
-    useful: () => {
-      if (args.smol.skipmilk) return false;
-      if (get("_milkOfMagnesiumUsed")) return false;
-      if (myFullness() >= 1) return false;
-      if (myDaycount() > 1 && myAdventures() > 5) return undefined;
-      return true;
-    },
-    priority: 5,
   },
   // Hero keys
   {
@@ -137,21 +77,6 @@ export const pulls: PullSpec[] = [
     pull: $item`carnivorous potted plant`,
     optional: true,
     priority: 2,
-  },
-  // Survivability pulls
-  {
-    pull: $item`nurse's hat`,
-    priority: 100,
-  },
-  {
-    pull: $item`sea salt scrubs`,
-    useful: () => have($skill`Torso Awareness`),
-    priority: 99,
-  },
-  {
-    pull: $item`hopping socks`, // +max MP item
-    useful: () => !have($skill`Torso Awareness`) && !have($item`SpinMaster™ lathe`),
-    priority: 98,
   },
   // General pulls
   {
@@ -271,13 +196,6 @@ export const pulls: PullSpec[] = [
     },
     priority: 8,
   },
-  { pull: $item`old patched suit-pants`, optional: true, priority: 5.05 },
-  {
-    pull: $item`transparent pants`,
-    optional: true,
-    useful: () => !have($item`designer sweatpants`),
-    priority: 5.04,
-  },
   { pull: $item`deck of lewd playing cards`, optional: true, priority: 5.03 },
   { pull: $item`gravy boat`, useful: () => !underStandard(), priority: 5.02 },
   {
@@ -330,14 +248,16 @@ export const pulls: PullSpec[] = [
 ];
 
 class Pull {
-  items: () => (Item | undefined)[];
-  name: string;
-  optional: boolean;
-  duplicate: boolean;
-  useful: () => boolean | undefined;
-  post: () => void;
-  description?: string;
-  price?: number;
+  readonly items: () => (Item | undefined)[];
+  readonly name: string;
+  readonly optional: boolean;
+  readonly duplicate: boolean;
+  readonly useful: () => boolean | undefined;
+  readonly post: () => void;
+  readonly description?: string;
+  readonly price?: number;
+  readonly priority: number;
+  state: PullState;
 
   constructor(spec: PullSpec) {
     if ("name" in spec) {
@@ -369,6 +289,8 @@ class Pull {
       (() => {
         null;
       });
+    this.priority = spec.priority;
+    this.state = PullState.MAYBE_UNSURE;
   }
 
   public wasPulled(pulled: Set<Item>) {
@@ -416,11 +338,14 @@ enum PullState {
 
 export class PullStrategy implements QuestStrategy {
   pulls: Pull[];
-  enabled: PullState[];
 
   constructor(pulls: PullSpec[]) {
-    this.pulls = pulls.map((pull) => new Pull(pull));
-    this.enabled = pulls.map(() => PullState.MAYBE_UNSURE);
+    this.pulls = [];
+    this.add(pulls);
+  }
+
+  public add(pulls: PullSpec[]) {
+    this.pulls.concat(pulls.map((pull) => new Pull(pull)));
   }
 
   public update(): void {
@@ -437,20 +362,20 @@ export class PullStrategy implements QuestStrategy {
 
     for (let i = 0; i < this.pulls.length; i++) {
       if (this.pulls[i].wasPulled(pulled)) {
-        this.enabled[i] = PullState.PULLED;
+        this.pulls[i].state = PullState.PULLED;
         continue;
       }
 
       switch (this.pulls[i].shouldPull()) {
         case false:
-          this.enabled[i] = PullState.UNNEEDED;
+          this.pulls[i].state = PullState.UNNEEDED;
           continue;
         case true:
-          this.enabled[i] = count > 0 ? PullState.READY : PullState.MAYBE_IFROOM;
+          this.pulls[i].state = count > 0 ? PullState.READY : PullState.MAYBE_IFROOM;
           count--;
           continue;
         case undefined:
-          this.enabled[i] = PullState.MAYBE_UNSURE;
+          this.pulls[i].state = PullState.MAYBE_UNSURE;
           count--;
           continue;
       }
@@ -473,7 +398,7 @@ export class PullStrategy implements QuestStrategy {
    */
   public pullIfReady(item: Item): boolean {
     for (let i = 0; i < this.pulls.length; i++) {
-      if (this.enabled[i] !== PullState.MAYBE_UNSURE) continue;
+      if (this.pulls[i].state !== PullState.MAYBE_UNSURE) continue;
       const options = this.pulls[i].items();
       if (options.includes(item)) {
         this.pulls[i].pull();
@@ -493,10 +418,10 @@ export class PullStrategy implements QuestStrategy {
             name: pull.name,
             priority: () => Priorities.Free,
             after: [],
-            ready: () => this.enabled[index] === PullState.READY,
+            ready: () => this.pulls[index].state === PullState.READY,
             completed: () =>
-              this.enabled[index] === PullState.PULLED ||
-              this.enabled[index] === PullState.UNNEEDED,
+              this.pulls[index].state === PullState.PULLED ||
+              this.pulls[index].state === PullState.UNNEEDED,
             do: () => pull.pull(),
             post: () => {
               pull.post();
