@@ -25,7 +25,7 @@ export const DietQuest: Quest = {
       name: "Eat",
       ready: () =>
         atLevel(5) &&
-        (have($item`Ol' Scratch's salad fork`) || args.minor.skipfork) &&
+        (have($item`Ol' Scratch's salad fork`) || args.smol.skipfork) &&
         ((!get("pizzaOfLegendEaten") && have($item`Pizza of Legend`)) ||
           (!get("calzoneOfLegendEaten") && have($item`Calzone of Legend`)) ||
           (!get("deepDishOfLegendEaten") && have($item`Deep Dish of Legend`))) &&
@@ -36,7 +36,7 @@ export const DietQuest: Quest = {
         useSkill($skill`Cannelloni Cocoon`);
         if (have($item`milk of magnesium`) && !get("_milkOfMagnesiumUsed"))
           use($item`milk of magnesium`);
-        if (!args.minor.skipfork) eat(1, $item`Ol' Scratch's salad fork`);
+        if (!args.smol.skipfork) eat(1, $item`Ol' Scratch's salad fork`);
 
         if (!get("calzoneOfLegendEaten") && have($item`Calzone of Legend`))
           eat(1, $item`Calzone of Legend`);
@@ -53,14 +53,14 @@ export const DietQuest: Quest = {
     },
     {
       name: "Drink",
-      ready: () => atLevel(11) && (have($item`Frosty's frosty mug`) || args.minor.skipmug),
+      ready: () => atLevel(11) && (have($item`Frosty's frosty mug`) || args.smol.skipmug),
       completed: () =>
         myInebriety() === 1 || (!have($item`astral pilsner`) && !have($item`astral six-pack`)),
       do: () => {
         if (have($item`astral six-pack`)) use($item`astral six-pack`);
         customRestoreMp(20);
         useSkill($skill`Cannelloni Cocoon`);
-        if (!args.minor.skipmug) drink(1, $item`Frosty's frosty mug`);
+        if (!args.smol.skipmug) drink(1, $item`Frosty's frosty mug`);
         drink(1, $item`astral pilsner`);
       },
       outfit: {
