@@ -1,20 +1,19 @@
 import { $path, set } from "libram";
 import { PathInfo } from "../pathinfo";
-import { Quest, Task } from "../../engine/task";
+import { Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { runChoice, visitUrl } from "kolmafia";
 import { SmolDietQuest } from "./tasks";
+import { RunPlan } from "../../engine/runplan";
 
 export class SmolInfo implements PathInfo {
   getPath() {
     return $path`A Shrunken Adventurer am I`;
   }
 
-  getQuests(quests: Quest[]) {
-    return [
-      ...quests,
-      SmolDietQuest,
-    ];
+  getPlan(plan: RunPlan): RunPlan {
+    plan.quests.concat(SmolDietQuest);
+    return plan;
   }
 
   getEngine(tasks: Task[], ignoreTasks: string[], completedTasks: string[]): Engine {

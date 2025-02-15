@@ -223,7 +223,7 @@ enum KeyState {
   IMPOSSIBLE = "Impossible",
 }
 
-class KeyStrategy {
+export class KeyStrategy {
   plan = new Map<Keys, KeyState>();
   tasks: KeyTask[];
   zap_choice?: Item[];

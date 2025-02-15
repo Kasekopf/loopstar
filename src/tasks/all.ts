@@ -15,18 +15,17 @@ import { MacguffinQuest } from "./level11";
 import { WarQuest } from "./level12";
 import { TowerQuest } from "./level13";
 import { MiscQuest, WandQuest } from "./misc";
-import { PullQuest } from "./pulls";
-import { DigitalQuest, KeysQuest } from "./keys";
-import { SummonQuest } from "./summons";
+import { DigitalQuest, KeysQuest, keyStrategy } from "./keys";
+import { summonStrategy } from "./summons";
 import { Quest } from "../engine/task";
+import { pullStrategy } from "./pulls";
+import { RunPlan } from "../engine/runplan";
 
-export const allQuests: Quest[] = [
+const allQuests: Quest[] = [
   TootQuest,
   MiscQuest,
-  PullQuest,
   WandQuest,
   KeysQuest,
-  SummonQuest,
   MosquitoQuest,
   TavernQuest,
   BatQuest,
@@ -44,4 +43,11 @@ export const allQuests: Quest[] = [
   WarQuest,
   TowerQuest,
   DigitalQuest,
-]
+];
+
+export const basePlan: RunPlan = new RunPlan(
+  allQuests,
+  summonStrategy,
+  pullStrategy,
+  keyStrategy,
+)

@@ -19,7 +19,7 @@ import {
 import { $familiar, $item, $items, $skill, get, have, set } from "libram";
 import { args, toTempPref } from "../args";
 import { Priorities } from "../engine/priority";
-import { Quest, Task } from "../engine/task";
+import { Quest, QuestStrategy, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Keys, keyStrategy } from "./keys";
 import { trainSetAvailable } from "./misc";
@@ -250,10 +250,15 @@ export const pulls: PullSpec[] = [
         have($skill`Map the Monsters`) &&
         have($familiar`Melodramedary`)
       ),
-    priority: 10
+    priority: 10,
   },
   { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2, priority: 9.01 },
-  { pull: $item`Buddy Bjorn`, useful: () => yellowSubmarinePossible(true), optional: true, priority: 9 },
+  {
+    pull: $item`Buddy Bjorn`,
+    useful: () => yellowSubmarinePossible(true),
+    optional: true,
+    priority: 9,
+  },
   {
     pull: $item`killing jar`,
     useful: () => {
@@ -284,7 +289,12 @@ export const pulls: PullSpec[] = [
     },
     priority: 5.01,
   },
-  { pull: $item`11-leaf clover`, duplicate: true, useful: () => get("zeppelinProtestors") < 80, priority: 5 },
+  {
+    pull: $item`11-leaf clover`,
+    duplicate: true,
+    useful: () => get("zeppelinProtestors") < 80,
+    priority: 5,
+  },
   {
     pull: $item`wet stew`,
     useful: () =>
@@ -292,11 +302,11 @@ export const pulls: PullSpec[] = [
       !have($item`wet stunt nut stew`) &&
       !have($item`wet stew`) &&
       (!have($item`lion oil`) || !have($item`bird rib`)),
-    priority: 5
+    priority: 5,
   },
   {
     pull: $item`Flash Liquidizer Ultra Dousing Accessory`,
-    priority: 4
+    priority: 4,
   },
   {
     pull: $item`Shore Inc. Ship Trip Scrip`,
@@ -315,7 +325,7 @@ export const pulls: PullSpec[] = [
       return scripNeeded > 0;
     },
     optional: true,
-    priority: 3
+    priority: 3,
   },
 ];
 
@@ -404,7 +414,7 @@ enum PullState {
   UNNEEDED,
 }
 
-class PullStrategy {
+export class PullStrategy implements QuestStrategy {
   pulls: Pull[];
   enabled: PullState[];
 
@@ -473,40 +483,43 @@ class PullStrategy {
     }
     return false;
   }
+
+  public getQuest(): Quest {
+    return {
+      name: "Pull",
+      tasks: [
+        ...this.pulls.map((pull, index): Task => {
+          return {
+            name: pull.name,
+            priority: () => Priorities.Free,
+            after: [],
+            ready: () => this.enabled[index] === PullState.READY,
+            completed: () =>
+              this.enabled[index] === PullState.PULLED ||
+              this.enabled[index] === PullState.UNNEEDED,
+            do: () => pull.pull(),
+            post: () => {
+              pull.post();
+              this.update();
+            },
+            limit: { tries: 1 },
+            freeaction: true,
+          };
+        }),
+        {
+          // Add a last task that tracks if all pulls have been done, for routing
+          name: "All",
+          after: this.pulls.map((pull) => pull.name),
+          completed: () => true,
+          do: (): void => {
+            throw `Should never run`;
+          },
+          limit: { tries: 1 },
+          freeaction: true,
+        },
+      ],
+    }
+  }
 }
 
 export const pullStrategy = new PullStrategy(pulls);
-export const PullQuest: Quest = {
-  name: "Pull",
-  tasks: [
-    ...pullStrategy.pulls.map((pull, index): Task => {
-      return {
-        name: pull.name,
-        priority: () => Priorities.Free,
-        after: [],
-        ready: () => pullStrategy.enabled[index] === PullState.READY,
-        completed: () =>
-          pullStrategy.enabled[index] === PullState.PULLED ||
-          pullStrategy.enabled[index] === PullState.UNNEEDED,
-        do: () => pull.pull(),
-        post: () => {
-          pull.post();
-          pullStrategy.update();
-        },
-        limit: { tries: 1 },
-        freeaction: true,
-      };
-    }),
-    {
-      // Add a last task that tracks if all pulls have been done, for routing
-      name: "All",
-      after: pullStrategy.pulls.map((pull) => pull.name),
-      completed: () => true,
-      do: (): void => {
-        throw `Should never run`;
-      },
-      limit: { tries: 1 },
-      freeaction: true,
-    },
-  ],
-};

@@ -46,9 +46,8 @@ export function main(command?: string): void {
   printVersionInfo();
   if (args.version) return;
 
-  const path = allPaths().find(p => p.getPath() === myPath());
-  if (!path)
-    throw `You are currently in a path (${myPath()}) which is not supported.`;
+  const path = allPaths().find((p) => p.getPath() === myPath());
+  if (!path) throw `You are currently in a path (${myPath()}) which is not supported.`;
 
   const set_time_now = get(time_property, -1) === -1;
   if (set_time_now) set(time_property, gametimeToInt());

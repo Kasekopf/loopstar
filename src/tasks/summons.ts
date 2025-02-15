@@ -27,7 +27,7 @@ import {
 import { CombatStrategy } from "../engine/combat";
 import { debug, underStandard } from "../lib";
 import { args } from "../args";
-import { Quest, Task } from "../engine/task";
+import { Quest, QuestStrategy, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { yellowRayPossible } from "../engine/resources";
 import { Priorities } from "../engine/priority";
@@ -254,7 +254,7 @@ function checkFax(mon: Monster): boolean {
   return false;
 }
 
-class SummonStrategy {
+export class SummonStrategy implements QuestStrategy {
   targets: SummonTarget[];
   sources: SummonSource[];
   plan = new Map<Monster, SummonSource>();
@@ -288,26 +288,28 @@ class SummonStrategy {
     if (source.ready === undefined) return true;
     return source.ready();
   }
+
+  public getQuest(): Quest {
+    return {
+      name: "Summon",
+      tasks: summonTargets.map((task): Task => {
+        return {
+          ...task,
+          name: task.target.name.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()), // capitalize first letter of each word
+          ready: () => (task.ready?.() ?? true) && summonStrategy.sourceReadyFor(task.target),
+          do: () => {
+            // Perform the actual summon
+            const source = summonStrategy.getSourceFor(task.target);
+            if (source) {
+              debug(`Summon source: ${source.name}`);
+              source.summon(task.target);
+            } else throw `Unable to find summon source for ${task.target.name}`;
+            runCombat();
+          },
+          limit: { tries: task.tries ?? 1 },
+        };
+      }),
+    };
+  }
 }
 export const summonStrategy = new SummonStrategy(summonTargets, summonSources);
-
-export const SummonQuest: Quest = {
-  name: "Summon",
-  tasks: summonTargets.map((task): Task => {
-    return {
-      ...task,
-      name: task.target.name.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()), // capitalize first letter of each word
-      ready: () => (task.ready?.() ?? true) && summonStrategy.sourceReadyFor(task.target),
-      do: () => {
-        // Perform the actual summon
-        const source = summonStrategy.getSourceFor(task.target);
-        if (source) {
-          debug(`Summon source: ${source.name}`);
-          source.summon(task.target);
-        } else throw `Unable to find summon source for ${task.target.name}`;
-        runCombat();
-      },
-      limit: { tries: task.tries ?? 1 },
-    };
-  }),
-};

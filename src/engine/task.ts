@@ -43,3 +43,8 @@ export function hasDelay(task: Task): boolean {
   if (!(task.do instanceof Location)) return false;
   return task.do.turnsSpent < undelay(task.delay);
 }
+
+export interface QuestStrategy {
+  getQuest(): Quest;
+  update(): void;
+}

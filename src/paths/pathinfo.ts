@@ -1,10 +1,11 @@
 import { Path } from "kolmafia";
-import { Quest, Task } from "../engine/task";
+import { Task } from "../engine/task";
 import { Engine } from "../engine/engine";
+import { RunPlan } from "../engine/runplan";
 
 export interface PathInfo {
   getPath(): Path;
-  getQuests(quests: Quest[]): Quest[];
+  getPlan(plan: RunPlan): RunPlan;
   getEngine(tasks: Task[], ignoreTasks: string[], completedTasks: string[]): Engine;
   runIntro(): void;
 }
