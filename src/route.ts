@@ -28,9 +28,9 @@ export const routing: string[] = [
   "Misc/Snojo",
 
   // Eat as soon as possible
-  "Diet/Eat",
-  "Diet/Drink",
-  "Diet/Numberology",
+  // "Diet/Eat",
+  // "Diet/Drink",
+  // "Diet/Numberology",
 
   // Start quests when able
   "Knob/Start",

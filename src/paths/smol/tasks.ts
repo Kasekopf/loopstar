@@ -12,14 +12,14 @@ import {
   useSkill,
 } from "kolmafia";
 import { $effect, $effects, $item, $items, $skill, get, have } from "libram";
-import { Priorities } from "../engine/priority";
-import { Quest } from "../engine/task";
-import { atLevel } from "../lib";
-import { args } from "../args";
-import { customRestoreMp } from "../engine/moods";
+import { Priorities } from "../../engine/priority";
+import { Quest } from "../../engine/task";
+import { atLevel } from "../../lib";
+import { args } from "../../args";
+import { customRestoreMp } from "../../engine/moods";
 
-export const DietQuest: Quest = {
-  name: "Diet",
+export const SmolDietQuest: Quest = {
+  name: "SmolDiet",
   tasks: [
     {
       name: "Eat",
@@ -88,7 +88,7 @@ export const DietQuest: Quest = {
     },
     {
       name: "Tune after Diet",
-      after: ["Diet/Eat", "Diet/Drink"],
+      after: ["Eat", "Drink"],
       ready: () => mySign() === "Blender" || mySign() === "Opossum",
       completed: () =>
         !have($item`hewn moon-rune spoon`) ||

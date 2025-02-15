@@ -11,13 +11,13 @@ import {
   svnExists,
   turnsPlayed,
 } from "kolmafia";
-import { all_tasks } from "./tasks/all";
+import { allQuests } from "./tasks/all";
 import { prioritize } from "./route";
 import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
 import { get, set, sinceKolmafiaRevision } from "libram";
 import { Prioritization } from "./engine/priority";
-import { Args, step } from "grimoire-kolmafia";
+import { Args, getTasks, step } from "grimoire-kolmafia";
 import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
@@ -54,7 +54,15 @@ export function main(command?: string): void {
   if (set_time_now) set(time_property, gametimeToInt());
 
   path.runIntro();
-  const tasks = prioritize(all_tasks());
+
+  // Construct the list of tasks
+  const quests = path.getQuests(allQuests);
+  const tasks = prioritize(getTasks(quests));
+  for (const task of tasks) {
+    if (task.limit.soft) {
+      task.limit.soft *= args.minor.luck;
+    }
+  }
 
   const engine = path.getEngine(
     tasks,

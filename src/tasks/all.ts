@@ -18,44 +18,30 @@ import { MiscQuest, WandQuest } from "./misc";
 import { PullQuest } from "./pulls";
 import { DigitalQuest, KeysQuest } from "./keys";
 import { SummonQuest } from "./summons";
-import { DietQuest } from "./diet";
-import { Task } from "../engine/task";
-import { getTasks } from "grimoire-kolmafia";
-import { args } from "../args";
+import { Quest } from "../engine/task";
 
-export function all_tasks(): Task[] {
-  const quests = [
-    TootQuest,
-    MiscQuest,
-    DietQuest,
-    PullQuest,
-    WandQuest,
-    KeysQuest,
-    SummonQuest,
-    MosquitoQuest,
-    TavernQuest,
-    BatQuest,
-    KnobQuest,
-    FriarQuest,
-    // OrganQuest,
-    CryptQuest,
-    McLargeHugeQuest,
-    ChasmQuest,
-    GiantQuest,
-    HiddenQuest,
-    ManorQuest,
-    PalindomeQuest,
-    MacguffinQuest,
-    WarQuest,
-    TowerQuest,
-    DigitalQuest,
-  ];
-
-  const tasks = getTasks(quests);
-  for (const task of tasks) {
-    if (task.limit.soft) {
-      task.limit.soft *= args.minor.luck;
-    }
-  }
-  return tasks;
-}
+export const allQuests: Quest[] = [
+  TootQuest,
+  MiscQuest,
+  PullQuest,
+  WandQuest,
+  KeysQuest,
+  SummonQuest,
+  MosquitoQuest,
+  TavernQuest,
+  BatQuest,
+  KnobQuest,
+  FriarQuest,
+  // OrganQuest,
+  CryptQuest,
+  McLargeHugeQuest,
+  ChasmQuest,
+  GiantQuest,
+  HiddenQuest,
+  ManorQuest,
+  PalindomeQuest,
+  MacguffinQuest,
+  WarQuest,
+  TowerQuest,
+  DigitalQuest,
+]
