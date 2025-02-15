@@ -7,22 +7,21 @@ import {
   myPath,
   print,
   pullsRemaining,
-  runChoice,
   svnAtHead,
   svnExists,
   turnsPlayed,
-  visitUrl,
 } from "kolmafia";
 import { all_tasks } from "./tasks/all";
 import { prioritize } from "./route";
 import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
-import { $path, get, set, sinceKolmafiaRevision } from "libram";
+import { get, set, sinceKolmafiaRevision } from "libram";
 import { Prioritization } from "./engine/priority";
 import { Args, step } from "grimoire-kolmafia";
 import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
+import { allPaths } from "./paths/all";
 
 const time_property = toTempPref("first_start");
 const svn_name = "Kasekopf-loop-casual-branches-release";
@@ -47,18 +46,17 @@ export function main(command?: string): void {
   printVersionInfo();
   if (args.version) return;
 
-  if (myPath() !== $path`A Shrunken Adventurer am I` && !args.debug.list)
-    throw `You are not currently in a Shrunken Adventurer run. Please start one.`;
+  const path = allPaths().find(p => p.getPath() === myPath());
+  if (!path)
+    throw `You are currently in a path ({myPath()}) which is not supported.`;
 
   const set_time_now = get(time_property, -1) === -1;
   if (set_time_now) set(time_property, gametimeToInt());
 
-  // Clear intro adventure
-  set("choiceAdventure1507", 1);
-  if (visitUrl("main.php").includes("dense, trackless jungle")) runChoice(-1);
-
+  path.runIntro();
   const tasks = prioritize(all_tasks());
-  const engine = new Engine(
+
+  const engine = path.getEngine(
     tasks,
     args.debug.ignoretasks?.split(",") ?? [],
     args.debug.completedtasks?.split(",") ?? []
@@ -72,7 +70,7 @@ export function main(command?: string): void {
     engine.run(args.debug.actions);
 
     const remaining_tasks = tasks.filter((task) => !task.completed());
-    if (!runComplete()) {
+    if (step("questL13Final") > 11 || myPath() !== path.getPath()) {
       if (args.debug.actions !== undefined) {
         const next = engine.getNextTask();
         if (next) {
@@ -92,8 +90,9 @@ export function main(command?: string): void {
   }
 
   if (step("questL13Final") > 11) {
-    print("Shrunken Adventurer complete!", "purple");
+    print("Run complete!", "purple");
   }
+  print(`   Path: ${path.getPath()}`);
   print(`   Adventures used: ${turnsPlayed()}`, "purple");
   print(`   Adventures remaining: ${myAdventures()}`, "purple");
   if (set_time_now)
@@ -116,10 +115,6 @@ export function main(command?: string): void {
       "purple"
     );
   }
-}
-
-function runComplete(): boolean {
-  return step("questL13Final") > 11 || myPath() !== $path`A Shrunken Adventurer am I`;
 }
 
 function printVersionInfo(): void {
