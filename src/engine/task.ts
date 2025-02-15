@@ -1,15 +1,7 @@
-import { Item, Location, Monster } from "kolmafia";
+import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
 import { undelay } from "libram";
-
-export type AcquireItem = {
-  item: Item;
-  num?: number;
-  price?: number;
-  useful?: () => boolean;
-  optional?: boolean;
-};
 
 export type Quest = BaseQuest<Task>;
 
