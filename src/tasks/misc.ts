@@ -1667,8 +1667,9 @@ export const removeTeleportitis = {
 
 export function haveOre() {
   if (step("questL08Trapper") >= 2) return true;
-  if (get("trapperOre") !== "") {
-    return itemAmount(Item.get(get("trapperOre"))) >= 3;
+  const ore = get("trapperOre");
+  if (ore) {
+    return itemAmount(ore) >= 3;
   }
   return (
     itemAmount($item`asbestos ore`) >= 3 &&

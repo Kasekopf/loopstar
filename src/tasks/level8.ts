@@ -69,7 +69,7 @@ export const McLargeHugeQuest: Quest = {
       },
       completed: () =>
         step("questL08Trapper") >= 2 ||
-        (get("trapperOre") !== "" && itemAmount(Item.get(get("trapperOre"))) >= 3) ||
+        itemAmount(get("trapperOre", $item`none`)) >= 3 ||
         (itemAmount($item`asbestos ore`) >= 3 &&
           itemAmount($item`chrome ore`) >= 3 &&
           itemAmount($item`linoleum ore`) >= 3),
@@ -132,7 +132,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Trapper Return",
       after: ["Goatlet", "Pull/Ore", "Summon/Mountain Man", "Clover Ore"],
-      ready: () => get("trapperOre") !== "" && itemAmount(Item.get(get("trapperOre"))) >= 3, // Checked here since there is no task for Trainset ores
+      ready: () => itemAmount(get("trapperOre", $item`none`)) >= 3, // Checked here since there is no task for Trainset ores
       completed: () => step("questL08Trapper") >= 2,
       do: () => visitUrl("place.php?whichplace=mclargehuge&action=trappercabin"),
       limit: { tries: 1 },

@@ -42,7 +42,7 @@ import { tryPlayApriling } from "../lib";
 
 function shenItem(item: Item) {
   return (
-    get("shenQuestItem") === item.name &&
+    get("shenQuestItem") === item &&
     (step("questL11Shen") === 1 || step("questL11Shen") === 3 || step("questL11Shen") === 5)
   );
 }

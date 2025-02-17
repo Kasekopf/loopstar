@@ -86,7 +86,11 @@ export const pulls: PullSpec[] = [
   },
   {
     name: "Ore",
-    pull: () => (get("trapperOre") === "" ? undefined : Item.get(get("trapperOre"))),
+    pull: () => {
+      const ore = get("trapperOre");
+      if (!ore) return undefined;
+      return ore;
+    },
     useful: () => {
       if (trainSetAvailable()) return false;
       if (
@@ -96,8 +100,10 @@ export const pulls: PullSpec[] = [
       )
         return false;
       if (have($item`Deck of Every Card`)) return false;
-      if (get("trapperOre") === "") return undefined;
-      return itemAmount(Item.get(get("trapperOre"))) < 3 && step("questL08Trapper") < 2;
+      if (step("questL08Trapper") >= 2) return false;
+      const ore = get("trapperOre");
+      if (!ore) return undefined;
+      return itemAmount(ore) < 3;
     },
     duplicate: true,
     priority: 80,
