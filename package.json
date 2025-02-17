@@ -1,7 +1,7 @@
 {
-  "name": "loopsmol",
+  "name": "loopstar",
   "version": "0.1.0",
-  "description": "Shrunken Adventurer script",
+  "description": "KoL Multi-Path Looping script",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -40,16 +40,16 @@
   },
   "author": "Kasekopf",
   "license": "ISC",
-  "repository": "https://github.com/Kasekopf/loopsmol",
+  "repository": "https://github.com/Kasekopf/loopstar",
   "keywords": [
     "KoLMafia",
     "JS",
     "TS"
   ],
   "bugs": {
-    "url": "https://github.com/Kasekopf/loopsmol/issues"
+    "url": "https://github.com/Kasekopf/loopstar/issues"
   },
-  "homepage": "https://github.com/Kasekopf/loopsmol",
+  "homepage": "https://github.com/Kasekopf/loopstar",
   "private": true,
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

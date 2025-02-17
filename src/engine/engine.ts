@@ -718,7 +718,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       autoAbortThreshold: "-0.05",
       recoveryScript: "",
       removeMalignantEffects: false,
-      choiceAdventureScript: "loopsmol_choice.js",
+      choiceAdventureScript: "loopstar_choice.js",
       mpAutoRecoveryItems: ensureRecovery(
         "mpAutoRecoveryItems",
         ["black cherry soda", "doc galaktik's invigorating tonic"],

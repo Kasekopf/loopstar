@@ -115,7 +115,7 @@ export function main(command?: string): void {
 
 function printVersionInfo(): void {
   debug(
-    `Running loopsmol version [${lastCommitHash ?? "custom-built"}] in KoLmafia r${getRevision()}`
+    `Running loopstar version [${lastCommitHash ?? "custom-built"}] in KoLmafia r${getRevision()}`
   );
   if (lastCommitHash !== undefined) {
     if (svnExists(svn_name) && !svnAtHead(svn_name))
