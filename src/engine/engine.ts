@@ -125,6 +125,7 @@ export const wanderingNCs = new Set<string>([
 type ActiveTask = Task & {
   activePriority?: Prioritization;
   otherEffects?: Effect[];
+  availableTasks?: Task[];
 };
 
 export class Engine extends BaseEngine<CombatActions, ActiveTask> {
@@ -145,28 +146,33 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         return {
           ...removeTeleportitis,
           activePriority: Prioritization.fixed(Priorities.Always),
+          availableTasks,
         };
       }
-      return { ...teleportitis, activePriority: Prioritization.fixed(Priorities.Always) };
+      return {
+        ...teleportitis,
+        activePriority: Prioritization.fixed(Priorities.Always),
+        availableTasks,
+      };
     }
 
     // Otherwise, choose from all available tasks
     const taskPriorities = availableTasks.map((task) => {
-      return { ...task, active_priority: Prioritization.from(task) };
+      return { ...task, activePriority: Prioritization.from(task), availableTasks: availableTasks };
     });
 
     // Sort tasks in a stable way, by priority (decreasing) and then by route
     const tasksOrderedByPriority = stableSort(
       taskPriorities,
-      (task) => -1 * task.active_priority?.score()
+      (task) => -1 * task.activePriority?.score()
     );
     if (args.debug.verbose) {
       printHtml("");
       printHtml("Available Tasks:");
       for (const task of tasksOrderedByPriority) {
         const name = task.name;
-        const reason = task.active_priority?.explainWithColor() ?? "Available";
-        const score = task.active_priority?.score() ?? 0;
+        const reason = task.activePriority?.explainWithColor() ?? "Available";
+        const score = task.activePriority?.score() ?? 0;
         printHtml(`<u>${name}</u>: ${reason} <font color='#888888'>(${score})</font>`);
       }
       printHtml("");
@@ -306,8 +312,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
       const banish_state = globalStateCache.banishes();
       if (combat.can("banish") && !banish_state.isFullyBanished(task)) {
-        const available_tasks = this.tasks.filter((task) => this.available(task));
-        const banishSources = unusedBanishes(banish_state, available_tasks);
+        const banishSources = unusedBanishes(banish_state, task.availableTasks ?? []);
         resources.provide("banish", equipFirst(outfit, banishSources));
         debug(
           `Banish targets: ${combat
@@ -358,8 +363,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
               runawaySources.filter((source) => !source.banishes)
             );
             resources.provide("ignoreNoBanish", runaway);
-            if (runaway?.effect)
-              task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
+            if (runaway?.effect) task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
           }
         }
       }
@@ -394,11 +398,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         if (myTurncount() >= ROUTE_WAIT_TO_EVENTUALLY_NCFORCE)
           allowableNCForce.push(NCForce.Eventually);
         if (
-          this.tasks.find(
-            (t) =>
-              allowableNCForce.includes(undelay(t.ncforce)) &&
-              this.available(t) &&
-              t.name !== task.name
+          task.availableTasks?.find(
+            (t) => allowableNCForce.includes(undelay(t.ncforce)) && t.name !== task.name
           ) !== undefined
         ) {
           const ncforcer = equipFirst(outfit, forceNCSources);
@@ -698,10 +699,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     // Try to fix evil tracking after backing up
     if (get("lastCopyableMonster") === $monster`giant swarm of ghuol whelps`) visitUrl("crypt.php");
 
-    if (
-      task.activePriority?.has(Priorities.BadOrb) &&
-      !haveEquipped($item`miniature crystal ball`)
-    )
+    if (task.activePriority?.has(Priorities.BadOrb) && !haveEquipped($item`miniature crystal ball`))
       resetBadOrb();
     if (get("_latteBanishUsed") && shouldFinishLatte()) refillLatte();
     autosellJunk();
