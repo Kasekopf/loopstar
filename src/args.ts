@@ -157,6 +157,11 @@ export const args = Args.create(
         help: "Halt when you have this number of adventures remaining or fewer",
         default: 0,
       }),
+      verify: Args.flag({
+        help: "Verify that all supported paths pass basic checks",
+        default: false,
+        hidden: true,
+      })
     }),
   },
   {

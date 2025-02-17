@@ -21,6 +21,7 @@ import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
 import { allPaths } from "./paths/all";
+import { SmolInfo } from "./paths/smol/info";
 
 const time_property = toTempPref("first_start");
 const svn_name = "Kasekopf-loop-casual-branches-release";
@@ -39,6 +40,15 @@ export function main(command?: string): void {
   }
   if (args.sim) {
     checkRequirements();
+    return;
+  }
+  if (args.debug.verify) {
+    // Debugging check
+    const path = new SmolInfo();
+    const plan = path.getPlan(basePlan);
+    const tasks = plan.getTasks();
+    const engine = path.getEngine(tasks);
+    listTasks(engine);
     return;
   }
 
