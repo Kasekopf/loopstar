@@ -130,7 +130,7 @@ function printVersionInfo(): void {
 }
 
 function listTasks(engine: Engine, show_phyla = false): void {
-  engine.updatePlan();
+  const resourceAllocations = engine.updatePlan();
   for (const task of engine.tasks) {
     if (task.completed()) {
       debug(`${task.name}: Done`, "blue");
@@ -139,7 +139,20 @@ function listTasks(engine: Engine, show_phyla = false): void {
         const priority = Prioritization.from(task);
         const reason = priority.explain();
         const why = reason === "" ? "Route" : reason;
-        debug(`${task.name}: Available [${priority.score()}: ${why}]`);
+        switch (resourceAllocations.get(task.name)) {
+          case undefined:
+            debug(`${task.name}: Available [${priority.score()}: ${why}]`);
+            break;
+          case true:
+            debug(`${task.name}: Available [${priority.score()}: ${why}] (Resource Allocated)`);
+            break;
+          case false:
+            debug(
+              `${task.name}: Blocked [${priority.score()}: ${why}] (No Resource Allocated)`,
+              "red"
+            );
+            break;
+        }
       } else {
         debug(`${task.name}: Not Available`, "red");
       }
