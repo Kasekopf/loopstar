@@ -161,7 +161,7 @@ export const args = Args.create(
         help: "Verify that all supported paths pass basic checks",
         default: false,
         hidden: true,
-      })
+      }),
     }),
   },
   {
