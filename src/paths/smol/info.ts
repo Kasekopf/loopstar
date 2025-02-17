@@ -14,8 +14,8 @@ export class SmolInfo implements PathInfo {
   }
 
   getPlan(plan: RunPlan): RunPlan {
-    plan.quests.concat(SmolDietQuest);
-    plan.quests.concat(SmolPullQuest);
+    plan.quests.push(SmolDietQuest);
+    plan.quests.push(SmolPullQuest);
     return plan;
   }
 
