@@ -34,7 +34,7 @@ import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { cosmicBowlingBallReady } from "../lib";
 import { fillHp } from "../engine/moods";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 function manualChoice(whichchoice: number, option: number) {
   return visitUrl(`choice.php?whichchoice=${whichchoice}&pwd=${myHash()}&option=${option}`);

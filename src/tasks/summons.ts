@@ -29,10 +29,10 @@ import { debug, underStandard } from "../lib";
 import { args } from "../args";
 import { Quest, QuestStrategy, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
-import { yellowRayPossible } from "../engine/resources";
 import { Priorities } from "../engine/priority";
 import { fillHp } from "../engine/moods";
 import { oresNeeded } from "./level8";
+import { yellowRayPossible } from "../resources/yellowray";
 
 type SummonTarget = Omit<Task, "do" | "name" | "limit"> & {
   target: Monster;

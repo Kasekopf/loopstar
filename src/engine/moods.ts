@@ -47,7 +47,8 @@ import {
   isSong,
   uneffect,
 } from "libram";
-import { asdonFillTo, asdonFualable } from "./resources";
+import { asdonFualable } from "../lib";
+import { asdonFillTo } from "../lib";
 import { underStandard } from "../lib";
 import { step } from "grimoire-kolmafia";
 

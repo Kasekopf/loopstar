@@ -39,7 +39,7 @@ import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { customRestoreMp, fillHp } from "../engine/moods";
 import { stenchPlanner } from "../engine/outfit";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 const ABoo: Task[] = [
   {

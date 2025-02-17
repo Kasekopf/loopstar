@@ -35,7 +35,7 @@ import { CombatStrategy } from "../engine/combat";
 import { atLevel, debug, haveLoathingIdolMicrophone } from "../lib";
 import { councilSafe } from "./level12";
 import { customRestoreMp } from "../engine/moods";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 const Diary: Task[] = [
   {

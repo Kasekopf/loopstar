@@ -32,7 +32,7 @@ import { Modes, OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { Priorities } from "../engine/priority";
 import { tuneSnapper } from "../lib";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 const Manor1: Task[] = [
   {

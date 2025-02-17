@@ -90,8 +90,8 @@ import { args, toTempPref } from "../args";
 import { coldPlanner, yellowSubmarinePossible } from "../engine/outfit";
 import { ROUTE_WAIT_TO_NCFORCE } from "../route";
 import { fillHp } from "../engine/moods";
-import { getActiveBackupTarget } from "../engine/resources";
 import { Station } from "libram/dist/resources/2022/TrainSet";
+import { getActiveBackupTarget } from "../resources/backup";
 
 const meatBuffer = 1000;
 

@@ -38,7 +38,7 @@ import { atLevel, haveFlorest, haveLoathingIdolMicrophone } from "../lib";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 function tuneCape(): void {
   if (

@@ -1,0 +1,279 @@
+import { CombatResource, Outfit, OutfitSpec } from "grimoire-kolmafia";
+import {
+  cliExecute,
+  familiarWeight,
+  getProperty,
+  Item,
+  Location,
+  mySign,
+  myTurncount,
+  numericModifier,
+  toInt,
+  useFamiliar,
+  visitUrl,
+} from "kolmafia";
+import {
+  $effect,
+  $familiar,
+  $familiars,
+  $item,
+  $items,
+  $location,
+  $skill,
+  get,
+  getActiveEffects,
+  have,
+  Macro,
+  Modes,
+} from "libram";
+import { asdonFualable } from "../lib";
+import { asdonFillTo } from "../lib";
+
+export interface RunawaySource extends CombatResource {
+  do: Macro;
+  banishes: boolean;
+  chance: () => number;
+}
+
+export const runawayValue =
+  have($item`Greatest American Pants`) || have($item`navel ring of navel gazing`)
+    ? 0.8 * get("valueOfAdventure")
+    : get("valueOfAdventure");
+
+function commaItemFinder(): Item | undefined {
+  const commaItem =
+    $items`aquaviolet jub-jub bird, charpuce jub-jub bird, crimsilion jub-jub bird, stomp box`.find(
+      (f) => have(f)
+    );
+
+  return commaItem;
+}
+
+export function getRunawaySources(location?: Location) {
+  const runawayFamiliarPlan = planRunawayFamiliar();
+
+  return [
+    {
+      name: "Latte (Refill)",
+      available: () =>
+        (!get("_latteBanishUsed") || get("_latteRefillsUsed") < 2) && // Save one refill for aftercore
+        have($item`latte lovers member's mug`) &&
+        shouldFinishLatte(),
+      prepare: refillLatte,
+      do: new Macro().skill($skill`Throw Latte on Opponent`),
+      chance: () => 1,
+      equip: $item`latte lovers member's mug`,
+      banishes: true,
+    },
+    {
+      name: "Bowl Curveball",
+      available: () =>
+        have($item`cosmic bowling ball`) || get("cosmicBowlingBallReturnCombats") === 0,
+      do: new Macro().skill($skill`Bowl a Curveball`),
+      chance: () => 1,
+      banishes: true,
+    },
+    {
+      name: "Spring Shoes",
+      available: () => have($item`spring shoes`) && !have($effect`Everything Looks Green`),
+      do: new Macro().skill($skill`Spring Away`),
+      chance: () => 1,
+      equip: $item`spring shoes`,
+      banishes: false,
+    },
+    {
+      name: "Bandersnatch",
+      available: () =>
+        runawayFamiliarPlan.available &&
+        runawayFamiliarPlan.outfit.familiar === $familiar`Frumious Bandersnatch`,
+      equip: runawayFamiliarPlan.outfit,
+      do: new Macro().runaway(),
+      chance: () => 1,
+      effect: $effect`Ode to Booze`,
+      banishes: false,
+    },
+    {
+      name: "Stomping Boots",
+      available: () =>
+        runawayFamiliarPlan.available &&
+        runawayFamiliarPlan.outfit.familiar === $familiar`Pair of Stomping Boots`,
+      equip: runawayFamiliarPlan.outfit,
+      do: new Macro().runaway(),
+      chance: () => 1,
+      banishes: false,
+    },
+    {
+      name: "Comma Chameleon",
+      prepare: (): void => {
+        const commaItem = commaItemFinder();
+
+        if (commaItem !== undefined && get("commaFamiliar") === null) {
+          useFamiliar($familiar`Comma Chameleon`);
+          visitUrl(`inv_equip.php?which=2&action=equip&whichitem=${toInt(commaItem)}&pwd`);
+        }
+      },
+      available: (): boolean => {
+        const commaItem = commaItemFinder();
+
+        if (
+          runawayFamiliarPlan.available &&
+          runawayFamiliarPlan.outfit.familiar === $familiar`Comma Chameleon` &&
+          (get("commaFamiliar") === $familiar`Frumious Bandersnatch` ||
+            get("commaFamiliar") === $familiar`Pair of Stomping Boots` ||
+            (commaItem !== undefined && have(commaItem)))
+        )
+          return true;
+        return false;
+      },
+      equip: runawayFamiliarPlan.outfit,
+      do: new Macro().runaway(),
+      chance: () => 1,
+      effect: $effect`Ode to Booze`,
+      banishes: false,
+    },
+    {
+      name: "Asdon Martin",
+      available: (): boolean => {
+        if (!asdonFualable(50)) return false;
+        // The boss bat minions are not banishable, which breaks the tracking
+        if (location === $location`The Boss Bat's Lair`) return false;
+        const banishes = get("banishedMonsters").split(":");
+        const bumperIndex = banishes
+          .map((string) => string.toLowerCase())
+          .indexOf("spring-loaded front bumper");
+        if (bumperIndex === -1) return true;
+        return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
+      },
+      prepare: () => asdonFillTo(50),
+      do: new Macro().skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
+      chance: () => 1,
+      banishes: true,
+    },
+    {
+      name: "GAP",
+      available: () => have($item`Greatest American Pants`),
+      equip: $item`Greatest American Pants`,
+      do: new Macro().runaway(),
+      chance: () => (get("_navelRunaways") < 3 ? 1 : 0.2),
+      banishes: false,
+    },
+    {
+      name: "Navel Ring",
+      available: () => have($item`navel ring of navel gazing`),
+      equip: $item`navel ring of navel gazing`,
+      do: new Macro().runaway(),
+      chance: () => (get("_navelRunaways") < 3 ? 1 : 0.2),
+      banishes: false,
+    },
+    {
+      name: "Peppermint Parasol",
+      available: () => have($item`peppermint parasol`) && get("_navelRunaways") < 9,
+      do: new Macro().item($item`peppermint parasol`),
+      chance: () => (get("_navelRunaways") < 3 ? 1 : 0.2),
+      banishes: false,
+    },
+  ];
+}
+
+interface RunawayFamiliarSpec {
+  available: boolean;
+  outfit: OutfitSpec;
+}
+
+type FamweightOption = {
+  thing: Item;
+  modes?: Partial<Modes>;
+};
+
+const famweightOptions: FamweightOption[] = [
+  // Fam equip
+  { thing: $item`amulet coin` },
+  { thing: $item`astral pet sweater` },
+  { thing: $item`tiny stillsuit` },
+  // Hats
+  { thing: $item`Daylight Shavings Helmet` },
+  // Hands
+  { thing: $item`Fourth of May Cosplay Saber` },
+  { thing: $item`iFlail` },
+  { thing: $item`familiar scrapbook` },
+  // Accessories
+  { thing: $item`Brutal brogues` },
+  { thing: $item`hewn moon-rune spoon` },
+  { thing: $item`Beach Comb` },
+];
+
+function planRunawayFamiliar(): RunawayFamiliarSpec {
+  const bestFamiliar = $familiars`Frumious Bandersnatch, Pair of Stomping Boots`.find((f) =>
+    have(f)
+  );
+  const altFamiliar =
+    have($familiar`Comma Chameleon`) &&
+    (getProperty("commaFamiliar") === "Frumious Bandersnatch" ||
+      getProperty("commaFamiliar") === "Pair of Stomping Boots" ||
+      getProperty("_commaRunDone"));
+
+  const chosenFamiliar =
+    bestFamiliar ?? (altFamiliar === true ? $familiar`Comma Chameleon` : false);
+
+  if (chosenFamiliar) {
+    const goalWeight = 5 * (1 + get("_banderRunaways"));
+    let attainableWeight = familiarWeight(chosenFamiliar);
+
+    // Include passive skills
+    if (have($skill`Crimbo Training: Concierge`)) attainableWeight += 1;
+    if (have($skill`Amphibian Sympathy`)) attainableWeight += 5;
+    if (mySign() === "Platypus") attainableWeight += 5;
+
+    // Include active effects
+    for (const effect of getActiveEffects())
+      attainableWeight += numericModifier(effect, "Familiar Weight");
+
+    // Include as much equipment as needed
+    const outfit = new Outfit();
+    outfit.equip(chosenFamiliar);
+    for (const option of famweightOptions) {
+      if (attainableWeight >= goalWeight) break;
+      if (outfit.equip(option.thing)) {
+        attainableWeight += numericModifier(option.thing, "Familiar Weight");
+      }
+    }
+
+    return {
+      outfit: outfit.spec(),
+      available: attainableWeight >= goalWeight,
+    };
+  }
+  return {
+    available: false,
+    outfit: {},
+  };
+}
+/**
+ * Return true if we have all of our final latte ingredients, but they are not in the latte.
+ */
+
+export function shouldFinishLatte(): boolean {
+  if (!have($item`latte lovers member's mug`)) return false;
+  if (myTurncount() >= 1000) return false;
+
+  // Check that we have all the proper ingredients
+  for (const ingredient of ["wing", "cajun", "vitamins"])
+    if (!get("latteUnlocks").includes(ingredient)) return false;
+  // Check that the latte is not already finished
+  return !["Meat Drop: 40", "Combat Rate: 10", "Experience (familiar): 3"].every((modifier) =>
+    get("latteModifier").includes(modifier)
+  );
+}
+/**
+ * Refill the latte, using as many final ingredients as possible.
+ */
+
+export function refillLatte(): void {
+  if (!get("_latteBanishUsed")) return;
+  const modifiers = [];
+  if (get("latteUnlocks").includes("wing")) modifiers.push("wing");
+  if (get("latteUnlocks").includes("cajun")) modifiers.push("cajun");
+  if (get("latteUnlocks").includes("vitamins")) modifiers.push("vitamins");
+  modifiers.push("cinnamon", "pumpkin", "vanilla"); // Always unlocked
+  cliExecute(`latte refill ${modifiers.slice(0, 3).join(" ")}`);
+}

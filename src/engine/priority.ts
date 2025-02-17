@@ -17,16 +17,13 @@ import { CombatStrategy } from "./combat";
 import { moodCompatible } from "./moods";
 import { hasDelay, NCForce, Priority, Task } from "./task";
 import { globalStateCache } from "./state";
-import {
-  forceItemSources,
-  forceNCPossible,
-  getActiveBackupTarget,
-  wandererSources,
-  yellowRaySources,
-} from "./resources";
 import { canEquipResource, getModifiersFrom } from "./outfit";
 import { Outfit } from "grimoire-kolmafia";
 import { args } from "../args";
+import { forceItemSources, yellowRaySources } from "../resources/yellowray";
+import { wandererSources } from "../resources/wanderer";
+import { forceNCPossible } from "../resources/forcenc";
+import { getActiveBackupTarget } from "../resources/backup";
 
 export class Priorities {
   static Always: Priority = { score: 40000, reason: "Forced" };

@@ -82,21 +82,8 @@ import {
 } from "./outfit";
 import { cliExecute, equippedAmount, itemAmount, runChoice } from "kolmafia";
 import { debug, stableSort } from "../lib";
-import {
-  canChargeVoid,
-  CombatResource,
-  forceItemSources,
-  forceNCPossible,
-  forceNCSources,
-  freekillSources,
-  getActiveBackupTarget,
-  getRunawaySources,
-  refillLatte,
-  shouldFinishLatte,
-  unusedBanishes,
-  wandererSources,
-  yellowRaySources,
-} from "./resources";
+import { refillLatte } from "../resources/runaway";
+import { shouldFinishLatte } from "../resources/runaway";
 import { Priorities, Prioritization } from "./priority";
 import { args, toTempPref } from "../args";
 import { flyersDone } from "../tasks/level12";
@@ -106,6 +93,14 @@ import { summonStrategy } from "../tasks/summons";
 import { keyStrategy } from "../tasks/keys";
 import { applyEffects, customRestoreMp } from "./moods";
 import { ROUTE_WAIT_TO_EVENTUALLY_NCFORCE, ROUTE_WAIT_TO_NCFORCE } from "../route";
+import { unusedBanishes } from "../resources/banish";
+import { CombatResource } from "../resources/lib";
+import { canChargeVoid, wandererSources } from "../resources/wanderer";
+import { getRunawaySources } from "../resources/runaway";
+import { freekillSources } from "../resources/freekill";
+import { forceItemSources, yellowRaySources } from "../resources/yellowray";
+import { forceNCPossible, forceNCSources } from "../resources/forcenc";
+import { getActiveBackupTarget } from "../resources/backup";
 
 export const wanderingNCs = new Set<string>([
   "Wooof! Wooooooof!",

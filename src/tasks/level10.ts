@@ -18,7 +18,9 @@ import { Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
-import { forceItemPossible, tryForceNC, tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
+import { forceItemPossible } from "../resources/yellowray";
+import { tryForceNC } from "../resources/forcenc";
 
 export const GiantQuest: Quest = {
   name: "Giant",

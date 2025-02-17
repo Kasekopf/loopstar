@@ -38,7 +38,7 @@ import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
 import { tuneSnapper } from "../lib";
 import { Priorities } from "../engine/priority";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 function shenItem(item: Item) {
   return (

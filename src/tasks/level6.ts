@@ -6,7 +6,7 @@ import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { NCForce, Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
-import { tryPlayApriling } from "../engine/resources";
+import { tryPlayApriling } from "../lib";
 
 export const FriarQuest: Quest = {
   name: "Friar",

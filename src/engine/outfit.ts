@@ -39,7 +39,7 @@ import {
   have,
   maxBy,
 } from "libram";
-import { Resource } from "./resources";
+import { Resource } from "../resources/lib";
 import { Keys, keyStrategy } from "../tasks/keys";
 import { Modes, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
 import { atLevel, garboAverageValue, garboValue, haveLoathingLegion } from "../lib";

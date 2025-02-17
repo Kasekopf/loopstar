@@ -1,17 +1,37 @@
 import { step } from "grimoire-kolmafia";
 import {
   appearanceRates,
+  buy,
+  getFuel,
+  getWorkshed,
   Item,
+  itemAmount,
   Location,
   Monster,
+  myAscensions,
   myFamiliar,
   myLevel,
+  myMeat,
   myPrimestat,
   Phylum,
   print,
+  retrieveItem,
+  toInt,
+  use,
   visitUrl,
 } from "kolmafia";
-import { $familiar, $item, $location, $monsters, $stat, get, have, Snapper } from "libram";
+import {
+  $familiar,
+  $item,
+  $location,
+  $monsters,
+  $stat,
+  AprilingBandHelmet,
+  AsdonMartin,
+  get,
+  have,
+  Snapper,
+} from "libram";
 import { makeValue, ValueFunctions } from "garbo-lib";
 
 export function debug(message: string, color?: string): void {
@@ -173,4 +193,70 @@ export function stableSort<T>(items: T[], key: (item: T) => number): T[] {
     return a.score - b.score;
   });
   return scoredItems.map((scoredItem) => scoredItem.item);
+}
+/**
+ * Actually fuel the asdon to the required amount.
+ */
+
+export function asdonFillTo(amount: number): boolean {
+  if (getWorkshed() !== $item`Asdon Martin keyfob (on ring)`) return false;
+
+  const remaining = amount - getFuel();
+  const count = Math.ceil(remaining / 5) + 1; // 5 is minimum adv gain from loaf of soda bread, +1 buffer
+  if (!have($item`bugbear bungguard`) || !have($item`bugbear beanie`)) {
+    // Prepare enough wad of dough from all-purpose flower
+    // We must do this ourselves since retrieveItem($item`loaf of soda bread`)
+    // in libram will not consider all-purpose flower
+    if (itemAmount($item`wad of dough`) < count) {
+      buy($item`all-purpose flower`);
+      use($item`all-purpose flower`);
+    }
+  }
+
+  retrieveItem(count, $item`loaf of soda bread`);
+  visitUrl(
+    `campground.php?action=fuelconvertor&pwd&qty=${count}&iid=${toInt(
+      $item`loaf of soda bread`
+    )}&go=Convert%21`
+  );
+  if (getFuel() < amount) {
+    throw new Error("Soda bread did not generate enough fuel");
+  }
+  return true;
+}
+/**
+ * Return true if we can possibly fuel the asdon to the required amount.
+ */
+
+export function asdonFualable(amount: number): boolean {
+  if (!AsdonMartin.installed()) return false;
+  if (!have($item`forged identification documents`) && step("questL11Black") < 4) return false; // Save early
+  if (amount <= getFuel()) return true;
+
+  // Use wad of dough with the bugbear outfit
+  if (have($item`bugbear bungguard`) && have($item`bugbear beanie`)) {
+    return myMeat() >= (amount - getFuel()) * 24 + 1000; // Save 1k meat as buffer
+  }
+
+  // Use all-purpose flower if we have enough ascensions
+  if (myAscensions() >= 10 && (have($item`bitchin' meatcar`) || have($item`Desert Bus pass`))) {
+    return myMeat() >= 3000 + (amount - getFuel()) * 14; // 2k for all-purpose flower + save 1k meat as buffer + soda water
+  }
+
+  return false;
+}
+export function tryPlayApriling(modifier: string): void {
+  if (!AprilingBandHelmet.have()) return;
+
+  if (modifier.includes("+combat")) {
+    AprilingBandHelmet.conduct("Apriling Band Battle Cadence");
+  }
+
+  if (modifier.includes("-combat")) {
+    AprilingBandHelmet.conduct("Apriling Band Patrol Beat");
+  }
+
+  if (modifier.includes("food") || modifier.includes("booze")) {
+    AprilingBandHelmet.conduct("Apriling Band Celebration Bop");
+  }
 }
