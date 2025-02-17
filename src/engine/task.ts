@@ -31,6 +31,8 @@ export type Task = {
   map_the_monster?: Monster | (() => Monster); // Try and map to the given monster, if possible
   nofightingfamiliars?: boolean;
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
+
+  requires?: AllocationRequest;
 } & BaseTask<CombatActions>;
 
 export type Priority = {
@@ -48,3 +50,16 @@ export interface QuestStrategy {
   getQuest(): Quest;
   update(): void;
 }
+
+export enum Allocations {
+  PULL,
+}
+export type AllocationSummon = {
+  summon: Monster;
+};
+export type Allocation = Allocations | AllocationSummon;
+
+export type AllocationRequest = {
+  which: Allocation;
+  value: number;
+};

@@ -12,6 +12,7 @@ import {
   getWorkshed,
   haveEffect,
   haveEquipped,
+  inHardcore,
   inMultiFight,
   Location,
   logprint,
@@ -29,6 +30,7 @@ import {
   numericModifier,
   print,
   printHtml,
+  pullsRemaining,
   restoreHp,
   runCombat,
   Slot,
@@ -38,7 +40,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { hasDelay, NCForce, Task } from "./task";
+import { Allocations, hasDelay, NCForce, Task } from "./task";
 import {
   $effect,
   $effects,
@@ -132,8 +134,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   }
 
   public getNextTask(): ActiveTask | undefined {
-    this.updatePlan();
-    const availableTasks = this.tasks.filter((task) => this.available(task));
+    const resourcesAllocated = this.updatePlan();
+    const availableTasks = this.tasks.filter(
+      (task) => this.available(task) && (!task.requires || resourcesAllocated.get(task.name))
+    );
 
     // Teleportitis overrides all
     if (have($effect`Teleportitis`)) {
@@ -747,12 +751,31 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     });
   }
 
-  updatePlan(): void {
+  updatePlan(): Map<string, boolean> {
     // Note order matters for these strategy updates
     globalStateCache.invalidate();
+
+    const resourcesAllocated = new Map<string, boolean>();
+    const resourcesNeeded = this.tasks.filter((task) => task.requires && !task.completed());
+    const tasksByResource = stableSort(resourcesNeeded, (task) => -1 * (task.requires?.value ?? 0));
+    let pullsLeft = pullsRemaining() - (20 - args.major.pulls);
+    if (inHardcore() || myTurncount() >= 1000) pullsLeft = 0; // No pulls in hardcore or out of ronin
+    for (const task of tasksByResource) {
+      if (!task.requires) break;
+      if (task.requires.which === Allocations.PULL) {
+        if (pullsLeft > 0) {
+          resourcesAllocated.set(task.name, true);
+          pullsLeft -= 1;
+        } else {
+          resourcesAllocated.set(task.name, false);
+        }
+      }
+    }
+
     summonStrategy.update(); // Update summon plan with current state
     keyStrategy.update(); // Update key plan with current state
     pullStrategy.update(); // Update pull plan with current state
+    return resourcesAllocated;
   }
 }
 

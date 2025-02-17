@@ -15,7 +15,7 @@ import {
 import { $familiar, $item, $items, $skill, get, have, set } from "libram";
 import { args, toTempPref } from "../args";
 import { Priorities } from "../engine/priority";
-import { Quest, QuestStrategy, Task } from "../engine/task";
+import { Allocations, Quest, QuestStrategy, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Keys, keyStrategy } from "./keys";
 import { trainSetAvailable } from "./misc";
@@ -448,3 +448,31 @@ export class PullStrategy implements QuestStrategy {
 }
 
 export const pullStrategy = new PullStrategy(pulls);
+
+export function getPullTask(spec: PullSpec): Task {
+  const pull = new Pull(spec);
+  return {
+    name: pull.name,
+    priority: () => Priorities.Free,
+    after: [],
+    ready: () => !!pull.shouldPull(),
+    completed: () =>
+      pull.wasPulled(
+        new Set<Item>(
+          get("_roninStoragePulls")
+            .split(",")
+            .map((id) => parseInt(id))
+            .filter((id) => id > 0)
+            .map((id) => Item.get(id))
+        )
+      ),
+    do: () => pull.pull(),
+    post: () => pull.post(),
+    limit: { tries: 1 },
+    freeaction: true,
+    requires: {
+      which: Allocations.PULL,
+      value: pull.priority,
+    },
+  };
+}
