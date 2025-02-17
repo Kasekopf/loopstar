@@ -515,7 +515,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       print(`Familiar: ${myFamiliar()}`);
     } else {
       logprint(`Equipped: ${equipped.join(", ")}`);
-      print(`Familiar: ${myFamiliar()}`);
+      logprint(`Familiar: ${myFamiliar()}`);
     }
     logModifiers(outfit);
 
