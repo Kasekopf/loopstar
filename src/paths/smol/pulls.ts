@@ -1,6 +1,5 @@
-import { get } from "http";
 import { Item, myAdventures, myDaycount, myFullness, myInebriety } from "kolmafia";
-import { $item, $skill, have } from "libram";
+import { $item, $skill, get, have } from "libram";
 import { args } from "../../args";
 import { getPullTask, PullSpec } from "../../tasks/pulls";
 import { Quest } from "../../engine/task";
