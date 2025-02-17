@@ -405,6 +405,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       }
     }
 
+    if (get("noncombatForcerActive")) {
+      // Avoid some things that might override the NC and break the tracking
+      outfit.equip({ avoid: $items`Kramco Sausage-o-Matic™` });
+    }
+
     if (
       wanderers.length === 0 &&
       hasDelay(task) &&
@@ -423,11 +428,6 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       task.combat?.can("yellowRay") ||
       (!resources.has("ignore") && !resources.has("banish"));
     equipCharging(outfit, mightKillSomething ?? false, task.nofightingfamiliars ?? false);
-
-    if (get("noncombatForcerActive")) {
-      // Avoid some things that might override the NC and break the tracking
-      outfit.equip({ avoid: $items`Kramco Sausage-o-Matic™` });
-    }
 
     // Prepare full outfit
     if (!outfit.skipDefaults) {
