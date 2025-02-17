@@ -133,23 +133,8 @@ type ScoredTask = {
 };
 
 export class Engine extends BaseEngine<CombatActions, ActiveTask> {
-  constructor(tasks: Task[], ignoreTasks: string[], completedTasks: string[]) {
-    const ignore_set = new Set<string>(ignoreTasks.map((n) => n.trim()));
-    const completed_set = new Set<string>(completedTasks.map((n) => n.trim()));
-    // Completed tasks are always completed, ignored tasks are never ready
-    tasks = tasks.map((task) => {
-      if (completed_set.has(task.name)) return { ...task, completed: () => true };
-      if (ignore_set.has(task.name)) return { ...task, ready: () => false };
-      return task;
-    });
+  constructor(tasks: Task[]) {
     super(tasks, { combat_defaults: new MyActionDefaults() });
-
-    for (const task of ignore_set) {
-      if (!this.tasks_by_name.has(task)) debug(`Warning: Unknown ignoretask ${task}`);
-    }
-    for (const task of completed_set) {
-      if (!this.tasks_by_name.has(task)) debug(`Warning: Unknown completedtask ${task}`);
-    }
   }
 
   public getNextTask(): ActiveTask | undefined {

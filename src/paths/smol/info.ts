@@ -18,8 +18,8 @@ export class SmolInfo implements PathInfo {
     return plan;
   }
 
-  getEngine(tasks: Task[], ignoreTasks: string[], completedTasks: string[]): Engine {
-    return new Engine(tasks, ignoreTasks, completedTasks);
+  getEngine(tasks: Task[]): Engine {
+    return new Engine(tasks);
   }
 
   runIntro() {

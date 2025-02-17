@@ -56,17 +56,7 @@ export function main(command?: string): void {
   // Construct the list of tasks
   const plan = path.getPlan(basePlan);
   const tasks = plan.getTasks();
-  for (const task of tasks) {
-    if (task.limit.soft) {
-      task.limit.soft *= args.minor.luck;
-    }
-  }
-
-  const engine = path.getEngine(
-    tasks,
-    args.debug.ignoretasks?.split(",") ?? [],
-    args.debug.completedtasks?.split(",") ?? []
-  );
+  const engine = path.getEngine(tasks);
   try {
     if (args.debug.list) {
       listTasks(engine);

@@ -6,6 +6,6 @@ import { RunPlan } from "../engine/runplan";
 export interface PathInfo {
   getPath(): Path;
   getPlan(plan: RunPlan): RunPlan;
-  getEngine(tasks: Task[], ignoreTasks: string[], completedTasks: string[]): Engine;
+  getEngine(tasks: Task[]): Engine;
   runIntro(): void;
 }
