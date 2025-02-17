@@ -123,8 +123,8 @@ export const wanderingNCs = new Set<string>([
 ]);
 
 type ActiveTask = Task & {
-  active_priority?: Prioritization;
-  other_effects?: Effect[];
+  activePriority?: Prioritization;
+  otherEffects?: Effect[];
 };
 
 export class Engine extends BaseEngine<CombatActions, ActiveTask> {
@@ -144,10 +144,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       if (teleportitis.completed() && removeTeleportitis.ready()) {
         return {
           ...removeTeleportitis,
-          active_priority: Prioritization.fixed(Priorities.Always),
+          activePriority: Prioritization.fixed(Priorities.Always),
         };
       }
-      return { ...teleportitis, active_priority: Prioritization.fixed(Priorities.Always) };
+      return { ...teleportitis, activePriority: Prioritization.fixed(Priorities.Always) };
     }
 
     // Otherwise, choose from all available tasks
@@ -179,7 +179,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
   public execute(task: ActiveTask): void {
     debug(``);
-    const reason = task.active_priority?.explain() ?? "";
+    const reason = task.activePriority?.explain() ?? "";
     const why = reason === "" ? "Route" : reason;
     debug(`Executing ${task.name} [${why}]`, "blue");
     this.checkLimits({ ...task, limit: { ...task.limit, unready: false } }, () => true); // ignore unready for this initial check
@@ -213,7 +213,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // Setup forced wanderers
     const wanderers = [];
-    if (task.active_priority?.has(Priorities.Wanderer)) {
+    if (task.activePriority?.has(Priorities.Wanderer)) {
       const prioritizedWanderer = wandererSources.find(
         (source) => source.available() && source.chance() === 1
       );
@@ -224,7 +224,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
 
     // Setup forced backups
-    if (task.active_priority?.has(Priorities.LastCopyableMonster)) {
+    if (task.activePriority?.has(Priorities.LastCopyableMonster)) {
       const backup = getActiveBackupTarget();
       if (!backup) throw `Backup requested but lastCopyableMonster changed?`;
       if (!outfit.equip($item`backup camera`)) throw `Cannot force backup camera on ${task.name}`;
@@ -241,7 +241,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     equipInitial(outfit);
 
     // Force the June cleaver if we really want it
-    if (task.active_priority?.has(Priorities.GoodCleaver)) outfit.equip($item`June cleaver`);
+    if (task.activePriority?.has(Priorities.GoodCleaver)) outfit.equip($item`June cleaver`);
 
     // Prepare combat macro
     if (combat.getDefaultAction() === undefined) combat.action("ignore");
@@ -323,7 +323,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       }
 
       // Don't equip the orb if we have a bad target
-      if (task.active_priority?.has(Priorities.BadOrb)) {
+      if (task.activePriority?.has(Priorities.BadOrb)) {
         outfit.equip({ avoid: $items`miniature crystal ball` });
         if (outfit.equips.get($slot`familiar`) === $item`miniature crystal ball`) {
           outfit.equips.delete($slot`familiar`);
@@ -333,7 +333,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       // Equip an orb if we have a good target.
       // (If we have banished all the bad targets, there is no need to force an orb)
       if (
-        task.active_priority?.has(Priorities.GoodOrb) &&
+        task.activePriority?.has(Priorities.GoodOrb) &&
         (!combat.can("banish") || !banish_state.isFullyBanished(task))
       ) {
         outfit.equip($item`miniature crystal ball`);
@@ -345,7 +345,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         let runaway = undefined;
         if (combat.can("ignore") || combat.can("ignoreSoftBanish")) {
           runaway = equipFirst(outfit, runawaySources);
-          if (runaway?.effect) task.other_effects = [...(task.other_effects ?? []), runaway.effect];
+          if (runaway?.effect) task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
           resources.provide("ignore", runaway);
           resources.provide("ignoreSoftBanish", runaway);
         }
@@ -359,7 +359,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
             );
             resources.provide("ignoreNoBanish", runaway);
             if (runaway?.effect)
-              task.other_effects = [...(task.other_effects ?? []), runaway.effect];
+              task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
           }
         }
       }
@@ -413,12 +413,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       wanderers.length === 0 &&
       hasDelay(task) &&
       !get("noncombatForcerActive") &&
-      !task.active_priority?.has(Priorities.LastCopyableMonster)
+      !task.activePriority?.has(Priorities.LastCopyableMonster)
     )
       wanderers.push(...equipUntilCapped(outfit, wandererSources));
 
     const mightKillSomething =
-      task.active_priority?.has(Priorities.Wanderer) ||
+      task.activePriority?.has(Priorities.Wanderer) ||
       task.combat?.can("kill") ||
       task.combat?.can("killHard") ||
       task.combat?.can("killItem") ||
@@ -510,8 +510,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
   dress(task: ActiveTask, outfit: Outfit): void {
     const effects: Effect[] = undelay(task.effects) ?? [];
-    const other_effects = task.other_effects ?? [];
-    applyEffects(outfit.modifier.join(","), [...effects, ...other_effects]);
+    const otherEffects = task.otherEffects ?? [];
+    applyEffects(outfit.modifier.join(","), [...effects, ...otherEffects]);
 
     try {
       cacheDress(outfit);
@@ -628,7 +628,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // Consider crepe paper parachute cape if available
     const parachuteTarget = undelay(task.parachute);
-    if (parachuteTarget && !task.active_priority?.has(Priorities.GoodOrb)) {
+    if (parachuteTarget && !task.activePriority?.has(Priorities.GoodOrb)) {
       const baseDo = task.do;
       task.do = () => {
         if (CrepeParachute.fight(parachuteTarget)) return;
@@ -699,7 +699,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     if (get("lastCopyableMonster") === $monster`giant swarm of ghuol whelps`) visitUrl("crypt.php");
 
     if (
-      task.active_priority?.has(Priorities.BadOrb) &&
+      task.activePriority?.has(Priorities.BadOrb) &&
       !haveEquipped($item`miniature crystal ball`)
     )
       resetBadOrb();
