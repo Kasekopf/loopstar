@@ -23,6 +23,7 @@ export const SmolDietQuest: Quest = {
   tasks: [
     {
       name: "Eat",
+      priority: () => Priorities.Free,
       ready: () =>
         atLevel(5) &&
         (have($item`Ol' Scratch's salad fork`) || args.smol.skipfork) &&
@@ -53,6 +54,7 @@ export const SmolDietQuest: Quest = {
     },
     {
       name: "Drink",
+      priority: () => Priorities.Free,
       ready: () => atLevel(11) && (have($item`Frosty's frosty mug`) || args.smol.skipmug),
       completed: () =>
         myInebriety() === 1 || (!have($item`astral pilsner`) && !have($item`astral six-pack`)),
