@@ -6,6 +6,7 @@ import { runChoice, visitUrl } from "kolmafia";
 import { SmolDietQuest } from "./tasks";
 import { RunPlan } from "../../engine/runplan";
 import { SmolPullQuest } from "./pulls";
+import { SmolEngine } from "./engine";
 
 export class SmolInfo implements PathInfo {
   getPath() {
@@ -19,7 +20,7 @@ export class SmolInfo implements PathInfo {
   }
 
   getEngine(tasks: Task[]): Engine {
-    return new Engine(tasks);
+    return new SmolEngine(tasks);
   }
 
   runIntro() {

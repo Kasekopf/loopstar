@@ -18,7 +18,6 @@ import {
   logprint,
   myAdventures,
   myFamiliar,
-  myFullness,
   myHp,
   myLevel,
   myMaxhp,
@@ -117,7 +116,7 @@ export const wanderingNCs = new Set<string>([
   "Teacher's Pet",
 ]);
 
-type ActiveTask = Task & {
+export type ActiveTask = Task & {
   activePriority?: Prioritization;
   otherEffects?: Effect[];
   availableTasks?: Task[];
@@ -278,17 +277,6 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         undefined,
         true
       );
-    }
-
-    // Use red rocket to boost food stats
-    if (
-      have($item`red rocket`) &&
-      myFullness() === 0 &&
-      myTurncount() > 1 &&
-      myLevel() < 12 &&
-      !have($effect`Everything Looks Red`)
-    ) {
-      combat.macro(new Macro().tryItem($item`red rocket`), undefined, true);
     }
 
     if (wanderers.length === 0) {
