@@ -7,7 +7,6 @@ export const ROUTE_WAIT_TO_EVENTUALLY_NCFORCE = 200;
 export const routing: string[] = [
   // Break pvp stone ASAP
   "Misc/Break Stone",
-  "Pull/All",
 
   // Start with the basic leveling tasks
   "Toot/Finish",
