@@ -351,7 +351,7 @@ export function getPullTask(spec: PullSpec): Task {
   const pull = new Pull(spec);
   return {
     name: pull.name,
-    priority: () => Priorities.Free,
+    priority: () => Priorities.Pull,
     after: [],
     ready: () => !!pull.shouldPull(),
     completed: () =>

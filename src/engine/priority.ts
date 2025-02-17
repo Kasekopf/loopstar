@@ -29,7 +29,8 @@ import { Outfit } from "grimoire-kolmafia";
 import { args } from "../args";
 
 export class Priorities {
-  static Always: Priority = { score: 20000, reason: "Forced" };
+  static Always: Priority = { score: 40000, reason: "Forced" };
+  static Pull: Priority = { score: 20000, reason: "Pull" };
   static Free: Priority = { score: 10000, reason: "Free action" };
   static LastCopyableMonster: Priority = { score: 4000, reason: "Copy last monster" };
   static GoodFeelNostalgia: Priority = { score: 3999, reason: "Feel Nostalgia is ready" };
