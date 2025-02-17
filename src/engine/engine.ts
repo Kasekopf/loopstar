@@ -79,7 +79,7 @@ import {
   getModifiersFrom,
 } from "./outfit";
 import { cliExecute, equippedAmount, itemAmount, runChoice } from "kolmafia";
-import { debug } from "../lib";
+import { debug, stableSort } from "../lib";
 import {
   canChargeVoid,
   CombatResource,
@@ -126,12 +126,6 @@ type ActiveTask = Task & {
   other_effects?: Effect[];
 };
 
-type ScoredTask = {
-  task: ActiveTask;
-  score: number;
-  index: number;
-};
-
 export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   constructor(tasks: Task[]) {
     super(tasks, { combat_defaults: new MyActionDefaults() });
@@ -139,9 +133,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
   public getNextTask(): ActiveTask | undefined {
     this.updatePlan();
-    const available_tasks = this.tasks.filter((task) => this.available(task));
-
-    if (myPath() !== $path`A Shrunken Adventurer am I`) return undefined; // Prism broken
+    const availableTasks = this.tasks.filter((task) => this.available(task));
 
     // Teleportitis overrides all
     if (have($effect`Teleportitis`)) {
@@ -156,35 +148,27 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
 
     // Otherwise, choose from all available tasks
-    const task_priorities = available_tasks.map((task) => {
+    const taskPriorities = availableTasks.map((task) => {
       return { ...task, active_priority: Prioritization.from(task) };
     });
 
-    // Sort tasks in a stable way, by priority and then by route
-    const scored_tasks: ScoredTask[] = [];
-    for (let i = 0; i < task_priorities.length; i++) {
-      scored_tasks.push({
-        task: task_priorities[i],
-        score: task_priorities[i].active_priority.score(),
-        index: i,
-      });
-    }
-    scored_tasks.sort((a, b) => {
-      if (a.score === b.score) return a.index - b.index;
-      return b.score - a.score;
-    });
+    // Sort tasks in a stable way, by priority (decreasing) and then by route
+    const tasksOrderedByPriority = stableSort(
+      taskPriorities,
+      (task) => -1 * task.active_priority?.score()
+    );
     if (args.debug.verbose) {
       printHtml("");
       printHtml("Available Tasks:");
-      for (const scored_task of scored_tasks) {
-        const name = scored_task.task.name;
-        const reason = scored_task.task.active_priority?.explainWithColor() ?? "Available";
-        const score = scored_task.score;
+      for (const task of tasksOrderedByPriority) {
+        const name = task.name;
+        const reason = task.active_priority?.explainWithColor() ?? "Available";
+        const score = task.active_priority?.score() ?? 0;
         printHtml(`<u>${name}</u>: ${reason} <font color='#888888'>(${score})</font>`);
       }
       printHtml("");
     }
-    if (scored_tasks.length > 0) return scored_tasks[0].task;
+    if (tasksOrderedByPriority.length > 0) return tasksOrderedByPriority[0];
 
     // No next task
     return undefined;

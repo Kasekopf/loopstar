@@ -142,3 +142,35 @@ export function garboValue(item: Item, useHistorical = false): number {
 export function garboAverageValue(...items: Item[]): number {
   return garboValueFunctions().averageValue(...items);
 }
+
+type ScoredItem<T> = {
+  item: T;
+  score: number;
+  index: number;
+};
+
+/**
+ * Sort the given items in an increasing, stable way.
+ *
+ * That is if key(a)=key(b), then a and b will appear in the same order as in
+ * the original array.
+ *
+ * @param items The array to sort.
+ * @param key The value to use for each array item.
+ * @returns A new copy of the array, sorted.
+ */
+export function stableSort<T>(items: T[], key: (item: T) => number): T[] {
+  const scoredItems: ScoredItem<T>[] = [];
+  for (let i = 0; i < items.length; i++) {
+    scoredItems.push({
+      item: items[i],
+      score: key(items[i]),
+      index: i,
+    });
+  }
+  scoredItems.sort((a, b) => {
+    if (a.score === b.score) return a.index - b.index;
+    return a.score - b.score;
+  });
+  return scoredItems.map((scoredItem) => scoredItem.item);
+}
