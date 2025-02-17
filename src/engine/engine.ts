@@ -103,7 +103,6 @@ import { flyersDone } from "../tasks/level12";
 import { globalStateCache } from "./state";
 import { removeTeleportitis, teleportitisTask } from "../tasks/misc";
 import { summonStrategy } from "../tasks/summons";
-import { pullStrategy } from "../tasks/pulls";
 import { keyStrategy } from "../tasks/keys";
 import { applyEffects, customRestoreMp } from "./moods";
 import { ROUTE_WAIT_TO_EVENTUALLY_NCFORCE, ROUTE_WAIT_TO_NCFORCE } from "../route";
@@ -774,7 +773,6 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     summonStrategy.update(); // Update summon plan with current state
     keyStrategy.update(); // Update key plan with current state
-    pullStrategy.update(); // Update pull plan with current state
     return resourcesAllocated;
   }
 }

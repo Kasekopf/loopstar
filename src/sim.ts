@@ -21,7 +21,7 @@ import {
   have,
   permedSkills,
 } from "libram";
-import { pullStrategy } from "./tasks/pulls";
+import { getPullItem, pulls } from "./tasks/pulls";
 
 class Hardcoded {
   have: boolean;
@@ -466,8 +466,8 @@ function buildRecommendedSkillsList(): (Requirement & { thing: Skill })[] {
 
 function buildPullList(optional: boolean): Requirement[] {
   const result: Requirement[] = [];
-  for (const pull of pullStrategy.pulls) {
-    const items = pull.items().filter((item) => item) as Item[];
+  for (const pull of pulls) {
+    const items = getPullItem(pull) ?? [];
 
     // Ignore dynamic item selection for now
     if (items.length === 0) continue;
@@ -476,7 +476,8 @@ function buildPullList(optional: boolean): Requirement[] {
     const big_items = items.filter((item) => mallPrice(item) === 0 || mallPrice(item) > 200000);
     // Ignore item lists where the IOTM is just a sub for a cheaper item,
     // except still highlight GAP/navel ring.
-    if (big_items.length < items.length && pull.name !== "Runaway IoTM") continue;
+    if (big_items.length < items.length && !items.includes($item`Greatest American Pants`))
+      continue;
     if (pull.optional !== optional) continue;
     result.push({ thing: big_items, why: pull.description ?? "Pull" });
   }

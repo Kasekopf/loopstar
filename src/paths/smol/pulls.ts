@@ -2,7 +2,8 @@ import { get } from "http";
 import { Item, myAdventures, myDaycount, myFullness, myInebriety } from "kolmafia";
 import { $item, $skill, have } from "libram";
 import { args } from "../../args";
-import { PullSpec } from "../../tasks/pulls";
+import { getPullTask, PullSpec } from "../../tasks/pulls";
+import { Quest } from "../../engine/task";
 
 export const smolPulls: PullSpec[] = [
   // Food
@@ -90,3 +91,8 @@ export const smolPulls: PullSpec[] = [
     priority: 5.04,
   },
 ];
+
+export const SmolPullQuest: Quest = {
+  name: "SmolPull",
+  tasks: smolPulls.map((p) => getPullTask(p)),
+};

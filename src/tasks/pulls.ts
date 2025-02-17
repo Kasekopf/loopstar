@@ -1,13 +1,11 @@
 import {
   buyUsingStorage,
   cliExecute,
-  inHardcore,
   isUnrestricted,
   Item,
   itemAmount,
   myMeat,
   myTurncount,
-  pullsRemaining,
   storageAmount,
   toInt,
   visitUrl,
@@ -15,7 +13,7 @@ import {
 import { $familiar, $item, $items, $skill, get, have, set } from "libram";
 import { args, toTempPref } from "../args";
 import { Priorities } from "../engine/priority";
-import { Allocations, Quest, QuestStrategy, Task } from "../engine/task";
+import { Allocations, Quest, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Keys, keyStrategy } from "./keys";
 import { trainSetAvailable } from "./misc";
@@ -247,6 +245,19 @@ export const pulls: PullSpec[] = [
   },
 ];
 
+export function getPullItem(spec: PullSpec): Item[] | undefined {
+  if (spec.pull instanceof Item) {
+    return [spec.pull];
+  } else if (typeof spec.pull === "function") {
+    const result = spec.pull();
+    if (!result) return undefined;
+    if (result instanceof Item) return [result];
+    return result;
+  } else {
+    return spec.pull;
+  }
+}
+
 class Pull {
   readonly items: () => (Item | undefined)[];
   readonly name: string;
@@ -336,119 +347,6 @@ enum PullState {
   UNNEEDED,
 }
 
-export class PullStrategy implements QuestStrategy {
-  pulls: Pull[];
-
-  constructor(pulls: PullSpec[]) {
-    this.pulls = [];
-    this.add(pulls);
-  }
-
-  public add(pulls: PullSpec[]) {
-    this.pulls.concat(pulls.map((pull) => new Pull(pull)));
-  }
-
-  public update(): void {
-    const pulled = new Set<Item>(
-      get("_roninStoragePulls")
-        .split(",")
-        .map((id) => parseInt(id))
-        .filter((id) => id > 0)
-        .map((id) => Item.get(id))
-    );
-
-    let count = pullsRemaining() - (20 - args.major.pulls);
-    if (inHardcore() || myTurncount() >= 1000) count = 0; // No pulls in hardcore or out of ronin
-
-    for (let i = 0; i < this.pulls.length; i++) {
-      if (this.pulls[i].wasPulled(pulled)) {
-        this.pulls[i].state = PullState.PULLED;
-        continue;
-      }
-
-      switch (this.pulls[i].shouldPull()) {
-        case false:
-          this.pulls[i].state = PullState.UNNEEDED;
-          continue;
-        case true:
-          this.pulls[i].state = count > 0 ? PullState.READY : PullState.MAYBE_IFROOM;
-          count--;
-          continue;
-        case undefined:
-          this.pulls[i].state = PullState.MAYBE_UNSURE;
-          count--;
-          continue;
-      }
-    }
-  }
-
-  public pullsUsed(): number {
-    return get("_roninStoragePulls").split(",").length;
-  }
-
-  /**
-   * Attempt to pull the provided item without distrupting the plan.
-   *
-   * This will only work if the item is listed as a possible pull in the list,
-   * but its ready() method is returning undefined, so it is MAYBE_UNSURE in
-   * the current pull strategy.
-   *
-   * @param item The item to check.
-   * @returns True if the item was pulled.
-   */
-  public pullIfReady(item: Item): boolean {
-    for (let i = 0; i < this.pulls.length; i++) {
-      if (this.pulls[i].state !== PullState.MAYBE_UNSURE) continue;
-      const options = this.pulls[i].items();
-      if (options.includes(item)) {
-        this.pulls[i].pull();
-        this.update();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public getQuest(): Quest {
-    return {
-      name: "Pull",
-      tasks: [
-        ...this.pulls.map((pull, index): Task => {
-          return {
-            name: pull.name,
-            priority: () => Priorities.Free,
-            after: [],
-            ready: () => this.pulls[index].state === PullState.READY,
-            completed: () =>
-              this.pulls[index].state === PullState.PULLED ||
-              this.pulls[index].state === PullState.UNNEEDED,
-            do: () => pull.pull(),
-            post: () => {
-              pull.post();
-              this.update();
-            },
-            limit: { tries: 1 },
-            freeaction: true,
-          };
-        }),
-        {
-          // Add a last task that tracks if all pulls have been done, for routing
-          name: "All",
-          after: this.pulls.map((pull) => pull.name),
-          completed: () => true,
-          do: (): void => {
-            throw `Should never run`;
-          },
-          limit: { tries: 1 },
-          freeaction: true,
-        },
-      ],
-    };
-  }
-}
-
-export const pullStrategy = new PullStrategy(pulls);
-
 export function getPullTask(spec: PullSpec): Task {
   const pull = new Pull(spec);
   return {
@@ -477,3 +375,8 @@ export function getPullTask(spec: PullSpec): Task {
     },
   };
 }
+
+export const PullQuest: Quest = {
+  name: "Pull",
+  tasks: pulls.map((p) => getPullTask(p)),
+};

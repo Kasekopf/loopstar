@@ -18,10 +18,11 @@ import { MiscQuest, WandQuest } from "./misc";
 import { DigitalQuest, KeysQuest, keyStrategy } from "./keys";
 import { summonStrategy } from "./summons";
 import { Quest } from "../engine/task";
-import { pullStrategy } from "./pulls";
+import { PullQuest } from "./pulls";
 import { RunPlan } from "../engine/runplan";
 
 const allQuests: Quest[] = [
+  PullQuest,
   TootQuest,
   MiscQuest,
   WandQuest,
@@ -45,4 +46,4 @@ const allQuests: Quest[] = [
   DigitalQuest,
 ];
 
-export const basePlan: RunPlan = new RunPlan(allQuests, summonStrategy, pullStrategy, keyStrategy);
+export const basePlan: RunPlan = new RunPlan(allQuests, summonStrategy, keyStrategy);
