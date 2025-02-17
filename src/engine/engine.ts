@@ -751,6 +751,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   updatePlan(): Map<string, boolean> {
     // Note order matters for these strategy updates
     globalStateCache.invalidate();
+    summonStrategy.update(); // Update summon plan with current state
+    keyStrategy.update(); // Update key plan with current state
 
     const resourcesAllocated = new Map<string, boolean>();
     const resourcesNeeded = this.tasks.filter((task) => task.requires && !task.completed());
@@ -768,9 +770,6 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         }
       }
     }
-
-    summonStrategy.update(); // Update summon plan with current state
-    keyStrategy.update(); // Update key plan with current state
     return resourcesAllocated;
   }
 }
