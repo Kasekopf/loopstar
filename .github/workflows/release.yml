@@ -1,4 +1,4 @@
-name: Release loopsmol
+name: Release loopstar
 
 on:
   workflow_dispatch:

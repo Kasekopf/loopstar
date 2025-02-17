@@ -1,4 +1,4 @@
-name: Build and lint loopsmol
+name: Build and lint loopstar
 
 on:
   push:
