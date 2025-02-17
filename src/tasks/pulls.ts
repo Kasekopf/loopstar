@@ -457,6 +457,7 @@ export function getPullTask(spec: PullSpec): Task {
     after: [],
     ready: () => !!pull.shouldPull(),
     completed: () =>
+      pull.shouldPull() === false ||
       pull.wasPulled(
         new Set<Item>(
           get("_roninStoragePulls")
