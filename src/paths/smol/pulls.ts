@@ -75,20 +75,20 @@ export const smolPulls: PullSpec[] = [
   {
     pull: $item`sea salt scrubs`,
     useful: () => have($skill`Torso Awareness`),
-    priority: 99,
+    priority: 100,
   },
   {
     pull: $item`hopping socks`, // +max MP item
     useful: () => !have($skill`Torso Awareness`) && !have($item`SpinMaster™ lathe`),
-    priority: 98,
+    priority: 100,
   },
   // Pulls with high (avoided) requirements
-  { pull: $item`old patched suit-pants`, optional: true, priority: 5.05 },
+  { pull: $item`old patched suit-pants`, optional: true, priority: 5 },
   {
     pull: $item`transparent pants`,
     optional: true,
     useful: () => !have($item`designer sweatpants`),
-    priority: 5.04,
+    priority: 5,
   },
 ];
 

@@ -49,14 +49,14 @@ export const pulls: PullSpec[] = [
   {
     pull: $item`daily dungeon malware`,
     useful: () => keyStrategy.useful(Keys.Malware),
-    priority: 1002,
+    priority: 1000,
   },
   {
     name: "Key Zappable",
     pull: () => keyStrategy.getZapChoice(0),
     useful: () => keyStrategy.useful(Keys.Zap),
     duplicate: true,
-    priority: 1001,
+    priority: 1000,
   },
   {
     name: "Key Zappable 2",
@@ -126,13 +126,13 @@ export const pulls: PullSpec[] = [
       if (step("questL11Black") >= 2 && myTurncount() >= 200) return true;
       return undefined;
     },
-    priority: 69,
+    priority: 70,
   },
   {
     pull: $items`Greatest American Pants, navel ring of navel gazing, peppermint parasol`,
     optional: true,
     name: "Runaway IoTM",
-    priority: 10.01,
+    priority: 10,
   },
   {
     pull: $items`aquaviolet jub-jub bird, charpuce jub-jub bird, crimsilion jub-jub bird, stomp box`,
@@ -194,8 +194,8 @@ export const pulls: PullSpec[] = [
     },
     priority: 8,
   },
-  { pull: $item`deck of lewd playing cards`, optional: true, priority: 5.03 },
-  { pull: $item`gravy boat`, useful: () => !underStandard(), priority: 5.02 },
+  { pull: $item`deck of lewd playing cards`, optional: true, priority: 5 },
+  { pull: $item`gravy boat`, useful: () => !underStandard(), priority: 5 },
   {
     pull: $item`Mohawk wig`,
     useful: () => {
@@ -203,7 +203,7 @@ export const pulls: PullSpec[] = [
       if (have($item`S.O.C.K.`)) return true; // If one didn't drop naturally
       return undefined;
     },
-    priority: 5.01,
+    priority: 5,
   },
   {
     pull: $item`11-leaf clover`,
