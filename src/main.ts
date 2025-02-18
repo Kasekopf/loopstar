@@ -76,7 +76,7 @@ export function main(command?: string): void {
     engine.run(args.debug.actions);
 
     const remaining_tasks = tasks.filter((task) => !task.completed());
-    if (step("questL13Final") > 11 || myPath() !== path.getPath()) {
+    if (step("questL13Final") <= 11 && myPath() === path.getPath()) {
       if (args.debug.actions !== undefined) {
         const next = engine.getNextTask();
         if (next) {
@@ -98,7 +98,7 @@ export function main(command?: string): void {
   if (step("questL13Final") > 11) {
     print("Run complete!", "purple");
   }
-  print(`   Path: ${path.getPath()}`);
+  print(`   Path: ${path.getPath()}`, "purple");
   print(`   Adventures used: ${turnsPlayed()}`, "purple");
   print(`   Adventures remaining: ${myAdventures()}`, "purple");
   if (set_time_now)
