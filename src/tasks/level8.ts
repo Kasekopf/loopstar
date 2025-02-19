@@ -19,6 +19,7 @@ import {
   $monster,
   $monsters,
   $skill,
+  CombatLoversLocket,
   Counter,
   ensureEffect,
   get,
@@ -31,7 +32,6 @@ import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
 import { councilSafe } from "./level12";
-import { summonStrategy } from "./summons";
 import { coldPlanner } from "../engine/outfit";
 import { trainSetAvailable } from "./misc";
 
@@ -62,7 +62,8 @@ export const McLargeHugeQuest: Quest = {
       after: ["Trapper Request", "Pull/Ore", "Misc/Hermit Clover"],
       ready: () =>
         have($item`11-leaf clover`) &&
-        summonStrategy.getSourceFor($monster`mountain man`) === undefined &&
+        // TODO: fix this condition to check summoning mountain main
+        !CombatLoversLocket.have() &&
         oresNeeded() > 0,
       prepare: () => {
         if (!have($effect`Lucky!`)) use($item`11-leaf clover`);

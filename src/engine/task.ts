@@ -63,3 +63,9 @@ export type AllocationRequest = {
   which: Allocation;
   value: number;
 };
+
+export type FilledSummon = {
+  do: () => void;
+  ready: () => boolean;
+};
+export type FilledAllocation = Allocations | FilledSummon;

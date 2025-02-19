@@ -16,13 +16,14 @@ import { WarQuest } from "./level12";
 import { TowerQuest } from "./level13";
 import { MiscQuest, WandQuest } from "./misc";
 import { DigitalQuest, KeysQuest, keyStrategy } from "./keys";
-import { summonStrategy } from "./summons";
+import { SummonQuest } from "./summons";
 import { Quest } from "../engine/task";
 import { PullQuest } from "./pulls";
 import { RunPlan } from "../engine/runplan";
 
 const allQuests: Quest[] = [
   PullQuest,
+  SummonQuest,
   TootQuest,
   MiscQuest,
   WandQuest,
@@ -46,4 +47,4 @@ const allQuests: Quest[] = [
   DigitalQuest,
 ];
 
-export const basePlan: RunPlan = new RunPlan(allQuests, summonStrategy, keyStrategy);
+export const basePlan: RunPlan = new RunPlan(allQuests, keyStrategy);

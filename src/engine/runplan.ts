@@ -1,5 +1,4 @@
 import { Quest, Task } from "./task";
-import { SummonStrategy } from "../tasks/summons";
 import { KeyStrategy } from "../tasks/keys";
 import { getTasks } from "grimoire-kolmafia";
 import { args } from "../args";
@@ -8,22 +7,19 @@ import { debug } from "../lib";
 
 export class RunPlan {
   quests: Quest[];
-  summonStrategy: SummonStrategy;
   keyStrategy: KeyStrategy;
 
-  constructor(quests: Quest[], summonStrategy: SummonStrategy, keyStrategy: KeyStrategy) {
+  constructor(quests: Quest[], keyStrategy: KeyStrategy) {
     this.quests = quests;
-    this.summonStrategy = summonStrategy;
     this.keyStrategy = keyStrategy;
   }
 
   update() {
-    this.summonStrategy.update();
     this.keyStrategy.update();
   }
 
   getTasks(): Task[] {
-    const quests = [...this.quests, this.summonStrategy.getQuest()];
+    const quests = [...this.quests];
     const tasks = prioritize(getTasks(quests));
     for (const task of tasks) {
       if (task.limit.soft) {

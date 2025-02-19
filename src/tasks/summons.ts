@@ -1,41 +1,16 @@
-import {
-  canFaxbot,
-  chatPrivate,
-  cliExecute,
-  isOnline,
-  itemAmount,
-  Monster,
-  myMeat,
-  reverseNumberology,
-  runCombat,
-  use,
-  visitUrl,
-  wait,
-} from "kolmafia";
-import {
-  $effect,
-  $familiar,
-  $item,
-  $items,
-  $monster,
-  $skill,
-  CombatLoversLocket,
-  get,
-  have,
-  Macro,
-} from "libram";
+import { itemAmount, Monster, myMeat } from "kolmafia";
+import { $effect, $familiar, $item, $items, $monster, $skill, get, have, Macro } from "libram";
 import { CombatStrategy } from "../engine/combat";
-import { debug, underStandard } from "../lib";
-import { args } from "../args";
-import { Quest, QuestStrategy, Task } from "../engine/task";
+import { Quest, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { fillHp } from "../engine/moods";
 import { oresNeeded } from "./level8";
 import { yellowRayPossible } from "../resources/yellowray";
 
-type SummonTarget = Omit<Task, "do" | "name" | "limit"> & {
+export type SummonTarget = Omit<Task, "do" | "name" | "limit"> & {
   target: Monster;
+  value: number;
   tries?: number;
 };
 const summonTargets: SummonTarget[] = [
@@ -53,6 +28,7 @@ const summonTargets: SummonTarget[] = [
       avoid: $items`carnivorous potted plant`,
     },
     combat: new CombatStrategy().yellowRay(),
+    value: 10,
   },
   {
     target: $monster`mountain man`,
@@ -89,6 +65,7 @@ const summonTargets: SummonTarget[] = [
       return result;
     }),
     tries: 3,
+    value: 9,
   },
   {
     target: $monster`Astrologer of Shub-Jigguwatt`,
@@ -106,25 +83,18 @@ const summonTargets: SummonTarget[] = [
     combat: new CombatStrategy()
       .macro(Macro.trySkill($skill`Micrometeorite`).trySkill($skill`Curse of Weaksauce`))
       .kill(),
-  },
-  {
-    target: $monster`Astronomer`,
-    after: ["Astrologer Of Shub-Jigguwatt"],
-    completed: () =>
-      have($item`star chart`) ||
-      have($item`Richard's star key`) ||
-      get("nsTowerDoorKeysUsed").includes("Richard's star key"),
-    combat: new CombatStrategy().kill(),
+    value: 3,
   },
   {
     target: $monster`Astronomer`,
     after: [],
-    ready: () => !have($item`Cargo Cultist Shorts`) || get("_cargoPocketEmptied"),
     completed: () =>
       have($item`star chart`) ||
       have($item`Richard's star key`) ||
-      get("nsTowerDoorKeysUsed").includes("Richard's star key"),
+      get("nsTowerDoorKeysUsed").includes("Richard's star key") ||
+      (have($item`Cargo Cultist Shorts`) && get("_cargoPocketEmptied")),
     combat: new CombatStrategy().kill(),
+    value: 3,
   },
   {
     target: $monster`Camel's Toe`,
@@ -149,6 +119,7 @@ const summonTargets: SummonTarget[] = [
       return { modifier: "item" };
     },
     combat: new CombatStrategy().macro(Macro.trySkill($skill`%fn, spit on them!`)).killItem(),
+    value: 3,
   },
   {
     target: $monster`Baa'baa'bu'ran`,
@@ -159,157 +130,27 @@ const summonTargets: SummonTarget[] = [
       step("questL11Worship") >= 3,
     outfit: { modifier: "item" },
     combat: new CombatStrategy().killItem(),
+    value: 2,
   },
 ];
 
-type SummonSource = {
-  name: string;
-  available: () => number;
-  ready?: () => boolean;
-  canFight: (mon: Monster) => boolean;
-  summon: (mon: Monster) => void;
+export function getSummonTask(spec: SummonTarget): Task {
+  return {
+    ...spec,
+    name: spec.target.name.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()), // capitalize first letter of each word
+    ready: spec.ready,
+    do: () => {
+      throw `Attempted to summon ${spec.target.name} with no allocation`;
+    },
+    limit: { tries: spec.tries ?? 1 },
+    requires: {
+      which: { summon: spec.target },
+      value: spec.value,
+    },
+  };
+}
+
+export const SummonQuest: Quest = {
+  name: "Summon",
+  tasks: summonTargets.map((s) => getSummonTask(s)),
 };
-const summonSources: SummonSource[] = [
-  {
-    name: "Numberology",
-    available: () => {
-      if (get("skillLevel144") === 0) return 0;
-      if (get("_universeCalculated") === 3) return 0;
-      return get("_universeCalculated") < get("skillLevel144") ? 1 : 0;
-    },
-    ready: () => Object.values(reverseNumberology()).includes(51),
-    canFight: (mon: Monster) => mon === $monster`War Frat 151st Infantryman`, // Only use for war frat
-    summon: () => cliExecute("numberology 51"),
-  },
-  {
-    name: "White Page",
-    available: () => (have($item`white page`) ? 1 : 0),
-    canFight: (mon: Monster) => mon === $monster`white lion`,
-    summon: () => use($item`white page`),
-  },
-  {
-    name: "Combat Locket",
-    available: () =>
-      CombatLoversLocket.have() ? CombatLoversLocket.reminiscesLeft() - args.minor.savelocket : 0,
-    canFight: (mon: Monster) => CombatLoversLocket.availableLocketMonsters().includes(mon),
-    summon: (mon: Monster) => CombatLoversLocket.reminisce(mon),
-  },
-  {
-    name: "Cargo Shorts",
-    available: () => (have($item`Cargo Cultist Shorts`) && !get("_cargoPocketEmptied") ? 1 : 0),
-    canFight: (mon: Monster) => mon === $monster`Astrologer of Shub-Jigguwatt`,
-    summon: (mon: Monster) => {
-      if (mon === $monster`Astrologer of Shub-Jigguwatt`) {
-        cliExecute("cargo 533");
-        use($item`greasy desk bell`);
-      }
-    },
-  },
-  {
-    name: "Fax",
-    available: () => {
-      if (
-        args.minor.fax &&
-        !underStandard() &&
-        !get("_photocopyUsed") &&
-        have($item`Clan VIP Lounge key`)
-      )
-        return 1;
-      return 0;
-    },
-    canFight: (mon: Monster) => canFaxbot(mon),
-    summon: (mon: Monster) => {
-      // Default to CheeseFax unless EasyFax is the only faxbot online
-      const faxbot =
-        ["OnlyFax", "CheeseFax", "EasyFax"].find((bot) => isOnline(bot)) ?? "CheeseFax";
-      for (let i = 0; i < 6; i++) {
-        if (i % 3 === 0) chatPrivate(faxbot, mon.name);
-        wait(10 + i);
-        if (checkFax(mon)) break;
-      }
-      if (!checkFax(mon)) {
-        if (!isOnline(faxbot))
-          throw `Failed to acquire photocopied ${mon.name}. Faxbot ${faxbot} appears to be offline.`;
-        throw `Failed to acquire photocopied ${mon.name} but ${faxbot} is online.`;
-      }
-      use($item`photocopied monster`);
-    },
-  },
-  {
-    name: "Wish",
-    available: () => (have($item`genie bottle`) ? 3 - get("_genieWishesUsed") : 0),
-    canFight: () => true,
-    summon: (mon: Monster) => {
-      cliExecute(`genie monster ${mon.name}`);
-      visitUrl("main.php");
-    },
-  },
-];
-
-// From garbo
-function checkFax(mon: Monster): boolean {
-  if (!have($item`photocopied monster`)) cliExecute("fax receive");
-  if (get("photocopyMonster") === mon) return true;
-  cliExecute("fax send");
-  return false;
-}
-
-export class SummonStrategy implements QuestStrategy {
-  targets: SummonTarget[];
-  sources: SummonSource[];
-  plan = new Map<Monster, SummonSource>();
-
-  constructor(targets: SummonTarget[], sources: SummonSource[]) {
-    this.targets = targets;
-    this.sources = sources;
-  }
-
-  public update(): void {
-    this.plan.clear();
-    const targets = this.targets.filter((t) => !t.completed()).map((t) => t.target);
-    for (const source of this.sources) {
-      let available = source.available();
-      for (const target of targets) {
-        if (available > 0 && !this.plan.has(target) && source.canFight(target)) {
-          this.plan.set(target, source);
-          available -= 1;
-        }
-      }
-    }
-  }
-
-  public getSourceFor(monster: Monster): SummonSource | undefined {
-    return this.plan.get(monster);
-  }
-
-  public sourceReadyFor(monster: Monster): boolean {
-    const source = this.getSourceFor(monster);
-    if (source === undefined) return false;
-    if (source.ready === undefined) return true;
-    return source.ready();
-  }
-
-  public getQuest(): Quest {
-    return {
-      name: "Summon",
-      tasks: summonTargets.map((task): Task => {
-        return {
-          ...task,
-          name: task.target.name.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()), // capitalize first letter of each word
-          ready: () => (task.ready?.() ?? true) && summonStrategy.sourceReadyFor(task.target),
-          do: () => {
-            // Perform the actual summon
-            const source = summonStrategy.getSourceFor(task.target);
-            if (source) {
-              debug(`Summon source: ${source.name}`);
-              source.summon(task.target);
-            } else throw `Unable to find summon source for ${task.target.name}`;
-            runCombat();
-          },
-          limit: { tries: task.tries ?? 1 },
-        };
-      }),
-    };
-  }
-}
-export const summonStrategy = new SummonStrategy(summonTargets, summonSources);
