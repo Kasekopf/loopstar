@@ -39,7 +39,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { Allocations, FilledAllocation, hasDelay, NCForce, Task } from "./task";
+import { Allocations, DeltaTask, hasDelay, NCForce, Task } from "./task";
 import {
   $effect,
   $effects,
@@ -80,7 +80,7 @@ import {
   getModifiersFrom,
 } from "./outfit";
 import { cliExecute, equippedAmount, itemAmount, runChoice } from "kolmafia";
-import { debug, stableSort } from "../lib";
+import { debug, merge, stableSort } from "../lib";
 import { refillLatte } from "../resources/runaway";
 import { shouldFinishLatte } from "../resources/runaway";
 import { Priorities, Prioritization } from "./priority";
@@ -131,9 +131,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const resourcesAllocated = this.updatePlan();
     const tasksWithResources = this.tasks.map((task) => {
       const allocation = resourcesAllocated.get(task.name);
-      if (!allocation) return task;
-      const priorReady = task.ready ?? (() => true);
-      return { ...task, do: allocation.do, ready: () => priorReady() && allocation.ready() };
+      if (allocation === false || allocation === undefined) return task;
+      return merge(task, allocation);
     });
     const availableTasks = tasksWithResources.filter(
       (task) => this.available(task) && (!task.requires || resourcesAllocated.get(task.name))
@@ -737,12 +736,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     });
   }
 
-  updatePlan(): Map<string, FilledAllocation | false> {
+  updatePlan(): Map<string, DeltaTask | false> {
     // Note order matters for these strategy updates
     globalStateCache.invalidate();
     keyStrategy.update(); // Update key plan with current state
 
-    const resourcesAllocated = new Map<string, FilledAllocation | false>();
+    const resourcesAllocated = new Map<string, DeltaTask | false>();
     const resourcesNeeded = this.tasks.filter((task) => task.requires && !task.completed());
     const tasksByResource = stableSort(resourcesNeeded, (task) => -1 * (task.requires?.value ?? 0));
     let pullsLeft = pullsRemaining() - (20 - args.major.pulls);
@@ -754,7 +753,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       if (!task.requires) break;
       if (task.requires.which === Allocations.PULL) {
         if (pullsLeft > 0) {
-          resourcesAllocated.set(task.name, Allocations.PULL);
+          resourcesAllocated.set(task.name, {});
           pullsLeft -= 1;
         } else {
           resourcesAllocated.set(task.name, false);
@@ -766,13 +765,17 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
             const allocatedSummon = summonSources[i];
             const monster = task.requires.which.summon;
             resourcesAllocated.set(task.name, {
-              do: () => {
-                // Perform the actual summon
-                debug(`Summon source: ${allocatedSummon.name}`);
-                allocatedSummon.summon(monster);
-                runCombat();
+              do: {
+                replace: () => {
+                  // Perform the actual summon
+                  debug(`Summon source: ${allocatedSummon.name}`);
+                  allocatedSummon.summon(monster);
+                  runCombat();
+                },
               },
-              ready: () => allocatedSummon.ready?.() ?? true,
+              ready: {
+                amend: (ready) => () => (ready?.() ?? true) && (allocatedSummon.ready?.() ?? true),
+              },
             });
           }
         }

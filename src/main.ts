@@ -153,14 +153,14 @@ function listTasks(engine: Engine, show_phyla = false): void {
           case undefined:
             debug(`${task.name}: Available [${priority.score()}: ${why}]`);
             break;
-          case true:
-            debug(`${task.name}: Available [${priority.score()}: ${why}] (Resource Allocated)`);
-            break;
           case false:
             debug(
               `${task.name}: Blocked [${priority.score()}: ${why}] (No Resource Allocated)`,
               "red"
             );
+            break;
+          default:
+            debug(`${task.name}: Available [${priority.score()}: ${why}] (Resource Allocated)`);
             break;
         }
       } else {

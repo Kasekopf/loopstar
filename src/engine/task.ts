@@ -2,6 +2,7 @@ import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
 import { undelay } from "libram";
+import { Delta } from "../lib";
 
 export type Quest = BaseQuest<Task>;
 
@@ -35,6 +36,8 @@ export type Task = {
   requires?: AllocationRequest;
 } & BaseTask<CombatActions>;
 
+export type DeltaTask = Delta<Task>;
+
 export type Priority = {
   score: number;
   reason?: string;
@@ -63,9 +66,3 @@ export type AllocationRequest = {
   which: Allocation;
   value: number;
 };
-
-export type FilledSummon = {
-  do: () => void;
-  ready: () => boolean;
-};
-export type FilledAllocation = Allocations | FilledSummon;
