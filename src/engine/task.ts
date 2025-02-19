@@ -49,11 +49,6 @@ export function hasDelay(task: Task): boolean {
   return task.do.turnsSpent < undelay(task.delay);
 }
 
-export interface QuestStrategy {
-  getQuest(): Quest;
-  update(): void;
-}
-
 export enum Allocations {
   PULL,
 }
