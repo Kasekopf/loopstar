@@ -131,12 +131,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const resourcesAllocated = this.updatePlan();
     const tasksWithResources = this.tasks.map((task) => {
       const allocation = resourcesAllocated.get(task.name);
-      if (allocation === false || allocation === undefined) return task;
+      if (allocation === undefined) return task;
       return merge(task, allocation);
     });
-    const availableTasks = tasksWithResources.filter(
-      (task) => this.available(task) && (!task.requires || resourcesAllocated.get(task.name))
-    );
+    const availableTasks = tasksWithResources.filter((task) => this.available(task));
 
     // Teleportitis overrides all
     if (have($effect`Teleportitis`)) {
@@ -736,34 +734,37 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     });
   }
 
-  updatePlan(): Map<string, DeltaTask | false> {
+  updatePlan(): Map<string, DeltaTask> {
     // Note order matters for these strategy updates
     globalStateCache.invalidate();
     keyStrategy.update(); // Update key plan with current state
 
-    const resourcesAllocated = new Map<string, DeltaTask | false>();
-    const resourcesNeeded = this.tasks.filter((task) => task.requires && !task.completed());
-    const tasksByResource = stableSort(resourcesNeeded, (task) => -1 * (task.requires?.value ?? 0));
+    const resourcesAllocated = new Map<string, DeltaTask>();
+    const resourcesNeeded = this.tasks.filter((task) => task.resources && !task.completed());
+    const tasksByResource = stableSort(
+      resourcesNeeded,
+      (task) => -1 * (task.resources?.value ?? 0)
+    );
     let pullsLeft = pullsRemaining() - (20 - args.major.pulls);
     if (inHardcore() || myTurncount() >= 1000) pullsLeft = 0; // No pulls in hardcore or out of ronin
 
     const summonsLeft = summonSources.map((s) => s.available());
 
     for (const task of tasksByResource) {
-      if (!task.requires) break;
-      if (task.requires.which === Allocations.PULL) {
+      if (!task.resources) break;
+      let allocated = false;
+      if (task.resources.which === Allocations.PULL) {
         if (pullsLeft > 0) {
           resourcesAllocated.set(task.name, {});
           pullsLeft -= 1;
-        } else {
-          resourcesAllocated.set(task.name, false);
+          allocated = true;
         }
-      } else if ("summon" in task.requires.which) {
+      } else if ("summon" in task.resources.which) {
         for (let i = 0; i < summonsLeft.length; i++) {
           if (!summonsLeft[i]) continue;
-          if (summonSources[i].canFight(task.requires.which.summon)) {
+          if (summonSources[i].canFight(task.resources.which.summon)) {
             const allocatedSummon = summonSources[i];
-            const monster = task.requires.which.summon;
+            const monster = task.resources.which.summon;
             resourcesAllocated.set(task.name, {
               replace: {
                 do: () => {
@@ -779,14 +780,25 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
                 },
               },
             });
+            allocated = true;
+            break;
           }
-          break;
         }
+      }
+
+      if (!allocated && task.resources.required) {
+        resourcesAllocated.set(task.name, UNFULFILLED_ALLOCATION);
       }
     }
     return resourcesAllocated;
   }
 }
+
+export const UNFULFILLED_ALLOCATION = {
+  replace: {
+    ready: () => false,
+  },
+};
 
 function autosellJunk(): void {
   if (myPath() !== $path`A Shrunken Adventurer am I`) return; // final safety

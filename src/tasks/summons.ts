@@ -143,9 +143,10 @@ export function getSummonTask(spec: SummonTarget): Task {
       throw `Attempted to summon ${spec.target.name} with no allocation`;
     },
     limit: { tries: spec.tries ?? 1 },
-    requires: {
+    resources: {
       which: { summon: spec.target },
       value: spec.value,
+      required: true,
     },
   };
 }

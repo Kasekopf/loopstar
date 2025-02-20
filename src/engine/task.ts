@@ -33,10 +33,10 @@ export type Task = {
   nofightingfamiliars?: boolean;
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
 
-  requires?: AllocationRequest;
+  resources?: AllocationRequest;
 } & BaseTask<CombatActions>;
 
-export type DeltaTask = Delta<Omit<Task, "name">>;
+export type DeltaTask = Delta<Task>;
 
 export type Priority = {
   score: number;
@@ -60,4 +60,5 @@ export type Allocation = Allocations | AllocationSummon;
 export type AllocationRequest = {
   which: Allocation;
   value: number;
+  required?: boolean;
 };

@@ -12,7 +12,7 @@ import {
   turnsPlayed,
 } from "kolmafia";
 import { basePlan } from "./tasks/all";
-import { Engine } from "./engine/engine";
+import { Engine, UNFULFILLED_ALLOCATION } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
 import { get, set, sinceKolmafiaRevision } from "libram";
 import { Prioritization } from "./engine/priority";
@@ -149,19 +149,16 @@ function listTasks(engine: Engine, show_phyla = false): void {
         const priority = Prioritization.from(task);
         const reason = priority.explain();
         const why = reason === "" ? "Route" : reason;
-        switch (resourceAllocations.get(task.name)) {
-          case undefined:
-            debug(`${task.name}: Available [${priority.score()}: ${why}]`);
-            break;
-          case false:
-            debug(
-              `${task.name}: Blocked [${priority.score()}: ${why}] (No Resource Allocated)`,
-              "red"
-            );
-            break;
-          default:
-            debug(`${task.name}: Available [${priority.score()}: ${why}] (Resource Allocated)`);
-            break;
+        const allocation = resourceAllocations.get(task.name);
+        if (allocation === undefined) {
+          debug(`${task.name}: Available [${priority.score()}: ${why}]`);
+        } else if (allocation === UNFULFILLED_ALLOCATION) {
+          debug(
+            `${task.name}: No Available [${priority.score()}: ${why}] (No Resource Allocated)`,
+            "red"
+          );
+        } else {
+          debug(`${task.name}: Available [${priority.score()}: ${why}] (Resource Allocated)`);
         }
       } else {
         debug(`${task.name}: Not Available`, "red");

@@ -375,9 +375,10 @@ export function getPullTask(spec: PullSpec): Task {
     post: () => pull.post(),
     limit: { tries: 1 },
     freeaction: true,
-    requires: {
+    resources: {
       which: Allocations.PULL,
       value: pull.priority,
+      required: true,
     },
   };
 }
