@@ -36,7 +36,7 @@ export type Task = {
   requires?: AllocationRequest;
 } & BaseTask<CombatActions>;
 
-export type DeltaTask = Delta<Task>;
+export type DeltaTask = Delta<Omit<Task, "name">>;
 
 export type Priority = {
   score: number;

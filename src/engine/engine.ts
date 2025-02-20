@@ -765,19 +765,22 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
             const allocatedSummon = summonSources[i];
             const monster = task.requires.which.summon;
             resourcesAllocated.set(task.name, {
-              do: {
-                replace: () => {
+              replace: {
+                do: () => {
                   // Perform the actual summon
                   debug(`Summon source: ${allocatedSummon.name}`);
                   allocatedSummon.summon(monster);
                   runCombat();
                 },
               },
-              ready: {
-                amend: (ready) => () => (ready?.() ?? true) && (allocatedSummon.ready?.() ?? true),
+              amend: {
+                ready: (orignalReady) => {
+                  return () => (orignalReady?.() ?? true) && (allocatedSummon.ready?.() ?? true);
+                },
               },
             });
           }
+          break;
         }
       }
     }

@@ -261,18 +261,19 @@ export function tryPlayApriling(modifier: string): void {
   }
 }
 
-type FieldReplace<A> = { replace: A };
-type FieldAmend<A> = { amend: (original: A) => A };
-type FullDelta<T> = {
-  [Property in keyof T]: FieldReplace<T[Property]> | FieldAmend<T[Property]>;
+type Amend<T> = {
+  [Property in keyof T]: (original: T[Property]) => T[Property];
 };
-export type Delta<T> = Partial<FullDelta<T>>;
+export type Delta<T> = {
+  replace?: Partial<T>;
+  amend?: Partial<Amend<T>>;
+};
 export function merge<T>(original: T, delta: Delta<T>): T {
-  const result: T = { ...original };
-  for (const field in delta) {
-    if (!delta[field]) continue;
-    if ("replace" in delta[field]) result[field] = delta[field].replace;
-    else if ("amend" in delta[field]) result[field] = delta[field].amend(result[field]);
+  const result: T = { ...original, ...(delta.replace ?? {}) };
+  for (const field in delta.amend) {
+    if (delta.amend[field]) {
+      result[field] = delta.amend[field](result[field]);
+    }
   }
   return result;
 }
