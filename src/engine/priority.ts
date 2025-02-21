@@ -132,7 +132,7 @@ export class Prioritization {
     }
 
     // If we have already used banishes in the zone, prefer it
-    if (!task?.ignore_banishes?.()) {
+    if (!task?.ignorebanishes?.()) {
       const numBanished = globalStateCache.banishes().numPartiallyBanished(task);
       if (numBanished === 1) result.priorities.add(Priorities.GoodBanish);
       else if (numBanished === 2) result.priorities.add(Priorities.GoodBanish2);

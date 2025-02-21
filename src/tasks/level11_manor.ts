@@ -151,7 +151,7 @@ const Manor2: Task[] = [
     delay: 5,
     // No need to search for cosmetics wraith
     orbtargets: () => [],
-    ignore_banishes: () => have($item`genie bottle`),
+    ignorebanishes: () => have($item`genie bottle`),
   },
   {
     name: "Bathroom",
@@ -170,7 +170,7 @@ const Manor2: Task[] = [
     limit: { soft: 15 },
     // No need to search for cosmetics wraith
     orbtargets: () => [],
-    ignore_banishes: () => have($item`genie bottle`),
+    ignorebanishes: () => have($item`genie bottle`),
   },
   {
     name: "Bedroom",

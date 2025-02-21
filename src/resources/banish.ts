@@ -128,7 +128,7 @@ export function unusedBanishes(banishState: BanishState, tasks: Task[]): BanishS
   const used_banishes = new Set<Item | Skill>();
   for (const task of tasks) {
     if (task.combat === undefined) continue;
-    if (task.ignore_banishes?.()) continue;
+    if (task.ignorebanishes?.()) continue;
     for (const monster of task.combat.where("banish")) {
       const banished_with = banishState.already_banished.get(monster);
       if (banished_with !== undefined) used_banishes.add(banished_with);

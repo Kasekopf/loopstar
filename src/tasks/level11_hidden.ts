@@ -483,7 +483,7 @@ const Bowling: Task[] = [
       }
       return result;
     },
-    ignore_banishes: () => bowlingBallsGathered(),
+    ignorebanishes: () => bowlingBallsGathered(),
     map_the_monster: () => {
       if (
         itemAmount($item`bowling ball`) === 0 &&
