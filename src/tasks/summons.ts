@@ -92,7 +92,7 @@ const summonTargets: SummonTarget[] = [
       have($item`star chart`) ||
       have($item`Richard's star key`) ||
       get("nsTowerDoorKeysUsed").includes("Richard's star key") ||
-      (have($item`Cargo Cultist Shorts`) && get("_cargoPocketEmptied")),
+      (have($item`Cargo Cultist Shorts`) && !get("_cargoPocketEmptied")),
     combat: new CombatStrategy().kill(),
     value: 3,
   },
@@ -127,7 +127,8 @@ const summonTargets: SummonTarget[] = [
     completed: () =>
       itemAmount($item`stone wool`) >= 2 ||
       (itemAmount($item`stone wool`) === 1 && have($item`the Nostril of the Serpent`)) ||
-      step("questL11Worship") >= 3,
+      step("questL11Worship") >= 3 ||
+      (have($item`Deck of Every Card`) && get("_deckCardsDrawn") === 0),
     outfit: { modifier: "item" },
     combat: new CombatStrategy().killItem(),
     value: 2,
