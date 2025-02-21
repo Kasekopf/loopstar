@@ -116,6 +116,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const tasksWithResources = this.tasks.map((task) => {
       const allocation = resourcesAllocated.get(task.name);
       if (allocation === undefined) return task;
+      const resources = undelay(task.resources);
+      if (resources?.delta) return merge(merge(task, resources.delta), allocation);
       return merge(task, allocation);
     });
     const availableTasks = tasksWithResources.filter((task) => this.available(task));

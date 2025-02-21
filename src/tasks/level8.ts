@@ -7,7 +7,6 @@ import {
   myLevel,
   myLocation,
   numericModifier,
-  use,
   visitUrl,
 } from "kolmafia";
 import {
@@ -19,6 +18,7 @@ import {
   $monster,
   $monsters,
   $skill,
+  clamp,
   CombatLoversLocket,
   Counter,
   ensureEffect,
@@ -26,7 +26,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { Quest } from "../engine/task";
+import { AllocationRequest, Allocations, Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
@@ -59,22 +59,24 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Clover Ore",
       after: ["Trapper Request", "Pull/Ore", "Misc/Hermit Clover"],
-      ready: () =>
-        have($item`11-leaf clover`) &&
-        // TODO: fix this condition to check summoning mountain main
-        !CombatLoversLocket.have() &&
-        oresNeeded() > 0,
-      prepare: () => {
-        if (!have($effect`Lucky!`)) use($item`11-leaf clover`);
-      },
       completed: () =>
         step("questL08Trapper") >= 2 ||
         itemAmount(get("trapperOre", $item`none`)) >= 3 ||
         (itemAmount($item`asbestos ore`) >= 3 &&
           itemAmount($item`chrome ore`) >= 3 &&
-          itemAmount($item`linoleum ore`) >= 3),
+          itemAmount($item`linoleum ore`) >= 3) ||
+        // TODO: fix this condition to check summoning mountain main
+        CombatLoversLocket.have() ||
+        oresNeeded() === 0,
       do: $location`Itznotyerzitz Mine`,
-      limit: { tries: 2 },
+      limit: { tries: 3 },
+      resources: () =>
+        <AllocationRequest>{
+          which: Allocations.Lucky,
+          value: 10,
+          required: true,
+          repeat: clamp(0, oresNeeded(), 3),
+        },
     },
     {
       name: "Goatlet",

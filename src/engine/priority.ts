@@ -85,8 +85,14 @@ export class Prioritization {
       if (base !== Priorities.None) result.priorities.add(base);
     }
 
+    // Prioritize free tasks
     if (undelay(task.freeaction)) {
       result.priorities.add(Priorities.Free);
+    }
+
+    // Prioritize utilizing NC forces
+    if (get("noncombatForcerActive") && task.tags?.includes("NCForce")) {
+      result.priorities.add(Priorities.GoodForceNC);
     }
 
     // Prioritize getting a YR

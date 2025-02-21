@@ -63,6 +63,7 @@ export function hasDelay(task: Task): boolean {
 export enum Allocations {
   Pull,
   NCForce,
+  Lucky,
 }
 export type AllocationSummon = {
   summon: Monster;
@@ -74,4 +75,5 @@ export type AllocationRequest = {
   value: number;
   required?: boolean;
   repeat?: number;
+  delta?: DeltaTask;
 };

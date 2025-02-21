@@ -123,14 +123,6 @@ const Temple: Task[] = [
       itemAmount($item`stone wool`) >= 2 ||
       (itemAmount($item`stone wool`) === 1 && have($item`the Nostril of the Serpent`)) ||
       step("questL11Worship") >= 3,
-    prepare: () => {
-      if (
-        itemAmount($item`11-leaf clover`) > 1 &&
-        !have($effect`Lucky!`) &&
-        !have($item`industrial fire extinguisher`)
-      )
-        use($item`11-leaf clover`);
-    },
     do: $location`The Hidden Temple`,
     outfit: () => {
       if (have($item`industrial fire extinguisher`) && get("_fireExtinguisherCharge") >= 10)
@@ -156,6 +148,13 @@ const Temple: Task[] = [
       .killItem([$monster`baa-relief sheep`, $monster`Baa'baa'bu'ran`]),
     choices: { 579: 2, 580: 1, 581: 3, 582: 1 },
     limit: { soft: 20 },
+    resources: () => {
+      if (have($item`industrial fire extinguisher`)) return undefined;
+      return {
+        which: Allocations.Lucky,
+        value: 5,
+      };
+    },
   },
   {
     name: "Temple Nostril",

@@ -3,9 +3,10 @@ import { args } from "../args";
 import { debug, stableSort } from "../lib";
 import { summonSources } from "../resources/summon";
 import { Allocation, Allocations, AllocationSummon, DeltaTask, Task } from "./task";
-import { get, undelay } from "libram";
+import { $effect, get, have, undelay } from "libram";
 import { forceNCSources, noncombatForceNCSources } from "../resources/forcenc";
 import { Priorities } from "./priority";
+import { luckySources } from "../resources/lucky";
 
 type Allocator = {
   applies: (which: Allocation) => boolean;
@@ -31,7 +32,6 @@ const allocators: Allocator[] = [
     amount: () => (get("noncombatForcerActive") ? 1 : 0),
     delta: {
       tag: "NCForce",
-      replace: { priority: () => Priorities.GoodForceNC },
     },
   },
   ...noncombatForceNCSources.map(
@@ -42,11 +42,15 @@ const allocators: Allocator[] = [
         delta: {
           tag: "NCForce",
           replace: {
-            priority: () => (s.available() ? Priorities.None : Priorities.BadForcingNC),
+            priority: () => {
+              if (get("noncombatForcerActive")) return Priorities.None;
+              if (s.available()) return Priorities.None;
+              return Priorities.BadForcingNC;
+            },
           },
           amend: {
             prepare: (original) => () => {
-              s.do();
+              if (!get("noncombatForcerActive")) s.do();
               original?.();
             },
           },
@@ -60,7 +64,12 @@ const allocators: Allocator[] = [
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
-          replace: { priority: () => Priorities.BadForcingNC },
+          replace: {
+            priority: () => {
+              if (get("noncombatForcerActive")) return Priorities.None;
+              return Priorities.BadForcingNC;
+            },
+          },
         },
       }
   ),
@@ -88,6 +97,30 @@ const allocators: Allocator[] = [
             },
             tag: s.name,
           },
+      }
+  ),
+  // Lucky
+  {
+    applies: (which) => which === Allocations.Lucky,
+    amount: () => (have($effect`Lucky!`) ? 1 : 0),
+    delta: {
+      tag: "Lucky",
+    },
+  },
+  ...luckySources.map(
+    (s) =>
+      <Allocator>{
+        applies: (which) => which === Allocations.Lucky,
+        amount: () => s.remaining(),
+        delta: {
+          tag: "Lucky",
+          amend: {
+            prepare: (original) => () => {
+              if (!have($effect`Lucky!`)) s.do();
+              original?.();
+            },
+          },
+        },
       }
   ),
 ];

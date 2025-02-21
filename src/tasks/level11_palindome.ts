@@ -11,7 +11,6 @@ import {
   restoreHp,
   runChoice,
   use,
-  useSkill,
   visitUrl,
 } from "kolmafia";
 import {
@@ -25,13 +24,12 @@ import {
   $monsters,
   $phylum,
   $skill,
-  AugustScepter,
   ensureEffect,
   get,
   have,
   Macro,
 } from "libram";
-import { Quest, Task } from "../engine/task";
+import { Allocations, Quest, Task } from "../engine/task";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
@@ -276,10 +274,6 @@ const Zepplin: Task[] = [
         step("questL11Shen") === 999),
     prepare: () => {
       if (have($item`lynyrd musk`)) ensureEffect($effect`Musky`);
-      if (AugustScepter.canCast(2) && !have($effect`Lucky!`))
-        useSkill($skill`Aug. 2nd: Find an Eleven-Leaf Clover Day`);
-      if (itemAmount($item`11-leaf clover`) > cloversToSave() && !have($effect`Lucky!`))
-        use($item`11-leaf clover`);
       if (
         !have($item`candy cane sword cane`) &&
         have($item`pocket wish`) &&
@@ -307,22 +301,27 @@ const Zepplin: Task[] = [
         1432: 1,
       };
     },
-    outfit: () => {
-      const sleazeitems = $items`candy cane sword cane, deck of lewd playing cards, June cleaver, designer sweatpants, Jurassic Parka, transparent pants`;
-      if (itemAmount($item`11-leaf clover`) > cloversToSave() || have($effect`Lucky!`))
-        return {
-          modifier: "sleaze dmg, sleaze spell dmg",
-          equip: sleazeitems,
-          modes: { parka: "dilophosaur" },
-        };
-      return {
-        modifier: "-combat, sleaze dmg, sleaze spell dmg",
-        equip: sleazeitems,
-        modes: { parka: "dilophosaur" },
-      };
+    outfit: {
+      modifier: "-combat, sleaze dmg, sleaze spell dmg",
+      equip: $items`candy cane sword cane, deck of lewd playing cards, June cleaver, designer sweatpants, Jurassic Parka, transparent pants`,
+      modes: { parka: "dilophosaur" },
     },
-    skipprep: () => itemAmount($item`11-leaf clover`) > cloversToSave() || have($effect`Lucky!`),
     limit: { soft: 30 },
+    resources: {
+      which: Allocations.Lucky,
+      value: 2,
+      delta: {
+        replace: {
+          outfit: {
+            modifier: "sleaze dmg, sleaze spell dmg",
+            equip: $items`candy cane sword cane, deck of lewd playing cards, June cleaver, designer sweatpants, Jurassic Parka, transparent pants`,
+            modes: { parka: "dilophosaur" },
+          },
+          skipprep: true,
+        },
+      },
+      repeat: 3,
+    },
   },
   {
     name: "Protesters Finish",
