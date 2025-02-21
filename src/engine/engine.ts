@@ -97,7 +97,7 @@ import { freekillSources } from "../resources/freekill";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { forceNCPossible, forceNCSources } from "../resources/forcenc";
 import { getActiveBackupTarget } from "../resources/backup";
-import { allocateResources } from "./allocation";
+import { allocateResources, UNALLOCATED } from "./allocation";
 
 export type ActiveTask = Task & {
   activePriority?: Prioritization;
@@ -117,7 +117,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       const allocation = resourcesAllocated.get(task.name);
       if (allocation === undefined) return task;
       const resources = undelay(task.resources);
-      if (resources?.delta) return merge(merge(task, resources.delta), allocation);
+      if (resources?.delta && allocation !== UNALLOCATED)
+        return merge(merge(task, resources.delta), allocation);
       return merge(task, allocation);
     });
     const availableTasks = tasksWithResources.filter((task) => this.available(task));

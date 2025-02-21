@@ -9,7 +9,7 @@ import { Priorities } from "./priority";
 import { luckySources } from "../resources/lucky";
 
 type Allocator = {
-  applies: (which: Allocation) => boolean; // True if this allocator can satisfy this request
+  appliesTo: (which: Allocation) => boolean; // True if this allocator can satisfy this request
   amount: () => number; // The number of resources available to be allocated
   delta: DeltaTask | ((which: Allocation) => DeltaTask); // The change to make on the task if a resource is allocated
 };
@@ -17,7 +17,7 @@ type Allocator = {
 const allocators: Allocator[] = [
   // Pulls
   {
-    applies: (which) => which === Allocations.Pull,
+    appliesTo: (which) => which === Allocations.Pull,
     amount: () => {
       if (inHardcore() || myTurncount() >= 1000) return 0;
       return pullsRemaining() - (20 - args.major.pulls);
@@ -28,7 +28,7 @@ const allocators: Allocator[] = [
   },
   // NC Forcers
   {
-    applies: (which) => which === Allocations.NCForce,
+    appliesTo: (which) => which === Allocations.NCForce,
     amount: () => (get("noncombatForcerActive") ? 1 : 0),
     delta: {
       tag: "NCForce",
@@ -37,7 +37,7 @@ const allocators: Allocator[] = [
   ...noncombatForceNCSources.map(
     (s) =>
       <Allocator>{
-        applies: (which) => which === Allocations.NCForce,
+        appliesTo: (which) => which === Allocations.NCForce,
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
@@ -57,7 +57,7 @@ const allocators: Allocator[] = [
   ...forceNCSources.map(
     (s) =>
       <Allocator>{
-        applies: (which) => which === Allocations.NCForce,
+        appliesTo: (which) => which === Allocations.NCForce,
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
@@ -74,7 +74,7 @@ const allocators: Allocator[] = [
   ...summonSources.map(
     (s) =>
       <Allocator>{
-        applies: (which: Allocation) =>
+        appliesTo: (which: Allocation) =>
           typeof which === "object" && "summon" in which && s.canFight(which.summon),
         amount: () => s.available(),
         delta: (req) =>
@@ -96,7 +96,7 @@ const allocators: Allocator[] = [
   ),
   // Lucky
   {
-    applies: (which) => which === Allocations.Lucky,
+    appliesTo: (which) => which === Allocations.Lucky,
     amount: () => (have($effect`Lucky!`) ? 1 : 0),
     delta: {
       tag: "Lucky",
@@ -105,7 +105,7 @@ const allocators: Allocator[] = [
   ...luckySources.map(
     (s) =>
       <Allocator>{
-        applies: (which) => which === Allocations.Lucky,
+        appliesTo: (which) => which === Allocations.Lucky,
         amount: () => s.remaining(),
         delta: {
           tag: "Lucky",
@@ -120,42 +120,47 @@ const allocators: Allocator[] = [
 ];
 
 export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
-  const resourcesAllocated = new Map<string, DeltaTask>();
+  // Order tasks by the value fulfilling their resource request will give.
+  // We will fulfil these requests greedily in this order.
   const resourcesNeeded = tasks.filter((task) => task.resources && !task.completed());
   const tasksByResource = stableSort(
     resourcesNeeded,
     (task) => -1 * (undelay(task.resources)?.value ?? 0)
   );
 
-  const remaining = allocators.map((s) => s.amount());
+  const fulfillments = new Map<string, DeltaTask>();
+  const remainingToAllocate = allocators.map((s) => s.amount());
   for (const task of tasksByResource) {
-    const resources = undelay(task.resources);
-    if (!resources) break;
+    const request = undelay(task.resources);
+    if (!request) continue;
     let foundResource = false;
-    for (let i = 0; i < (resources.repeat ?? 1); i++) {
-      const found = allocators.findIndex((a, i) => a.applies(resources.which) && remaining[i] > 0);
-      if (found >= 0) {
-        const delta =
-          typeof allocators[found].delta === "function"
-            ? allocators[found].delta(resources.which)
-            : allocators[found].delta;
-        remaining[found] -= 1;
+    for (let i = 0; i < (request.repeat ?? 1); i++) {
+      // Try to find a resource to fulfill the request
+      const foundIndex = allocators.findIndex(
+        (a, i) => a.appliesTo(request.which) && remainingToAllocate[i] > 0
+      );
+      if (foundIndex >= 0) {
+        remainingToAllocate[foundIndex] -= 1;
         if (!foundResource) {
           // Only adjust the task for the *next* resource use
-          resourcesAllocated.set(task.name, delta);
+          const delta = undelay(allocators[foundIndex].delta, request.which);
+          fulfillments.set(task.name, delta);
         }
         foundResource = true;
+      } else {
+        break; // Any further repeated requests will fail anyway
       }
     }
 
-    if (!foundResource && resources.required) {
-      resourcesAllocated.set(task.name, UNFULFILLED_ALLOCATION);
+    if (!foundResource && request.required) {
+      // Block the task from running
+      fulfillments.set(task.name, UNALLOCATED);
     }
   }
-  return resourcesAllocated;
+  return fulfillments;
 }
 
-const UNFULFILLED_ALLOCATION = {
+export const UNALLOCATED: DeltaTask = {
   replace: {
     ready: () => false,
   },
