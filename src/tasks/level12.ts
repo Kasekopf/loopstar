@@ -41,7 +41,6 @@ import { atLevel, debug } from "../lib";
 import { tryPlayApriling } from "../lib";
 import { args, toTempPref } from "../args";
 import { customRestoreMp, fillHp } from "../engine/moods";
-import { tryForceNC } from "../resources/forcenc";
 import { forceItemPossible, yellowRayPossible } from "../resources/yellowray";
 
 export function flyersDone(): boolean {
@@ -602,8 +601,6 @@ export const WarQuest: Quest = {
       prepare: () => {
         // Restore a bit more HP than usual
         if (myHp() < 80 && myHp() < myMaxhp()) restoreHp(myMaxhp() < 80 ? myMaxhp() : 80);
-        if (have($item`candy cane sword cane`) || have($skill`Comprehensive Cartography`))
-          tryForceNC();
         tryPlayApriling("-combat");
       },
       outfit: () => {

@@ -72,4 +72,5 @@ export type AllocationRequest = {
   which: Allocation;
   value: number;
   required?: boolean;
+  repeat?: number;
 };

@@ -1,10 +1,10 @@
 import { drink, Item, itemAmount, toInt, visitUrl } from "kolmafia";
-import { $item, $items, $location, $monsters, $skill, get, have } from "libram";
+import { $item, $items, $location, $monsters, $skill, clamp, get, have } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
-import { Allocations, Quest } from "../engine/task";
+import { AllocationRequest, Allocations, Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { tryPlayApriling } from "../lib";
 
@@ -44,10 +44,12 @@ export const FriarQuest: Quest = {
         }
         return { modifier: "-combat" };
       },
-      resources: {
-        which: Allocations.NCForce,
-        value: 1 / 0.65,
-      },
+      resources: () =>
+        <AllocationRequest>{
+          which: Allocations.NCForce,
+          value: 1 / 0.65,
+          repeat: clamp(0, 4 - get("lastFriarsHeartNC"), 4),
+        },
       limit: { tries: 24 },
     },
     {
@@ -60,9 +62,13 @@ export const FriarQuest: Quest = {
       do: $location`The Dark Neck of the Woods`,
       outfit: { modifier: "-combat" },
       choices: { 1428: 2 },
-      resources: {
-        which: Allocations.NCForce,
-        value: 1 / 0.65,
+      resources: () => {
+        const maxNCs = have($skill`Comprehensive Cartography`) ? 2 : 4;
+        return {
+          which: Allocations.NCForce,
+          value: 1 / 0.65,
+          repeat: clamp(0, 4 - get("lastFriarsNeckNC"), maxNCs),
+        };
       },
       limit: { tries: 24 },
     },
@@ -89,10 +95,12 @@ export const FriarQuest: Quest = {
         }
         return { modifier: "-combat" };
       },
-      resources: {
-        which: Allocations.NCForce,
-        value: 1 / 0.65,
-      },
+      resources: () =>
+        <AllocationRequest>{
+          which: Allocations.NCForce,
+          value: 1 / 0.65,
+          repeat: clamp(0, 4 - get("lastFriarsElbowNC"), 4),
+        },
       limit: { tries: 24 },
     },
     {

@@ -66,9 +66,3 @@ export const noncombatForceNCSources: ForceNCSource[] = [
     },
   },
 ];
-
-export function tryForceNC(): boolean {
-  if (get("noncombatForcerActive")) return true;
-  noncombatForceNCSources.find((source) => source.available())?.do();
-  return get("noncombatForcerActive");
-}

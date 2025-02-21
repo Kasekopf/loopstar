@@ -14,13 +14,12 @@ import {
 } from "libram";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { atLevel } from "../lib";
-import { Quest } from "../engine/task";
+import { Allocations, Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { tryPlayApriling } from "../lib";
 import { forceItemPossible } from "../resources/yellowray";
-import { tryForceNC } from "../resources/forcenc";
 
 export const GiantQuest: Quest = {
   name: "Giant",
@@ -144,7 +143,6 @@ export const GiantQuest: Quest = {
           "Mess Around with Gym"
         ) || step("questL10Garbage") >= 8,
       prepare: () => {
-        tryForceNC();
         tryPlayApriling("-combat");
       },
       do: $location`The Castle in the Clouds in the Sky (Basement)`,
@@ -159,6 +157,10 @@ export const GiantQuest: Quest = {
       ),
       choices: { 670: 5, 669: 1, 671: 4 },
       limit: { soft: 20 },
+      resources: {
+        which: Allocations.NCForce,
+        value: 1 / 0.65,
+      },
     },
     {
       name: "Basement Finish",

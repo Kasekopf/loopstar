@@ -44,8 +44,8 @@ const allocators: Allocator[] = [
           tag: "NCForce",
           amend: {
             prepare: (original) => () => {
-              original?.();
               s.do();
+              original?.();
             },
           },
         },
@@ -101,15 +101,24 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
   for (const task of tasksByResource) {
     const resources = undelay(task.resources);
     if (!resources) break;
-    const found = allocators.findIndex((a, i) => a.applies(resources.which) && remaining[i] > 0);
-    if (found >= 0) {
-      const delta =
-        typeof allocators[found].delta === "function"
-          ? allocators[found].delta(resources.which)
-          : allocators[found].delta;
-      remaining[found] -= 1;
-      resourcesAllocated.set(task.name, delta);
-    } else {
+    let foundResource = false;
+    for (let i = 0; i < (resources.repeat ?? 1); i++) {
+      const found = allocators.findIndex((a, i) => a.applies(resources.which) && remaining[i] > 0);
+      if (found >= 0) {
+        const delta =
+          typeof allocators[found].delta === "function"
+            ? allocators[found].delta(resources.which)
+            : allocators[found].delta;
+        remaining[found] -= 1;
+        if (!foundResource) {
+          // Only adjust the task for the *next* resource use
+          resourcesAllocated.set(task.name, delta);
+        }
+        foundResource = true;
+      }
+    }
+
+    if (!foundResource && resources.required) {
       resourcesAllocated.set(task.name, UNFULFILLED_ALLOCATION);
     }
   }
