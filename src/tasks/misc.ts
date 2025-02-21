@@ -81,9 +81,9 @@ import {
   uneffect,
 } from "libram";
 import { Quest, Task } from "../engine/task";
-import { Guards, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
+import { Guards, lastEncounterWasWanderingNC, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
-import { Engine, wanderingNCs } from "../engine/engine";
+import { Engine } from "../engine/engine";
 import { Keys, keyStrategy } from "./keys";
 import { atLevel, haveLoathingIdolMicrophone, primestatId, underStandard } from "../lib";
 import { args, toTempPref } from "../args";
@@ -417,7 +417,7 @@ export const MiscQuest: Quest = {
       },
       do: () => {
         adv1(get("ghostLocation") ?? $location`none`, 0, "");
-        if (wanderingNCs.has(get("lastEncounter"))) {
+        if (lastEncounterWasWanderingNC()) {
           adv1(get("ghostLocation") ?? $location`none`, 0, "");
         }
       },
