@@ -151,7 +151,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       printHtml("");
       printHtml("Available Tasks:");
       for (const task of tasksOrderedByPriority) {
-        const name = task.name;
+        const name = getTaggedName(task);
         const reason = task.activePriority?.explainWithColor() ?? "Available";
         const score = task.activePriority?.score() ?? 0;
         printHtml(`<u>${name}</u>: ${reason} <font color='#888888'>(${score})</font>`);
