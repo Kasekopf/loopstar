@@ -12,7 +12,7 @@ import {
   turnsPlayed,
 } from "kolmafia";
 import { basePlan } from "./tasks/all";
-import { Engine, UNFULFILLED_ALLOCATION } from "./engine/engine";
+import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
 import { get, set, sinceKolmafiaRevision } from "libram";
 import { Prioritization } from "./engine/priority";
@@ -22,6 +22,7 @@ import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
 import { allPaths } from "./paths/all";
 import { SmolInfo } from "./paths/smol/info";
+import { getTaggedName, merge } from "./engine/task";
 
 const time_property = toTempPref("first_start");
 const svn_name = "Kasekopf-loop-casual-branches-release";
@@ -80,14 +81,14 @@ export function main(command?: string): void {
       if (args.debug.actions !== undefined) {
         const next = engine.getNextTask();
         if (next) {
-          debug(`Next task: ${next.name}`);
+          debug(`Next task: ${getTaggedName(next)}`);
           return;
         }
       }
 
       debug("Remaining tasks:", "red");
       for (const task of remaining_tasks) {
-        if (!task.completed()) debug(`${task.name}`, "red");
+        if (!task.completed()) debug(`${getTaggedName(task)}`, "red");
       }
       throw `Unable to find available task, but the run is not complete.`;
     }
@@ -145,23 +146,15 @@ function listTasks(engine: Engine, show_phyla = false): void {
     if (task.completed()) {
       debug(`${task.name}: Done`, "blue");
     } else {
-      if (engine.available(task)) {
+      const allocation = resourceAllocations.get(task.name);
+      const allocatedTask = allocation ? merge(task, allocation) : task;
+      if (engine.available(allocatedTask)) {
         const priority = Prioritization.from(task);
         const reason = priority.explain();
         const why = reason === "" ? "Route" : reason;
-        const allocation = resourceAllocations.get(task.name);
-        if (allocation === undefined) {
-          debug(`${task.name}: Available [${priority.score()}: ${why}]`);
-        } else if (allocation === UNFULFILLED_ALLOCATION) {
-          debug(
-            `${task.name}: No Available [${priority.score()}: ${why}] (No Resource Allocated)`,
-            "red"
-          );
-        } else {
-          debug(`${task.name}: Available [${priority.score()}: ${why}] (Resource Allocated)`);
-        }
+        debug(`${getTaggedName(allocatedTask)}: Available [${priority.score()}: ${why}]`);
       } else {
-        debug(`${task.name}: Not Available`, "red");
+        debug(`${getTaggedName(allocatedTask)}: Not Available`, "red");
       }
     }
 

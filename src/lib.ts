@@ -268,7 +268,7 @@ export type Delta<T> = {
   replace?: Partial<T>;
   amend?: Partial<Amend<T>>;
 };
-export function merge<T>(original: T, delta: Delta<T>): T {
+export function mergeDelta<T>(original: T, delta: Delta<T>): T {
   const result: T = { ...original, ...(delta.replace ?? {}) };
   for (const field in delta.amend) {
     if (delta.amend[field]) {

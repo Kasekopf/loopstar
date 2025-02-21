@@ -2,7 +2,7 @@ import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
 import { undelay } from "libram";
-import { Delta } from "../lib";
+import { Delta, mergeDelta } from "../lib";
 
 export type Quest = BaseQuest<Task>;
 
@@ -34,9 +34,26 @@ export type Task = {
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
 
   resources?: AllocationRequest;
+  tags?: string[];
 } & BaseTask<CombatActions>;
 
-export type DeltaTask = Delta<Task>;
+export type DeltaTask = Delta<Task> & {
+  tag?: string;
+};
+
+export function getTaggedName(task: Task): string {
+  if (!task.tags) return task.name;
+  return [task.name, ...task.tags].join("#");
+}
+
+export function merge(task: Task, delta: DeltaTask): Task {
+  const result = mergeDelta(task, delta);
+  if (delta.tag) {
+    if (!result.tags) result.tags = [delta.tag];
+    else result.tags = [...result.tags, delta.tag];
+  }
+  return result;
+}
 
 export type Priority = {
   score: number;

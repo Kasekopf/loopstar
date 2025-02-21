@@ -39,7 +39,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { Allocations, DeltaTask, hasDelay, NCForce, Task } from "./task";
+import { Allocations, DeltaTask, getTaggedName, hasDelay, merge, NCForce, Task } from "./task";
 import {
   $effect,
   $effects,
@@ -80,7 +80,7 @@ import {
   getModifiersFrom,
 } from "./outfit";
 import { cliExecute, equippedAmount, itemAmount, runChoice } from "kolmafia";
-import { debug, merge, stableSort } from "../lib";
+import { debug, stableSort } from "../lib";
 import { refillLatte } from "../resources/runaway";
 import { shouldFinishLatte } from "../resources/runaway";
 import { Priorities, Prioritization } from "./priority";
@@ -182,9 +182,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
   public execute(task: ActiveTask): void {
     debug(``);
+    const name = getTaggedName(task);
     const reason = task.activePriority?.explain() ?? "";
     const why = reason === "" ? "Route" : reason;
-    debug(`Executing ${task.name} [${why}]`, "blue");
+    debug(`Executing ${name} [${why}]`, "blue");
     this.checkLimits({ ...task, limit: { ...task.limit, unready: false } }, () => true); // ignore unready for this initial check
     if (myAdventures() < args.debug.halt) throw `Running out of adventures!`;
     super.execute(task);
@@ -755,7 +756,9 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       let allocated = false;
       if (task.resources.which === Allocations.PULL) {
         if (pullsLeft > 0) {
-          resourcesAllocated.set(task.name, {});
+          resourcesAllocated.set(task.name, {
+            tag: "Pull",
+          });
           pullsLeft -= 1;
           allocated = true;
         }
@@ -779,6 +782,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
                   return () => (orignalReady?.() ?? true) && (allocatedSummon.ready?.() ?? true);
                 },
               },
+              tag: allocatedSummon.name,
             });
             allocated = true;
             break;
@@ -794,10 +798,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   }
 }
 
-export const UNFULFILLED_ALLOCATION = {
+const UNFULFILLED_ALLOCATION = {
   replace: {
     ready: () => false,
   },
+  tag: "Unallocated",
 };
 
 function autosellJunk(): void {
