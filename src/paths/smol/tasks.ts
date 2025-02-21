@@ -11,14 +11,14 @@ import {
   use,
   useSkill,
 } from "kolmafia";
-import { $effect, $effects, $item, $items, $skill, get, have } from "libram";
+import { $effect, $effects, $item, $items, $skill, CursedMonkeyPaw, get, have } from "libram";
 import { Quest } from "../../engine/task";
 import { atLevel } from "../../lib";
 import { args } from "../../args";
 import { customRestoreMp } from "../../engine/moods";
 
-export const SmolDietQuest: Quest = {
-  name: "SmolDiet",
+export const SmolQuest: Quest = {
+  name: "Smol",
   tasks: [
     {
       name: "Eat",
@@ -97,6 +97,22 @@ export const SmolDietQuest: Quest = {
       freeaction: true,
       do: () => cliExecute(`spoon ${args.minor.tune}`),
       limit: { tries: 1 },
+    },
+    {
+      name: "Limit Stats",
+      after: ["Tower/Start"],
+      completed: () =>
+        get("nsContestants2") > -1 ||
+        have($effect`Feeling Insignificant`) ||
+        !have($item`pocket wish`) ||
+        !CursedMonkeyPaw.have() ||
+        CursedMonkeyPaw.wishes() === 0,
+      do: () => {
+        if (have($item`pocket wish`)) cliExecute("genie effect Feeling Insignificant");
+        else CursedMonkeyPaw.wishFor($effect`Feeling Insignificant`);
+      },
+      limit: { tries: 1 },
+      freeaction: true,
     },
   ],
 };

@@ -3,7 +3,7 @@ import { PathInfo } from "../pathinfo";
 import { Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { runChoice, visitUrl } from "kolmafia";
-import { SmolDietQuest } from "./tasks";
+import { SmolQuest } from "./tasks";
 import { RunPlan } from "../../engine/runplan";
 import { SmolPullQuest } from "./pulls";
 import { SmolEngine } from "./engine";
@@ -14,7 +14,7 @@ export class SmolInfo implements PathInfo {
   }
 
   getPlan(plan: RunPlan): RunPlan {
-    plan.quests.push(SmolDietQuest);
+    plan.quests.splice(0, 0, SmolQuest); // Limit stats should be first
     plan.quests.push(SmolPullQuest);
     return plan;
   }

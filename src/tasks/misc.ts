@@ -65,7 +65,6 @@ import {
   CinchoDeMayo,
   Clan,
   ClosedCircuitPayphone,
-  CursedMonkeyPaw,
   DaylightShavings,
   ensureEffect,
   get,
@@ -1270,22 +1269,6 @@ export const MiscQuest: Quest = {
       outfit: { modifier: "HP" },
       freeaction: true,
       limit: { tries: 10 },
-    },
-    {
-      name: "Limit Stats",
-      after: ["Tower/Start"],
-      completed: () =>
-        get("nsContestants2") > -1 ||
-        have($effect`Feeling Insignificant`) ||
-        !have($item`pocket wish`) ||
-        !CursedMonkeyPaw.have() ||
-        CursedMonkeyPaw.wishes() === 0,
-      do: () => {
-        if (have($item`pocket wish`)) cliExecute("genie effect Feeling Insignificant");
-        else CursedMonkeyPaw.wishFor($effect`Feeling Insignificant`);
-      },
-      limit: { tries: 1 },
-      freeaction: true,
     },
     {
       name: "Leaf Resin",
