@@ -23,6 +23,7 @@ import { args, toTempPref } from "./args";
 import { allPaths } from "./paths/all";
 import { SmolInfo } from "./paths/smol/info";
 import { getTaggedName, merge } from "./engine/task";
+import { allocateResources } from "./engine/allocation";
 
 const time_property = toTempPref("first_start");
 const svn_name = "Kasekopf-loop-casual-branches-release";
@@ -141,7 +142,8 @@ function printVersionInfo(): void {
 }
 
 function listTasks(engine: Engine, show_phyla = false): void {
-  const resourceAllocations = engine.updatePlan();
+  engine.updatePlan();
+  const resourceAllocations = allocateResources(engine.tasks);
   for (const task of engine.tasks) {
     if (task.completed()) {
       debug(`${task.name}: Done`, "blue");

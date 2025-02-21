@@ -12,7 +12,6 @@ import {
   getWorkshed,
   haveEffect,
   haveEquipped,
-  inHardcore,
   inMultiFight,
   Location,
   logprint,
@@ -29,7 +28,6 @@ import {
   numericModifier,
   print,
   printHtml,
-  pullsRemaining,
   restoreHp,
   runCombat,
   Slot,
@@ -39,7 +37,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { Allocations, DeltaTask, getTaggedName, hasDelay, merge, NCForce, Task } from "./task";
+import { getTaggedName, hasDelay, merge, NCForce, Task } from "./task";
 import {
   $effect,
   $effects,
@@ -88,7 +86,6 @@ import { args, toTempPref } from "../args";
 import { flyersDone } from "../tasks/level12";
 import { globalStateCache } from "./state";
 import { removeTeleportitis, teleportitisTask } from "../tasks/misc";
-import { summonSources } from "../resources/summon";
 import { keyStrategy } from "../tasks/keys";
 import { applyEffects, customRestoreMp } from "./moods";
 import { ROUTE_WAIT_TO_EVENTUALLY_NCFORCE, ROUTE_WAIT_TO_NCFORCE } from "../route";
@@ -100,21 +97,7 @@ import { freekillSources } from "../resources/freekill";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { forceNCPossible, forceNCSources } from "../resources/forcenc";
 import { getActiveBackupTarget } from "../resources/backup";
-
-export const wanderingNCs = new Set<string>([
-  "Wooof! Wooooooof!",
-  "Playing Fetch*",
-  "A Pound of Cure",
-  "Aunts not Ants",
-  "Bath Time",
-  "Beware of Aligator",
-  "Delicious Sprouts",
-  "Hypnotic Master",
-  "Lost and Found",
-  "Poetic Justice",
-  "Summer Days",
-  "Teacher's Pet",
-]);
+import { allocateResources } from "./allocation";
 
 export type ActiveTask = Task & {
   activePriority?: Prioritization;
@@ -128,7 +111,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   }
 
   public getNextTask(): ActiveTask | undefined {
-    const resourcesAllocated = this.updatePlan();
+    this.updatePlan();
+    const resourcesAllocated = allocateResources(this.tasks);
     const tasksWithResources = this.tasks.map((task) => {
       const allocation = resourcesAllocated.get(task.name);
       if (allocation === undefined) return task;
@@ -740,75 +724,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     });
   }
 
-  updatePlan(): Map<string, DeltaTask> {
+  updatePlan() {
     // Note order matters for these strategy updates
     globalStateCache.invalidate();
     keyStrategy.update(); // Update key plan with current state
-
-    const resourcesAllocated = new Map<string, DeltaTask>();
-    const resourcesNeeded = this.tasks.filter((task) => task.resources && !task.completed());
-    const tasksByResource = stableSort(
-      resourcesNeeded,
-      (task) => -1 * (task.resources?.value ?? 0)
-    );
-    let pullsLeft = pullsRemaining() - (20 - args.major.pulls);
-    if (inHardcore() || myTurncount() >= 1000) pullsLeft = 0; // No pulls in hardcore or out of ronin
-
-    const summonsLeft = summonSources.map((s) => s.available());
-
-    for (const task of tasksByResource) {
-      if (!task.resources) break;
-      let allocated = false;
-      if (task.resources.which === Allocations.PULL) {
-        if (pullsLeft > 0) {
-          resourcesAllocated.set(task.name, {
-            tag: "Pull",
-          });
-          pullsLeft -= 1;
-          allocated = true;
-        }
-      } else if ("summon" in task.resources.which) {
-        for (let i = 0; i < summonsLeft.length; i++) {
-          if (!summonsLeft[i]) continue;
-          if (summonSources[i].canFight(task.resources.which.summon)) {
-            const allocatedSummon = summonSources[i];
-            const monster = task.resources.which.summon;
-            resourcesAllocated.set(task.name, {
-              replace: {
-                do: () => {
-                  // Perform the actual summon
-                  debug(`Summon source: ${allocatedSummon.name}`);
-                  allocatedSummon.summon(monster);
-                  runCombat();
-                },
-              },
-              amend: {
-                ready: (orignalReady) => {
-                  return () => (orignalReady?.() ?? true) && (allocatedSummon.ready?.() ?? true);
-                },
-              },
-              tag: allocatedSummon.name,
-            });
-            allocated = true;
-            break;
-          }
-        }
-      }
-
-      if (!allocated && task.resources.required) {
-        resourcesAllocated.set(task.name, UNFULFILLED_ALLOCATION);
-      }
-    }
-    return resourcesAllocated;
   }
 }
-
-const UNFULFILLED_ALLOCATION = {
-  replace: {
-    ready: () => false,
-  },
-  tag: "Unallocated",
-};
 
 function autosellJunk(): void {
   if (myPath() !== $path`A Shrunken Adventurer am I`) return; // final safety
