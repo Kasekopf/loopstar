@@ -36,7 +36,7 @@ export type DeltaTask = Delta<Task> & {
 
 export function getTaggedName(task: Task): string {
   if (!task.tags) return task.name;
-  return [task.name, ...task.tags].join("#");
+  return [task.name, ...task.tags].join(" # ");
 }
 
 export function merge(task: Task, delta: DeltaTask): Task {
