@@ -41,6 +41,9 @@ const allocators: Allocator[] = [
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
+          replace: {
+            priority: () => (s.available() ? Priorities.None : Priorities.BadForcingNC),
+          },
           amend: {
             prepare: (original) => () => {
               s.do();
