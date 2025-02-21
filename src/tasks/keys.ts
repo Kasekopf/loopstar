@@ -41,7 +41,6 @@ import {
 import { CombatStrategy } from "../engine/combat";
 import { Quest, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
-import { Priorities } from "../engine/priority";
 import { args, toTempPref } from "../args";
 import { trainSetAvailable } from "./misc";
 import { atLevel, haveFlorest, underStandard } from "../lib";
@@ -64,7 +63,6 @@ const heroKeys: KeyTask[] = [
     which: Keys.Deck,
     possible: () => have($item`Deck of Every Card`) && get("_deckCardsDrawn") === 0,
     after: [],
-    priority: () => Priorities.Free,
     completed: () => get("_deckCardsDrawn") > 0 || !have($item`Deck of Every Card`),
     do: () => {
       cliExecute("cheat tower");
@@ -81,7 +79,6 @@ const heroKeys: KeyTask[] = [
     which: Keys.Lockpicking,
     possible: () => have($skill`Lock Picking`) && !get("lockPicked"),
     after: [],
-    priority: () => Priorities.Free,
     completed: () => !have($skill`Lock Picking`) || get("lockPicked"),
     do: () => castWithMpSwaps([$skill`Lock Picking`]),
     choices: () => {
@@ -357,7 +354,6 @@ export const DigitalQuest: Quest = {
       name: "Open",
       after: ["Mosquito/Start", "Misc/Check Florist"],
       completed: () => have($item`continuum transfunctioner`),
-      priority: () => Priorities.Free,
       do: () => {
         visitUrl("place.php?whichplace=forestvillage&action=fv_mystic");
         runChoice(1);

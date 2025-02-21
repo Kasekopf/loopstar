@@ -17,7 +17,7 @@ export const MosquitoQuest: Quest = {
       completed: () => step("questL02Larva") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     {
@@ -53,7 +53,7 @@ export const MosquitoQuest: Quest = {
     {
       name: "Finish",
       after: ["Mosquito"],
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       completed: () => step("questL02Larva") === 999,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },

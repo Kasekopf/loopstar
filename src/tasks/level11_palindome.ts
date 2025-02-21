@@ -321,7 +321,7 @@ const Zepplin: Task[] = [
         modes: { parka: "dilophosaur" },
       };
     },
-    freeaction: () => itemAmount($item`11-leaf clover`) > cloversToSave() || have($effect`Lucky!`),
+    skipprep: () => itemAmount($item`11-leaf clover`) > cloversToSave() || have($effect`Lucky!`),
     limit: { soft: 30 },
   },
   {

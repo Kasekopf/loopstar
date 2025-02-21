@@ -331,7 +331,6 @@ const Nook: Task[] = [
   {
     name: "Nook Eye", // In case we get eyes from outside sources (Nostalgia)
     after: ["Start"],
-    priority: () => Priorities.Free,
     ready: () => have($item`evil eye`),
     completed: () => get("cyrptNookEvilness") <= 13,
     do: (): void => {
@@ -361,7 +360,7 @@ export const CryptQuest: Quest = {
       completed: () => step("questL07Cyrptic") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     ...Alcove,
@@ -385,7 +384,7 @@ export const CryptQuest: Quest = {
     {
       name: "Finish",
       after: ["Start", "Bonerdagon"],
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       completed: () => step("questL07Cyrptic") === 999,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },

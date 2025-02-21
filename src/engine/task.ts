@@ -11,6 +11,7 @@ export type Task = {
   combat?: CombatStrategy;
   delay?: number | (() => number);
   freeaction?: boolean | (() => boolean);
+  skipprep?: boolean | (() => boolean);
   freecombat?: boolean;
   limit: Limit;
   expectbeatenup?: boolean | (() => boolean);

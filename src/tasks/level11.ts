@@ -99,7 +99,7 @@ const Diary: Task[] = [
     },
     outfit: { equip: $items`designer sweatpants` },
     limit: { tries: 1 },
-    freeaction: true,
+    skipprep: true,
   },
   {
     name: "Diary",
@@ -140,8 +140,8 @@ const Desert: Task[] = [
       });
       return { 793: swordReady ? 5 : statChoice };
     },
+    skipprep: true,
     limit: { tries: 1 },
-    freeaction: true,
   },
   {
     name: "Compass",
@@ -420,7 +420,6 @@ export const MacguffinQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(11),
-      priority: () => Priorities.Free, // Always start this quest ASAP, it is key for routing
       completed: () => step("questL11MacGuffin") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
@@ -432,7 +431,7 @@ export const MacguffinQuest: Quest = {
     {
       name: "Finish",
       after: ["Boss"],
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       completed: () => step("questL11MacGuffin") === 999,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },

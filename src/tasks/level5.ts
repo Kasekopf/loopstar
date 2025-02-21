@@ -33,7 +33,7 @@ export const KnobQuest: Quest = {
       },
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     {
@@ -53,7 +53,6 @@ export const KnobQuest: Quest = {
     {
       name: "Open Knob",
       after: ["Start", "Outskirts"],
-      priority: () => Priorities.Free,
       completed: () => step("questL05Goblin") >= 1,
       do: () => use($item`Cobb's Knob map`),
       limit: { tries: 1 },

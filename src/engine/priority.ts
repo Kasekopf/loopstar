@@ -85,6 +85,10 @@ export class Prioritization {
       if (base !== Priorities.None) result.priorities.add(base);
     }
 
+    if (undelay(task.freeaction)) {
+      result.priorities.add(Priorities.Free);
+    }
+
     // Prioritize getting a YR
     const yr_needed =
       task.combat?.can("yellowRay") ||

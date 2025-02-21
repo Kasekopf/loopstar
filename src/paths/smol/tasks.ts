@@ -12,7 +12,6 @@ import {
   useSkill,
 } from "kolmafia";
 import { $effect, $effects, $item, $items, $skill, get, have } from "libram";
-import { Priorities } from "../../engine/priority";
 import { Quest } from "../../engine/task";
 import { atLevel } from "../../lib";
 import { args } from "../../args";
@@ -23,7 +22,6 @@ export const SmolDietQuest: Quest = {
   tasks: [
     {
       name: "Eat",
-      priority: () => Priorities.Free,
       ready: () =>
         atLevel(5) &&
         (have($item`Ol' Scratch's salad fork`) || args.smol.skipfork) &&
@@ -51,10 +49,10 @@ export const SmolDietQuest: Quest = {
         modifier: "100 hot res, HP",
       },
       limit: { tries: 1 },
+      freeaction: true,
     },
     {
       name: "Drink",
-      priority: () => Priorities.Free,
       ready: () => atLevel(11) && (have($item`Frosty's frosty mug`) || args.smol.skipmug),
       completed: () =>
         myInebriety() === 1 || (!have($item`astral pilsner`) && !have($item`astral six-pack`)),
@@ -71,10 +69,10 @@ export const SmolDietQuest: Quest = {
       },
       effects: $effects`Ode to Booze`,
       limit: { tries: 1 },
+      freeaction: true,
     },
     {
       name: "Numberology",
-      priority: () => Priorities.Free,
       after: ["Summon/War Frat 151st Infantryman"],
       completed: () =>
         // When you use 3 casts of numberology in ronin,
@@ -96,7 +94,6 @@ export const SmolDietQuest: Quest = {
         !have($item`hewn moon-rune spoon`) ||
         args.minor.tune === undefined ||
         get("moonTuned", false),
-      priority: () => Priorities.Free,
       freeaction: true,
       do: () => cliExecute(`spoon ${args.minor.tune}`),
       limit: { tries: 1 },

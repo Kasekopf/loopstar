@@ -18,7 +18,7 @@ export const FriarQuest: Quest = {
       completed: () => step("questL06Friar") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     {

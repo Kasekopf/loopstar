@@ -17,7 +17,7 @@ export const TavernQuest: Quest = {
       completed: () => step("questL03Rat") >= 0,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     {

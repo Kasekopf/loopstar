@@ -199,7 +199,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     combat: CombatStrategy<CombatActions>,
     resources: CombatResources<CombatActions>
   ): void {
-    if (undelay(task.freeaction)) {
+    if (undelay(task.freeaction) || undelay(task.skipprep)) {
       // Prepare only as requested by the task
       return;
     }
@@ -508,7 +508,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
     logModifiers(outfit);
 
-    if (undelay(task.freeaction)) {
+    if (undelay(task.freeaction) || undelay(task.skipprep)) {
       // Prepare only as requested by the task
       return;
     }

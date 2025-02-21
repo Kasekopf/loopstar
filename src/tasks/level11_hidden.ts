@@ -266,7 +266,7 @@ const Apartment: Task[] = [
     do: $location`An Overgrown Shrine (Northwest)`,
     choices: { 781: 2 },
     limit: { tries: 1 },
-    freeaction: true,
+    skipprep: true,
   },
 ];
 
@@ -356,7 +356,7 @@ const Office: Task[] = [
     do: $location`An Overgrown Shrine (Northeast)`,
     choices: { 785: 2 },
     limit: { tries: 1 },
-    freeaction: true,
+    skipprep: true,
   },
 ];
 
@@ -406,7 +406,7 @@ const Hospital: Task[] = [
     do: $location`An Overgrown Shrine (Southwest)`,
     choices: { 783: 2 },
     limit: { tries: 1 },
-    freeaction: true,
+    skipprep: true,
   },
 ];
 
@@ -515,7 +515,7 @@ const Bowling: Task[] = [
     do: $location`An Overgrown Shrine (Southeast)`,
     choices: { 787: 2 },
     limit: { tries: 1 },
-    freeaction: true,
+    skipprep: true,
   },
 ];
 

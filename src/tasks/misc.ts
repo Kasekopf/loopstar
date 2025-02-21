@@ -100,7 +100,6 @@ export const MiscQuest: Quest = {
     {
       name: "Unlock Beach",
       after: ["Sewer Accordion", "Sewer Saucepan", "Sewer Totem"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + (knollAvailable() ? 538 : 5000),
       completed: () => have($item`bitchin' meatcar`) || have($item`Desert Bus pass`),
       do: () => {
@@ -113,7 +112,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Mayam Calendar",
-      priority: () => Priorities.Free,
       completed: () => !MayamCalendar.have() || MayamCalendar.remainingUses() === 0,
       do: () => {
         cliExecute("mayam rings fur lightning eyepatch yam");
@@ -161,7 +159,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Unlock Island Takerspace",
-      priority: () => Priorities.Free,
       ready: () =>
         getWorkshed() === $item`TakerSpace letter of Marque` || have($item`pirate dinghy`),
       completed: () =>
@@ -233,7 +230,6 @@ export const MiscQuest: Quest = {
     {
       name: "Acquire Kgnee",
       after: [],
-      priority: () => Priorities.Free,
       ready: () =>
         have($familiar`Reagnimated Gnome`) &&
         !have($item`gnomish housemaid's kgnee`) &&
@@ -254,7 +250,6 @@ export const MiscQuest: Quest = {
     {
       name: "Voting",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => !underStandard(),
       completed: () =>
         !args.minor.voterbooth ||
@@ -501,7 +496,6 @@ export const MiscQuest: Quest = {
     {
       name: "Acquire Birch Battery",
       after: [],
-      priority: () => Priorities.Free,
       ready: () =>
         have($item`SpinMaster™ lathe`) &&
         (!get("_spinmasterLatheVisited") || have($item`flimsy hardwood scraps`)),
@@ -516,7 +510,6 @@ export const MiscQuest: Quest = {
     {
       name: "Acquire Firework Hat",
       after: ["Acquire Red Rocket"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + 500,
       completed: () =>
         have($item`sombrero-mounted sparkler`) ||
@@ -533,7 +526,6 @@ export const MiscQuest: Quest = {
     {
       name: "Acquire Rocket Boots",
       after: ["Acquire Red Rocket"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + 1000,
       completed: () =>
         have($item`rocket boots`) ||
@@ -550,7 +542,6 @@ export const MiscQuest: Quest = {
     {
       name: "Acquire Red Rocket",
       after: ["Sewer Accordion", "Sewer Totem", "Sewer Saucepan", "Acquire Mouthwash", "Mouthwash"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + 250,
       completed: () =>
         have($item`red rocket`) ||
@@ -569,7 +560,6 @@ export const MiscQuest: Quest = {
     {
       name: "Goose Exp",
       after: [],
-      priority: () => Priorities.Free,
       completed: () =>
         familiarWeight($familiar`Grey Goose`) >= 9 ||
         get(toTempPref("chefGoose")) === "true" ||
@@ -602,7 +592,6 @@ export const MiscQuest: Quest = {
         !have($skill`Summon Clip Art`) ||
         get("tomeSummons") >= 3 ||
         !have($familiar`Cornbeefadon`),
-      priority: () => Priorities.Free,
       do: () => {
         retrieveItem($item`box of Familiar Jacks`);
         use($item`box of Familiar Jacks`);
@@ -614,7 +603,6 @@ export const MiscQuest: Quest = {
     {
       name: "Boombox",
       after: [],
-      priority: () => Priorities.Free,
       completed: () =>
         !have($item`SongBoom™ BoomBox`) ||
         get("boomBoxSong") === "Total Eclipse of Your Meat" ||
@@ -626,7 +614,6 @@ export const MiscQuest: Quest = {
     {
       name: "Mayday",
       after: ["Macguffin/Start"],
-      priority: () => Priorities.Free,
       completed: () =>
         !get("hasMaydayContract") || (!have($item`MayDay™ supply package`) && atLevel(11)),
       ready: () => have($item`MayDay™ supply package`) && myTurncount() < 1000,
@@ -650,7 +637,6 @@ export const MiscQuest: Quest = {
     {
       name: "Workshed",
       after: [],
-      priority: () => Priorities.Free,
       completed: () =>
         getWorkshed() !== $item`none` || !have(args.major.workshed) || myTurncount() >= 1000,
       do: () => use(args.major.workshed),
@@ -660,7 +646,6 @@ export const MiscQuest: Quest = {
     {
       name: "Swap Workshed",
       after: [],
-      priority: () => Priorities.Free,
       ready: () =>
         (get("_coldMedicineConsults") >= 5 && getWorkshed() === $item`cold medicine cabinet`) ||
         ((get("_pirateDinghyUsed") ||
@@ -681,7 +666,6 @@ export const MiscQuest: Quest = {
     {
       name: "Bugbear Outfit",
       after: ["Acquire Red Rocket"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + 140,
       completed: () =>
         (!have($item`Asdon Martin keyfob (on ring)`) && !AsdonMartin.installed()) ||
@@ -698,7 +682,6 @@ export const MiscQuest: Quest = {
     {
       name: "Break Stone",
       after: [],
-      priority: () => Priorities.Free,
       completed: () => hippyStoneBroken(),
       ready: () => args.minor.pvp,
       do: (): void => {
@@ -711,7 +694,6 @@ export const MiscQuest: Quest = {
     {
       name: "Autumnaton",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => AutumnAton.available(),
       completed: () => !AutumnAton.have(),
       do: () => {
@@ -781,7 +763,6 @@ export const MiscQuest: Quest = {
     {
       name: "Saber",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => have($item`Fourth of May Cosplay Saber`),
       completed: () => get("_saberMod") !== 0,
       do: (): void => {
@@ -795,7 +776,6 @@ export const MiscQuest: Quest = {
     {
       name: "Grapefruit",
       after: [],
-      priority: () => Priorities.Free,
       ready: () =>
         have($item`filthy corduroys`) &&
         have($item`filthy knitted dread sack`) &&
@@ -812,7 +792,6 @@ export const MiscQuest: Quest = {
     {
       name: "Prepare Robortender",
       after: ["Grapefruit"],
-      priority: () => Priorities.Free,
       ready: () =>
         (((have($item`fish head`) && have($item`boxed wine`)) || have($item`piscatini`)) &&
           have($item`grapefruit`)) ||
@@ -833,7 +812,6 @@ export const MiscQuest: Quest = {
     {
       name: "Trainset",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => getWorkshed() === $item`model train set` && TrainSet.canConfigure(),
       completed: () => {
         const config = TrainSet.cycle();
@@ -852,7 +830,6 @@ export const MiscQuest: Quest = {
     {
       name: "Harvest Chateau",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => get("chateauAvailable") && !underStandard(),
       completed: () => get("_chateauDeskHarvested"),
       do: (): void => {
@@ -864,7 +841,6 @@ export const MiscQuest: Quest = {
     {
       name: "Learn About Bugs",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => have($item`S.I.T. Course Completion Certificate`),
       completed: () => get("_sitCourseCompleted", true) || have($skill`Insectologist`),
       do: () => use($item`S.I.T. Course Completion Certificate`),
@@ -875,7 +851,6 @@ export const MiscQuest: Quest = {
     {
       name: "Harvest Rock Garden",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => haveInCampground($item`packet of rock seeds`),
       completed: () =>
         !haveInCampground($item`milestone`) || getCampground()[$item`milestone`.name] < 1,
@@ -890,7 +865,6 @@ export const MiscQuest: Quest = {
     {
       name: "Cincho Rest",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => CinchoDeMayo.currentCinch() + CinchoDeMayo.cinchRestoredBy() <= 100,
       completed: () =>
         !have($item`Cincho de Mayo`) ||
@@ -931,7 +905,6 @@ export const MiscQuest: Quest = {
     {
       name: "2002 Store",
       after: [],
-      priority: () => Priorities.Free,
       completed: () =>
         !have($item`2002 Mr. Store Catalog`) ||
         (get("availableMrStore2002Credits") === 0 && get("_2002MrStoreCreditsCollected")),
@@ -1032,7 +1005,6 @@ export const MiscQuest: Quest = {
     {
       name: "Cloud Talk",
       after: [],
-      priority: () => Priorities.Free,
       completed: () =>
         have($effect`That's Just Cloud-Talk, Man`) ||
         get("_campAwayCloudBuffs", 0) > 0 ||
@@ -1109,7 +1081,6 @@ export const MiscQuest: Quest = {
     {
       name: "Leaflet",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => myLevel() >= 9,
       completed: () => get("leafletCompleted"),
       do: (): void => {
@@ -1126,7 +1097,6 @@ export const MiscQuest: Quest = {
     {
       name: "Horsery",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => get("horseryAvailable"),
       completed: () => get("_horsery") === "dark horse",
       do: () => cliExecute("horsery dark"),
@@ -1136,7 +1106,6 @@ export const MiscQuest: Quest = {
     {
       name: "Sewer Accordion",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= 1000,
       completed: () => have($item`stolen accordion`),
       do: () => retrieveItem($item`stolen accordion`),
@@ -1147,7 +1116,6 @@ export const MiscQuest: Quest = {
     {
       name: "Sewer Totem",
       after: ["Sewer Accordion"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= 1000,
       completed: () => have($item`turtle totem`),
       do: () => retrieveItem($item`turtle totem`),
@@ -1158,7 +1126,6 @@ export const MiscQuest: Quest = {
     {
       name: "Sewer Saucepan",
       after: ["Sewer Accordion", "Sewer Totem"],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= 1000,
       completed: () => have($item`saucepan`),
       do: () => retrieveItem($item`saucepan`),
@@ -1168,7 +1135,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Wish",
-      priority: () => Priorities.Free,
       after: [],
       completed: () => get("_genieWishesUsed") >= 3 || !have($item`genie bottle`),
       do: () => cliExecute(`genie wish for more wishes`),
@@ -1177,7 +1143,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Saucecrafting",
-      priority: () => Priorities.Free,
       after: [],
       ready: () => have($skill`Advanced Saucecrafting`) && myMp() >= 10,
       completed: () => get("reagentSummons") > 0,
@@ -1187,7 +1152,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Prevent Scurvy and Sobriety",
-      priority: () => Priorities.Free,
       after: [],
       ready: () => have($skill`Prevent Scurvy and Sobriety`) && myMp() >= 50,
       completed: () => get("_preventScurvy"),
@@ -1250,7 +1214,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Cowboy Boots",
-      priority: () => Priorities.Free,
       after: [],
       completed: () => have($item`your cowboy boots`) || !get("telegraphOfficeAvailable"),
       do: () => visitUrl("place.php?whichplace=town_right&action=townright_ltt"),
@@ -1259,7 +1222,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Barrel Lid",
-      priority: () => Priorities.Free,
       after: [],
       completed: () => get("_barrelPrayer") || !get("barrelShrineUnlocked"),
       do: () => {
@@ -1272,7 +1234,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Delevel",
-      priority: () => Priorities.Free,
       after: ["Tower/Shadow"],
       ready: () => myFullness() === fullnessLimit(),
       completed: () => !args.minor.delevel || !atLevel(14) || !have($item`Clan VIP Lounge key`),
@@ -1283,7 +1244,6 @@ export const MiscQuest: Quest = {
     {
       name: "Blood Bubble",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + 500,
       completed: () =>
         !have($skill`Blood Bubble`) || step("questL13Final") > 10 || have($effect`Blood Bubble`),
@@ -1299,7 +1259,6 @@ export const MiscQuest: Quest = {
     {
       name: "Blood Bond",
       after: [],
-      priority: () => Priorities.Free,
       ready: () => myMeat() >= meatBuffer + 500,
       completed: () =>
         !have($skill`Blood Bond`) || step("questL13Final") > 10 || have($effect`Blood Bond`),
@@ -1314,7 +1273,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Limit Stats",
-      priority: () => Priorities.Free,
       after: ["Tower/Start"],
       completed: () =>
         get("nsContestants2") > -1 ||
@@ -1331,7 +1289,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Leaf Resin",
-      priority: () => Priorities.Free,
       ready: () =>
         BurningLeaves.have() && BurningLeaves.numberOfLeaves() >= 50 && !have($effect`Resined`),
       completed: () => step("questL12War") === 999, // Stop near the end of the run
@@ -1342,7 +1299,6 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Acquire Tuba",
-      priority: () => Priorities.Free,
       ready: () => !args.minor.savetuba && AprilingBandHelmet.canJoinSection(),
       completed: () => have($item`Apriling band tuba`),
       do: () => AprilingBandHelmet.joinSection($item`Apriling band tuba`),
@@ -1352,7 +1308,6 @@ export const MiscQuest: Quest = {
     {
       name: "Open McHugeLarge Bag",
       after: [],
-      priority: () => Priorities.Free,
       completed: () => !have($item`McHugeLarge duffel bag`) || have($item`McHugeLarge right pole`),
       do: () => visitUrl("inventory.php?action=skiduffel&pwd"),
       freeaction: true,
@@ -1361,7 +1316,6 @@ export const MiscQuest: Quest = {
     {
       name: "Check Florist",
       after: ["Mosquito/Start"],
-      priority: () => Priorities.Free,
       completed: () => get("floristFriarChecked"),
       do: () => {
         floristAvailable();
@@ -1373,7 +1327,6 @@ export const MiscQuest: Quest = {
     {
       name: "Clan Photo Booth Free Kill",
       after: [],
-      priority: () => Priorities.Free,
       completed: () =>
         get(toTempPref("photoBoothChecked"), false) ||
         (have($item`Sheriff moustache`) &&

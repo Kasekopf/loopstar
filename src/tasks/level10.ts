@@ -31,7 +31,7 @@ export const GiantQuest: Quest = {
       completed: () => step("questL10Garbage") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     {
@@ -61,7 +61,6 @@ export const GiantQuest: Quest = {
     {
       name: "Grow Beanstalk",
       after: ["Start", "Get Bean"],
-      priority: () => Priorities.Free,
       completed: () => step("questL10Garbage") >= 1,
       do: () => use($item`enchanted bean`),
       outfit: { equip: $items`spring shoes` },
@@ -224,7 +223,7 @@ export const GiantQuest: Quest = {
     {
       name: "Finish",
       after: ["Top Floor"],
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       completed: () => step("questL10Garbage") === 999,
       do: () => visitUrl("council.php"),
       limit: { soft: 10 },

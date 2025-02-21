@@ -72,7 +72,7 @@ const ABoo: Task[] = [
     choices: { 611: 1, 1430: 1 },
     combat: new CombatStrategy().killItem(),
     limit: { tries: 1 },
-    freeaction: true,
+    skipprep: true,
     expectbeatenup: true,
   },
   {
@@ -104,7 +104,7 @@ const ABoo: Task[] = [
     },
     choices: { 611: 1, 1430: 1 },
     limit: { tries: 5 },
-    freeaction: true,
+    skipprep: true,
     expectbeatenup: true,
   },
   {
@@ -330,13 +330,12 @@ export const ChasmQuest: Quest = {
       completed: () => step("questL09Topping") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
-      priority: () => (councilSafe() ? Priorities.Free : Priorities.BadMood),
+      priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
       freeaction: true,
     },
     {
       name: "Bat Wings Bridge Parts",
       after: ["Start"],
-      priority: () => Priorities.Free,
       ready: () => have($item`bat wings`) && get("chasmBridgeProgress") >= 25,
       completed: () => step("questL09Topping") >= 1,
       do: () => {
@@ -404,7 +403,7 @@ export const ChasmQuest: Quest = {
         ])
         .kill(),
       choices: { 1345: 3 },
-      freeaction: () => get("smutOrcNoncombatProgress") >= 15,
+      skipprep: () => get("smutOrcNoncombatProgress") >= 15,
       limit: {
         soft: 45,
         guard: Guards.after(
@@ -415,7 +414,6 @@ export const ChasmQuest: Quest = {
     {
       name: "Bridge Parts",
       after: ["Start"],
-      priority: () => Priorities.Free,
       ready: () =>
         (have($item`morningwood plank`) ||
           have($item`raging hardwood plank`) ||
