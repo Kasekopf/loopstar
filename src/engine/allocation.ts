@@ -4,11 +4,15 @@ import { args } from "../args";
 import { stableSort } from "../lib";
 import { summonSources } from "../resources/summon";
 import { Allocations, DeltaTask, Task } from "./task";
+import { undelay } from "libram";
 
 export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
   const resourcesAllocated = new Map<string, DeltaTask>();
   const resourcesNeeded = tasks.filter((task) => task.resources && !task.completed());
-  const tasksByResource = stableSort(resourcesNeeded, (task) => -1 * (task.resources?.value ?? 0));
+  const tasksByResource = stableSort(
+    resourcesNeeded,
+    (task) => -1 * (undelay(task.resources)?.value ?? 0)
+  );
   let pullsLeft = pullsRemaining() - (20 - args.major.pulls);
   if (inHardcore() || myTurncount() >= 1000) pullsLeft = 0; // No pulls in hardcore or out of ronin
 
@@ -16,8 +20,9 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
 
   for (const task of tasksByResource) {
     if (!task.resources) break;
+    const resources = undelay(task.resources);
     let allocated = false;
-    if (task.resources.which === Allocations.Pull) {
+    if (resources.which === Allocations.Pull) {
       if (pullsLeft > 0) {
         resourcesAllocated.set(task.name, {
           tag: "Pull",
@@ -25,12 +30,12 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
         pullsLeft -= 1;
         allocated = true;
       }
-    } else if ("summon" in task.resources.which) {
+    } else if ("summon" in resources.which) {
       for (let i = 0; i < summonsLeft.length; i++) {
         if (!summonsLeft[i]) continue;
-        if (summonSources[i].canFight(task.resources.which.summon)) {
+        if (summonSources[i].canFight(resources.which.summon)) {
           const allocatedSummon = summonSources[i];
-          const monster = task.resources.which.summon;
+          const monster = resources.which.summon;
           resourcesAllocated.set(task.name, {
             replace: {
               do: () => {
@@ -53,7 +58,7 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
       }
     }
 
-    if (!allocated && task.resources.required) {
+    if (!allocated && resources.required) {
       resourcesAllocated.set(task.name, UNFULFILLED_ALLOCATION);
     }
   }

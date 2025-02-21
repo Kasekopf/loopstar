@@ -1,7 +1,7 @@
 import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
-import { undelay } from "libram";
+import { Delayed, undelay } from "libram";
 import { Delta, mergeDelta } from "../lib";
 
 export type Quest = BaseQuest<Task>;
@@ -33,7 +33,7 @@ export type Task = {
   nofightingfamiliars?: boolean;
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
 
-  resources?: AllocationRequest;
+  resources?: Delayed<AllocationRequest>;
   tags?: string[];
 } & BaseTask<CombatActions>;
 
@@ -67,7 +67,7 @@ export function hasDelay(task: Task): boolean {
 }
 
 export enum Allocations {
-  Pull
+  Pull,
 }
 export type AllocationSummon = {
   summon: Monster;
