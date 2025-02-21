@@ -180,6 +180,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     return undefined;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public printExecutingMessage(task: ActiveTask) {
+    // Ignore since we printout in execute
+  }
+
   public execute(task: ActiveTask): void {
     debug(``);
     const name = getTaggedName(task);
