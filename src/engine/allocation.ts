@@ -4,7 +4,9 @@ import { args } from "../args";
 import { stableSort } from "../lib";
 import { summonSources } from "../resources/summon";
 import { Allocations, DeltaTask, Task } from "./task";
-import { undelay } from "libram";
+import { get, sum, undelay } from "libram";
+import { forceNCSources, noncombatForceNCSources } from "../resources/forcenc";
+import { Priorities } from "./priority";
 
 export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
   const resourcesAllocated = new Map<string, DeltaTask>();
@@ -18,9 +20,13 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
 
   const summonsLeft = summonSources.map((s) => s.available());
 
+  let activeForceNCLeft = get("noncombatForcerActive") ? 1 : 0;
+  let preparableForceNCLeft = sum(forceNCSources, (s) => s.remaining());
+  const passiveForceNCLeft = noncombatForceNCSources.map((s) => s.remaining());
+
   for (const task of tasksByResource) {
-    if (!task.resources) break;
     const resources = undelay(task.resources);
+    if (!resources) break;
     let allocated = false;
     if (resources.which === Allocations.Pull) {
       if (pullsLeft > 0) {
@@ -28,6 +34,39 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
           tag: "Pull",
         });
         pullsLeft -= 1;
+        allocated = true;
+      }
+    } else if (resources.which === Allocations.NCForce) {
+      if (activeForceNCLeft > 0) {
+        resourcesAllocated.set(task.name, {
+          tag: "NCForce",
+          replace: { priority: () => Priorities.GoodForceNC },
+        });
+        activeForceNCLeft -= 1;
+        allocated = true;
+      }
+      if (!allocated) {
+        for (let i = 0; i < passiveForceNCLeft.length; i++) {
+          if (!passiveForceNCLeft[i]) continue;
+          const passiveForceNC = noncombatForceNCSources[i];
+          resourcesAllocated.set(task.name, {
+            tag: "NCForce",
+            amend: {
+              prepare: (original) => () => {
+                original?.();
+                passiveForceNC.do();
+              },
+            },
+          });
+          allocated = true;
+        }
+      }
+      if (!allocated && preparableForceNCLeft > 0) {
+        resourcesAllocated.set(task.name, {
+          tag: "NCForce",
+          replace: { priority: () => Priorities.BadForcingNC },
+        });
+        preparableForceNCLeft -= 1;
         allocated = true;
       }
     } else if ("summon" in resources.which) {

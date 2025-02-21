@@ -15,14 +15,13 @@ import {
 } from "libram";
 import { CombatStrategy } from "./combat";
 import { moodCompatible } from "./moods";
-import { hasDelay, NCForce, Priority, Task } from "./task";
+import { hasDelay, Priority, Task } from "./task";
 import { globalStateCache } from "./state";
 import { canEquipResource, getModifiersFrom } from "./outfit";
 import { Outfit } from "grimoire-kolmafia";
 import { args } from "../args";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { wandererSources } from "../resources/wanderer";
-import { forceNCPossible } from "../resources/forcenc";
 import { getActiveBackupTarget } from "../resources/backup";
 
 export class Priorities {
@@ -134,16 +133,6 @@ export class Prioritization {
     if (modifier?.includes("ML") && !modifier.match("-[\\d .]*ML")) {
       if (getTodaysHolidayWanderers().length > 0 && getCounter("holiday") <= 0) {
         result.priorities.add(Priorities.BadHoliday);
-      }
-    }
-
-    // Handle potential NC forcers in a zone
-    const ncforce = undelay(task.ncforce);
-    if (ncforce === NCForce.Yes || ncforce === NCForce.Eventually) {
-      if (get("noncombatForcerActive")) {
-        result.priorities.add(Priorities.GoodForceNC);
-      } else if (forceNCPossible()) {
-        result.priorities.add(Priorities.BadForcingNC);
       }
     }
 

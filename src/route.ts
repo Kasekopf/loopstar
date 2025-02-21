@@ -2,7 +2,6 @@ import { orderByRoute } from "grimoire-kolmafia";
 import { Task } from "./engine/task";
 
 export const ROUTE_WAIT_TO_NCFORCE = 55;
-export const ROUTE_WAIT_TO_EVENTUALLY_NCFORCE = 200;
 
 export const routing: string[] = [
   // Break pvp stone ASAP

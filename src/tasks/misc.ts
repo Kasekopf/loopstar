@@ -88,7 +88,6 @@ import { Keys, keyStrategy } from "./keys";
 import { atLevel, haveLoathingIdolMicrophone, primestatId, underStandard } from "../lib";
 import { args, toTempPref } from "../args";
 import { coldPlanner, yellowSubmarinePossible } from "../engine/outfit";
-import { ROUTE_WAIT_TO_NCFORCE } from "../route";
 import { fillHp } from "../engine/moods";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { getActiveBackupTarget } from "../resources/backup";
@@ -887,22 +886,6 @@ export const MiscQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
-    },
-    {
-      name: "Cincho",
-      after: ["Friar/Start"],
-      priority: () => Priorities.Free,
-      completed: () =>
-        !have($item`Cincho de Mayo`) ||
-        (get("timesRested") >= totalFreeRests() && CinchoDeMayo.currentCinch() < 60),
-      ready: () =>
-        myTurncount() >= ROUTE_WAIT_TO_NCFORCE &&
-        have($item`Cincho de Mayo`) &&
-        CinchoDeMayo.currentCinch() >= 60 &&
-        !get("noncombatForcerActive"),
-      outfit: { equip: $items`Cincho de Mayo` },
-      do: () => useSkill($skill`Cincho: Fiesta Exit`),
-      limit: { unready: true },
     },
     {
       name: "Cincho Rest",

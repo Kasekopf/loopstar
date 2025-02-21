@@ -6,12 +6,6 @@ import { Delta, mergeDelta } from "../lib";
 
 export type Quest = BaseQuest<Task>;
 
-export enum NCForce {
-  No = 0,
-  Yes = 1, // After ROUTE_WAIT_TO_NCFORCE turns
-  Eventually = 2, // After ROUTE_WAIT_TO_EVENTUALLY_NCFORCE turns
-}
-
 export type Task = {
   priority?: () => Priority | Priority[];
   combat?: CombatStrategy;
@@ -27,13 +21,12 @@ export type Task = {
   // If given but function returns undefined, do not use orb predictions.
   orbtargets?: () => Monster[] | undefined;
   boss?: boolean;
-  ncforce?: NCForce | (() => NCForce);
   ignore_banishes?: () => boolean;
   map_the_monster?: Monster | (() => Monster); // Try and map to the given monster, if possible
   nofightingfamiliars?: boolean;
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
 
-  resources?: Delayed<AllocationRequest>;
+  resources?: Delayed<AllocationRequest | undefined>;
   tags?: string[];
 } & BaseTask<CombatActions>;
 
@@ -68,6 +61,7 @@ export function hasDelay(task: Task): boolean {
 
 export enum Allocations {
   Pull,
+  NCForce,
 }
 export type AllocationSummon = {
   summon: Monster;

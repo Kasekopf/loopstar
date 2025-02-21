@@ -37,7 +37,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { getTaggedName, hasDelay, merge, NCForce, Task } from "./task";
+import { getTaggedName, hasDelay, merge, Task } from "./task";
 import {
   $effect,
   $effects,
@@ -88,7 +88,7 @@ import { globalStateCache } from "./state";
 import { removeTeleportitis, teleportitisTask } from "../tasks/misc";
 import { keyStrategy } from "../tasks/keys";
 import { applyEffects, customRestoreMp } from "./moods";
-import { ROUTE_WAIT_TO_EVENTUALLY_NCFORCE, ROUTE_WAIT_TO_NCFORCE } from "../route";
+import { ROUTE_WAIT_TO_NCFORCE } from "../route";
 import { unusedBanishes } from "../resources/banish";
 import { CombatResource } from "../resources/lib";
 import { canChargeVoid, wandererSources } from "../resources/wanderer";
@@ -367,16 +367,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         !nc_task_blacklist.has(task.name) &&
         !have($effect`Teleportitis`) &&
         force_item_source?.equip !== $item`Fourth of May Cosplay Saber` &&
-        !get("noncombatForcerActive")
+        !get("noncombatForcerActive") &&
+        myTurncount() >= ROUTE_WAIT_TO_NCFORCE
       ) {
-        const allowableNCForce: (NCForce | undefined)[] = [];
-        if (myTurncount() >= ROUTE_WAIT_TO_NCFORCE) allowableNCForce.push(NCForce.Yes);
-        if (myTurncount() >= ROUTE_WAIT_TO_EVENTUALLY_NCFORCE)
-          allowableNCForce.push(NCForce.Eventually);
         if (
-          task.availableTasks?.find(
-            (t) => allowableNCForce.includes(undelay(t.ncforce)) && t.name !== task.name
-          ) !== undefined
+          task.availableTasks?.find((t) => t.tags?.includes("NCForce") && t.name !== task.name) !==
+          undefined
         ) {
           const ncforcer = equipFirst(outfit, forceNCSources);
           if (ncforcer) {
