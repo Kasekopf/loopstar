@@ -9,9 +9,9 @@ import { Priorities } from "./priority";
 import { luckySources } from "../resources/lucky";
 
 type Allocator = {
-  applies: (which: Allocation) => boolean;
-  amount: () => number;
-  delta: DeltaTask | ((which: Allocation) => DeltaTask);
+  applies: (which: Allocation) => boolean; // True if this allocator can satisfy this request
+  amount: () => number; // The number of resources available to be allocated
+  delta: DeltaTask | ((which: Allocation) => DeltaTask); // The change to make on the task if a resource is allocated
 };
 
 const allocators: Allocator[] = [
@@ -41,17 +41,14 @@ const allocators: Allocator[] = [
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
-          replace: {
+          combine: {
             priority: () => {
               if (get("noncombatForcerActive")) return Priorities.None;
               if (s.available()) return Priorities.None;
               return Priorities.BadForcingNC;
             },
-          },
-          amend: {
-            prepare: (original) => () => {
+            prepare: () => {
               if (!get("noncombatForcerActive")) s.do();
-              original?.();
             },
           },
         },
@@ -64,7 +61,7 @@ const allocators: Allocator[] = [
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
-          replace: {
+          combine: {
             priority: () => {
               if (get("noncombatForcerActive")) return Priorities.None;
               return Priorities.BadForcingNC;
@@ -90,10 +87,8 @@ const allocators: Allocator[] = [
                 runCombat();
               },
             },
-            amend: {
-              ready: (originalReady) => {
-                return () => (originalReady?.() ?? true) && (s.ready?.() ?? true);
-              },
+            combine: {
+              ready: s.ready,
             },
             tag: s.name,
           },
@@ -114,10 +109,9 @@ const allocators: Allocator[] = [
         amount: () => s.remaining(),
         delta: {
           tag: "Lucky",
-          amend: {
-            prepare: (original) => () => {
+          combine: {
+            prepare: () => {
               if (!have($effect`Lucky!`)) s.do();
-              original?.();
             },
           },
         },

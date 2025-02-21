@@ -33,6 +33,7 @@ export type Task = {
 
 export type DeltaTask = Delta<Task> & {
   tag?: string;
+  combine?: Partial<Pick<Task, "prepare" | "ready" | "priority">>;
 };
 
 export function getTaggedName(task: Task): string {
@@ -40,11 +41,31 @@ export function getTaggedName(task: Task): string {
   return [task.name, ...task.tags].join(" # ");
 }
 
+function compose<T>(
+  func1: (() => T) | undefined,
+  func2: (() => T) | undefined,
+  combine: (a: T, b: T) => T
+): (() => T) | undefined {
+  if (!func1) return func2;
+  if (!func2) return func1;
+  return () => combine(func1(), func2());
+}
+
 export function merge(task: Task, delta: DeltaTask): Task {
   const result = mergeDelta(task, delta);
   if (delta.tag) {
     if (!result.tags) result.tags = [delta.tag];
     else result.tags = [...result.tags, delta.tag];
+  }
+  if (delta.combine) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    result.prepare = compose(delta.combine.prepare, result.prepare, (a, b) => undefined);
+    result.ready = compose(delta.combine.ready, result.ready, (a, b) => a && b);
+    result.priority = compose(delta.combine.priority, result.priority, (a, b) => {
+      const aArr = Array.isArray(a) ? a : [a];
+      const bArr = Array.isArray(b) ? b : [b];
+      return [...aArr, ...bArr];
+    });
   }
   return result;
 }
