@@ -17,7 +17,7 @@ export function allocateResources(tasks: Task[]): Map<string, DeltaTask> {
   for (const task of tasksByResource) {
     if (!task.resources) break;
     let allocated = false;
-    if (task.resources.which === Allocations.PULL) {
+    if (task.resources.which === Allocations.Pull) {
       if (pullsLeft > 0) {
         resourcesAllocated.set(task.name, {
           tag: "Pull",

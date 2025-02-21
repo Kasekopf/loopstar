@@ -67,7 +67,7 @@ export function hasDelay(task: Task): boolean {
 }
 
 export enum Allocations {
-  PULL,
+  Pull
 }
 export type AllocationSummon = {
   summon: Monster;

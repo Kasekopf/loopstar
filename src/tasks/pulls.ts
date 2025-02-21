@@ -376,7 +376,7 @@ export function getPullTask(spec: PullSpec): Task {
     limit: { tries: 1 },
     freeaction: true,
     resources: {
-      which: Allocations.PULL,
+      which: Allocations.Pull,
       value: pull.priority,
       required: true,
     },
