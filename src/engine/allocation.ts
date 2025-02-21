@@ -1,7 +1,6 @@
-import { debug } from "console";
 import { inHardcore, myTurncount, pullsRemaining, runCombat } from "kolmafia";
 import { args } from "../args";
-import { stableSort } from "../lib";
+import { debug, stableSort } from "../lib";
 import { summonSources } from "../resources/summon";
 import { Allocation, Allocations, AllocationSummon, DeltaTask, Task } from "./task";
 import { get, undelay } from "libram";
