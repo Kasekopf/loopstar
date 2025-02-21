@@ -68,7 +68,8 @@ const allocators: Allocator[] = [
   ...summonSources.map(
     (s) =>
       <Allocator>{
-        applies: (which: Allocation) => typeof which === "object" && "summon" in which,
+        applies: (which: Allocation) =>
+          typeof which === "object" && "summon" in which && s.canFight(which.summon),
         amount: () => s.available(),
         delta: (req) =>
           <DeltaTask>{
