@@ -166,8 +166,26 @@ export const McLargeHugeQuest: Quest = {
       limit: { soft: 30 },
     },
     {
-      name: "Extreme Snowboard",
+      name: "Extreme Snowboard Initial",
       after: ["Trapper Return", "Extreme Outfit"],
+      completed: () => get("currentExtremity") >= 1 || step("questL08Trapper") >= 3,
+      do: $location`The eXtreme Slope`,
+      outfit: () => {
+        if (haveHugeLarge())
+          return {
+            equip: $items`McHugeLarge left pole, McHugeLarge right pole, McHugeLarge left ski, McHugeLarge right ski, McHugeLarge duffel bag`,
+            modifier: "-combat",
+          };
+        return {
+          equip: $items`eXtreme mittens, snowboarder pants, eXtreme scarf`,
+          modifier: "-combat",
+        };
+      },
+      limit: { soft: 10 },
+    },
+    {
+      name: "Extreme Snowboard",
+      after: ["Trapper Return", "Extreme Outfit", "Extreme Snowboard Initial"],
       completed: () => get("currentExtremity") >= 3 || step("questL08Trapper") >= 3,
       do: $location`The eXtreme Slope`,
       outfit: () => {
@@ -181,7 +199,14 @@ export const McLargeHugeQuest: Quest = {
           modifier: "-combat",
         };
       },
-      limit: { soft: 30 },
+      // Only the 2nd and 3rd eXXXtreme adventures can be forced
+      resources: () =>
+        <AllocationRequest>{
+          which: Allocations.NCForce,
+          value: 1 / 0.65,
+          repeat: get("currentExtremity") >= 2 ? 1 : 2,
+        },
+      limit: { soft: 20 },
     },
     {
       name: "Climb",
