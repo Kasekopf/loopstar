@@ -19,9 +19,10 @@ export class AftercoreInfo implements PathInfo {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getTasks(_: Task[]): Task[] {
-    if (!args.major.goal) return [];
-    switch (args.major.goal) {
+  getTasks(_: Task[], goalOverride = undefined): Task[] {
+    const goal = goalOverride ?? args.major.goal;
+    if (!goal) return [];
+    switch (goal) {
       case "organ":
         return getTasks([FriarQuest, OrganQuest]);
       case "level":
@@ -34,7 +35,7 @@ export class AftercoreInfo implements PathInfo {
           },
         ]);
       default:
-        throw `Unknown goal ${args.major.goal}`;
+        throw `Unknown goal ${goal}`;
     }
   }
 
