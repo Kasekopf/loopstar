@@ -2,6 +2,7 @@ import { mallPrice } from "kolmafia";
 import { args } from "../../args";
 import { NamedDeltaTask } from "../../engine/task";
 import { $item } from "libram";
+import { PullQuest } from "../../tasks/pulls";
 
 export const casualDeltas: NamedDeltaTask[] = [
   {
@@ -16,4 +17,11 @@ export const casualDeltas: NamedDeltaTask[] = [
       limit: { tries: 20 },
     },
   },
+  ...PullQuest.tasks.map(
+    (t) =>
+      <NamedDeltaTask>{
+        name: `${PullQuest.name}/${t.name}`,
+        delete: true,
+      }
+  ),
 ];
