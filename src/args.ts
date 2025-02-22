@@ -123,6 +123,10 @@ export const args = Args.create(
       }),
     }),
     casual: Args.group("Path: Casual", {
+      steelorgan: Args.boolean({
+        help: "Get the steel organ",
+        default: true,
+      }),
       stomach: Args.number({
         help: "Amount of stomach to fill.",
         default: 5,
