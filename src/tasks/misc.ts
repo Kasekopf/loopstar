@@ -1,6 +1,5 @@
 import { CombatStrategy, killMacro } from "../engine/combat";
 import {
-  adv1,
   buy,
   cliExecute,
   equippedAmount,
@@ -34,6 +33,7 @@ import {
   myTurncount,
   numericModifier,
   print,
+  putCloset,
   retrieveItem,
   runChoice,
   totalFreeRests,
@@ -80,7 +80,7 @@ import {
   uneffect,
 } from "libram";
 import { Quest, Task } from "../engine/task";
-import { Guards, lastEncounterWasWanderingNC, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
+import { Guards, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { Engine } from "../engine/engine";
 import { Keys, keyStrategy } from "./keys";
@@ -361,7 +361,11 @@ export const MiscQuest: Quest = {
           case $location`The Skeleton Store`:
             return true; // Can freely start quest
           case $location`The Smut Orc Logging Camp`:
-            return step("questL09Topping") >= 0;
+            return (
+              step("questL09Topping") >= 0 &&
+              // Wait until Blech House is cleared
+              get("smutOrcNoncombatProgress") < 15
+            );
           case $location`The Spooky Forest`:
             return step("questL02Larva") >= 0;
         }
@@ -384,6 +388,8 @@ export const MiscQuest: Quest = {
               visitUrl("choice.php?pwd=&whichchoice=798&option=2");
               visitUrl("woods.php");
             }
+            if (have($item`funky junk key`))
+              putCloset($item`funky junk key`, itemAmount($item`funky junk key`));
             return;
           case $location`The Overgrown Lot`:
             if (step("questM24Doc") === -1) {
@@ -409,10 +415,7 @@ export const MiscQuest: Quest = {
         }
       },
       do: () => {
-        adv1(get("ghostLocation") ?? $location`none`, 0, "");
-        if (lastEncounterWasWanderingNC()) {
-          adv1(get("ghostLocation") ?? $location`none`, 0, "");
-        }
+        return get("ghostLocation") ?? $location`none`;
       },
       outfit: (): OutfitSpec | Outfit => {
         if (get("ghostLocation") === $location`Inside the Palindome`)
@@ -485,12 +488,42 @@ export const MiscQuest: Quest = {
             .skill($skill`Shoot Ghost`)
             .skill($skill`Trap Ghost`);
       }),
-      post: () => {
-        if (get("questPAGhost") !== "unstarted") {
-          throw `Failed to kill ghost from protonic accelerator pack`;
+      choices: () => {
+        const result = {
+          1060: 5,
+          1061: 6,
+          1062: 7,
+          899: 2,
+          896: 1,
+          893: 2,
+          901: 2,
+          334: 1,
+          507: 1,
+        };
+
+        // Make progress in the Spooky Forest if needed
+        if (!have($item`Spooky Temple map`) && step("questM16Temple") < 999) {
+          if (!have($item`tree-holed coin`)) {
+            return { ...result, 502: 2, 505: 2 };
+          }
+          return { ...result, 502: 3, 506: 3 };
         }
+        if (!have($item`Spooky-Gro fertilizer`) && step("questM16Temple") < 999) {
+          return { ...result, 502: 3, 506: 2 };
+        }
+        if (step("questL02Larva") < 1) {
+          return { ...result, 502: 2, 505: 1 };
+        }
+        // Otherwise, skip it (through the tree-holed coin path)
+        return { ...result, 502: 2, 505: 2 };
       },
-      limit: { tries: 20, unready: true },
+      limit: {
+        tries: 40,
+        guard: Guards.create(
+          () => myAdventures(),
+          (adv) => myAdventures() >= adv // Assert we did not use an adventure
+        ),
+      },
     },
     {
       name: "Acquire Birch Battery",
