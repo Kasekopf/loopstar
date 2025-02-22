@@ -205,7 +205,6 @@ export const pulls: PullSpec[] = [
   {
     pull: $item`Mohawk wig`,
     useful: () => {
-      if (have($skill`Emotionally Chipped`)) return false;
       if (have($item`S.O.C.K.`)) return true; // If one didn't drop naturally
       return undefined;
     },
