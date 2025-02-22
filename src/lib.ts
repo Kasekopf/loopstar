@@ -277,3 +277,13 @@ export function mergeDelta<T>(original: T, delta: Delta<T>): T {
   }
   return result;
 }
+
+export function haveHugeLarge() {
+  return (
+    have($item`McHugeLarge left pole`) &&
+    have($item`McHugeLarge right pole`) &&
+    have($item`McHugeLarge left ski`) &&
+    have($item`McHugeLarge right ski`) &&
+    have($item`McHugeLarge duffel bag`)
+  );
+}

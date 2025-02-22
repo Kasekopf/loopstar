@@ -30,7 +30,7 @@ import { AllocationRequest, Allocations, Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
-import { atLevel } from "../lib";
+import { atLevel, haveHugeLarge } from "../lib";
 import { councilSafe } from "./level12";
 import { coldPlanner } from "../engine/outfit";
 import { trainSetAvailable } from "./misc";
@@ -262,14 +262,4 @@ export function oresNeeded(): number {
 
   if (get("spookyVHSTapeMonster") === $monster`mountain man`) ore_needed -= 2;
   return Math.max(ore_needed, 0);
-}
-
-function haveHugeLarge() {
-  return (
-    have($item`McHugeLarge left pole`) &&
-    have($item`McHugeLarge right pole`) &&
-    have($item`McHugeLarge left ski`) &&
-    have($item`McHugeLarge right ski`) &&
-    have($item`McHugeLarge duffel bag`)
-  );
 }

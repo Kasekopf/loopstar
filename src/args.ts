@@ -120,6 +120,16 @@ export const args = Args.create(
         default: true,
       }),
     }),
+    casual: Args.group("Path: Casual", {
+      usedprice: Args.number({
+        help: "Maximum price to pay for items to be used up during the run.",
+        default: 1000,
+      }),
+      equipprice: Args.number({
+        help: "Maximum price to pay for equipment or items that will not be used up.",
+        default: 10000,
+      }),
+    }),
     debug: Args.group("Debug Options", {
       actions: Args.number({
         help: "Maximum number of actions to perform, if given. Can be used to execute just a few steps at a time.",

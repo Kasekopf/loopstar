@@ -12,6 +12,7 @@ import {
   getWorkshed,
   haveEffect,
   haveEquipped,
+  inCasual,
   inMultiFight,
   Location,
   logprint,
@@ -23,7 +24,6 @@ import {
   myMaxmp,
   myMeat,
   myMp,
-  myPath,
   myTurncount,
   numericModifier,
   print,
@@ -46,7 +46,6 @@ import {
   $location,
   $locations,
   $monster,
-  $path,
   $skill,
   $slot,
   CrepeParachute,
@@ -731,7 +730,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 }
 
 function autosellJunk(): void {
-  if (myPath() !== $path`A Shrunken Adventurer am I`) return; // final safety
+  if (inCasual()) return;
   if (myMeat() >= 10000) return;
   if (myTurncount() >= 1000) return; // stop after breaking ronin
   if (have($item`pork elf goodies sack`)) use($item`pork elf goodies sack`);
