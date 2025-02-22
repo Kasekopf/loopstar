@@ -15,6 +15,7 @@ import {
   myMaxmp,
   myMeat,
   myMp,
+  myPath,
   myPrimestat,
   numericModifier,
   restoreHp,
@@ -33,6 +34,7 @@ import {
   $effect,
   $effects,
   $item,
+  $path,
   $skill,
   $slot,
   $slots,
@@ -93,9 +95,11 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
     result["init"].push($effect`Whispering Strands`);
   }
 
-  // If we have an effect to override the 1 attribute cap,
-  // +%stat effects may be worthwhile
+  // If we are not in Smol,
+  // or if we have an effect to override the 1 attribute cap,
+  // +%stat effects may be worthwhile.
   if (
+    myPath() !== $path`A Shrunken Adventurer am I` ||
     have($effect`Feeling Insignificant`) ||
     have($effect`Drenched in Lava`) ||
     have($effect`Snowballed`)
