@@ -1,9 +1,9 @@
-import { Path } from "kolmafia";
 import { Task } from "../engine/task";
 import { Engine } from "../engine/engine";
 
 export interface PathInfo {
-  getPath(): Path;
+  name(): string;
+  active(): boolean;
   getTasks(tasks: Task[]): Task[];
   getEngine(tasks: Task[]): Engine;
   runIntro(): void;

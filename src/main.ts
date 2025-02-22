@@ -58,7 +58,7 @@ export function main(command?: string): void {
   printVersionInfo();
   if (args.version) return;
 
-  const path = allPaths().find((p) => p.getPath() === myPath());
+  const path = allPaths().find((p) => p.active());
   if (!path) throw `You are currently in a path (${myPath()}) which is not supported.`;
 
   const set_time_now = get(time_property, -1) === -1;
@@ -80,7 +80,7 @@ export function main(command?: string): void {
     engine.run(args.debug.actions);
 
     const remaining_tasks = tasks.filter((task) => !task.completed());
-    if (step("questL13Final") <= 11 && myPath() === path.getPath()) {
+    if (step("questL13Final") <= 11 && path.active()) {
       if (args.debug.actions !== undefined) {
         const next = engine.getNextTask();
         if (next) {
@@ -102,7 +102,7 @@ export function main(command?: string): void {
   if (step("questL13Final") > 11) {
     print("Run complete!", "purple");
   }
-  print(`   Path: ${path.getPath()}`, "purple");
+  print(`   Path: ${path.name()}`, "purple");
   print(`   Adventures used: ${turnsPlayed()}`, "purple");
   print(`   Adventures remaining: ${myAdventures()}`, "purple");
   if (set_time_now)

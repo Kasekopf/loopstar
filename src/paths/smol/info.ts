@@ -2,15 +2,19 @@ import { $path, set } from "libram";
 import { PathInfo } from "../pathinfo";
 import { Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
-import { runChoice, visitUrl } from "kolmafia";
+import { myPath, runChoice, visitUrl } from "kolmafia";
 import { SmolQuest } from "./tasks";
 import { SmolPullQuest } from "./pulls";
 import { SmolEngine } from "./engine";
 import { getTasks } from "grimoire-kolmafia";
 
 export class SmolInfo implements PathInfo {
-  getPath() {
-    return $path`A Shrunken Adventurer am I`;
+  name(): string {
+    return "Shrunken Adventurer";
+  }
+
+  active(): boolean {
+    return myPath() === $path`A Shrunken Adventurer am I`;
   }
 
   getTasks(tasks: Task[]): Task[] {
