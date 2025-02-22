@@ -126,7 +126,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Island Scrip",
-      after: ["Unlock Beach", "Acquire Red Rocket"],
+      after: ["Unlock Beach"],
       ready: () =>
         (myMeat() >= 6000 || (step("questL11Black") >= 4 && myMeat() >= meatBuffer + 500)) &&
         myAdventures() >= 20 &&
@@ -158,6 +158,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Unlock Island Takerspace",
+      priority: () => Priorities.Start,
       ready: () =>
         getWorkshed() === $item`TakerSpace letter of Marque` || have($item`pirate dinghy`),
       completed: () =>
@@ -205,6 +206,7 @@ export const MiscQuest: Quest = {
         itemAmount($item`blue pixel`) >= 5 &&
         itemAmount($item`green pixel`) >= 5,
       completed: () =>
+        !yellowSubmarinePossible() ||
         get("_pirateDinghyUsed") ||
         have($item`dingy dinghy`) ||
         have($item`junk junk`) ||
@@ -541,7 +543,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Acquire Firework Hat",
-      after: ["Acquire Red Rocket"],
+      after: [],
       ready: () => myMeat() >= meatBuffer + 500,
       completed: () =>
         have($item`sombrero-mounted sparkler`) ||
@@ -557,7 +559,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Acquire Rocket Boots",
-      after: ["Acquire Red Rocket"],
+      after: [],
       ready: () => myMeat() >= meatBuffer + 1000,
       completed: () =>
         have($item`rocket boots`) ||
@@ -567,24 +569,6 @@ export const MiscQuest: Quest = {
         visitUrl("clan_viplounge.php");
         visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
         cliExecute("acquire rocket boots");
-      },
-      limit: { tries: 1 },
-      freeaction: true,
-    },
-    {
-      name: "Acquire Red Rocket",
-      after: ["Sewer Accordion", "Sewer Totem", "Sewer Saucepan", "Acquire Mouthwash", "Mouthwash"],
-      ready: () => myMeat() >= meatBuffer + 250,
-      completed: () =>
-        have($item`red rocket`) ||
-        !have($item`Clan VIP Lounge key`) ||
-        have($effect`Ready to Eat`) ||
-        myFullness() > 0 ||
-        myLevel() >= 12,
-      do: () => {
-        visitUrl("clan_viplounge.php");
-        visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
-        cliExecute("acquire red rocket");
       },
       limit: { tries: 1 },
       freeaction: true,
@@ -605,7 +589,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Hermit Clover",
-      after: ["Hidden City/Open Temple", "Acquire Red Rocket"],
+      after: ["Hidden City/Open Temple"],
       ready: () => myMeat() >= meatBuffer + 1000,
       completed: () => get(toTempPref("clovers")) === "true",
       do: () => {
@@ -669,6 +653,7 @@ export const MiscQuest: Quest = {
     {
       name: "Workshed",
       after: [],
+      priority: () => Priorities.Start,
       completed: () =>
         getWorkshed() !== $item`none` || !have(args.major.workshed) || myTurncount() >= 1000,
       do: () => use(args.major.workshed),
@@ -697,7 +682,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Bugbear Outfit",
-      after: ["Acquire Red Rocket"],
+      after: [],
       ready: () => myMeat() >= meatBuffer + 140,
       completed: () =>
         (!have($item`Asdon Martin keyfob (on ring)`) && !AsdonMartin.installed()) ||
@@ -1373,7 +1358,7 @@ export const MiscQuest: Quest = {
       priority: () => Priorities.Start,
       completed: () =>
         !have($item`Sept-Ember Censer`) ||
-        (get("availableSeptEmbers", 0) < 2 && get("_septEmbersCollected", false)) ||
+        (get("availableSeptEmbers") < 2 && get("_septEmbersCollected", false)) ||
         args.minor.saveember,
       do: (): void => {
         // Grab Embers

@@ -6,10 +6,12 @@ import {
   myFullness,
   myInebriety,
   myLevel,
+  myMeat,
   mySign,
   reverseNumberology,
   use,
   useSkill,
+  visitUrl,
 } from "kolmafia";
 import { $effect, $effects, $item, $items, $skill, CursedMonkeyPaw, get, have } from "libram";
 import { Quest } from "../../engine/task";
@@ -97,6 +99,31 @@ export const SmolQuest: Quest = {
       freeaction: true,
       do: () => cliExecute(`spoon ${args.minor.tune}`),
       limit: { tries: 1 },
+    },
+    {
+      name: "Acquire Red Rocket",
+      after: [
+        "Misc/Sewer Accordion",
+        "Misc/Sewer Totem",
+        "Misc/Sewer Saucepan",
+        "Misc/Acquire Mouthwash",
+        "Misc/Mouthwash",
+      ],
+      // with meat buffer (slightly smaller, so this can always trigger)
+      ready: () => myMeat() >= 1000,
+      completed: () =>
+        have($item`red rocket`) ||
+        !have($item`Clan VIP Lounge key`) ||
+        have($effect`Ready to Eat`) ||
+        myFullness() > 0 ||
+        myLevel() >= 12,
+      do: () => {
+        visitUrl("clan_viplounge.php");
+        visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
+        cliExecute("acquire red rocket");
+      },
+      limit: { tries: 1 },
+      freeaction: true,
     },
     {
       name: "Limit Stats",
