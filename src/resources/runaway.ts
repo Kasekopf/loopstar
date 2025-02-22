@@ -191,12 +191,20 @@ const famweightOptions: FamweightOption[] = [
   { thing: $item`astral pet sweater` },
   { thing: $item`tiny stillsuit` },
   // Hats
+  { thing: $item`crumpled felt fedora` },
   { thing: $item`Daylight Shavings Helmet` },
   // Hands
+  { thing: $item`cursed pirate cutlass` },
   { thing: $item`Fourth of May Cosplay Saber` },
+  { thing: $item`ghostly reins` },
   { thing: $item`iFlail` },
   { thing: $item`familiar scrapbook` },
+  // Pants
+  { thing: $item`repaid diaper` },
+  { thing: $item`Great Wolf's beastly trousers` },
+  { thing: $item`Greaves of the Murk Lord` },
   // Accessories
+  { thing: $item`Belt of Loathing` },
   { thing: $item`Brutal brogues` },
   { thing: $item`hewn moon-rune spoon` },
   { thing: $item`Beach Comb` },
