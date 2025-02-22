@@ -90,6 +90,7 @@ import { coldPlanner, yellowSubmarinePossible } from "../engine/outfit";
 import { fillHp } from "../engine/moods";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { getActiveBackupTarget } from "../resources/backup";
+import { warCleared } from "./level12";
 
 const meatBuffer = 1000;
 
@@ -751,7 +752,8 @@ export const MiscQuest: Quest = {
         // Valuble quest locations
         if (
           itemAmount($item`barrel of gunpowder`) < 5 &&
-          get("sidequestLighthouseCompleted") === "none"
+          get("sidequestLighthouseCompleted") === "none" &&
+          !warCleared()
         )
           zones.push($location`Sonofa Beach`);
 

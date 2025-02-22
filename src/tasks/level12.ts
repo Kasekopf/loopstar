@@ -47,7 +47,7 @@ export function flyersDone(): boolean {
   return get("flyeredML") >= 10000;
 }
 
-function warCleared(): boolean {
+export function warCleared(): boolean {
   return get("hippiesDefeated") >= 1000;
 }
 
