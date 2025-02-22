@@ -16,7 +16,7 @@ import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
 import { get, set, sinceKolmafiaRevision } from "libram";
 import { Prioritization } from "./engine/priority";
-import { Args, step } from "grimoire-kolmafia";
+import { Args, step, verifyDependencies } from "grimoire-kolmafia";
 import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
@@ -47,8 +47,9 @@ export function main(command?: string): void {
   if (args.debug.verify) {
     // Debugging check
     const path = new SmolInfo();
-    const plan = path.getPlan(basePlan);
-    const tasks = plan.getTasks();
+    const baseTasks = basePlan.getTasks();
+    const tasks = path.getTasks(baseTasks);
+    verifyDependencies(tasks);
     const engine = path.getEngine(tasks);
     listTasks(engine);
     return;
@@ -66,8 +67,9 @@ export function main(command?: string): void {
   path.runIntro();
 
   // Construct the list of tasks
-  const plan = path.getPlan(basePlan);
-  const tasks = plan.getTasks();
+  const baseTasks = basePlan.getTasks();
+  const tasks = path.getTasks(baseTasks);
+  verifyDependencies(tasks);
   const engine = path.getEngine(tasks);
   try {
     if (args.debug.list) {

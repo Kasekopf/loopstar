@@ -4,19 +4,18 @@ import { Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { runChoice, visitUrl } from "kolmafia";
 import { SmolQuest } from "./tasks";
-import { RunPlan } from "../../engine/runplan";
 import { SmolPullQuest } from "./pulls";
 import { SmolEngine } from "./engine";
+import { getTasks } from "grimoire-kolmafia";
 
 export class SmolInfo implements PathInfo {
   getPath() {
     return $path`A Shrunken Adventurer am I`;
   }
 
-  getPlan(plan: RunPlan): RunPlan {
-    plan.quests.splice(0, 0, SmolQuest); // Limit stats should be first
-    plan.quests.push(SmolPullQuest);
-    return plan;
+  getTasks(tasks: Task[]): Task[] {
+    const newTasks = getTasks([SmolQuest, SmolPullQuest], false, false);
+    return [...newTasks, ...tasks];
   }
 
   getEngine(tasks: Task[]): Engine {
