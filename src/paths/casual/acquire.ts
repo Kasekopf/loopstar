@@ -141,6 +141,15 @@ const acquireSpecs: AcquireSpec[] = [
   ),
   // L9
   {
+    what: $item`bubblin' crude`,
+    needed: () => {
+      if (have($item`jar of oil`)) return 0;
+      if (get("twinPeakProgress") & 4) return 0;
+      return 12;
+    },
+    price: Prices.Used,
+  },
+  {
     what: $item`rusty hedge trimmers`,
     needed: () => {
       if (get("twinPeakProgress") === 0) return 0;
@@ -374,6 +383,11 @@ const acquireSpecs: AcquireSpec[] = [
     price: Prices.Used,
   },
   // Misc Helpful Items
+  {
+    what: $item`bitchin' meatcar`,
+    needed: () => (have($item`Desert Bus pass`) ? 0 : 1),
+    price: 5000,
+  },
   {
     what: $item`blue plate`,
     needed: () => (have($familiar`Shorter-Order Cook`) ? 1 : 0),
