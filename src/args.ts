@@ -123,6 +123,23 @@ export const args = Args.create(
       }),
     }),
     casual: Args.group("Path: Casual", {
+      stomach: Args.number({
+        help: "Amount of stomach to fill.",
+        default: 5,
+      }),
+      liver: Args.number({
+        help: "Amount of liver to fill.",
+        default: 10,
+      }),
+      spleen: Args.number({
+        help: "Amount of spleen to fill.",
+        default: 5,
+      }),
+      voa: Args.number({
+        help: "Value of an adventure, in meat",
+        setting: "valueOfAdventure",
+        default: 6500,
+      }),
       milestoneprice: Args.number({
         help: "Skip the desert with milestones, when their price is cheaper than this.",
         default: 0,
