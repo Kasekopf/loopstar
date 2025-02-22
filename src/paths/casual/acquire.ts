@@ -1,13 +1,14 @@
 import { step } from "grimoire-kolmafia";
 import {
   equippedAmount,
+  floor,
   hippyStoneBroken,
   Item,
   itemAmount,
   retrieveItem,
   retrievePrice,
 } from "kolmafia";
-import { $familiar, $item, $items, clamp, get, have, set, withProperty } from "libram";
+import { $familiar, $item, $items, clamp, get, have, set, undelay, withProperty } from "libram";
 import { atLevel, debug, haveHugeLarge } from "../../lib";
 import { Keys, keyStrategy } from "../../tasks/keys";
 import { Quest, Task } from "../../engine/task";
@@ -22,7 +23,7 @@ import { args, toTempPref } from "../../args";
 type AcquireSpec = {
   what: Item;
   needed: () => number;
-  price: Prices | number;
+  price: Prices | number | (() => number);
 };
 
 /**
@@ -34,7 +35,7 @@ enum Prices {
   Adventure, // Something to save 1 adventure
 }
 
-function realizePrice(price: Prices | number): number {
+function realizePrice(price: Prices | number | (() => number)): number {
   switch (price) {
     case Prices.Used:
       return args.casual.usedprice;
@@ -43,7 +44,7 @@ function realizePrice(price: Prices | number): number {
     case Prices.Adventure:
       return get("valueOfAdventure");
     default:
-      return price;
+      return undelay(price);
   }
 }
 
@@ -272,6 +273,14 @@ const acquireSpecs: AcquireSpec[] = [
     price: Prices.Used,
   },
   // L11 Desert
+  {
+    what: $item`milestone`,
+    needed: () => {
+      if (args.casual.milestoneprice === 0) return 0;
+      return floor(get("desertExploration") / 5);
+    },
+    price: () => args.casual.milestoneprice,
+  },
   {
     what: $item`killing jar`,
     needed: () => ((get("gnasirProgress") & 4) === 0 ? 1 : 0),

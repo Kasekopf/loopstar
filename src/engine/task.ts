@@ -41,6 +41,11 @@ export type DeltaTask = Delta<Task> & {
   combine?: Partial<Pick<Task, "prepare" | "ready" | "priority">>;
 };
 
+export type NamedDeltaTask = DeltaTask & {
+  name: string;
+  delete?: boolean;
+};
+
 export function getTaggedName(task: Task): string {
   if (!task.tags) return task.name;
   return [task.name, ...task.tags].join(" # ");
@@ -73,6 +78,33 @@ export function merge(task: Task, delta: DeltaTask): Task {
     });
   }
   return result;
+}
+
+export function findAndMerge(
+  tasks: Task[],
+  deltas: NamedDeltaTask[],
+  defaultTag: string | undefined = undefined
+) {
+  const deltasByName = new Map<string, NamedDeltaTask>();
+  const tasksToDelete = new Set<string>();
+  for (const delta of deltas) {
+    if (delta.delete) tasksToDelete.add(delta.name);
+    else deltasByName.set(delta.name, delta);
+  }
+
+  return tasks
+    .filter((task) => !tasksToDelete.has(task.name))
+    .map((task) => <Task>{ ...task, after: task.after?.filter((name) => !tasksToDelete.has(name)) })
+    .map((task) => {
+      const delta = deltasByName.get(task.name);
+      if (!delta) {
+        return task;
+      }
+      if (!delta.tag) {
+        return merge(task, { ...delta, tag: defaultTag });
+      }
+      return merge(task, delta);
+    });
 }
 
 export type Priority = {

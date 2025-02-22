@@ -121,6 +121,10 @@ export const args = Args.create(
       }),
     }),
     casual: Args.group("Path: Casual", {
+      milestoneprice: Args.number({
+        help: "Skip the desert with milestones, when their price is cheaper than this.",
+        default: 0,
+      }),
       usedprice: Args.number({
         help: "Maximum price to pay for items to be used up during the run.",
         default: 1000,

@@ -1,9 +1,10 @@
 import { PathInfo } from "../pathinfo";
-import { Task } from "../../engine/task";
+import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { inCasual } from "kolmafia";
 import { getAcquireQuest } from "./acquire";
 import { getTasks } from "grimoire-kolmafia";
+import { casualDeltas } from "./tasks";
 
 export class SmolInfo implements PathInfo {
   name(): string {
@@ -15,8 +16,9 @@ export class SmolInfo implements PathInfo {
   }
 
   getTasks(tasks: Task[]): Task[] {
+    const changedTasks = findAndMerge(tasks, casualDeltas);
     const newTasks = getTasks([getAcquireQuest()], false, false);
-    return [...newTasks, ...tasks];
+    return [...newTasks, ...changedTasks];
   }
 
   getEngine(tasks: Task[]): Engine {
