@@ -20,12 +20,14 @@ import { SummonQuest } from "./summons";
 import { Quest } from "../engine/task";
 import { PullQuest } from "./pulls";
 import { RunPlan } from "../engine/runplan";
+import { LevelingQuest } from "./leveling";
 
 const allQuests: Quest[] = [
   PullQuest,
   SummonQuest,
   TootQuest,
   MiscQuest,
+  LevelingQuest,
   WandQuest,
   KeysQuest,
   MosquitoQuest,

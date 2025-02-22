@@ -106,8 +106,8 @@ export const SmolQuest: Quest = {
         "Misc/Sewer Accordion",
         "Misc/Sewer Totem",
         "Misc/Sewer Saucepan",
-        "Misc/Acquire Mouthwash",
-        "Misc/Mouthwash",
+        "Leveling/Acquire Mouthwash",
+        "Leveling/Mouthwash",
       ],
       // with meat buffer (slightly smaller, so this can always trigger)
       ready: () => myMeat() >= 1000,

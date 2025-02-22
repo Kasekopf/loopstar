@@ -31,6 +31,14 @@ export const args = Args.create(
         default: $item`none`,
         options: worksheds,
       }),
+      goal: Args.string({
+        help: "An aftercore goal to accomplish.",
+        options: [
+          ["level", "Level up to level 13."],
+          ["organ", "Get your steel organ."],
+        ],
+        setting: "",
+      }),
     }),
     minor: Args.group("Minor Options", {
       pvp: Args.flag({

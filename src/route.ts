@@ -17,12 +17,12 @@ export const routing: string[] = [
   "Keys/Deck",
 
   // Level up
-  "Misc/Cloud Talk",
+  "Leveling/Cloud Talk",
   "Summon/War Frat 151st Infantryman", // Summon before leaving level 1
   "Misc/LOV Tunnel",
   "Misc/Daycare",
   "Misc/Bastille",
-  "Misc/Mouthwash",
+  "Leveling/Mouthwash",
   "Misc/Snojo",
 
   // Eat as soon as possible
