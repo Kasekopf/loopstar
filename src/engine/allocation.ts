@@ -141,7 +141,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
   const resourcesNeeded = tasks.filter((task) => task.resources && !task.completed());
   const tasksByResource = stableSort(
     resourcesNeeded,
-    (task) => -1 * (undelay(task.resources)?.value ?? 0)
+    (task) => -1 * (undelay(task.resources)?.benefit ?? 0)
   );
 
   const fulfillments = new Map<string, DeltaTask>();
@@ -152,7 +152,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
     if (verbose) {
       const name = getTaggedName(task);
       const requestStr = getAllocationName(request.which);
-      const valueStr = request.value.toFixed(2);
+      const valueStr = request.benefit.toFixed(2);
       debug(`${name}: ${requestStr} x${request.repeat ?? 1} for ${valueStr}`);
     }
     let foundResource = false;

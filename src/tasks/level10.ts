@@ -150,7 +150,7 @@ export const GiantQuest: Quest = {
       limit: { soft: 20 },
       resources: {
         which: Allocations.NCForce,
-        value: 1 / 0.65,
+        benefit: 1 / 0.65,
       },
     },
     {

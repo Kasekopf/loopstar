@@ -645,7 +645,7 @@ export const WarQuest: Quest = {
         if (have($item`candy cane sword cane`) || have($skill`Comprehensive Cartography`)) {
           return {
             which: Allocations.NCForce,
-            value: 1 / 0.5,
+            benefit: 1 / 0.5,
           };
         }
         return undefined;

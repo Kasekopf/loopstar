@@ -10,7 +10,7 @@ import { yellowRayPossible } from "../resources/yellowray";
 
 export type SummonTarget = Omit<Task, "do" | "name" | "limit"> & {
   target: Monster;
-  value: number;
+  benefit: number;
   tries?: number;
 };
 const summonTargets: SummonTarget[] = [
@@ -28,7 +28,7 @@ const summonTargets: SummonTarget[] = [
       avoid: $items`carnivorous potted plant`,
     },
     combat: new CombatStrategy().yellowRay(),
-    value: 10,
+    benefit: 10,
   },
   {
     target: $monster`mountain man`,
@@ -65,7 +65,7 @@ const summonTargets: SummonTarget[] = [
       return result;
     }),
     tries: 3,
-    value: 9,
+    benefit: 9,
   },
   {
     target: $monster`Astrologer of Shub-Jigguwatt`,
@@ -83,7 +83,7 @@ const summonTargets: SummonTarget[] = [
     combat: new CombatStrategy()
       .macro(Macro.trySkill($skill`Micrometeorite`).trySkill($skill`Curse of Weaksauce`))
       .kill(),
-    value: 3,
+    benefit: 3,
   },
   {
     target: $monster`Astronomer`,
@@ -94,7 +94,7 @@ const summonTargets: SummonTarget[] = [
       get("nsTowerDoorKeysUsed").includes("Richard's star key") ||
       (have($item`Cargo Cultist Shorts`) && !get("_cargoPocketEmptied")),
     combat: new CombatStrategy().kill(),
-    value: 3,
+    benefit: 3,
   },
   {
     target: $monster`Camel's Toe`,
@@ -119,7 +119,7 @@ const summonTargets: SummonTarget[] = [
       return { modifier: "item" };
     },
     combat: new CombatStrategy().macro(Macro.trySkill($skill`%fn, spit on them!`)).killItem(),
-    value: 3,
+    benefit: 3,
   },
   {
     target: $monster`Baa'baa'bu'ran`,
@@ -131,7 +131,7 @@ const summonTargets: SummonTarget[] = [
       (have($item`Deck of Every Card`) && get("_deckCardsDrawn") === 0),
     outfit: { modifier: "item" },
     combat: new CombatStrategy().killItem(),
-    value: 2,
+    benefit: 2,
   },
 ];
 
@@ -146,7 +146,7 @@ export function getSummonTask(spec: SummonTarget): Task {
     limit: { tries: spec.tries ?? 1 },
     resources: {
       which: { summon: spec.target },
-      value: spec.value,
+      benefit: spec.benefit,
       required: true,
     },
   };

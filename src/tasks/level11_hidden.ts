@@ -54,7 +54,7 @@ const Temple: Task[] = [
     do: $location`The Spooky Forest`,
     resources: {
       which: Allocations.NCForce,
-      value: 1 / 0.55,
+      benefit: 1 / 0.55,
     },
     choices: { 502: 2, 505: 2, 334: 1 },
     outfit: { modifier: "-combat" },
@@ -70,7 +70,7 @@ const Temple: Task[] = [
     do: $location`The Spooky Forest`,
     resources: {
       which: Allocations.NCForce,
-      value: 1 / 0.55,
+      benefit: 1 / 0.55,
     },
     choices: { 502: 3, 506: 3, 507: 1, 334: 1 },
     outfit: { modifier: "-combat" },
@@ -86,7 +86,7 @@ const Temple: Task[] = [
     do: $location`The Spooky Forest`,
     resources: {
       which: Allocations.NCForce,
-      value: 1 / 0.55,
+      benefit: 1 / 0.55,
     },
     choices: { 502: 3, 506: 2, 507: 1, 334: 1 },
     outfit: { modifier: "-combat" },
@@ -102,7 +102,7 @@ const Temple: Task[] = [
     do: $location`The Spooky Forest`,
     resources: {
       which: Allocations.NCForce,
-      value: 1 / 0.55,
+      benefit: 1 / 0.55,
     },
     choices: { 502: 1, 503: 3, 504: 3, 334: 1 },
     outfit: { modifier: "-combat" },
@@ -152,7 +152,7 @@ const Temple: Task[] = [
       if (have($item`industrial fire extinguisher`)) return undefined;
       return {
         which: Allocations.Lucky,
-        value: 5,
+        benefit: 5,
       };
     },
   },

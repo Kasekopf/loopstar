@@ -20,7 +20,7 @@ export const smolPulls: PullSpec[] = [
       if (myDaycount() > 1 && myAdventures() > 5) return undefined;
       return true;
     },
-    priority: 200,
+    benefit: 200,
   },
   {
     pull: $item`Ol' Scratch's salad fork`,
@@ -31,12 +31,12 @@ export const smolPulls: PullSpec[] = [
       return true;
     },
     price: 400000,
-    priority: 60,
+    benefit: 60,
   },
   {
     pull: $item`crepe paper parachute cape`,
     optional: true,
-    priority: 10,
+    benefit: 10,
   },
   {
     pull: $item`Frosty's frosty mug`,
@@ -47,13 +47,13 @@ export const smolPulls: PullSpec[] = [
       return true;
     },
     price: 200000,
-    priority: 100,
+    benefit: 100,
   },
   {
     pull: $item`Bowl of Infinite Jelly`,
     useful: () => myFullness() === 0,
     optional: true,
-    priority: 40,
+    benefit: 40,
   },
   {
     pull: $item`milk of magnesium`,
@@ -64,30 +64,30 @@ export const smolPulls: PullSpec[] = [
       if (myDaycount() > 1 && myAdventures() > 5) return undefined;
       return true;
     },
-    priority: 5,
+    benefit: 5,
   },
   // Survivability pulls
   {
     pull: $item`nurse's hat`,
-    priority: 100,
+    benefit: 100,
   },
   {
     pull: $item`sea salt scrubs`,
     useful: () => have($skill`Torso Awareness`),
-    priority: 100,
+    benefit: 100,
   },
   {
     pull: $item`hopping socks`, // +max MP item
     useful: () => !have($skill`Torso Awareness`) && !have($item`SpinMaster™ lathe`),
-    priority: 100,
+    benefit: 100,
   },
   // Pulls with high (avoided) requirements
-  { pull: $item`old patched suit-pants`, optional: true, priority: 5 },
+  { pull: $item`old patched suit-pants`, optional: true, benefit: 5 },
   {
     pull: $item`transparent pants`,
     optional: true,
     useful: () => !have($item`designer sweatpants`),
-    priority: 5,
+    benefit: 5,
   },
 ];
 

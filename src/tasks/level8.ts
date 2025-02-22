@@ -73,7 +73,7 @@ export const McLargeHugeQuest: Quest = {
       resources: () =>
         <AllocationRequest>{
           which: Allocations.Lucky,
-          value: 10,
+          benefit: 10,
           required: true,
           repeat: clamp(oresNeeded(), 0, 3),
         },
@@ -203,7 +203,7 @@ export const McLargeHugeQuest: Quest = {
       resources: () =>
         <AllocationRequest>{
           which: Allocations.NCForce,
-          value: 1 / 0.65,
+          benefit: 1 / 0.65,
           repeat: get("currentExtremity") >= 2 ? 1 : 2,
         },
       limit: { soft: 20 },

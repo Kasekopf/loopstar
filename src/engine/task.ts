@@ -141,7 +141,7 @@ export function getAllocationName(allocation: Allocation): string {
 
 export type AllocationRequest = {
   which: Allocation;
-  value: number;
+  benefit: number;
   required?: boolean;
   repeat?: number;
   delta?: DeltaTask;

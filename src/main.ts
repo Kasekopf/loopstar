@@ -59,7 +59,7 @@ export function main(command?: string): void {
   if (args.version) return;
 
   const path = allPaths().find((p) => p.active());
-  if (step("questL13Final") > 11 && !args.major.goal) {
+  if (step("questL13Final") > 11 && !args.major.goal && !args.debug.list && !args.debug.allocate) {
     debug("");
     debug(
       'This script is designed to be run while inside of a run, but your run is complete! Run "loopstar help" for script options.'

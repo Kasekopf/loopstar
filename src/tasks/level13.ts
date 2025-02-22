@@ -342,7 +342,7 @@ const wand: Task[] = [
     do: $location`The Castle in the Clouds in the Sky (Basement)`,
     resources: {
       which: Allocations.Lucky,
-      value: 6,
+      benefit: 6,
       required: true,
     },
     limit: { tries: 1 },

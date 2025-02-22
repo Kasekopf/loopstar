@@ -46,7 +46,7 @@ export const FriarQuest: Quest = {
       resources: () =>
         <AllocationRequest>{
           which: Allocations.NCForce,
-          value: 1 / 0.65 / 2, // discounted due to late free runs
+          benefit: 1 / 0.65 / 2, // discounted due to late free runs
           repeat: clamp(4 - get("lastFriarsHeartNC"), 0, 4),
         },
       limit: { tries: 24 },
@@ -65,7 +65,7 @@ export const FriarQuest: Quest = {
         const maxNCs = have($skill`Comprehensive Cartography`) ? 2 : 4;
         return {
           which: Allocations.NCForce,
-          value: 1 / 0.65 / 2, // discounted due to late free runs
+          benefit: 1 / 0.65 / 2, // discounted due to late free runs
           repeat: clamp(4 - get("lastFriarsNeckNC"), 0, maxNCs),
         };
       },
@@ -97,7 +97,7 @@ export const FriarQuest: Quest = {
       resources: () =>
         <AllocationRequest>{
           which: Allocations.NCForce,
-          value: 1 / 0.65 / 2, // discounted due to late free runs
+          benefit: 1 / 0.65 / 2, // discounted due to late free runs
           repeat: clamp(4 - get("lastFriarsElbowNC"), 0, 4),
         },
       limit: { tries: 24 },

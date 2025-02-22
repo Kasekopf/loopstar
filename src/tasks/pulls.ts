@@ -27,7 +27,7 @@ import { underStandard } from "../lib";
  * pull: The item to pull, or a list of options to pull.
  * name: If a list of options is given, what to use for the task (& sim) name.
  * description: Extra text to include in the sim message.
- * priority: The number of turns this pull would save or generate.
+ * benefit: The number of turns this pull would save or generate.
  */
 export type PullSpec = {
   optional?: boolean;
@@ -36,45 +36,45 @@ export type PullSpec = {
   post?: () => void;
   description?: string;
   price?: number;
-  priority: number;
+  benefit: number;
 } & ({ pull: Item } | { pull: Item[] | (() => Item | Item[] | undefined); name: string });
 
 export const pulls: PullSpec[] = [
   {
     pull: $item`crepe paper parachute cape`,
     optional: true,
-    priority: 10,
+    benefit: 10,
   },
   // Hero keys
   {
     pull: $item`daily dungeon malware`,
     useful: () => keyStrategy.useful(Keys.Malware),
-    priority: 1000,
+    benefit: 1000,
   },
   {
     name: "Key Zappable",
     pull: () => keyStrategy.getZapChoice(0),
     useful: () => keyStrategy.useful(Keys.Zap),
     duplicate: true,
-    priority: 1000,
+    benefit: 1000,
   },
   {
     name: "Key Zappable 2",
     pull: () => keyStrategy.getZapChoice(1),
     useful: () => keyStrategy.useful(Keys.Zap2),
     duplicate: true,
-    priority: 1000,
+    benefit: 1000,
   },
   // Other adventure pulls
   {
     pull: $item`mafia thumb ring`,
     optional: true,
-    priority: 12,
+    benefit: 12,
   },
   {
     pull: $item`carnivorous potted plant`,
     optional: true,
-    priority: 2,
+    benefit: 2,
   },
   // General pulls
   {
@@ -82,7 +82,7 @@ export const pulls: PullSpec[] = [
     useful: () => args.minor.lgr,
     optional: true,
     description: 'Farming currency; see the argument "lgr"',
-    priority: 90,
+    benefit: 90,
   },
   {
     name: "Ore",
@@ -106,7 +106,7 @@ export const pulls: PullSpec[] = [
       return itemAmount(ore) < 3;
     },
     duplicate: true,
-    priority: 80,
+    benefit: 80,
   },
   {
     pull: $item`1,970 carat gold`,
@@ -123,7 +123,7 @@ export const pulls: PullSpec[] = [
       if (step("questL11Black") > 2) return false;
       return undefined;
     },
-    priority: 70,
+    benefit: 70,
   },
   {
     pull: $item`1952 Mickey Mantle card`,
@@ -132,13 +132,13 @@ export const pulls: PullSpec[] = [
       if (step("questL11Black") >= 2 && myTurncount() >= 200) return true;
       return undefined;
     },
-    priority: 70,
+    benefit: 70,
   },
   {
     pull: $items`Greatest American Pants, navel ring of navel gazing, peppermint parasol`,
     optional: true,
     name: "Runaway IoTM",
-    priority: 10,
+    benefit: 10,
   },
   {
     pull: $items`aquaviolet jub-jub bird, charpuce jub-jub bird, crimsilion jub-jub bird, stomp box`,
@@ -159,7 +159,7 @@ export const pulls: PullSpec[] = [
         cliExecute("set _commaRunDone = true");
       }
     },
-    priority: 10,
+    benefit: 10,
   },
   {
     pull: $item`ring of conflict`, // Last chance for -5% combat frequency
@@ -168,9 +168,9 @@ export const pulls: PullSpec[] = [
       !have($item`Space Trip safety headphones`) &&
       storageAmount($item`Space Trip safety headphones`) === 0 &&
       !have($item`protonic accelerator pack`),
-    priority: 5,
+    benefit: 5,
   },
-  { pull: $item`antique machete`, priority: 12 },
+  { pull: $item`antique machete`, benefit: 12 },
   {
     pull: $item`book of matches`,
     useful: () =>
@@ -179,14 +179,14 @@ export const pulls: PullSpec[] = [
         have($skill`Map the Monsters`) &&
         have($familiar`Melodramedary`)
       ),
-    priority: 10,
+    benefit: 10,
   },
-  { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2, priority: 9.01 },
+  { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2, benefit: 9.01 },
   {
     pull: $item`Buddy Bjorn`,
     useful: () => yellowSubmarinePossible(true),
     optional: true,
-    priority: 9,
+    benefit: 9,
   },
   {
     pull: $item`killing jar`,
@@ -198,23 +198,23 @@ export const pulls: PullSpec[] = [
         get("desertExploration") < 100
       );
     },
-    priority: 8,
+    benefit: 8,
   },
-  { pull: $item`deck of lewd playing cards`, optional: true, priority: 5 },
-  { pull: $item`gravy boat`, useful: () => !underStandard(), priority: 5 },
+  { pull: $item`deck of lewd playing cards`, optional: true, benefit: 5 },
+  { pull: $item`gravy boat`, useful: () => !underStandard(), benefit: 5 },
   {
     pull: $item`Mohawk wig`,
     useful: () => {
       if (have($item`S.O.C.K.`)) return true; // If one didn't drop naturally
       return undefined;
     },
-    priority: 5,
+    benefit: 5,
   },
   {
     pull: $item`11-leaf clover`,
     duplicate: true,
     useful: () => get("zeppelinProtestors") < 80,
-    priority: 5,
+    benefit: 5,
   },
   {
     pull: $item`wet stew`,
@@ -223,11 +223,11 @@ export const pulls: PullSpec[] = [
       !have($item`wet stunt nut stew`) &&
       !have($item`wet stew`) &&
       (!have($item`lion oil`) || !have($item`bird rib`)),
-    priority: 5,
+    benefit: 5,
   },
   {
     pull: $item`Flash Liquidizer Ultra Dousing Accessory`,
-    priority: 4,
+    benefit: 4,
   },
   {
     pull: $item`Shore Inc. Ship Trip Scrip`,
@@ -246,7 +246,7 @@ export const pulls: PullSpec[] = [
       return scripNeeded > 0;
     },
     optional: true,
-    priority: 3,
+    benefit: 3,
   },
 ];
 
@@ -305,7 +305,7 @@ class Pull {
       (() => {
         null;
       });
-    this.priority = spec.priority;
+    this.priority = spec.benefit;
     this.state = PullState.MAYBE_UNSURE;
   }
 
@@ -376,7 +376,7 @@ export function getPullTask(spec: PullSpec): Task {
     freeaction: true,
     resources: {
       which: Allocations.Pull,
-      value: pull.priority,
+      benefit: pull.priority,
       required: true,
     },
   };
