@@ -8,7 +8,7 @@ import {
   retrievePrice,
 } from "kolmafia";
 import { $familiar, $item, $items, clamp, get, have, set, withProperty } from "libram";
-import { debug, haveHugeLarge } from "../../lib";
+import { atLevel, debug, haveHugeLarge } from "../../lib";
 import { Keys, keyStrategy } from "../../tasks/keys";
 import { Quest, Task } from "../../engine/task";
 import { args, toTempPref } from "../../args";
@@ -48,6 +48,22 @@ function realizePrice(price: Prices | number): number {
 }
 
 const acquireSpecs: AcquireSpec[] = [
+  // Leveling
+  {
+    what: $item`Mmm-brr! brand mouthwash`,
+    needed: () => {
+      if (
+        have($item`Sept-Ember Censer`) &&
+        (get("availableSeptEmbers") >= 2 || !get("_septEmbersCollected", false)) &&
+        !args.minor.saveember
+      ) {
+        return 0;
+      }
+      if (atLevel(12)) return 0;
+      return 3;
+    },
+    price: Prices.Used,
+  },
   // L4
   {
     what: $item`sonar-in-a-biscuit`,

@@ -1373,7 +1373,7 @@ export const MiscQuest: Quest = {
       priority: () => Priorities.Start,
       completed: () =>
         !have($item`Sept-Ember Censer`) ||
-        (get("availableSeptEmbers", 0) < 1 && get("_septEmbersCollected", false)) ||
+        (get("availableSeptEmbers", 0) < 2 && get("_septEmbersCollected", false)) ||
         args.minor.saveember,
       do: (): void => {
         // Grab Embers
