@@ -16,7 +16,7 @@ export class SmolInfo implements PathInfo {
   }
 
   getTasks(tasks: Task[]): Task[] {
-    const changedTasks = findAndMerge(tasks, casualDeltas);
+    const changedTasks = findAndMerge(tasks, casualDeltas, "Casual");
     const newTasks = getTasks([getAcquireQuest()], false, false);
     return [...newTasks, ...changedTasks];
   }
