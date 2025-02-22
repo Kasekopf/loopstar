@@ -75,7 +75,7 @@ export const McLargeHugeQuest: Quest = {
           which: Allocations.Lucky,
           value: 10,
           required: true,
-          repeat: clamp(0, oresNeeded(), 3),
+          repeat: clamp(oresNeeded(), 0, 3),
         },
     },
     {

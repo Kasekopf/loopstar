@@ -48,7 +48,7 @@ export const FriarQuest: Quest = {
         <AllocationRequest>{
           which: Allocations.NCForce,
           value: 1 / 0.65,
-          repeat: clamp(0, 4 - get("lastFriarsHeartNC"), 4),
+          repeat: clamp(4 - get("lastFriarsHeartNC"), 0, 4),
         },
       limit: { tries: 24 },
     },
@@ -67,7 +67,7 @@ export const FriarQuest: Quest = {
         return {
           which: Allocations.NCForce,
           value: 1 / 0.65,
-          repeat: clamp(0, 4 - get("lastFriarsNeckNC"), maxNCs),
+          repeat: clamp(4 - get("lastFriarsNeckNC"), 0, maxNCs),
         };
       },
       limit: { tries: 24 },
@@ -99,7 +99,7 @@ export const FriarQuest: Quest = {
         <AllocationRequest>{
           which: Allocations.NCForce,
           value: 1 / 0.65,
-          repeat: clamp(0, 4 - get("lastFriarsElbowNC"), 4),
+          repeat: clamp(4 - get("lastFriarsElbowNC"), 0, 4),
         },
       limit: { tries: 24 },
     },
