@@ -436,6 +436,7 @@ export function getAcquireQuest(): Quest {
               set(toTempPref(`_failedacquire_${a.what.id}`), true);
             }
           },
+          freeaction: true,
           limit: {
             // If PvP is on, one might be stolen during the run
             tries: args.minor.pvp || hippyStoneBroken() ? 2 : 1,
