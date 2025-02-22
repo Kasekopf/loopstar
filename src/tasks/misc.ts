@@ -254,7 +254,7 @@ export const MiscQuest: Quest = {
       after: [],
       ready: () => !underStandard(),
       completed: () =>
-        !args.minor.voterbooth ||
+        !args.resources.voterbooth ||
         have($item`"I Voted!" sticker`) ||
         get("_voteToday") ||
         !get("voteAlways"),
@@ -1302,7 +1302,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Acquire Tuba",
-      ready: () => !args.minor.savetuba && AprilingBandHelmet.canJoinSection(),
+      ready: () => args.resources.saveapriling < 2 && AprilingBandHelmet.canJoinSection(),
       completed: () => have($item`Apriling band tuba`),
       do: () => AprilingBandHelmet.joinSection($item`Apriling band tuba`),
       limit: { tries: 1 },
@@ -1360,8 +1360,9 @@ export const MiscQuest: Quest = {
       priority: () => Priorities.Start,
       completed: () =>
         !have($item`Sept-Ember Censer`) ||
-        (get("availableSeptEmbers") < 2 && get("_septEmbersCollected", false)) ||
-        args.minor.saveember,
+        (get("availableSeptEmbers") <= 7 - args.resources.saveember &&
+          get("_septEmbersCollected", false)) ||
+        args.resources.saveember >= 7,
       do: (): void => {
         // Grab Embers
         visitUrl("shop.php?whichshop=september");
@@ -1372,7 +1373,7 @@ export const MiscQuest: Quest = {
           visitUrl(`shop.php?whichshop=september&action=buyitem&quantity=1&whichrow=1516&pwd`);
 
         // Grab Mouthwashes
-        const mouthwashes = floor(get("availableSeptEmbers", 0) / 2);
+        const mouthwashes = floor((get("availableSeptEmbers", 0) - args.resources.saveember) / 2);
         visitUrl(
           `shop.php?whichshop=september&action=buyitem&quantity=${mouthwashes}&whichrow=1512&pwd`
         );
@@ -1441,6 +1442,7 @@ export const MiscQuest: Quest = {
       completed: () => false,
       ready: () => {
         if (!have($item`backup camera`)) return false;
+        if (get("_backUpUses") >= 11 - args.resources.savebackups) return false;
         const target = getActiveBackupTarget();
         return target !== undefined && target.monster !== $monster`Eldritch Tentacle`;
       },
@@ -1640,7 +1642,7 @@ function getDesiredTrainsetConfig(): TrainSet.Cycle {
   config.push(Station.COAL_HOPPER);
   if (!have($item`designer sweatpants`)) {
     config.push(Station.TOWER_FIZZY);
-  } else if (myLevel() < 5 && (!have($item`Sept-Ember Censer`) || args.minor.saveember)) {
+  } else if (myLevel() < 5 && (!have($item`Sept-Ember Censer`) || args.resources.saveember > 0)) {
     config.push(statPiece);
   }
 

@@ -41,7 +41,9 @@ export const summonSources: SummonSource[] = [
   {
     name: "Combat Locket",
     available: () =>
-      CombatLoversLocket.have() ? CombatLoversLocket.reminiscesLeft() - args.minor.savelocket : 0,
+      CombatLoversLocket.have()
+        ? CombatLoversLocket.reminiscesLeft() - args.resources.savelocket
+        : 0,
     canFight: (mon: Monster) => CombatLoversLocket.availableLocketMonsters().includes(mon),
     summon: (mon: Monster) => CombatLoversLocket.reminisce(mon),
   },
@@ -60,7 +62,7 @@ export const summonSources: SummonSource[] = [
     name: "Fax",
     available: () => {
       if (
-        args.minor.fax &&
+        args.resources.fax &&
         !underStandard() &&
         !get("_photocopyUsed") &&
         have($item`Clan VIP Lounge key`)

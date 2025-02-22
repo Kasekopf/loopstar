@@ -501,12 +501,9 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     fixFoldables(outfit);
 
     const equipped = [...new Set(Slot.all().map((slot) => equippedItem(slot)))];
-    if (args.debug.verboseequip) {
+    if (args.debug.verbose) {
       print(`Equipped: ${equipped.join(", ")}`);
       print(`Familiar: ${myFamiliar()}`);
-    } else {
-      logprint(`Equipped: ${equipped.join(", ")}`);
-      logprint(`Familiar: ${myFamiliar()}`);
     }
     logModifiers(outfit);
 

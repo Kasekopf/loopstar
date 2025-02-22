@@ -10,13 +10,13 @@ export const forceNCSources: ForceNCSorce[] = [
     available: () =>
       have($skill`Torso Awareness`) &&
       have($item`Jurassic Parka`) &&
-      get("_spikolodonSpikeUses") + args.minor.saveparka < 5,
+      get("_spikolodonSpikeUses") + args.resources.saveparka < 5,
     equip: { equip: $items`Jurassic Parka`, modes: { parka: "spikolodon" } },
     do: Macro.skill($skill`Launch spikolodon spikes`),
     remaining: () => {
       if (!have($skill`Torso Awareness`)) return 0;
       if (!have($item`Jurassic Parka`)) return 0;
-      return max(0, 5 - get("_spikolodonSpikeUses") - args.minor.saveparka);
+      return max(0, 5 - get("_spikolodonSpikeUses") - args.resources.saveparka);
     },
   },
   {
@@ -52,7 +52,7 @@ const tuba = $item`Apriling band tuba`;
 export const noncombatForceNCSources: ForceNCSource[] = [
   {
     name: "Apriling band tuba",
-    available: () => (AprilingBandHelmet.canJoinSection() || have(tuba)) && tuba.dailyusesleft > 0,
+    available: () => have(tuba) && tuba.dailyusesleft > 0,
     do: () => AprilingBandHelmet.play(tuba, true),
     remaining: () => {
       if (!AprilingBandHelmet.canJoinSection() && !have(tuba)) return 0;

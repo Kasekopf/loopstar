@@ -794,7 +794,7 @@ function dimesForGarters(): void {
 
   if (itemAmount($item`gauze garter`) < 20) {
     if ($coinmaster`Quartersmaster`.availableTokens >= 2) cliExecute(`make * gauze garter`);
-  } else if (args.minor.warProfiteering)
+  } else if (args.minor.warprofiteering)
     if ($coinmaster`Quartersmaster`.availableTokens >= 5)
       cliExecute("make * commemorative war stein");
 }

@@ -33,9 +33,13 @@ export const args = Args.create(
       }),
     }),
     minor: Args.group("Minor Options", {
-      fax: Args.boolean({
-        help: "Use a fax to summon a monster. Set to false if the faxbots are offline.",
-        default: true,
+      pvp: Args.flag({
+        help: "Break your hippy stone at the start of the run.",
+        default: false,
+      }),
+      wand: Args.flag({
+        help: "Always get the zap wand.",
+        default: false,
       }),
       lgr: Args.flag({
         help: "Pull a lucky gold ring. If pulled, it will be equipped during many combats.",
@@ -45,49 +49,17 @@ export const args = Args.create(
         help: "Use your Space Jellyfish to get stench jellies during the war (this may reduce your goose familiar exp).",
         default: false,
       }),
-      profitFamiliar: Args.flag({
+      profitfamiliar: Args.flag({
         help: "Use free familiar turns for familiar related profits.",
-        default: false,
-      }),
-      pvp: Args.flag({
-        help: "Break your hippy stone at the start of the run.",
-        default: false,
-      }),
-      wand: Args.flag({
-        help: "Always get the zap wand.",
         default: false,
       }),
       forcelocket: Args.flag({
         help: "Always equip the combat lover's locket, in order to get monsters inside quickly.",
         default: false,
       }),
-      skipbackups: Args.flag({
-        help: "Don't use any Backup Camera Backups.",
-        default: false,
-      }),
-      saveember: Args.flag({
-        help: "Don't use sept-ember censer.",
-        default: false,
-      }),
-      savelocket: Args.number({
-        help: "Number of uses of the combat lover's locket to save.",
-        default: 0,
-      }),
-      savetuba: Args.flag({
-        help: "Don't use Apriling Band Helmet's Tuba summon.",
-        default: false,
-      }),
       luck: Args.number({
         help: 'Multiply the threshold for stopping execution when "you may just be unlucky". Increasing this can be dangerous and cause the script to waste more adventures; use at your own risk.',
         default: 1,
-      }),
-      saveparka: Args.number({
-        help: "Number of spikolodon spikes to save (max 5).",
-        default: 0,
-      }),
-      voterbooth: Args.flag({
-        help: "Attempt to use the voter booth if we have access.",
-        default: true,
       }),
       stillsuit: Args.familiar({
         help: "Equip the stillsuit to this familiar during the run",
@@ -101,9 +73,39 @@ export const args = Args.create(
       tune: Args.string({
         help: "Use your hewn moon-rune spoon to retune to this sign after dieting.",
       }),
-      warProfiteering: Args.flag({
+      warprofiteering: Args.flag({
         help: "Once we have 20 gauze garters, convert war items into items that autosell for meat",
         default: false,
+      }),
+    }),
+    resources: Args.group("Resource Usage", {
+      fax: Args.boolean({
+        help: "Use a fax to summon a monster. Set to false if the faxbots are offline.",
+        default: true,
+      }),
+      savebackups: Args.number({
+        help: "Number of uses of the backup camera to save (max 11).",
+        default: 0,
+      }),
+      saveember: Args.number({
+        help: "Number of sept-ember embers to save (max 7).",
+        default: 0,
+      }),
+      savelocket: Args.number({
+        help: "Number of uses of the combat lover's locket to save (max 3).",
+        default: 0,
+      }),
+      saveparka: Args.number({
+        help: "Number of spikolodon spikes to save (max 5).",
+        default: 0,
+      }),
+      saveapriling: Args.number({
+        help: "Number of apriling band instruments to save (max 2).",
+        default: 0,
+      }),
+      voterbooth: Args.flag({
+        help: "Attempt to use the voter booth if we have access.",
+        default: true,
       }),
     }),
     smol: Args.group("Path: A Shrunken Adventurer am I", {
@@ -141,9 +143,6 @@ export const args = Args.create(
       verbose: Args.flag({
         help: "Print out a list of possible tasks at each step.",
         default: false,
-      }),
-      verboseequip: Args.flag({
-        help: "Print out equipment usage before each task to the CLI.",
       }),
       ignoretasks: Args.string({
         help: "A comma-separated list of task names that should not be done. Can be used as a workaround for script bugs where a task is crashing.",

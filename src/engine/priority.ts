@@ -223,7 +223,7 @@ export class Prioritization {
     // Consider (more expensive to compute) ways to burn delay
     if (hasDelay(task)) {
       // Consider backing up a monster into the task
-      if (have($item`backup camera`) && !args.minor.skipbackups) {
+      if (have($item`backup camera`) && get("_backUpUses") < 11 - args.resources.savebackups) {
         const backup = getActiveBackupTarget();
         if (backup) {
           const outfit = new Outfit();

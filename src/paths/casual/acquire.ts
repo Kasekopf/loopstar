@@ -56,7 +56,7 @@ const acquireSpecs: AcquireSpec[] = [
       if (
         have($item`Sept-Ember Censer`) &&
         (get("availableSeptEmbers") >= 2 || !get("_septEmbersCollected", false)) &&
-        !args.minor.saveember
+        !args.resources.saveember
       ) {
         return 0;
       }

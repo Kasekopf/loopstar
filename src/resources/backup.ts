@@ -1,7 +1,6 @@
 import { OutfitSpec } from "grimoire-kolmafia";
 import { itemAmount, Monster } from "kolmafia";
 import { $item, $monster, AutumnAton, get, have } from "libram";
-import { args } from "../args";
 import { oresNeeded } from "../tasks/level8";
 
 export type BackupTarget = {
@@ -16,14 +15,13 @@ const backupTargets: BackupTarget[] = [
     completed: () =>
       (itemAmount($item`star`) >= 8 && itemAmount($item`line`) >= 7) ||
       have($item`Richard's star key`) ||
-      get("nsTowerDoorKeysUsed").includes("Richard's star key") ||
-      args.minor.skipbackups,
+      get("nsTowerDoorKeysUsed").includes("Richard's star key"),
     outfit: { modifier: "item" },
     limit_tries: 3,
   },
   {
     monster: $monster`mountain man`,
-    completed: () => oresNeeded() === 0 || args.minor.skipbackups,
+    completed: () => oresNeeded() === 0,
     outfit: { modifier: "item" },
     limit_tries: 2,
   },
@@ -40,7 +38,7 @@ const backupTargets: BackupTarget[] = [
   },
   {
     monster: $monster`Eldritch Tentacle`,
-    completed: () => args.minor.skipbackups,
+    completed: () => false,
     limit_tries: 11,
   },
 ];
