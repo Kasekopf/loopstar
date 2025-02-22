@@ -15,9 +15,9 @@ import { args, toTempPref } from "../../args";
 
 /**
  * what: The item to buy.
- * needed: The amount we need to have.
+ * needed: The amount we need to have. This amount should go
+ *    from zero to nonzero at most once during a run.
  * price: The maximum price to spend.
- * limit: The number of times we should have to buy 1+ of these.
  */
 type AcquireSpec = {
   what: Item;
