@@ -10,8 +10,6 @@ import {
   myTurncount,
   numericModifier,
   runChoice,
-  use,
-  useSkill,
   visitUrl,
 } from "kolmafia";
 import {
@@ -32,7 +30,7 @@ import {
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
-import { Quest, Task } from "../engine/task";
+import { Allocations, Quest, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { customRestoreMp, ensureWithMPSwaps, fillHp } from "../engine/moods";
 
@@ -337,17 +335,16 @@ const wand: Task[] = [
   {
     name: "Wand Parts",
     after: ["Wall of Bones"],
-    ready: () =>
-      have($item`11-leaf clover`) || have($skill`Aug. 2nd: Find an Eleven-Leaf Clover Day`),
     completed: () =>
       have($item`Wand of Nagamar`) ||
       ((have($item`WA`) || (have($item`ruby W`) && have($item`metallic A`))) &&
         (have($item`ND`) || (have($item`lowercase N`) && have($item`heavy D`)))),
-    prepare: (): void => {
-      if (have($item`11-leaf clover`)) use($item`11-leaf clover`);
-      else useSkill($skill`Aug. 2nd: Find an Eleven-Leaf Clover Day`);
-    },
     do: $location`The Castle in the Clouds in the Sky (Basement)`,
+    resources: {
+      which: Allocations.Lucky,
+      value: 6,
+      required: true,
+    },
     limit: { tries: 1 },
   },
   {
