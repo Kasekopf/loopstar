@@ -44,15 +44,7 @@ export const GiantQuest: Quest = {
         equip: $items`miniature crystal ball`,
         avoid: $items`broken champagne bottle`,
       },
-      map_the_monster: () => {
-        if (
-          have($familiar`Patriotic Eagle`) &&
-          have($skill`Gallapagosian Mating Call`) &&
-          have($skill`Map the Monsters`)
-        )
-          return $monster`none`; // Save for GROPS
-        return $monster`beanbat`;
-      },
+      map_the_monster: $monster`beanbat`,
       combat: new CombatStrategy()
         .banish($monsters`magical fruit bat, musical fruit bat`)
         .killItem($monster`beanbat`),
