@@ -77,13 +77,16 @@ export function main(command?: string): void {
   const baseTasks = basePlan.getTasks();
   const tasks = path.getTasks(baseTasks);
   verifyDependencies(tasks);
+  if (args.debug.allocate) {
+    allocateResources(tasks, true);
+    return;
+  }
   const engine = path.getEngine(tasks);
   try {
     if (args.debug.list) {
       listTasks(engine);
       return;
     }
-
     engine.run(args.debug.actions);
 
     const remaining_tasks = tasks.filter((task) => !task.completed());

@@ -227,7 +227,7 @@ const acquireSpecs: AcquireSpec[] = [
     what: $item`bowling ball`,
     needed: () => {
       const timesBowled = get("hiddenBowlingAlleyProgress") - 1;
-      return clamp(0, 5 - timesBowled, 5);
+      return clamp(5 - timesBowled, 0, 5);
     },
     price: Prices.Used,
   },
@@ -244,7 +244,7 @@ const acquireSpecs: AcquireSpec[] = [
     what: $item`glark cable`,
     needed: () => {
       if (step("questL11Ron") >= 5) return 0;
-      return clamp(0, 5 - get("_glarkCableUses"), 5);
+      return clamp(5 - get("_glarkCableUses"), 0, 5);
     },
     price: Prices.Adventure,
   },
@@ -297,7 +297,7 @@ const acquireSpecs: AcquireSpec[] = [
       if (get("pyramidBombUsed")) return 0;
       const ratchetLikes = itemAmount($item`crumbling wooden wheel`);
       const needed = have($item`ancient bomb`) ? 3 : have($item`ancient bronze token`) ? 7 : 10;
-      return clamp(0, needed - ratchetLikes, 10);
+      return clamp(needed - ratchetLikes, 0, 10);
     },
     price: Prices.Used,
   },

@@ -175,6 +175,13 @@ export const args = Args.create(
         help: "Verify that all supported paths pass basic checks",
         default: false,
         hidden: true,
+        setting: "",
+      }),
+      allocate: Args.flag({
+        help: "Check the current task resource allocation",
+        default: false,
+        hidden: true,
+        setting: "",
       }),
     }),
   },

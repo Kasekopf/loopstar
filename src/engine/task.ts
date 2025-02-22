@@ -119,14 +119,25 @@ export function hasDelay(task: Task): boolean {
 }
 
 export enum Allocations {
-  Pull,
-  NCForce,
-  Lucky,
+  Pull = "Pull",
+  NCForce = "NCForce",
+  Lucky = "Lucky",
 }
 export type AllocationSummon = {
   summon: Monster;
 };
 export type Allocation = Allocations | AllocationSummon;
+
+export function getAllocationName(allocation: Allocation): string {
+  switch (allocation) {
+    case Allocations.Pull:
+    case Allocations.NCForce:
+    case Allocations.Lucky:
+      return allocation;
+    default:
+      return `{ summon: ${allocation.summon} }`;
+  }
+}
 
 export type AllocationRequest = {
   which: Allocation;
