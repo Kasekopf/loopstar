@@ -6,7 +6,7 @@ import { getAcquireQuest } from "./acquire";
 import { getTasks } from "grimoire-kolmafia";
 import { casualDeltas } from "./tasks";
 
-export class SmolInfo implements PathInfo {
+export class CasualInfo implements PathInfo {
   name(): string {
     return "Casual";
   }

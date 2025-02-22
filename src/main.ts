@@ -21,9 +21,9 @@ import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
 import { allPaths } from "./paths/all";
-import { SmolInfo } from "./paths/smol/info";
 import { getTaggedName, merge } from "./engine/task";
 import { allocateResources } from "./engine/allocation";
+import { CasualInfo } from "./paths/casual/info";
 
 const time_property = toTempPref("first_start");
 const svn_name = "Kasekopf-loop-casual-branches-release";
@@ -46,7 +46,7 @@ export function main(command?: string): void {
   }
   if (args.debug.verify) {
     // Debugging check
-    const path = new SmolInfo();
+    const path = new CasualInfo();
     const baseTasks = basePlan.getTasks();
     const tasks = path.getTasks(baseTasks);
     verifyDependencies(tasks);
@@ -148,7 +148,7 @@ function listTasks(engine: Engine, show_phyla = false): void {
   const resourceAllocations = allocateResources(engine.tasks);
   for (const task of engine.tasks) {
     if (task.completed()) {
-      debug(`${task.name}: Done`, "blue");
+      debug(`${getTaggedName(task)}: Done`, "blue");
     } else {
       const allocation = resourceAllocations.get(task.name);
       const allocatedTask = allocation ? merge(task, allocation) : task;
