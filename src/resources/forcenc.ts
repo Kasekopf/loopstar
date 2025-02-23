@@ -43,7 +43,7 @@ export function forceNCPossible(): boolean {
 type ForceNCSource = {
   name: string;
   available: () => boolean;
-  do: () => void;
+  prepare: () => void;
   remaining: () => number;
 };
 
@@ -53,7 +53,7 @@ export const noncombatForceNCSources: ForceNCSource[] = [
   {
     name: "Apriling band tuba",
     available: () => have(tuba) && tuba.dailyusesleft > 0,
-    do: () => AprilingBandHelmet.play(tuba, true),
+    prepare: () => AprilingBandHelmet.play(tuba, true),
     remaining: () => {
       if (!AprilingBandHelmet.canJoinSection() && !have(tuba)) return 0;
       return tuba.dailyusesleft;
@@ -62,7 +62,7 @@ export const noncombatForceNCSources: ForceNCSource[] = [
   {
     name: "Cincho",
     available: () => CinchoDeMayo.currentCinch() >= 60,
-    do: () => useSkill($skill`Cincho: Fiesta Exit`),
+    prepare: () => useSkill($skill`Cincho: Fiesta Exit`),
     remaining: () => {
       if (!CinchoDeMayo.have()) return 0;
       return floor(CinchoDeMayo.totalAvailableCinch() / 60);

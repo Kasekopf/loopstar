@@ -60,7 +60,7 @@ const allocators: Allocator[] = [
               return Priorities.BadForcingNC;
             },
             prepare: () => {
-              if (!get("noncombatForcerActive")) s.do();
+              if (!get("noncombatForcerActive")) s.prepare();
             },
           },
         },
@@ -127,7 +127,7 @@ const allocators: Allocator[] = [
           tag: "Lucky",
           combine: {
             prepare: () => {
-              if (!have($effect`Lucky!`)) s.do();
+              if (!have($effect`Lucky!`)) s.prepare();
             },
           },
         },
