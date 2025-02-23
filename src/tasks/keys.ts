@@ -5,6 +5,7 @@ import {
   equippedItem,
   getProperty,
   haveEquipped,
+  inCasual,
   inHardcore,
   Item,
   itemAmount,
@@ -146,7 +147,7 @@ const heroKeys: KeyTask[] = [
     completed: () => get("lastZapperWandExplosionDay") >= 1 || get("_zapCount") >= 1,
     do: () => {
       unequipAcc(keyStrategy.getZapChoice(0));
-      if (!have(keyStrategy.getZapChoice(0)) && myTurncount() >= 1000)
+      if (!have(keyStrategy.getZapChoice(0)) && (myTurncount() >= 1000 || inCasual()))
         buy(keyStrategy.getZapChoice(0), 1, 100000);
       cliExecute(`zap ${keyStrategy.getZapChoice(0)}`);
     },
@@ -160,7 +161,7 @@ const heroKeys: KeyTask[] = [
     completed: () => get("lastZapperWandExplosionDay") >= 1 || get("_zapCount") >= 2,
     do: () => {
       unequipAcc(keyStrategy.getZapChoice(1));
-      if (!have(keyStrategy.getZapChoice(1)) && myTurncount() >= 1000)
+      if (!have(keyStrategy.getZapChoice(1)) && (myTurncount() >= 1000 || inCasual()))
         buy(keyStrategy.getZapChoice(1), 1, 100000);
       cliExecute(`zap ${keyStrategy.getZapChoice(1)}`);
     },
