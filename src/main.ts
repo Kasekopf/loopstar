@@ -104,7 +104,7 @@ export function main(command?: string): void {
   set(toTempPref("script_runs"), get(toTempPref("script_runs"), 0) + 1);
   try {
     engine.run(args.debug.actions);
-    if (step("questL13Final") <= 11 && path.active()) printRemainingTasks(engine);
+    if (!path.finished() && path.active()) printRemainingTasks(engine);
   } finally {
     engine.propertyManager.resetAll();
   }
@@ -112,10 +112,17 @@ export function main(command?: string): void {
 }
 
 function printCompleteMessage(path: PathInfo): void {
-  if (step("questL13Final") > 11) {
-    print("Run complete!", "purple");
+  if (path.name() === "Aftercore") {
+    if (path.finished()) {
+      print("Goal complete!", "purple");
+    }
+    print(`Goal: ${args.aftercore.goal}`, "purple");
+  } else {
+    if (path.finished()) {
+      print("Run complete!", "purple");
+    }
+    print(`   Path: ${path.name()}`, "purple");
   }
-  print(`   Path: ${path.name()}`, "purple");
   print(`   Adventures used: ${turnsPlayed()}`, "purple");
   print(`   Adventures remaining: ${myAdventures()}`, "purple");
 

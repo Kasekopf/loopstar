@@ -6,7 +6,7 @@ import { myPath, runChoice, visitUrl } from "kolmafia";
 import { SmolQuest } from "./tasks";
 import { SmolPullQuest, smolPulls } from "./pulls";
 import { SmolEngine } from "./engine";
-import { getTasks } from "grimoire-kolmafia";
+import { getTasks, step } from "grimoire-kolmafia";
 import { buildPullRequirements, Requirement, RequirementCategory } from "../../sim";
 
 export class SmolInfo implements PathInfo {
@@ -16,6 +16,10 @@ export class SmolInfo implements PathInfo {
 
   active(): boolean {
     return myPath() === $path`A Shrunken Adventurer am I`;
+  }
+
+  finished(): boolean {
+    return step("questL13Final") > 11;
   }
 
   getTasks(tasks: Task[]): Task[] {

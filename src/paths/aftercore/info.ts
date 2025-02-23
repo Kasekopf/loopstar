@@ -6,8 +6,9 @@ import { getTasks } from "grimoire-kolmafia";
 import { FriarQuest } from "../../tasks/level6";
 import { OrganQuest } from "../casual/tasks";
 import { LevelingQuest } from "../../tasks/leveling";
-import { get } from "libram";
+import { $skill, get, have } from "libram";
 import { Requirement } from "../../sim";
+import { atLevel } from "../../lib";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {
@@ -17,6 +18,18 @@ export class AftercoreInfo implements PathInfo {
   active(): boolean {
     if (!args.aftercore.goal) return false;
     return get("kingLiberated");
+  }
+
+  finished(goalOverride: string | undefined = undefined): boolean {
+    const goal = goalOverride ?? args.aftercore.goal;
+    switch (goal) {
+      case "organ":
+        return have($skill`Liver of Steel`);
+      case "level":
+        return atLevel(12);
+      default:
+        throw `Unknown goal ${goal}`;
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
