@@ -15,12 +15,12 @@ import { MacguffinQuest } from "./level11";
 import { WarQuest } from "./level12";
 import { TowerQuest } from "./level13";
 import { MiscQuest, WandQuest } from "./misc";
-import { DigitalQuest, KeysQuest, keyStrategy } from "./keys";
+import { DigitalQuest, KeysQuest } from "./keys";
 import { SummonQuest } from "./summons";
-import { Quest } from "../engine/task";
+import { Quest, Task } from "../engine/task";
 import { PullQuest } from "./pulls";
-import { RunPlan } from "../engine/runplan";
 import { LevelingQuest } from "./leveling";
+import { getTasks } from "grimoire-kolmafia";
 
 const allQuests: Quest[] = [
   PullQuest,
@@ -49,4 +49,6 @@ const allQuests: Quest[] = [
   DigitalQuest,
 ];
 
-export const basePlan: RunPlan = new RunPlan(allQuests, keyStrategy);
+export function getAllTasks(): Task[] {
+  return getTasks(allQuests);
+}

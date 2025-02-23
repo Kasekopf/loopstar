@@ -1,7 +1,9 @@
-import { Task } from "../engine/task";
+import { findAndMerge, NamedDeltaTask, Task } from "../engine/task";
 import { Engine } from "../engine/engine";
 import { verifyDependencies } from "grimoire-kolmafia";
 import { Requirement } from "../sim";
+import { args } from "../args";
+import { prioritize } from "../route";
 
 export abstract class PathInfo {
   abstract name(): string;
@@ -11,9 +13,41 @@ export abstract class PathInfo {
   abstract getRequirements(reqs: Requirement[]): Requirement[]; // for sim
   abstract runIntro(): void;
 
-  load(tasks: Task[]): Engine {
-    const customizedTasks = this.getTasks(tasks);
+  load(baseTasks: Task[]): Engine {
+    const customizedTasks = this.getTasks(baseTasks);
     verifyDependencies(customizedTasks);
-    return this.getEngine(customizedTasks);
+
+    const softTunedTasks = customizedTasks.map((t) => {
+      if (t.limit.soft && args.minor.luck !== 1)
+        return { ...t, limit: { ...t.limit, soft: t.limit.soft * args.minor.luck } };
+      return t;
+    });
+
+    const ignoreTasks = args.debug.ignoretasks?.split(",") ?? [];
+    const completedTasks = args.debug.completedtasks?.split(",") ?? [];
+    const deltas = [
+      ...ignoreTasks.map(
+        (name) =>
+          <NamedDeltaTask>{
+            name: name,
+            replace: {
+              ready: () => false,
+            },
+            tag: "ignoretasks",
+          }
+      ),
+      ...completedTasks.map(
+        (name) =>
+          <NamedDeltaTask>{
+            name: name,
+            replace: {
+              completed: () => true,
+            },
+            tag: "completedtasks",
+          }
+      ),
+    ];
+    const tasksAfterIgnoreCompleted = findAndMerge(softTunedTasks, deltas);
+    return this.getEngine(prioritize(tasksAfterIgnoreCompleted));
   }
 }

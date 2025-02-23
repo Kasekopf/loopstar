@@ -12,7 +12,6 @@ import {
   svnExists,
   turnsPlayed,
 } from "kolmafia";
-import { basePlan } from "./tasks/all";
 import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
 import { get, set, sinceKolmafiaRevision } from "libram";
@@ -26,6 +25,7 @@ import { allocateResources } from "./engine/allocation";
 import { allPaths, getActivePath } from "./paths/all";
 import { PathInfo } from "./paths/pathinfo";
 import { AftercoreInfo } from "./paths/aftercore/info";
+import { getAllTasks } from "./tasks/all";
 
 const svn_name = "Kasekopf-loop-casual-branches-release";
 
@@ -54,7 +54,7 @@ export function main(command?: string): void {
   if (args.debug.list) {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To list tasks of a specific path, set the "path" arg.`;
-    const engine = path.load(basePlan.getTasks());
+    const engine = path.load(getAllTasks());
     engine.updatePlan();
     listTasks(engine);
     return;
@@ -62,7 +62,7 @@ export function main(command?: string): void {
   if (args.debug.allocate) {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To allocate tasks of a specific path, set the "path" arg.`;
-    const engine = path.load(basePlan.getTasks());
+    const engine = path.load(getAllTasks());
     engine.updatePlan();
     allocateResources(engine.tasks, true);
     return;
@@ -70,12 +70,12 @@ export function main(command?: string): void {
   if (args.debug.verify) {
     // Verify that all paths / goals can be loaded without exceptions
     for (const path of allPaths()) {
-      const engine = path.load(basePlan.getTasks());
+      const engine = path.load(getAllTasks());
       debug(`${path.name()}: Loaded ${engine.tasks.length} tasks`);
     }
     const aftercore = new AftercoreInfo();
     for (const goal of ["level", "organ"]) {
-      const engine = aftercore.getEngine(aftercore.getTasks(basePlan.getTasks(), goal));
+      const engine = aftercore.getEngine(aftercore.getTasks(getAllTasks(), goal));
       debug(`${goal}: Loaded ${engine.tasks.length} tasks`);
     }
     return;
@@ -95,8 +95,7 @@ export function main(command?: string): void {
   }
   if (!path) throw `You are currently in a path (${myPath()}) which is not supported.`;
   path.runIntro();
-  const baseTasks = basePlan.getTasks();
-  const engine = path.load(baseTasks);
+  const engine = path.load(getAllTasks());
 
   // Execute the engine
   if (get(toTempPref("first_start"), -1) === -1) set(toTempPref("first_start"), gametimeToInt());
