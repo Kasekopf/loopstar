@@ -47,7 +47,7 @@ export abstract class PathInfo {
           }
       ),
     ];
-    const tasksAfterIgnoreCompleted = findAndMerge(softTunedTasks, deltas);
+    const tasksAfterIgnoreCompleted = findAndMerge(softTunedTasks, deltas, undefined, true);
     return this.getEngine(prioritize(tasksAfterIgnoreCompleted));
   }
 }

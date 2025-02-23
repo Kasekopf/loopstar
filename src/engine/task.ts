@@ -2,6 +2,7 @@ import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
 import { Delayed, undelay } from "libram";
+import { debug } from "../lib";
 
 export type Quest = BaseQuest<Task>;
 
@@ -210,11 +211,19 @@ export function merge(task: Task, delta: DeltaTask): Task {
 export function findAndMerge(
   tasks: Task[],
   deltas: NamedDeltaTask[],
-  defaultTag: string | undefined = undefined
+  defaultTag: string | undefined = undefined,
+  forceMatch = false
 ) {
+  const taskNames = new Set<string>(tasks.map((t) => t.name));
   const deltasByName = new Map<string, NamedDeltaTask>();
   const tasksToDelete = new Set<string>();
   for (const delta of deltas) {
+    if (!taskNames.has(delta.name)) {
+      const tag = delta.tag ?? defaultTag ?? "delta;";
+      const err = `Unable to match name ${delta.name} from ${tag}`;
+      if (forceMatch) throw err;
+      else debug(`Warning: ${err}`);
+    }
     if (delta.delete) tasksToDelete.add(delta.name);
     else deltasByName.set(delta.name, delta);
   }
