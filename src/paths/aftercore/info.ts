@@ -42,7 +42,7 @@ export class AftercoreInfo extends PathInfo {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoute(route: string[]): string[] {
-    return [];  // Just follow task order
+    return []; // Just follow task order
   }
 
   getEngine(tasks: Task[]): Engine {

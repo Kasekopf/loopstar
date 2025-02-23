@@ -22,7 +22,7 @@ import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
 import { getTaggedName, merge } from "./engine/task";
 import { allocateResources } from "./engine/allocation";
-import { allPaths, getActivePath } from "./paths/all";
+import { allPaths, getActivePath, loadEngine } from "./paths/all";
 import { PathInfo } from "./paths/pathinfo";
 import { AftercoreInfo } from "./paths/aftercore/info";
 import { getAllTasks } from "./tasks/all";
@@ -54,7 +54,7 @@ export function main(command?: string): void {
   if (args.debug.list) {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To list tasks of a specific path, set the "path" arg.`;
-    const engine = path.load(getAllTasks());
+    const engine = loadEngine(path);
     engine.updatePlan();
     listTasks(engine);
     return;
@@ -62,7 +62,7 @@ export function main(command?: string): void {
   if (args.debug.allocate) {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To allocate tasks of a specific path, set the "path" arg.`;
-    const engine = path.load(getAllTasks());
+    const engine = loadEngine(path);
     engine.updatePlan();
     allocateResources(engine.tasks, true);
     return;
@@ -70,13 +70,15 @@ export function main(command?: string): void {
   if (args.debug.verify) {
     // Verify that all paths / goals can be loaded without exceptions
     for (const path of allPaths()) {
-      const engine = path.load(getAllTasks());
-      debug(`${path.name()}: Loaded ${engine.tasks.length} tasks`);
+      debug(`Path ${path.name()}:`);
+      const engine = loadEngine(path);
+      debug(`- Loaded ${engine.tasks.length} tasks`);
     }
     const aftercore = new AftercoreInfo();
     for (const goal of ["level", "organ"]) {
+      debug(`Goal ${goal}:`);
       const engine = aftercore.getEngine(aftercore.getTasks(getAllTasks(), goal));
-      debug(`${goal}: Loaded ${engine.tasks.length} tasks`);
+      debug(`- Loaded ${engine.tasks.length} tasks`);
     }
     return;
   }
@@ -95,7 +97,7 @@ export function main(command?: string): void {
   }
   if (!path) throw `You are currently in a path (${myPath()}) which is not supported.`;
   path.runIntro();
-  const engine = path.load(getAllTasks());
+  const engine = loadEngine(path);
 
   // Execute the engine
   if (get(toTempPref("first_start"), -1) === -1) set(toTempPref("first_start"), gametimeToInt());
