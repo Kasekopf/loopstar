@@ -9,7 +9,7 @@ import { SmolEngine } from "./engine";
 import { getTasks } from "grimoire-kolmafia";
 import { buildPullRequirements, Requirement, RequirementCategory } from "../../sim";
 
-export class SmolInfo extends PathInfo {
+export class SmolInfo implements PathInfo {
   name(): string {
     return "Shrunken Adventurer";
   }

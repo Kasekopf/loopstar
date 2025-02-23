@@ -9,7 +9,7 @@ import { CasualDietQuest } from "./diet";
 import { args } from "../../args";
 import { Requirement } from "../../sim";
 
-export class CasualInfo extends PathInfo {
+export class CasualInfo implements PathInfo {
   name(): string {
     return "Casual";
   }

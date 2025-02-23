@@ -9,7 +9,7 @@ import { LevelingQuest } from "../../tasks/leveling";
 import { get } from "libram";
 import { Requirement } from "../../sim";
 
-export class AftercoreInfo extends PathInfo {
+export class AftercoreInfo implements PathInfo {
   name(): string {
     return "Aftercore";
   }
