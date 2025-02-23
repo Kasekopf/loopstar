@@ -23,6 +23,10 @@ export class SmolInfo extends PathInfo {
     return [...newTasks, ...tasks];
   }
 
+  getRoute(route: string[]): string[] {
+    return route;
+  }
+
   getEngine(tasks: Task[]): Engine {
     return new SmolEngine(tasks);
   }

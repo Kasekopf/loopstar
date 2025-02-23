@@ -1,15 +1,16 @@
 import { findAndMerge, NamedDeltaTask, Task } from "../engine/task";
 import { Engine } from "../engine/engine";
-import { verifyDependencies } from "grimoire-kolmafia";
+import { orderByRoute, verifyDependencies } from "grimoire-kolmafia";
 import { Requirement } from "../sim";
 import { args } from "../args";
-import { prioritize } from "../route";
+import { baseRoute } from "../route";
 
 export abstract class PathInfo {
   abstract name(): string;
   abstract active(): boolean;
   abstract getTasks(tasks: Task[]): Task[]; // for load
   abstract getEngine(tasks: Task[]): Engine; // for load
+  abstract getRoute(route: string[]): string[]; // for load
   abstract getRequirements(reqs: Requirement[]): Requirement[]; // for sim
   abstract runIntro(): void;
 
@@ -48,6 +49,9 @@ export abstract class PathInfo {
       ),
     ];
     const tasksAfterIgnoreCompleted = findAndMerge(softTunedTasks, deltas, undefined, true);
-    return this.getEngine(prioritize(tasksAfterIgnoreCompleted));
+
+    const route = this.getRoute(baseRoute);
+    const routeOrderedTasks = orderByRoute(tasksAfterIgnoreCompleted, route, false);
+    return this.getEngine(routeOrderedTasks);
   }
 }

@@ -1,9 +1,6 @@
-import { orderByRoute } from "grimoire-kolmafia";
-import { Task } from "./engine/task";
-
 export const ROUTE_WAIT_TO_NCFORCE = 55;
 
-export const routing: string[] = [
+export const baseRoute: string[] = [
   // Break pvp stone ASAP
   "Misc/Break Stone",
 
@@ -153,7 +150,3 @@ export const routing: string[] = [
 
   "Tower/Naughty Sorceress",
 ];
-
-export function prioritize(tasks: Task[]): Task[] {
-  return orderByRoute(tasks, routing, false);
-}

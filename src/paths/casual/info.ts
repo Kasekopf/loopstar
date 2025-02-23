@@ -26,6 +26,10 @@ export class CasualInfo extends PathInfo {
     return [...newTasks, ...changedTasks];
   }
 
+  getRoute(route: string[]): string[] {
+    return route;
+  }
+
   getEngine(tasks: Task[]): Engine {
     return new Engine(tasks);
   }
