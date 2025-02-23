@@ -37,15 +37,11 @@ import { Priority, Quest, Resources, Task } from "../engine/task";
 import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
-import { atLevel, debug } from "../lib";
+import { atLevel, debug, flyersDone } from "../lib";
 import { tryPlayApriling } from "../lib";
 import { args, toTempPref } from "../args";
 import { customRestoreMp, fillHp } from "../engine/moods";
 import { forceItemPossible, yellowRayPossible } from "../resources/yellowray";
-
-export function flyersDone(): boolean {
-  return get("flyeredML") >= 10000;
-}
 
 export function warCleared(): boolean {
   return get("hippiesDefeated") >= 1000;

@@ -194,10 +194,10 @@ export function stableSort<T>(items: T[], key: (item: T) => number): T[] {
   });
   return scoredItems.map((scoredItem) => scoredItem.item);
 }
+
 /**
  * Actually fuel the asdon to the required amount.
  */
-
 export function asdonFillTo(amount: number): boolean {
   if (getWorkshed() !== $item`Asdon Martin keyfob (on ring)`) return false;
 
@@ -224,10 +224,10 @@ export function asdonFillTo(amount: number): boolean {
   }
   return true;
 }
+
 /**
  * Return true if we can possibly fuel the asdon to the required amount.
  */
-
 export function asdonFualable(amount: number): boolean {
   if (!AsdonMartin.installed()) return false;
   if (!have($item`forged identification documents`) && step("questL11Black") < 4) return false; // Save early
@@ -269,4 +269,8 @@ export function haveHugeLarge() {
     have($item`McHugeLarge right ski`) &&
     have($item`McHugeLarge duffel bag`)
   );
+}
+
+export function flyersDone(): boolean {
+  return get("flyeredML") >= 10000;
 }

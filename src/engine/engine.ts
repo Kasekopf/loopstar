@@ -82,7 +82,7 @@ import { refillLatte } from "../resources/runaway";
 import { shouldFinishLatte } from "../resources/runaway";
 import { Priorities, Prioritization } from "./priority";
 import { args, toTempPref } from "../args";
-import { flyersDone } from "../tasks/level12";
+import { flyersDone } from "../lib";
 import { globalStateCache } from "./state";
 import { removeTeleportitis, teleportitisTask } from "../tasks/misc";
 import { keyStrategy } from "../tasks/keys";
