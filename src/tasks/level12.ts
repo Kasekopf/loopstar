@@ -654,11 +654,6 @@ export const WarQuest: Quest = {
     {
       name: "Open Orchard",
       after: ["Flyers End", "Lighthouse End", "Junkyard End"],
-      acquire: [
-        { item: $item`beer helmet` },
-        { item: $item`distressed denim pants` },
-        { item: $item`bejeweled pledge pin` },
-      ],
       completed: () => get("hippiesDefeated") >= 64,
       outfit: () => {
         const jelly = args.minor.jellies ? $familiar`Space Jellyfish` : undefined;
@@ -700,11 +695,6 @@ export const WarQuest: Quest = {
     {
       name: "Open Nuns",
       after: ["Orchard Finish"],
-      acquire: [
-        { item: $item`beer helmet` },
-        { item: $item`distressed denim pants` },
-        { item: $item`bejeweled pledge pin` },
-      ],
       completed: () => get("hippiesDefeated") >= 192,
       outfit: () =>
         <OutfitSpec>{
@@ -722,11 +712,6 @@ export const WarQuest: Quest = {
     {
       name: "Clear",
       after: ["Nuns"],
-      acquire: [
-        { item: $item`beer helmet` },
-        { item: $item`distressed denim pants` },
-        { item: $item`bejeweled pledge pin` },
-      ],
       completed: () => get("hippiesDefeated") >= 1000,
       outfit: () => {
         const result = <OutfitSpec>{

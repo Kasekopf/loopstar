@@ -168,7 +168,6 @@ const Temple: Task[] = [
   {
     name: "Open City",
     after: ["Temple Nostril", "Macguffin/Diary"],
-    acquire: [{ item: $item`stone wool` }],
     completed: () => step("questL11Worship") >= 3,
     do: () => {
       visitUrl("adventure.php?snarfblat=280");
@@ -200,7 +199,6 @@ const Apartment: Task[] = [
     choices: { 781: 1 },
     limit: { tries: 4 },
     freecombat: true,
-    acquire: [{ item: $item`antique machete` }],
   },
   {
     name: "Apartment Files", // Get the last McClusky files here if needed, as a backup plan
@@ -282,7 +280,6 @@ const Office: Task[] = [
     choices: { 785: 1 },
     limit: { tries: 4 },
     freecombat: true,
-    acquire: [{ item: $item`antique machete` }],
   },
   {
     name: "Office Files",
@@ -372,7 +369,6 @@ const Hospital: Task[] = [
     choices: { 783: 1 },
     limit: { tries: 4 },
     freecombat: true,
-    acquire: [{ item: $item`antique machete` }],
   },
   {
     name: "Hospital",
@@ -437,20 +433,22 @@ const Bowling: Task[] = [
     acquire: [{ item: $item`Bowl of Scorpions`, optional: true }],
     completed: () => get("hiddenBowlingAlleyProgress") >= 7,
     prepare: () => {
-      // Open the hidden tavern if it is available.
-      if (get("hiddenTavernUnlock") < myAscensions() && have($item`book of matches`)) {
-        use($item`book of matches`);
-        buy($item`Bowl of Scorpions`);
-      }
       // Backload the bowling balls due to banish timers
       if (!bowlingBallsGathered()) {
+        // Open the hidden tavern if it is available.
+        if (get("hiddenTavernUnlock") < myAscensions() && have($item`book of matches`)) {
+          use($item`book of matches`);
+          buy($item`Bowl of Scorpions`);
+        }
+
         if (have($item`bowling ball`))
           putCloset($item`bowling ball`, itemAmount($item`bowling ball`));
+
+        if (myFamiliar() === $familiar`Melodramedary` && get("camelSpit") === 100) fillHp();
       } else {
         if (closetAmount($item`bowling ball`) > 0)
           takeCloset($item`bowling ball`, closetAmount($item`bowling ball`));
       }
-      if (myFamiliar() === $familiar`Melodramedary` && get("camelSpit") === 100) fillHp();
     },
     do: $location`The Hidden Bowling Alley`,
     combat: new CombatStrategy()
@@ -569,7 +567,6 @@ export const HiddenQuest: Quest = {
         .killHard($monster`dense liana`)
         .killHard($monster`Protector Spectre`),
       limit: { tries: 4 },
-      acquire: [{ item: $item`antique machete` }],
       boss: true,
     },
   ],

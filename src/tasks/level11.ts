@@ -276,11 +276,6 @@ const Desert: Task[] = [
 
 function rotatePyramid(goal: number): void {
   const ratchets = (goal - get("pyramidPosition") + 5) % 5;
-  const to_buy =
-    ratchets - itemAmount($item`tomb ratchet`) - itemAmount($item`crumbling wooden wheel`);
-  if (to_buy > 0) {
-    buy($item`tomb ratchet`, to_buy);
-  }
   visitUrl("place.php?whichplace=pyramid&action=pyramid_control");
   for (let i = 0; i < ratchets; i++) {
     if (have($item`crumbling wooden wheel`)) {

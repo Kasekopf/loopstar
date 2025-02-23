@@ -1,13 +1,9 @@
 import {
-  buy,
   cliExecute,
   haveEquipped,
-  itemAmount,
   myBuffedstat,
   myClass,
-  myMaxhp,
   myMaxmp,
-  myTurncount,
   numericModifier,
   runChoice,
   visitUrl,
@@ -551,17 +547,7 @@ export const TowerQuest: Quest = {
     {
       name: "Shadow",
       after: ["Mirror"],
-      prepare: () => {
-        fillHp();
-
-        // Buy garters here instead of in acquire,
-        // since the amount needed depends on Max HP.
-        const garters_needed =
-          Math.min(20, Math.ceil((100 + myMaxhp() / 6) / 80)) - itemAmount($item`gauze garter`);
-        if (garters_needed > 0 && myTurncount() >= 1000) {
-          buy($item`gauze garter`, garters_needed, 500);
-        }
-      },
+      prepare: () => fillHp(),
       completed: () => step("questL13Final") > 10,
       do: $location`Tower Level 5`,
       outfit: () => ({

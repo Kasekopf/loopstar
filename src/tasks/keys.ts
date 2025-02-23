@@ -147,8 +147,10 @@ const heroKeys: KeyTask[] = [
     completed: () => get("lastZapperWandExplosionDay") >= 1 || get("_zapCount") >= 1,
     do: () => {
       unequipAcc(keyStrategy.getZapChoice(0));
-      if (!have(keyStrategy.getZapChoice(0)) && (myTurncount() >= 1000 || inCasual()))
-        buy(keyStrategy.getZapChoice(0), 1, 100000);
+      if (!inCasual()) {
+        if (!have(keyStrategy.getZapChoice(0)) && myTurncount() >= 1000)
+          buy(keyStrategy.getZapChoice(0), 1, 100000);
+      }
       cliExecute(`zap ${keyStrategy.getZapChoice(0)}`);
     },
     limit: { tries: 1 },
@@ -161,8 +163,10 @@ const heroKeys: KeyTask[] = [
     completed: () => get("lastZapperWandExplosionDay") >= 1 || get("_zapCount") >= 2,
     do: () => {
       unequipAcc(keyStrategy.getZapChoice(1));
-      if (!have(keyStrategy.getZapChoice(1)) && (myTurncount() >= 1000 || inCasual()))
-        buy(keyStrategy.getZapChoice(1), 1, 100000);
+      if (!inCasual()) {
+        if (!have(keyStrategy.getZapChoice(1)) && myTurncount() >= 1000)
+          buy(keyStrategy.getZapChoice(1), 1, 100000);
+      }
       cliExecute(`zap ${keyStrategy.getZapChoice(1)}`);
     },
     limit: { tries: 1 },

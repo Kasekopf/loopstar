@@ -381,6 +381,18 @@ const acquireSpecs: AcquireSpec[] = [
     },
     price: Prices.Used,
   },
+  ...$items`Boris's ring, Jarlsberg's earring, Sneaky Pete's breath spray`.map(
+    (i) =>
+      <AcquireSpec>{
+        what: i,
+        needed: () => {
+          if (keyStrategy.useful(Keys.Zap) && keyStrategy.getZapChoice(0) === i) return 1;
+          if (keyStrategy.useful(Keys.Zap2) && keyStrategy.getZapChoice(1) === i) return 1;
+          return 0;
+        },
+        price: 100000,
+      }
+  ),
   {
     what: $item`gauze garter`,
     needed: () => (step("questL13Final") > 10 ? 0 : 10),
