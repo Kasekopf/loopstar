@@ -1,14 +1,21 @@
-import { Args } from "grimoire-kolmafia";
+import { Args, ParseError } from "grimoire-kolmafia";
 import { Item } from "kolmafia";
 import { $familiar, $item } from "libram";
 
-const worksheds = [
-  [$item`none`, "Do nothing"],
-  [$item`model train set`, "Swap to model train set"],
-  [$item`cold medicine cabinet`, "Swap to cold medicine cabinet"],
-  [$item`Asdon Martin keyfob (on ring)`, "Swap to asdon martin keyfob"],
-  [$item`TakerSpace letter of Marque`, "Swap to TakerSpace letter of Marque"],
-] as [Item, string][];
+export const supportedWorksheds = [
+  $item`none`,
+  $item`model train set`,
+  $item`cold medicine cabinet`,
+  $item`Asdon Martin keyfob (on ring)`,
+  $item`TakerSpace letter of Marque`,
+];
+
+function workshedParser(value: string) {
+  const item = Item.get(value);
+  if (!supportedWorksheds.includes(item))
+    return new ParseError(`received ${value} which was not a supported workshed`);
+  return item;
+}
 
 export const args = Args.create(
   "loopstar",
@@ -35,16 +42,22 @@ export const args = Args.create(
         help: "Number of pulls to use. Lower this if you would like to save some pulls to use for in-ronin farming. (Note that this argument is not needed if you pull all your farming items before running the script).",
         default: 20,
       }),
-      workshed: Args.item({
-        help: "Workshed item to place in an empty workshed at the start of the run.",
-        default: $item`model train set`,
-        options: worksheds,
-      }),
-      swapworkshed: Args.item({
-        help: "Workshed item to place in a workshed to replace the cold medicine cabinet.",
-        default: $item`none`,
-        options: worksheds,
-      }),
+      workshed: Args.custom<Item>(
+        {
+          help: "Workshed item to place in an empty workshed at the start of the run.",
+          default: $item`model train set`,
+        },
+        workshedParser,
+        "ITEM"
+      ),
+      swapworkshed: Args.custom<Item>(
+        {
+          help: "Workshed item to place in a workshed to replace the cold medicine cabinet.",
+          default: $item`none`,
+        },
+        workshedParser,
+        "ITEM"
+      ),
     }),
     minor: Args.group("Minor Options", {
       pvp: Args.flag({

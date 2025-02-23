@@ -1,7 +1,8 @@
 import { Args } from "grimoire-kolmafia";
 import { write } from "kolmafia";
 import { ComponentSetting, generateHTML, handleApiRequest, RelayPage } from "mafia-shared-relay";
-import { args } from "./args";
+import { args, supportedWorksheds } from "./args";
+import { $item } from "libram";
 
 function convertArgsToHtml(): RelayPage[] {
   const metadata = Args.getMetadata(args);
@@ -27,6 +28,13 @@ function convertArgsToHtml(): RelayPage[] {
 
       if (key.valueHelpName === "FLAG" || key.valueHelpName === "BOOLEAN") {
         component.type = "boolean";
+      } else if (name === "workshed" || name === "swapworkshed") {
+        // Hardcoded hack; show workshed options
+        component.type = "dropdown";
+        component.dropdown = supportedWorksheds.map((i) => {
+          const name = i === $item`none` ? "none" : i.name;
+          return { display: name, value: name };
+        });
       } else if (key.options !== undefined) {
         component.type = "dropdown";
         component.dropdown = key.options.map(([k, desc]) => {
