@@ -17,7 +17,6 @@ import { Allocations, Quest, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Keys, keyStrategy } from "./keys";
 import { trainSetAvailable } from "./misc";
-import { yellowSubmarinePossible } from "../engine/outfit";
 import { underStandard } from "../lib";
 
 /**
@@ -26,17 +25,19 @@ import { underStandard } from "../lib";
  * duplicate: True if we should pull it even if we have it.
  * pull: The item to pull, or a list of options to pull.
  * name: If a list of options is given, what to use for the task (& sim) name.
- * description: Extra text to include in the sim message.
  * benefit: The number of turns this pull would save or generate.
+ * description: Extra text to include in the sim message.
+ * disabled: If true, disabled by a flag (for "im reporting).
  */
 export type PullSpec = {
   optional?: boolean;
   useful?: () => boolean | undefined;
   duplicate?: boolean;
   post?: () => void;
-  description?: string;
   price?: number;
   benefit: number;
+  description?: string;
+  disabled?: () => boolean;
 } & ({ pull: Item } | { pull: Item[] | (() => Item | Item[] | undefined); name: string });
 
 export const pulls: PullSpec[] = [
@@ -44,6 +45,7 @@ export const pulls: PullSpec[] = [
     pull: $item`crepe paper parachute cape`,
     optional: true,
     benefit: 10,
+    description: "Monster targetting",
   },
   // Hero keys
   {
@@ -70,11 +72,13 @@ export const pulls: PullSpec[] = [
     pull: $item`mafia thumb ring`,
     optional: true,
     benefit: 12,
+    description: "Adv",
   },
   {
     pull: $item`carnivorous potted plant`,
     optional: true,
     benefit: 2,
+    description: "Free kills",
   },
   // General pulls
   {
@@ -139,6 +143,7 @@ export const pulls: PullSpec[] = [
     optional: true,
     name: "Runaway IoTM",
     benefit: 10,
+    description: "Free runs",
   },
   {
     pull: $items`aquaviolet jub-jub bird, charpuce jub-jub bird, crimsilion jub-jub bird, stomp box`,
@@ -182,12 +187,12 @@ export const pulls: PullSpec[] = [
     benefit: 10,
   },
   { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2, benefit: 9.01 },
-  {
-    pull: $item`Buddy Bjorn`,
-    useful: () => yellowSubmarinePossible(true),
-    optional: true,
-    benefit: 9,
-  },
+  // {
+  //   pull: $item`Buddy Bjorn`,
+  //   useful: () => yellowSubmarinePossible(true),
+  //   optional: true,
+  //   benefit: 9,
+  // },
   {
     pull: $item`killing jar`,
     useful: () => {
@@ -200,7 +205,12 @@ export const pulls: PullSpec[] = [
     },
     benefit: 8,
   },
-  { pull: $item`deck of lewd playing cards`, optional: true, benefit: 5 },
+  {
+    pull: $item`deck of lewd playing cards`,
+    optional: true,
+    benefit: 5,
+    description: "Protestors",
+  },
   { pull: $item`gravy boat`, useful: () => !underStandard(), benefit: 5 },
   {
     pull: $item`Mohawk wig`,
@@ -247,6 +257,7 @@ export const pulls: PullSpec[] = [
     },
     optional: true,
     benefit: 3,
+    description: "Shore trips",
   },
 ];
 

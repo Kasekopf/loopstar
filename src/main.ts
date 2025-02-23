@@ -44,7 +44,11 @@ export function main(command?: string): void {
     return;
   }
   if (args.sim) {
-    checkRequirements();
+    const path = getActivePath(args.path ?? "casual");
+    if (!path) {
+      throw `Unknown path ${args.path} for sim`;
+    }
+    checkRequirements(path);
     return;
   }
   if (args.debug.list) {

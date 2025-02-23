@@ -21,9 +21,10 @@ import {
   have,
   permedSkills,
 } from "libram";
-import { getPullItem, pulls } from "./tasks/pulls";
+import { getPullItem, pulls, PullSpec } from "./tasks/pulls";
+import { PathInfo } from "./paths/pathinfo";
 
-class Hardcoded {
+export class Hardcoded {
   have: boolean;
   name: string;
 
@@ -33,16 +34,27 @@ class Hardcoded {
   }
 }
 
+export enum RequirementCategory {
+  IOTM = "IoTMs",
+  Item = "Expensive Items",
+  Permed = "Skills",
+  Locket = "Combat Lover's Locket Monsters",
+  Other = "Miscellany",
+}
+
 type Thing = Item | Familiar | Skill | Monster | Hardcoded;
-interface Requirement {
+export interface Requirement {
   thing: Thing | Thing[];
   why: string;
+  required?: boolean;
+  category: RequirementCategory;
+  disabled?: boolean;
 }
 
 /**
  * Return: a list of all things required to run the script.
  */
-function buildIotmList(): Requirement[] {
+function buildIotmRequirements(): Requirement[] {
   return [
     { thing: $item`Clan VIP Lounge key`, why: "YRs, +combat" },
     {
@@ -62,7 +74,7 @@ function buildIotmList(): Requirement[] {
     },
     {
       thing: $familiar`Reagnimated Gnome`,
-      why: "Adv gain",
+      why: "Adv",
     },
     {
       thing: new Hardcoded(get("chateauAvailable"), "Chateau Mantegna"),
@@ -136,16 +148,8 @@ function buildIotmList(): Requirement[] {
       thing: new Hardcoded(CampAway.have(), "Distant Woods Getaway Brochure"),
       why: "+exp",
     },
-    {
-      thing: $item`Powerful Glove`,
-      why: "Pixels",
-    },
     { thing: $familiar`Left-Hand Man`, why: "Carn plant" },
     { thing: $familiar`Melodramedary`, why: "Desert progress" },
-    {
-      thing: $item`Cargo Cultist Shorts`,
-      why: "Mountain man",
-    },
     {
       thing: $skill`Comprehensive Cartography`,
       why: "Billiards, Friars, Nook, Castle, War start",
@@ -194,17 +198,12 @@ function buildIotmList(): Requirement[] {
       why: "Banishes",
     },
     {
-      thing: $item`combat lover's locket`,
-      why: "Reminiscing",
-    },
-    { thing: $familiar`Grey Goose`, why: "Duplication drones" },
-    {
       thing: $item`unbreakable umbrella`,
       why: "-combat modifier, ML",
     },
     {
       thing: $item`June cleaver`,
-      why: "Tavern, +adv",
+      why: "Tavern, Adv",
     },
     {
       thing: $item`designer sweatpants`,
@@ -265,43 +264,14 @@ function buildIotmList(): Requirement[] {
       thing: $item`candy cane sword cane`,
       why: "NS key, protestors, black forest, war start, bowling, shore",
     },
-  ];
+  ].map((r) => <Requirement>{ ...r, category: RequirementCategory.IOTM });
 }
 
-function buildLocketList(): Requirement[] {
-  return [
-    {
-      thing: $monster`Astronomer`,
-      why: "Star Key",
-    },
-    {
-      thing: $monster`Camel's Toe`,
-      why: "Star Key",
-    },
-    {
-      thing: $monster`Baa'baa'bu'ran`,
-      why: "Wool",
-    },
-    {
-      thing: $monster`mountain man`,
-      why: "Ore (without trainset)",
-    },
-    {
-      thing: $monster`War Frat 151st Infantryman`,
-      why: "Outfit (without numberology)",
-    },
-  ];
-}
-
-function buildMiscList(): Requirement[] {
+function buildMiscRequirements(): Requirement[] {
   return [
     {
       thing: $familiar`Oily Woim`,
       why: "Bonus initiative",
-    },
-    {
-      thing: $familiar`Gelatinous Cubeling`,
-      why: "Daily dungeon",
     },
     {
       thing: $familiar`Hobo Monkey`,
@@ -311,28 +281,21 @@ function buildMiscList(): Requirement[] {
       thing: new Hardcoded(get("poolSharkCount") >= 25, "Permanent pool skill from A Shark's Chum"),
       why: "Haunted billiards room",
     },
-  ];
+  ].map((r) => <Requirement>{ ...r, category: RequirementCategory.Other });
 }
 
-function buildRequiredSkillsList(): (Requirement & { thing: Skill })[] {
+function buildSkillRequirements(): (Requirement & { thing: Skill })[] {
   return [
     {
       thing: $skill`Saucestorm`,
       why: "Combat",
+      required: true,
     },
     {
       thing: $skill`Cannelloni Cocoon`,
       why: "Healing",
+      required: true,
     },
-    {
-      thing: $skill`Pizza Lover`,
-      why: "Adv gain, +exp",
-    },
-  ];
-}
-
-function buildRecommendedSkillsList(): (Requirement & { thing: Skill })[] {
-  return [
     {
       thing: $skill`Torso Awareness`,
       why: "Shirts",
@@ -461,14 +424,80 @@ function buildRecommendedSkillsList(): (Requirement & { thing: Skill })[] {
       thing: $skill`Blood Bond`,
       why: "Fam weight",
     },
+    {
+      thing: $skill`Calculate the Universe`,
+      why: "Frat outfit, adv",
+    },
+    {
+      thing: $skill`Saucegeyser`,
+      why: "Combat",
+    },
+  ].map((r) => {
+    return { ...r, category: RequirementCategory.Permed };
+  });
+}
+
+/**
+ * Things that are useful for all run types except casual.
+ */
+function buildNonCasualRequirements(): Requirement[] {
+  return [
+    {
+      thing: $item`Cargo Cultist Shorts`,
+      why: "Astrologer, Mountain man",
+      category: RequirementCategory.IOTM,
+    },
+    {
+      thing: $item`combat lover's locket`,
+      why: "Reminiscing",
+      category: RequirementCategory.IOTM,
+    },
+    {
+      thing: $familiar`Grey Goose`,
+      why: "Duplication drones",
+      category: RequirementCategory.IOTM,
+    },
+    {
+      thing: $familiar`Gelatinous Cubeling`,
+      why: "Daily dungeon",
+      category: RequirementCategory.Other,
+    },
+    // Locket monsters
+    {
+      thing: $monster`Astronomer`,
+      why: "Star Key",
+      category: RequirementCategory.Locket,
+    },
+    {
+      thing: $monster`Camel's Toe`,
+      why: "Star Key",
+      category: RequirementCategory.Locket,
+    },
+    {
+      thing: $monster`Baa'baa'bu'ran`,
+      why: "Wool",
+      category: RequirementCategory.Locket,
+    },
+    {
+      thing: $monster`mountain man`,
+      why: "Ore (without trainset)",
+      category: RequirementCategory.Locket,
+    },
+    {
+      thing: $monster`War Frat 151st Infantryman`,
+      why: "Outfit (without numberology)",
+      category: RequirementCategory.Locket,
+    },
   ];
 }
 
-function buildPullList(optional: boolean): Requirement[] {
+/**
+ * Build requirements from a set of pulls.
+ */
+export function buildPullRequirements(pulls: PullSpec[]): Requirement[] {
   const result: Requirement[] = [];
   for (const pull of pulls) {
     const items = getPullItem(pull) ?? [];
-
     // Ignore dynamic item selection for now
     if (items.length === 0) continue;
 
@@ -478,8 +507,13 @@ function buildPullList(optional: boolean): Requirement[] {
     // except still highlight GAP/navel ring.
     if (big_items.length < items.length && !items.includes($item`Greatest American Pants`))
       continue;
-    if (pull.optional !== optional) continue;
-    result.push({ thing: big_items, why: pull.description ?? "Pull" });
+    result.push({
+      thing: big_items,
+      why: pull.description ?? "Pull",
+      required: !pull.optional,
+      category: RequirementCategory.Item,
+      disabled: pull.disabled?.() ?? false,
+    });
   }
   return result;
 }
@@ -508,35 +542,54 @@ function check(req: Requirement): [boolean, string, Requirement] {
   }
 }
 
-export function checkRequirements(): void {
+export function checkRequirements(path: PathInfo): void {
   let missing_optional = 0;
   let missing = 0;
 
-  const categories: [string, Requirement[], boolean][] = [
-    ["Skills (Required)", buildRequiredSkillsList(), true],
-    ["Expensive Pulls (Required)", buildPullList(false), true],
-    ["Skills (Optional/Recommended)", buildRecommendedSkillsList(), false],
-    ["Expensive Pulls (Optional)", buildPullList(true), false],
-    ["IoTMs", buildIotmList(), false],
-    ["Miscellany", buildMiscList(), false],
-    ["Combat Lover's Locket Monsters", buildLocketList(), false],
+  const baseRequirements: Requirement[] = [
+    ...buildIotmRequirements(),
+    ...buildSkillRequirements(),
+    ...buildPullRequirements(pulls),
+    ...buildMiscRequirements(),
   ];
-  printHtml(
-    "Checking your character... Legend: <font color='#888888'>✓ Have</font> / <font color='red'>X Missing & Required</font> / <font color='black'>X Missing & Optional"
-  );
-  for (const [name, requirements, required] of categories) {
-    if (requirements.length === 0) continue;
+  if (path.name() !== "Casual") {
+    baseRequirements.push(...buildNonCasualRequirements());
+  }
+  const requirements = path.getRequirements(baseRequirements);
 
-    const requirements_info: [boolean, string, Requirement][] = requirements.map(check);
-    print(name, "blue");
-    for (const [have_it, name, req] of requirements_info.sort((a, b) => a[1].localeCompare(b[1]))) {
-      const color = have_it ? "#888888" : required ? "red" : "black";
-      const symbol = have_it ? "✓" : "X";
-      if (!have_it && !required) missing_optional++;
-      if (!have_it && required) missing++;
-      print(`${symbol} ${name} - ${req.why}`, color);
+  const legendEntries = [
+    "<font color='#888888'>✓ Have</font>",
+    "<font color='red'>X Missing & Required</font>",
+    "<font color='black'>X Missing & Optional</font>",
+    "<font color='#888888'>⊘ Missing & Disabled</font>",
+  ];
+  const legend = legendEntries.join(" / ");
+  printHtml(`Checking your character... Legend: ${legend}`);
+  for (const required of [true, false]) {
+    for (const category of Object.values(RequirementCategory)) {
+      const filteredRequirements = requirements.filter(
+        (r) => r.category === category && !!r.required === required
+      );
+      if (filteredRequirements.length === 0) continue;
+
+      const requiredTitle = required ? " (Required)" : "";
+      const name = `${category}${requiredTitle}`;
+      const requirementsInfo: [boolean, string, Requirement][] = filteredRequirements.map(check);
+      print(name, "blue");
+      for (const [have_it, name, req] of requirementsInfo.sort((a, b) =>
+        a[1].localeCompare(b[1])
+      )) {
+        const required = req.required;
+        const color = have_it || req.disabled ? "#888888" : required ? "red" : "black";
+        const symbol = have_it ? "✓" : req.disabled ? "⊘" : "X";
+        if (!req.disabled) {
+          if (!have_it && !required) missing_optional++;
+          if (!have_it && required) missing++;
+        }
+        print(`${symbol} ${name} - ${req.why}`, color);
+      }
+      print("");
     }
-    print("");
   }
 
   // Print the count of missing things

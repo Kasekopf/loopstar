@@ -7,6 +7,7 @@ import { getTasks } from "grimoire-kolmafia";
 import { casualDeltas, OrganQuest } from "./tasks";
 import { CasualDietQuest } from "./diet";
 import { args } from "../../args";
+import { Requirement } from "../../sim";
 
 export class CasualInfo extends PathInfo {
   name(): string {
@@ -31,5 +32,9 @@ export class CasualInfo extends PathInfo {
 
   runIntro() {
     // Do nothing
+  }
+
+  getRequirements(reqs: Requirement[]): Requirement[] {
+    return reqs;
   }
 }

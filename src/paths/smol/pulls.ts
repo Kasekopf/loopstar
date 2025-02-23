@@ -32,11 +32,8 @@ export const smolPulls: PullSpec[] = [
     },
     price: 400000,
     benefit: 60,
-  },
-  {
-    pull: $item`crepe paper parachute cape`,
-    optional: true,
-    benefit: 10,
+    description: "Adv; use skipfork to disable, or purchase ahead of running the script",
+    disabled: () => args.smol.skipfork,
   },
   {
     pull: $item`Frosty's frosty mug`,
@@ -48,12 +45,15 @@ export const smolPulls: PullSpec[] = [
     },
     price: 200000,
     benefit: 100,
+    description: "Adv; use skipmug to disable, or purchase ahead of running the script",
+    disabled: () => args.smol.skipmug,
   },
   {
     pull: $item`Bowl of Infinite Jelly`,
     useful: () => myFullness() === 0,
     optional: true,
     benefit: 40,
+    description: "Adv",
   },
   {
     pull: $item`milk of magnesium`,
@@ -82,12 +82,18 @@ export const smolPulls: PullSpec[] = [
     benefit: 100,
   },
   // Pulls with high (avoided) requirements
-  { pull: $item`old patched suit-pants`, optional: true, benefit: 5 },
+  {
+    pull: $item`old patched suit-pants`,
+    optional: true,
+    benefit: 5,
+    description: "ML",
+  },
   {
     pull: $item`transparent pants`,
     optional: true,
     useful: () => !have($item`designer sweatpants`),
     benefit: 5,
+    description: "Protestors",
   },
 ];
 

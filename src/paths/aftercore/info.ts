@@ -7,6 +7,7 @@ import { FriarQuest } from "../../tasks/level6";
 import { OrganQuest } from "../casual/tasks";
 import { LevelingQuest } from "../../tasks/leveling";
 import { get } from "libram";
+import { Requirement } from "../../sim";
 
 export class AftercoreInfo extends PathInfo {
   name(): string {
@@ -45,5 +46,9 @@ export class AftercoreInfo extends PathInfo {
 
   runIntro() {
     // Do nothing
+  }
+
+  getRequirements(reqs: Requirement[]): Requirement[] {
+    return reqs;
   }
 }
