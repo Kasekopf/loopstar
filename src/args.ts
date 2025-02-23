@@ -19,13 +19,14 @@ function workshedParser(value: string) {
 
 export const args = Args.create(
   "loopstar",
-  'This is a script to complete runs of some paths in a single day. Run "loopstar sim" without quotes to check if this script will work for you.\n\nThe arguments accepted by the script are listed below. Note that you can combine multiple options; for example "loopstar pulls=18 fax=false" will save 2 pulls and avoid using a faxbot. Most options also have an associated setting to set an option permanently; for example "set loopstar_pulls=18" will cause the script to always save 2 pulls (unless overriden by using the pulls option at runtime).',
+  'This is a script to complete runs in a single day for supported paths.\n\nRun "loopstar sim" without quotes to check if this script will work for you in a casual run. You can also set the path option (for example "loopstar sim path=smol") to check with different supported paths.\n\nThe arguments accepted by the script are listed below. Note that you can combine multiple options; for example "loopstar pulls=18 fax=false" will save 2 pulls and avoid using a faxbot. Most options also have an associated setting to set an option permanently; for example "set loopstar_pulls=18" will cause the script to always save 2 pulls (unless overriden by using the pulls option at runtime).',
   {
     sim: Args.flag({ help: "Check if you have the requirements to run this script.", setting: "" }),
-    version: Args.flag({ help: "Show script version and exit.", setting: "" }),
     path: Args.custom<string>(
       {
-        help: "Path to provide information for, for sim and help.",
+        // Fake the default value display;
+        // we don't actually want to set a default value for non-sim debug commands like list.
+        help: "Path to provide information for in sim. <font color='#888888'>[default: casual]</font>",
         options: [
           ["smol", "A Shrunken Adventurer am I"],
           ["casual", "Casual"],
@@ -36,6 +37,7 @@ export const args = Args.create(
       (value: string) => value.toLowerCase(),
       "TEXT"
     ),
+    version: Args.flag({ help: "Show script version and exit.", setting: "" }),
 
     major: Args.group("Major Options", {
       pulls: Args.number({
