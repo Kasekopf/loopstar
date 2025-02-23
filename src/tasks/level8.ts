@@ -26,7 +26,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { AllocationRequest, Allocations, Quest } from "../engine/task";
+import { Quest, ResourceRequest, Resources } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
@@ -71,8 +71,8 @@ export const McLargeHugeQuest: Quest = {
       do: $location`Itznotyerzitz Mine`,
       limit: { tries: 3 },
       resources: () =>
-        <AllocationRequest>{
-          which: Allocations.Lucky,
+        <ResourceRequest>{
+          which: Resources.Lucky,
           benefit: 10,
           required: true,
           repeat: clamp(oresNeeded(), 0, 3),
@@ -201,8 +201,8 @@ export const McLargeHugeQuest: Quest = {
       },
       // Only the 2nd and 3rd eXXXtreme adventures can be forced
       resources: () =>
-        <AllocationRequest>{
-          which: Allocations.NCForce,
+        <ResourceRequest>{
+          which: Resources.NCForce,
           benefit: 1 / 0.65,
           repeat: get("currentExtremity") >= 2 ? 1 : 2,
         },

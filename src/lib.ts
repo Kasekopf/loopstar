@@ -261,23 +261,6 @@ export function tryPlayApriling(modifier: string): void {
   }
 }
 
-type Amend<T> = {
-  [Property in keyof T]: (original: T[Property]) => T[Property];
-};
-export type Delta<T> = {
-  replace?: Partial<T>;
-  amend?: Partial<Amend<T>>;
-};
-export function mergeDelta<T>(original: T, delta: Delta<T>): T {
-  const result: T = { ...original, ...(delta.replace ?? {}) };
-  for (const field in delta.amend) {
-    if (delta.amend[field]) {
-      result[field] = delta.amend[field](result[field]);
-    }
-  }
-  return result;
-}
-
 export function haveHugeLarge() {
   return (
     have($item`McHugeLarge left pole`) &&

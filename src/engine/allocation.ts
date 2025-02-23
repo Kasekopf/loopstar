@@ -3,12 +3,12 @@ import { args } from "../args";
 import { debug, stableSort } from "../lib";
 import { summonSources } from "../resources/summon";
 import {
-  Allocation,
-  Allocations,
-  AllocationSummon,
   DeltaTask,
-  getAllocationName,
+  getResourceFriendlyName,
   getTaggedName,
+  Resources,
+  ResourceSummon,
+  ResourceType,
   Task,
 } from "./task";
 import { $effect, get, have, undelay } from "libram";
@@ -18,16 +18,16 @@ import { luckySources } from "../resources/lucky";
 
 type Allocator = {
   name: string; // Name for debugging printout
-  appliesTo: (which: Allocation) => boolean; // True if this allocator can satisfy this request
+  appliesTo: (which: ResourceType) => boolean; // True if this allocator can satisfy this request
   amount: () => number; // The number of resources available to be allocated
-  delta: DeltaTask | ((which: Allocation) => DeltaTask); // The change to make on the task if a resource is allocated
+  delta: DeltaTask | ((which: ResourceType) => DeltaTask); // The change to make on the task if a resource is allocated
 };
 
 const allocators: Allocator[] = [
   // Pulls
   {
     name: "Pull",
-    appliesTo: (which) => which === Allocations.Pull,
+    appliesTo: (which) => which === Resources.Pull,
     amount: () => {
       if (inHardcore() || myTurncount() >= 1000) return 0;
       return pullsRemaining() - (20 - args.major.pulls);
@@ -39,7 +39,7 @@ const allocators: Allocator[] = [
   // NC Forcers
   {
     name: "NC Force Active",
-    appliesTo: (which) => which === Allocations.NCForce,
+    appliesTo: (which) => which === Resources.NCForce,
     amount: () => (get("noncombatForcerActive") ? 1 : 0),
     delta: {
       tag: "NCForce",
@@ -49,7 +49,7 @@ const allocators: Allocator[] = [
     (s) =>
       <Allocator>{
         name: s.name,
-        appliesTo: (which) => which === Allocations.NCForce,
+        appliesTo: (which) => which === Resources.NCForce,
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
@@ -70,7 +70,7 @@ const allocators: Allocator[] = [
     (s) =>
       <Allocator>{
         name: s.name,
-        appliesTo: (which) => which === Allocations.NCForce,
+        appliesTo: (which) => which === Resources.NCForce,
         amount: () => s.remaining(),
         delta: {
           tag: "NCForce",
@@ -88,7 +88,7 @@ const allocators: Allocator[] = [
     (s) =>
       <Allocator>{
         name: s.name,
-        appliesTo: (which: Allocation) =>
+        appliesTo: (which: ResourceType) =>
           typeof which === "object" && "summon" in which && s.canFight(which.summon),
         amount: () => s.available(),
         delta: (req) =>
@@ -97,7 +97,7 @@ const allocators: Allocator[] = [
               do: () => {
                 // Perform the actual summon
                 debug(`Summon source: ${s.name}`);
-                s.summon((req as AllocationSummon).summon);
+                s.summon((req as ResourceSummon).summon);
                 runCombat();
               },
             },
@@ -111,7 +111,7 @@ const allocators: Allocator[] = [
   // Lucky
   {
     name: "Lucky Active",
-    appliesTo: (which) => which === Allocations.Lucky,
+    appliesTo: (which) => which === Resources.Lucky,
     amount: () => (have($effect`Lucky!`) ? 1 : 0),
     delta: {
       tag: "Lucky",
@@ -121,7 +121,7 @@ const allocators: Allocator[] = [
     (s) =>
       <Allocator>{
         name: s.name,
-        appliesTo: (which) => which === Allocations.Lucky,
+        appliesTo: (which) => which === Resources.Lucky,
         amount: () => s.remaining(),
         delta: {
           tag: "Lucky",
@@ -151,7 +151,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
     if (!request) continue;
     if (verbose) {
       const name = getTaggedName(task);
-      const requestStr = getAllocationName(request.which);
+      const requestStr = getResourceFriendlyName(request.which);
       const valueStr = request.benefit.toFixed(2);
       debug(`${name}: ${requestStr} x${request.repeat ?? 1} for ${valueStr}`);
     }

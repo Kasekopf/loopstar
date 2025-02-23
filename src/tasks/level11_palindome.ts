@@ -29,7 +29,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { Allocations, Quest, Task } from "../engine/task";
+import { Quest, Resources, Task } from "../engine/task";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
@@ -308,7 +308,7 @@ const Zepplin: Task[] = [
     },
     limit: { soft: 30 },
     resources: {
-      which: Allocations.Lucky,
+      which: Resources.Lucky,
       benefit: 2,
       delta: {
         replace: {

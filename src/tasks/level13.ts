@@ -30,7 +30,7 @@ import {
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
-import { Allocations, Quest, Task } from "../engine/task";
+import { Quest, Resources, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { customRestoreMp, ensureWithMPSwaps, fillHp } from "../engine/moods";
 
@@ -341,7 +341,7 @@ const wand: Task[] = [
         (have($item`ND`) || (have($item`lowercase N`) && have($item`heavy D`)))),
     do: $location`The Castle in the Clouds in the Sky (Basement)`,
     resources: {
-      which: Allocations.Lucky,
+      which: Resources.Lucky,
       benefit: 6,
       required: true,
     },

@@ -3,7 +3,7 @@ import { $item, $items, $location, $skill, clamp, get, have } from "libram";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
-import { AllocationRequest, Allocations, Quest } from "../engine/task";
+import { Quest, ResourceRequest, Resources } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { tryPlayApriling } from "../lib";
 
@@ -44,8 +44,8 @@ export const FriarQuest: Quest = {
         return { modifier: "-combat" };
       },
       resources: () =>
-        <AllocationRequest>{
-          which: Allocations.NCForce,
+        <ResourceRequest>{
+          which: Resources.NCForce,
           benefit: 1 / 0.65 / 2, // discounted due to late free runs
           repeat: clamp(4 - get("lastFriarsHeartNC"), 0, 4),
         },
@@ -64,7 +64,7 @@ export const FriarQuest: Quest = {
       resources: () => {
         const maxNCs = have($skill`Comprehensive Cartography`) ? 2 : 4;
         return {
-          which: Allocations.NCForce,
+          which: Resources.NCForce,
           benefit: 1 / 0.65 / 2, // discounted due to late free runs
           repeat: clamp(4 - get("lastFriarsNeckNC"), 0, maxNCs),
         };
@@ -95,8 +95,8 @@ export const FriarQuest: Quest = {
         return { modifier: "-combat" };
       },
       resources: () =>
-        <AllocationRequest>{
-          which: Allocations.NCForce,
+        <ResourceRequest>{
+          which: Resources.NCForce,
           benefit: 1 / 0.65 / 2, // discounted due to late free runs
           repeat: clamp(4 - get("lastFriarsElbowNC"), 0, 4),
         },

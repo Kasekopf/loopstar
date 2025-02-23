@@ -33,7 +33,7 @@ import {
   set,
   uneffect,
 } from "libram";
-import { Allocations, Priority, Quest, Task } from "../engine/task";
+import { Priority, Quest, Resources, Task } from "../engine/task";
 import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
@@ -644,7 +644,7 @@ export const WarQuest: Quest = {
       resources: () => {
         if (have($item`candy cane sword cane`) || have($skill`Comprehensive Cartography`)) {
           return {
-            which: Allocations.NCForce,
+            which: Resources.NCForce,
             benefit: 1 / 0.5,
           };
         }

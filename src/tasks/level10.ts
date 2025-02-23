@@ -14,7 +14,7 @@ import {
 } from "libram";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { atLevel } from "../lib";
-import { Allocations, Quest } from "../engine/task";
+import { Quest, Resources } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
@@ -149,7 +149,7 @@ export const GiantQuest: Quest = {
       choices: { 670: 5, 669: 1, 671: 4 },
       limit: { soft: 20 },
       resources: {
-        which: Allocations.NCForce,
+        which: Resources.NCForce,
         benefit: 1 / 0.65,
       },
     },

@@ -13,7 +13,7 @@ import {
 import { $familiar, $item, $items, $skill, get, have, set } from "libram";
 import { args, toTempPref } from "../args";
 import { Priorities } from "../engine/priority";
-import { Allocations, Quest, Task } from "../engine/task";
+import { Quest, Resources, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { Keys, keyStrategy } from "./keys";
 import { trainSetAvailable } from "./misc";
@@ -386,7 +386,7 @@ export function getPullTask(spec: PullSpec): Task {
     limit: { tries: 1 },
     freeaction: true,
     resources: {
-      which: Allocations.Pull,
+      which: Resources.Pull,
       benefit: pull.priority,
       required: true,
     },
