@@ -26,7 +26,7 @@ git checkout https://github.com/Kasekopf/loopstar release
 
 #### Requirements for Casual
 
-- Run `loopstar sim path=smol` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day.
+- Run `loopstar sim` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day.
 
 Other Recommendations:
 
