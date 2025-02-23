@@ -16,6 +16,20 @@ export const args = Args.create(
   {
     sim: Args.flag({ help: "Check if you have the requirements to run this script.", setting: "" }),
     version: Args.flag({ help: "Show script version and exit.", setting: "" }),
+    path: Args.custom<string>(
+      {
+        help: "Path to provide information for, for sim and help.",
+        options: [
+          ["smol", "A Shrunken Adventurer am I"],
+          ["casual", "Casual"],
+          ["aftercore", "Aftercore"],
+        ],
+        setting: "",
+      },
+      (value: string) => value.toLowerCase(),
+      "TEXT"
+    ),
+
     major: Args.group("Major Options", {
       pulls: Args.number({
         help: "Number of pulls to use. Lower this if you would like to save some pulls to use for in-ronin farming. (Note that this argument is not needed if you pull all your farming items before running the script).",
@@ -30,14 +44,6 @@ export const args = Args.create(
         help: "Workshed item to place in a workshed to replace the cold medicine cabinet.",
         default: $item`none`,
         options: worksheds,
-      }),
-      goal: Args.string({
-        help: "An aftercore goal to accomplish.",
-        options: [
-          ["level", "Level up to level 13."],
-          ["organ", "Get your steel organ."],
-        ],
-        setting: "",
       }),
     }),
     minor: Args.group("Minor Options", {
@@ -111,7 +117,7 @@ export const args = Args.create(
         help: "Number of apriling band instruments to save (max 2).",
         default: 0,
       }),
-      voterbooth: Args.flag({
+      voterbooth: Args.boolean({
         help: "Attempt to use the voter booth if we have access.",
         default: true,
       }),
@@ -165,6 +171,16 @@ export const args = Args.create(
         default: 10000,
       }),
     }),
+    aftercore: Args.group("Path: Aftercore", {
+      goal: Args.string({
+        help: "An aftercore goal to accomplish.",
+        options: [
+          ["level", "Level up to level 13."],
+          ["organ", "Get your steel organ."],
+        ],
+        setting: "",
+      }),
+    }),
     debug: Args.group("Debug Options", {
       actions: Args.number({
         help: "Maximum number of actions to perform, if given. Can be used to execute just a few steps at a time.",
@@ -214,7 +230,8 @@ export const args = Args.create(
     }),
   },
   {
-    defaultGroupName: "Commands",
+    defaultGroupName: "Information",
+    positionalArgs: ["path"],
   }
 );
 

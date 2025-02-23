@@ -8,7 +8,7 @@ import { SmolPullQuest } from "./pulls";
 import { SmolEngine } from "./engine";
 import { getTasks } from "grimoire-kolmafia";
 
-export class SmolInfo implements PathInfo {
+export class SmolInfo extends PathInfo {
   name(): string {
     return "Shrunken Adventurer";
   }

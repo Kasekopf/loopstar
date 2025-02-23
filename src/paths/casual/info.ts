@@ -8,7 +8,7 @@ import { casualDeltas, OrganQuest } from "./tasks";
 import { CasualDietQuest } from "./diet";
 import { args } from "../../args";
 
-export class CasualInfo implements PathInfo {
+export class CasualInfo extends PathInfo {
   name(): string {
     return "Casual";
   }
