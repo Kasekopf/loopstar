@@ -51,6 +51,7 @@ export function main(command?: string): void {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To list tasks of a specific path, set the "path" arg.`;
     const engine = path.load(basePlan.getTasks());
+    engine.updatePlan();
     listTasks(engine);
     return;
   }
@@ -58,6 +59,7 @@ export function main(command?: string): void {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To allocate tasks of a specific path, set the "path" arg.`;
     const engine = path.load(basePlan.getTasks());
+    engine.updatePlan();
     allocateResources(engine.tasks, true);
     return;
   }

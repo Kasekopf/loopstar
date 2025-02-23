@@ -171,6 +171,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     // Ignore since we printout in execute
   }
 
+  public run(actions?: number): void {
+    this.initPropetiesManagerOnRun();
+    super.run(actions);
+  }
+
   public execute(task: ActiveTask): void {
     debug(``);
     const name = getTaggedName(task);
@@ -680,9 +685,14 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     globalStateCache.invalidate();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   initPropertiesManager(manager: PropertiesManager): void {
-    super.initPropertiesManager(manager);
-    manager.set({
+    // Initialize on engine.run() instead of constructor
+  }
+
+  initPropetiesManagerOnRun(): void {
+    super.initPropertiesManager(this.propertyManager);
+    this.propertyManager.set({
       louvreGoal: 7,
       louvreDesiredGoal: 7,
       requireBoxServants: false,
@@ -711,7 +721,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         ]
       ),
     });
-    manager.setChoices({
+    this.propertyManager.setChoices({
       1106: 3, // Ghost Dog Chow
       1107: 1, // tennis ball
       1340: 3, // Is There A Doctor In The House?
