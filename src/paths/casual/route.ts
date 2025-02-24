@@ -28,7 +28,7 @@ export const casualRoute: string[] = [
   "War/Enrage",
   "War/Flyers Start", // Start the war and get flyers
   "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
-  "Summon/Giant Swarm Of Ghuol Whelps",
+  "Casual/Giant Swarm Of Ghuol Whelps",
 
   // Initial tasks for delay
   "Manor/Kitchen",

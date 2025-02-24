@@ -11,7 +11,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { args } from "../../args";
-import { NamedDeltaTask, Quest, Task } from "../../engine/task";
+import { NamedDeltaTask, Quest } from "../../engine/task";
 import {
   $effect,
   $item,
@@ -92,49 +92,52 @@ export const casualDeltas: NamedDeltaTask[] = [
   },
 ];
 
-export const CasualTasks: Task[] = [
-  getSummonTask({
-    target: $monster`giant swarm of ghuol whelps`,
-    after: ["Crypt/Start"],
-    ready: () => !have($effect`Everything Looks Purple`) && myBasestat($stat`Muscle`) >= 62,
-    completed: () => get("cyrptCrannyEvilness") <= 13,
-    prepare: () => {
-      changeMcd(10);
-      fillHp();
-    },
-    post: () => {
-      if (currentMcd() > 0) changeMcd(0);
-    },
-    outfit: () =>
-      <OutfitSpec>{
-        equip: tryCape(
-          $item`antique machete`,
-          $item`gravy boat`,
-          $item`Roman Candelabra`,
-          $item`unbreakable umbrella`,
-          $item`barrel lid`,
-          $item`carnivorous potted plant`
-        ),
-        modes: { retrocape: ["vampire", "kill"], umbrella: "broken" },
-        skipDefaults: true,
+export const CasualQuest: Quest = {
+  name: "Casual",
+  tasks: [
+    getSummonTask({
+      target: $monster`giant swarm of ghuol whelps`,
+      after: ["Crypt/Start"],
+      ready: () => !have($effect`Everything Looks Purple`) && myBasestat($stat`Muscle`) >= 62,
+      completed: () => get("cyrptCrannyEvilness") <= 13,
+      prepare: () => {
+        changeMcd(10);
+        fillHp();
       },
-    combat: new CombatStrategy()
-      .macro(() => {
-        const macro = Macro.trySkill($skill`Blow the Purple Candle!`).trySkill(
-          $skill`Slay the Dead`
-        );
-        if (have($skill`Garbage Nova`))
-          macro.while_("!mpbelow 50", Macro.skill($skill`Garbage Nova`));
-        if (have($skill`Splattersmash`))
-          macro.while_("!mpbelow 25", Macro.skill($skill`Splattersmash`));
-        if (have($skill`Saucegeyser`))
-          macro.while_("!mpbelow 24", Macro.skill($skill`Saucegeyser`));
-        return macro;
-      })
-      .killHard(),
-    benefit: 2,
-  }),
-];
+      post: () => {
+        if (currentMcd() > 0) changeMcd(0);
+      },
+      outfit: () =>
+        <OutfitSpec>{
+          equip: tryCape(
+            $item`antique machete`,
+            $item`gravy boat`,
+            $item`Roman Candelabra`,
+            $item`unbreakable umbrella`,
+            $item`barrel lid`,
+            $item`carnivorous potted plant`
+          ),
+          modes: { retrocape: ["vampire", "kill"], umbrella: "broken" },
+          skipDefaults: true,
+        },
+      combat: new CombatStrategy()
+        .macro(() => {
+          const macro = Macro.trySkill($skill`Blow the Purple Candle!`).trySkill(
+            $skill`Slay the Dead`
+          );
+          if (have($skill`Garbage Nova`))
+            macro.while_("!mpbelow 50", Macro.skill($skill`Garbage Nova`));
+          if (have($skill`Splattersmash`))
+            macro.while_("!mpbelow 25", Macro.skill($skill`Splattersmash`));
+          if (have($skill`Saucegeyser`))
+            macro.while_("!mpbelow 24", Macro.skill($skill`Saucegeyser`));
+          return macro;
+        })
+        .killHard(),
+      benefit: 2,
+    }),
+  ],
+};
 
 export const OrganQuest: Quest = {
   name: "Organ",
