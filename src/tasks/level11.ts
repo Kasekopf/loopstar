@@ -1,6 +1,6 @@
 import {
-  availableAmount,
   buy,
+  ceil,
   cliExecute,
   haveEquipped,
   itemAmount,
@@ -21,6 +21,7 @@ import {
   $monsters,
   $skill,
   byStat,
+  clamp,
   DaylightShavings,
   ensureEffect,
   get,
@@ -196,7 +197,11 @@ const Desert: Task[] = [
     after: ["Misc/Unlock Beach", "Diary"],
     ready: () => have($item`milestone`),
     completed: () => !have($item`milestone`) || get("desertExploration") >= 100,
-    do: () => use($item`milestone`, availableAmount($item`milestone`)),
+    do: () => {
+      const needed = ceil((100 - get("desertExploration")) / 5);
+      const toUse = clamp(clamp(needed, 0, itemAmount($item`milestone`)), 0, 20);
+      use($item`milestone`, toUse);
+    },
     limit: { tries: 5 }, // 5 to account for max of starting, poke garden & pull
     freeaction: true,
   },

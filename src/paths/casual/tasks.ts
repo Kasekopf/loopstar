@@ -38,6 +38,15 @@ export const casualDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  // Save some additional resources for aftercore
+  {
+    name: "Misc/Eldritch Tentacle",
+    delete: true,
+  },
+  {
+    name: "Misc/LOV Tunnel",
+    delete: true,
+  },
 ];
 
 export const OrganQuest: Quest = {

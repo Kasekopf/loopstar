@@ -90,7 +90,7 @@ export const KnobQuest: Quest = {
     },
     {
       name: "Perfume",
-      after: ["Harem"],
+      after: ["Open Knob", "Harem"],
       completed: () =>
         have($effect`Knob Goblin Perfume`) ||
         have($item`Knob Goblin perfume`) ||
@@ -101,7 +101,7 @@ export const KnobQuest: Quest = {
     },
     {
       name: "King",
-      after: ["Harem", "Perfume"],
+      after: ["Open Knob", "Harem", "Perfume"],
       priority: () => (have($effect`Knob Goblin Perfume`) ? Priorities.Effect : Priorities.None),
       completed: () => step("questL05Goblin") === 999,
       do: $location`Throne Room`,

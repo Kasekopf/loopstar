@@ -498,11 +498,6 @@ export const TowerQuest: Quest = {
           if (myBuffedstat($stat`moxie`) < 1000) ensureEffect($effect`Cock of the Walk`);
           if (myBuffedstat($stat`moxie`) < 1000) ensureEffect($effect`Superhuman Sarcasm`);
           if (myBuffedstat($stat`moxie`) < 1000) ensureEffect($effect`Gr8ness`);
-        } else if (have($item`Drunkula's bell`)) {
-          if (myBuffedstat($stat`mysticality`) < 2700)
-            ensureEffect($effect`On the Shoulders of Giants`);
-          if (myBuffedstat($stat`mysticality`) < 2700) ensureEffect($effect`Mystically Oiled`);
-          if (myBuffedstat($stat`mysticality`) < 2700) ensureEffect($effect`Gr8ness`);
         }
         fillHp();
         customRestoreMp(Math.min(200, myMaxmp()));
@@ -510,9 +505,6 @@ export const TowerQuest: Quest = {
       do: $location`Tower Level 3`,
       outfit: () => {
         if (have($item`electric boning knife`)) return {};
-        if (have($item`Great Wolf's rocket launcher`))
-          return { equip: $items`Great Wolf's rocket launcher`, modifier: "moxie" };
-        if (have($item`Drunkula's bell`)) return { modifier: "myst" };
         if (have($skill`Garbage Nova`))
           return {
             modifier: "spell dmg, myst",
@@ -520,14 +512,15 @@ export const TowerQuest: Quest = {
             modes: { retrocape: ["heck", "kill"] },
             familiar: $familiar`none`, // Familiar actions can cause wall of bones to heal
           };
+        if (have($item`Great Wolf's rocket launcher`))
+          return { equip: $items`Great Wolf's rocket launcher`, modifier: "moxie" };
         return {};
       },
       combat: new CombatStrategy().macro(() => {
         if (have($item`electric boning knife`)) return Macro.item($item`electric boning knife`);
+        if (have($skill`Garbage Nova`)) return Macro.skill($skill`Garbage Nova`).repeat();
         if (haveEquipped($item`Great Wolf's rocket launcher`))
           return Macro.skill($skill`Fire Rocket`);
-        if (have($item`Drunkula's bell`)) return Macro.item($item`Drunkula's bell`);
-        if (have($skill`Garbage Nova`)) return Macro.skill($skill`Garbage Nova`).repeat();
         throw `Unable to find way to kill Wall of Bones`;
       }),
       boss: true,
