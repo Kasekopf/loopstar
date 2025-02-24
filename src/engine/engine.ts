@@ -97,6 +97,7 @@ import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { forceNCPossible, forceNCSources } from "../resources/forcenc";
 import { getActiveBackupTarget } from "../resources/backup";
 import { allocateResources, UNALLOCATED } from "./allocation";
+import { warCleared } from "../tasks/level12";
 
 export type ActiveTask = Task & {
   activePriority?: Prioritization;
@@ -353,14 +354,15 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
       // Set up a free kill if needed, or if no free kills will ever be needed again
       // (after Nuns, when we have expensive buffs running)
-      if (
-        combat.can("killFree") ||
-        ((combat.can("kill") || combat.can("killItem")) &&
-          !task.boss &&
-          this.tasks.every((t) => t.completed() || !t.combat?.can("killFree")) &&
-          get("sidequestNunsCompleted") !== "none")
-      ) {
+      if (combat.can("killFree"))
         resources.provide("killFree", equipFirst(outfit, freekillSources));
+      if (
+        (combat.can("kill") || combat.can("killItem")) &&
+        !task.boss &&
+        this.tasks.every((t) => t.completed() || !t.combat?.can("killFree")) &&
+        (get("sidequestNunsCompleted") !== "none" || warCleared())
+      ) {
+        resources.provide("kill", equipFirst(outfit, freekillSources));
       }
 
       // Use an NC forcer if one is available and another task needs it.

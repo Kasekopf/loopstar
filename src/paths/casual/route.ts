@@ -111,9 +111,9 @@ export const casualRoute: string[] = [
   "Orc Chasm/Finish",
 
   // Finish up with last delay
+  "Digital/Key",
   "Bat/Finish",
   "Knob/King",
-  "Digital/Key",
 
   // Leave open a while for remaining runaways
   "Friar/Finish",
