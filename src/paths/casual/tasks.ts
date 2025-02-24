@@ -28,7 +28,7 @@ export const casualDeltas: NamedDeltaTask[] = [
         delete: true,
       }
   ),
-  // No need for so many nuns buffs
+  // Avoid using some buffs
   {
     name: "War/Nuns",
     replace: {
@@ -36,6 +36,12 @@ export const casualDeltas: NamedDeltaTask[] = [
         if (have($item`SongBoom™ BoomBox`) && get("boomBoxSong") !== "Total Eclipse of Your Meat")
           cliExecute("boombox meat");
       },
+    },
+  },
+  {
+    name: "Tower/Maze",
+    replace: {
+      effects: [],
     },
   },
   // Save some additional resources for aftercore
@@ -46,6 +52,17 @@ export const casualDeltas: NamedDeltaTask[] = [
   {
     name: "Misc/LOV Tunnel",
     delete: true,
+  },
+  {
+    name: "Misc/Shadow Rift",
+    delete: true,
+  },
+  // No need to setup some tasks
+  {
+    name: "Giant/Unlock HITS",
+    replace: {
+      ready: () => false,
+    },
   },
 ];
 

@@ -9,6 +9,7 @@ import { CasualDietQuest } from "./diet";
 import { args } from "../../args";
 import { Requirement } from "../../sim";
 import { $skill, have } from "libram";
+import { casualRoute } from "./route";
 
 export class CasualInfo implements PathInfo {
   name(): string {
@@ -26,13 +27,14 @@ export class CasualInfo implements PathInfo {
   getTasks(tasks: Task[]): Task[] {
     const changedTasks = findAndMerge(tasks, casualDeltas, "Casual");
     const newQuests = [getAcquireQuest(), CasualDietQuest];
-    if (args.casual.steelorgan) newQuests.concat(OrganQuest);
+    if (args.casual.steelorgan) newQuests.push(OrganQuest);
     const newTasks = getTasks(newQuests, false, false);
     return [...newTasks, ...changedTasks];
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoute(route: string[]): string[] {
-    return route;
+    return casualRoute;
   }
 
   getEngine(tasks: Task[]): Engine {

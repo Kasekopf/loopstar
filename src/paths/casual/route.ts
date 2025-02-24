@@ -1,6 +1,4 @@
-export const ROUTE_WAIT_TO_NCFORCE = 55;
-
-export const baseRoute: string[] = [
+export const casualRoute: string[] = [
   // Break pvp stone ASAP
   "Misc/Break Stone",
 
@@ -15,8 +13,6 @@ export const baseRoute: string[] = [
 
   // Level up
   "Leveling/Cloud Talk",
-  "Summon/War Frat 151st Infantryman", // Summon before leaving level 1
-  "Misc/LOV Tunnel",
   "Misc/Daycare",
   "Misc/Bastille",
   "Leveling/Mouthwash",
@@ -26,9 +22,12 @@ export const baseRoute: string[] = [
   "Knob/Start",
   "McLargeHuge/Trapper Request",
 
-  // Unlock island to start YRing
+  // Open the War ASAP for Yellow rays
   "Misc/Unlock Island Submarine",
   "Misc/Unlock Island",
+  "War/Enrage",
+  "War/Flyers Start", // Start the war and get flyers
+  "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
 
   // Initial tasks for delay
   "Manor/Kitchen",
@@ -37,33 +36,10 @@ export const baseRoute: string[] = [
   "Macguffin/Compass", // Unlock desert for ultrahydrated use
   "Manor/Start Floor2",
 
-  // First -combat group
-  "War/Enrage", // Open the War ASAP for Yellow rays
-  "War/Flyers Start", // Start the war and get flyers
-  "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
-  "Giant/Basement Finish", // Nice big delay zone before manor is opened
-  "Crypt/Cranny",
-
-  "Hidden City/Forest Coin", // First to get meat
-  "Hidden City/Forest Map",
-  "Hidden City/Forest Fertilizer",
-  "Hidden City/Forest Sapling", // Last to sell bar skins
-  "Mosquito/Finish",
-
-  // Do summons when ready
-  "Summon/Mountain Man",
-  "Summon/Astrologer Of Shub-Jigguwatt",
-  "Summon/Astronomer",
-  "Summon/Camel's Toe",
-  "Summon/Baa'baa'bu'ran",
-
-  // Start Hidden city
-  "Hidden City/Open Temple",
-  "Hidden City/Open City",
-  "Hidden City/Open Bowling",
-  "Hidden City/Open Office",
-  "Hidden City/Open Hospital",
-  "Hidden City/Open Apartment",
+  // Get and use clovers
+  "Misc/Hermit Clover",
+  "McLargeHuge/Trapper Return",
+  "Palindome/Protesters",
 
   // Setup additional -combats
   "Palindome/Copperhead",
@@ -72,12 +48,31 @@ export const baseRoute: string[] = [
   "Bat/Use Sonar 3", // Reveal more delay
   "Palindome/Cold Snake",
   "McLargeHuge/Climb",
-  "Hidden City/Banish Janitors",
 
-  // Get and use clovers
-  "Misc/Hermit Clover",
-  "McLargeHuge/Trapper Return",
-  "Palindome/Protesters",
+  // -combat tasks
+  "Manor/Gallery",
+  "Manor/Bedroom",
+  "Giant/Basement Finish",
+  "Crypt/Cranny",
+  "Hidden City/Forest Coin", // First to get meat
+  "Hidden City/Forest Map",
+  "Hidden City/Forest Fertilizer",
+  "Hidden City/Forest Sapling", // Last to sell bar skins
+  "Mosquito/Finish",
+  "Manor/Finish Floor2",
+  "Giant/Finish",
+  "Tavern/Finish",
+
+  "McLargeHuge/Finish", // Get Eagle beast banish
+  "Palindome/Talisman",
+  "Palindome/Palindome Dudes", // Use Eagle beast banish
+
+  // Hidden City
+  "Hidden City/Banish Janitors",
+  "Hidden City/Office Files",
+  "Hidden City/Apartment",
+  "Hidden City/Hospital",
+  "Hidden City/Bowling",
 
   // The following 3 tasks should always stay in this order
   "Macguffin/Oasis", // Get ultrahydrated as soon as needed
@@ -85,28 +80,13 @@ export const baseRoute: string[] = [
   "Macguffin/Desert", // charge camel for protestors
 
   // Finish remaining quests
-  "Giant/Unlock HITS",
   "Crypt/Alcove",
-
-  // Hidden City
-  "Hidden City/Office Files", // Banish janitors under delay
-  "Hidden City/Apartment",
-  "Hidden City/Hospital",
-  "Hidden City/Bowling",
-
   "Manor/Boss",
-  "McLargeHuge/Finish", // Get Eagle beast banish
   "Giant/Finish",
-  "Palindome/Talisman",
-  "Palindome/Palindome Dudes", // Use Eagle beast banish
   "Crypt/Niche",
   "War/Junkyard End",
 
-  "Tavern/Finish",
-
   // Setup for +meat/+item set
-  "Digital/Vanya",
-  "Digital/Megalo",
   "Hidden City/Office Boss", // Get Eagle dude banish
   "Macguffin/Upper Chamber",
   "Orc Chasm/Start Peaks",
@@ -114,17 +94,13 @@ export const baseRoute: string[] = [
   "War/Open Nuns",
 
   // Bulk +meat/+item tasks
-  "Misc/Shadow Rift",
-  "Misc/Shadow Lodestone",
   "War/Nuns",
   "Crypt/Nook",
   "Orc Chasm/ABoo Clues",
-  "Digital/Hero",
   "Orc Chasm/Oil Jar",
   "Macguffin/Middle Chamber", // Avoid Eagle beast banish!
   "Orc Chasm/Twin Init Search",
   "Orc Chasm/Twin Init", // Use Eagle dude banish
-  "Digital/Key",
 
   "Keys/Star Key", // Allow for better use of orb
   "Macguffin/Finish",
@@ -136,6 +112,7 @@ export const baseRoute: string[] = [
   "Bat/Finish",
   "Misc/Eldritch Tentacle",
   "Knob/King",
+  "Digital/Key",
 
   // Leave open a while for remaining runaways
   "Friar/Finish",

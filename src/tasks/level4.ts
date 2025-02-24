@@ -43,9 +43,6 @@ export const BatQuest: Quest = {
         if (numericModifier("stench resistance") < 1)
           throw `Unable to ensure stench res for guano junction`;
       },
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
-      },
       outfit: { modifier: "10 stench res", equip: $items`bat wings`, avoid: $items`June cleaver` },
       limit: { tries: 1 },
       freeaction: true,
@@ -60,9 +57,6 @@ export const BatQuest: Quest = {
         if (numericModifier("stench resistance") < 1) ensureEffect($effect`Red Door Syndrome`);
         if (numericModifier("stench resistance") < 1)
           throw `Unable to ensure stench res for guano junction`;
-      },
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
       },
       outfit: { modifier: "10 stench res", equip: $items`bat wings`, avoid: $items`June cleaver` },
       limit: { tries: 1 },
@@ -79,9 +73,6 @@ export const BatQuest: Quest = {
         if (numericModifier("stench resistance") < 1)
           throw `Unable to ensure stench res for guano junction`;
       },
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
-      },
       outfit: { modifier: "10 stench res", equip: $items`bat wings`, avoid: $items`June cleaver` },
       limit: { tries: 1 },
       freeaction: true,
@@ -97,9 +88,6 @@ export const BatQuest: Quest = {
         if (numericModifier("stench resistance") < 1)
           throw `Unable to ensure stench res for guano junction`;
       },
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
-      },
       outfit: { modifier: "10 stench res", equip: $items`bat wings`, avoid: $items`June cleaver` },
       limit: { tries: 1 },
       freeaction: true,
@@ -114,9 +102,6 @@ export const BatQuest: Quest = {
         if (numericModifier("stench resistance") < 1) ensureEffect($effect`Red Door Syndrome`);
         if (numericModifier("stench resistance") < 1)
           throw `Unable to ensure stench res for guano junction`;
-      },
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
       },
       outfit: (): Outfit => {
         if (
@@ -164,9 +149,6 @@ export const BatQuest: Quest = {
           throw `Unable to ensure stench res for guano junction`;
       },
       do: $location`Guano Junction`,
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
-      },
       outfit: { modifier: "item, 10 stench res" },
       combat: new CombatStrategy().kill($monster`screambat`).killItem(),
       limit: { tries: 10 },
@@ -189,9 +171,6 @@ export const BatQuest: Quest = {
           throw `Unable to ensure stench res for guano junction`;
       },
       do: $location`Guano Junction`,
-      post: () => {
-        if (have($item`sonar-in-a-biscuit`)) use($item`sonar-in-a-biscuit`);
-      },
       outfit: { modifier: "item, 10 stench res" },
       combat: new CombatStrategy().kill($monster`screambat`).killItem(),
       limit: { tries: 10 },

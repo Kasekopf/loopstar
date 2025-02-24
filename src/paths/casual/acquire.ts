@@ -422,6 +422,11 @@ const acquireSpecs: AcquireSpec[] = [
     },
     price: Prices.Permanent,
   },
+  {
+    what: $item`shadow brick`,
+    needed: () => clamp(13 - get("_shadowBricksUsed"), 0, 13),
+    price: Prices.Adventure,
+  },
 ];
 
 export function getAcquireQuest(): Quest {

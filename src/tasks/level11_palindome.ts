@@ -30,7 +30,7 @@ import {
 } from "libram";
 import { Quest, Resources, Task } from "../engine/task";
 import { OutfitSpec, step } from "grimoire-kolmafia";
-import { CombatStrategy, killMacro } from "../engine/combat";
+import { CombatStrategy } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
 import { tuneSnapper } from "../lib";
@@ -89,50 +89,33 @@ const Copperhead: Task[] = [
     limit: { tries: 30 }, // Extra waiter disguise adventures
   },
   {
-    name: "Bat Snake",
+    name: "Bat Snake Sonar",
     after: ["Copperhead Start", "Bat/Use Sonar 1"],
     ready: () => shenItem($item`The Stankara Stone`),
-    priority: () => {
-      const jar_needed =
-        !have($item`killing jar`) &&
-        !have($familiar`Melodramedary`) &&
-        (get("gnasirProgress") & 4) === 0 &&
-        get("desertExploration") < 100;
-      if (
-        jar_needed &&
-        get("lastEncounter") === "banshee librarian" &&
-        have($skill`Emotionally Chipped`) &&
-        get("_feelEnvyUsed") < 3 &&
-        get("_feelNostalgicUsed") < 3
-      )
-        return Priorities.GoodFeelNostalgia;
-      else return Priorities.None;
-    },
+    completed: () =>
+      step("questL11Shen") === 999 ||
+      have($item`The Stankara Stone`) ||
+      (myDaycount() === 1 && step("questL11Shen") > 1) ||
+      step("questL04Bat") >= 3,
+    do: $location`The Batrat and Ratbat Burrow`,
+    combat: new CombatStrategy().killHard($monster`Batsnake`).killItem(),
+    outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
+    limit: { soft: 10 },
+    orbtargets: () => [],
+  },
+  {
+    name: "Bat Snake",
+    after: ["Copperhead Start", "Bat/Use Sonar 1", "Bat Snake Sonar"],
+    ready: () => shenItem($item`The Stankara Stone`),
     completed: () =>
       step("questL11Shen") === 999 ||
       have($item`The Stankara Stone`) ||
       (myDaycount() === 1 && step("questL11Shen") > 1),
     do: $location`The Batrat and Ratbat Burrow`,
-    combat: new CombatStrategy()
-      .macro(() => {
-        const jar_needed =
-          !have($item`killing jar`) &&
-          !have($familiar`Melodramedary`) &&
-          (get("gnasirProgress") & 4) === 0 &&
-          get("desertExploration") < 100;
-        if (jar_needed && get("lastEncounter") === "banshee librarian") {
-          return Macro.trySkill($skill`Feel Nostalgic`)
-            .trySkill($skill`Feel Envy`)
-            .step(killMacro());
-        }
-        return new Macro();
-      }, $monsters`batrat, ratbat`)
-      .killHard($monster`Batsnake`)
-      .killItem(),
-    outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
+    combat: new CombatStrategy().killHard($monster`Batsnake`),
     limit: { soft: 10 },
     orbtargets: () => [],
-    delay: () => (step("questL04Bat") >= 3 ? 5 : 0),
+    delay: () => 5,
   },
   {
     name: "Cold Snake",

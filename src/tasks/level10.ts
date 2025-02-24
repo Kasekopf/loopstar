@@ -79,8 +79,17 @@ export const GiantQuest: Quest = {
         }
       },
       limit: { soft: 50 },
-      delay: () =>
-        have($item`Plastic Wrap Immateria`) ? 25 : have($item`Gauze Immateria`) ? 20 : 15, // After that, just look for noncombats
+      delay: () => {
+        if (have($item`bat wings`)) {
+          if (have($item`Plastic Wrap Immateria`)) return 20;
+          if (have($item`Gauze Immateria`)) return 16;
+          return 12;
+        } else {
+          if (have($item`Plastic Wrap Immateria`)) return 25;
+          if (have($item`Gauze Immateria`)) return 20;
+          return 15;
+        }
+      },
       outfit: () => {
         if (forceItemPossible()) return { modifier: "-combat", equip: $items`bat wings` };
         else
@@ -115,8 +124,17 @@ export const GiantQuest: Quest = {
       orbtargets: () => [],
       outfit: { modifier: "-combat", equip: $items`bat wings` },
       limit: { soft: 50 },
-      delay: () =>
-        have($item`Plastic Wrap Immateria`) ? 25 : have($item`Gauze Immateria`) ? 20 : 15, // After that, just look for noncombats
+      delay: () => {
+        if (have($item`bat wings`)) {
+          if (have($item`Plastic Wrap Immateria`)) return 20;
+          if (have($item`Gauze Immateria`)) return 16;
+          return 12;
+        } else {
+          if (have($item`Plastic Wrap Immateria`)) return 25;
+          if (have($item`Gauze Immateria`)) return 20;
+          return 15;
+        }
+      },
       combat: new CombatStrategy().macro(
         () =>
           have($item`Mohawk wig`) || !have($skill`Emotionally Chipped`) || get("_feelEnvyUsed") >= 3

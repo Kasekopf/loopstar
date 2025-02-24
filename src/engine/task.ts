@@ -28,6 +28,7 @@ export type Task = {
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
   resources?: Delayed<ResourceRequest | undefined>;
   tags?: string[];
+  ignoremonsters?: () => Monster[]; // Extra monsters to ignore on the combat strategy
 
   // The monsters to search for with orb.
   // In addition, absorb targets are always searched with the orb.

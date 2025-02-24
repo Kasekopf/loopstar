@@ -173,6 +173,7 @@ export class Prioritization {
       $location`The Hidden Temple`,
       $location`The Oasis`,
       $location`Lair of the Ninja Snowmen`,
+      $location`A-Boo Peak`,
     ];
     const location_whitelist = [
       $location`The Haunted Bathroom`,
@@ -191,7 +192,8 @@ export class Prioritization {
           !task.freecombat &&
           ball_useful &&
           !ball_may_not_be_useful &&
-          !location_in_blacklist)
+          !location_in_blacklist &&
+          !task.tags?.includes("NCForce"))
       ) {
         result.priorities.add(Priorities.CosmicBowlingBall);
       }

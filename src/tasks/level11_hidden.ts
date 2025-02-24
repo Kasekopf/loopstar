@@ -371,9 +371,15 @@ const Hospital: Task[] = [
     freecombat: true,
   },
   {
-    name: "Hospital",
+    name: "Hospital Equipment",
     after: ["Open Hospital", "Banish Janitors"],
-    completed: () => get("hiddenHospitalProgress") >= 7,
+    completed: () =>
+      get("hiddenHospitalProgress") >= 7 ||
+      (have($item`half-size scalpel`) &&
+        have($item`head mirror`) &&
+        have($item`surgical mask`) &&
+        have($item`half-size scalpel`) &&
+        have($item`bloodied surgical dungarees`)),
     do: $location`The Hidden Hospital`,
     combat: new CombatStrategy()
       .startingMacro(Macro.trySkill($skill`%fn, let's pledge allegiance to a Zone`))
@@ -381,6 +387,28 @@ const Hospital: Task[] = [
       .kill($monster`pygmy witch surgeon`)
       .banish($monster`pygmy janitor`)
       .banish($monsters`pygmy orderlies, pygmy witch nurse`),
+    outfit: () => {
+      const result = <OutfitSpec>{
+        shirt: have($skill`Torso Awareness`) ? $item`surgical apron` : undefined,
+        equip: $items`half-size scalpel, head mirror, surgical mask, bloodied surgical dungarees`,
+      };
+      if (!have($effect`Citizen of a Zone`) && have($familiar`Patriotic Eagle`)) {
+        result.familiar = $familiar`Patriotic Eagle`;
+      }
+      return result;
+    },
+    choices: { 784: 1 },
+    limit: { soft: 20 },
+  },
+  {
+    name: "Hospital",
+    after: ["Open Hospital", "Banish Janitors", "Hospital Equipment"],
+    completed: () => get("hiddenHospitalProgress") >= 7,
+    do: $location`The Hidden Hospital`,
+    combat: new CombatStrategy()
+      .startingMacro(Macro.trySkill($skill`%fn, let's pledge allegiance to a Zone`))
+      .killHard($monster`ancient protector spirit (The Hidden Hospital)`)
+      .ignore(),
     outfit: () => {
       const result = <OutfitSpec>{
         shirt: have($skill`Torso Awareness`) ? $item`surgical apron` : undefined,

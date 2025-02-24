@@ -108,7 +108,6 @@ export const KnobQuest: Quest = {
       combat: new CombatStrategy().killHard($monster`Knob Goblin King`),
       outfit: {
         equip: $items`Knob Goblin harem veil, Knob Goblin harem pants`,
-        modifier: "moxie, -10ML",
       },
       effects: $effects`Knob Goblin Perfume`,
       limit: { tries: 1 },

@@ -2,12 +2,15 @@ import {
   changeMcd,
   create,
   currentMcd,
+  floor,
+  haveEquipped,
   inCasual,
   myDaycount,
   myInebriety,
   myLevel,
   numericModifier,
   restoreMp,
+  squareRoot,
   use,
   visitUrl,
 } from "kolmafia";
@@ -27,8 +30,9 @@ import {
   getActiveEffects,
   have,
   Macro,
+  sumNumbers,
 } from "libram";
-import { Quest, Task } from "../engine/task";
+import { Quest, Resources, Task } from "../engine/task";
 import { Modes, OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { Priorities } from "../engine/priority";
@@ -60,18 +64,52 @@ const Manor1: Task[] = [
         ? Priorities.Effect
         : Priorities.None,
     prepare: () => {
-      if (have($item`handful of hand chalk`) && have($item`pool cue`))
+      const poolSkill = sumNumbers([
+        floor(2 * squareRoot(get("poolSharkCount"))),
+        myInebriety() >= 10 ? myInebriety() : 20 - 2 * myInebriety(),
+        haveEquipped($item`government-issued eyeshade`) ? 5 : 0,
+        have($effect`Chalky Hand`) ? 3 : 0,
+        have($effect`Video... Games?`) ? 5 : 0,
+        have($effect`Influence of Sphere`) ? 5 : 0,
+      ]);
+      if (
+        poolSkill <= 18 &&
+        have($item`handful of hand chalk`) &&
+        (have($item`pool cue`) || have($skill`Comprehensive Cartography`))
+      )
         ensureEffect($effect`Chalky Hand`);
       tryPlayApriling("-combat");
     },
     ready: () => myInebriety() >= 1 || (inCasual() && args.casual.liver === 0) || myDaycount() > 1,
     do: $location`The Haunted Billiards Room`,
-    choices: { 875: 1, 900: 2, 1436: 1 },
+    choices: () => {
+      const poolSkill = sumNumbers([
+        floor(2 * squareRoot(get("poolSharkCount"))),
+        myInebriety() >= 10 ? myInebriety() : 20 - 2 * myInebriety(),
+        haveEquipped($item`government-issued eyeshade`) ? 5 : 0,
+        have($effect`Chalky Hand`) ? 3 : 0,
+        have($effect`Video... Games?`) ? 5 : 0,
+        have($effect`Influence of Sphere`) ? 5 : 0,
+      ]);
+      return { 875: 1, 900: 2, 1436: poolSkill >= 18 ? 2 : 1 };
+    },
     outfit: () => {
+      const equip = [];
+      if (myInebriety() < 8 || myInebriety() >= 11) {
+        equip.push($item`government-issued eyeshade`);
+      }
       return {
-        equip: $items`pool cue`,
+        equip: equip,
         modifier: "-combat",
       };
+    },
+    resources: () => {
+      if (have($skill`Comprehensive Cartography`) && myInebriety() >= 8 && myInebriety() < 11)
+        return {
+          which: Resources.NCForce,
+          benefit: 1 / 0.55,
+        };
+      return undefined;
     },
     combat: new CombatStrategy()
       .ignore()
