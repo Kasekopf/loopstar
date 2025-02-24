@@ -117,6 +117,7 @@ export const CasualQuest: Quest = {
             $item`barrel lid`,
             $item`carnivorous potted plant`
           ),
+          modifier: "ML",
           modes: { retrocape: ["vampire", "kill"], umbrella: "broken" },
           skipDefaults: true,
         },
