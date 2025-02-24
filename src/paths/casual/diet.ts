@@ -105,7 +105,7 @@ export const CasualDietQuest: Quest = {
     {
       name: "Sausage",
       after: ["Consume"],
-      completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23, // Cap at 23 sausages to avoid burning through an entire supply
+      completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
       ready: () => have($item`magical sausage casing`),
       do: (): void => {
         // Pump-and-grind cannot be used from Left-Hand Man
@@ -116,7 +116,12 @@ export const CasualDietQuest: Quest = {
           useFamiliar($familiar`Left-Hand Man`);
           equip($slot`familiar`, $item`none`);
         }
-        eat(1, $item`magical sausage`);
+        const toEat = clamp(
+          itemAmount($item`magical sausage casing`),
+          0,
+          23 - get("_sausagesEaten")
+        );
+        eat(toEat, $item`magical sausage`);
       },
       limit: { tries: 23 },
       freeaction: true,
