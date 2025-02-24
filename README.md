@@ -114,8 +114,8 @@ Path: Casual:
   spleen NUMBER - Amount of spleen to fill. [default: 5] [setting: loopstar_spleen]
   voa NUMBER - Value of an adventure, in meat [default: 6500] [setting: valueOfAdventure]
   milestoneprice NUMBER - Skip the desert with milestones, when their price is cheaper than this. [default: 0] [setting: loopstar_milestoneprice]
-  usedprice NUMBER - Maximum price to pay for items to be used up during the run. [default: 1000] [setting: loopstar_usedprice]
-  equipprice NUMBER - Maximum price to pay for equipment or items that will not be used up. [default: 10000] [setting: loopstar_equipprice]
+  usedprice NUMBER - Maximum price to pay for items to be used up during the run. [default: 10000] [setting: loopstar_usedprice]
+  equipprice NUMBER - Maximum price to pay for equipment or items that will not be used up. [default: 50000] [setting: loopstar_equipprice]
 
 Path: Aftercore:
   goal TEXT - An aftercore goal to accomplish.

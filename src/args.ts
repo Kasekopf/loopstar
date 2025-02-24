@@ -179,11 +179,11 @@ export const args = Args.create(
       }),
       usedprice: Args.number({
         help: "Maximum price to pay for items to be used up during the run.",
-        default: 1000,
+        default: 10000,
       }),
       equipprice: Args.number({
         help: "Maximum price to pay for equipment or items that will not be used up.",
-        default: 10000,
+        default: 50000,
       }),
     }),
     aftercore: Args.group("Path: Aftercore", {

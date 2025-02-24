@@ -438,8 +438,8 @@ export function getAcquireQuest(): Quest {
             const needed = a.needed() - itemAmount(a.what) - equippedAmount(a.what);
             if (needed <= 0) return;
             const maxPrice = realizePrice(a.price);
-            withProperty("autoBuyPriceLimit", maxPrice, () => retrieveItem(a.what, needed));
-            if (!retrieveItem(a.what, needed)) {
+            const obtained = withProperty("autoBuyPriceLimit", maxPrice, () => retrieveItem(a.what, needed));
+            if (!obtained) {
               debug(
                 `Unable to acquire ${a.what} at ${maxPrice} (cost per: ${retrievePrice(a.what)})`
               );
