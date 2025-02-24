@@ -6,6 +6,7 @@ import {
   equippedItem,
   getInventory,
   getWorkshed,
+  inCasual,
   Item,
   itemAmount,
   mpCost,
@@ -99,10 +100,11 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
   // or if we have an effect to override the 1 attribute cap,
   // +%stat effects may be worthwhile.
   if (
-    myPath() !== $path`A Shrunken Adventurer am I` ||
-    have($effect`Feeling Insignificant`) ||
-    have($effect`Drenched in Lava`) ||
-    have($effect`Snowballed`)
+    !inCasual() &&
+    (myPath() !== $path`A Shrunken Adventurer am I` ||
+      have($effect`Feeling Insignificant`) ||
+      have($effect`Drenched in Lava`) ||
+      have($effect`Snowballed`))
   ) {
     // Add sauce potions
     const saucePotionsAvailable = Math.min(
