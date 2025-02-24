@@ -125,7 +125,7 @@ const Manor1: Task[] = [
     after: ["Billiards"],
     completed: () => step("questM20Necklace") >= 4,
     do: $location`The Haunted Library`,
-    combat: new CombatStrategy().banish($monsters`banshee librarian, bookbat`).kill(),
+    combat: new CombatStrategy().banish($monsters`banshee librarian, bookbat`).killHard(),
     outfit: { equip: $items`deft pirate hook` },
     orbtargets: () => undefined, // do not dodge anything with orb
     choices: { 163: 4, 888: 5, 889: 5, 894: 1 },
