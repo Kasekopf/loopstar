@@ -376,7 +376,8 @@ export const ChasmQuest: Quest = {
       },
       do: $location`The Smut Orc Logging Camp`,
       post: (): void => {
-        if (have($item`smut orc keepsake box`)) use($item`smut orc keepsake box`);
+        if (have($item`smut orc keepsake box`) && get("lastEncounter") === "smut orc pervert")
+          use($item`smut orc keepsake box`);
         visitUrl(`place.php?whichplace=orc_chasm&action=bridge${get("chasmBridgeProgress")}`); // use existing materials
       },
       outfit: () => {

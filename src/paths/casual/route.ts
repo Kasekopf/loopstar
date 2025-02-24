@@ -111,7 +111,6 @@ export const casualRoute: string[] = [
 
   // Finish up with last delay
   "Bat/Finish",
-  "Misc/Eldritch Tentacle",
   "Knob/King",
   "Digital/Key",
 
