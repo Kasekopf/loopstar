@@ -65,17 +65,10 @@ const Alcove: Task[] = [
     after: ["Start"],
     prepare: () => {
       tuneCape();
-      if (haveLoathingIdolMicrophone()) ensureEffect($effect`Poppy Performance`);
-      if (have($item`old bronzer`)) ensureEffect($effect`Sepia Tan`);
-      if (have($item`ant agonist`)) ensureEffect($effect`All Fired Up`);
-      if (have($item`Angry Farmer candy`)) ensureEffect($effect`Sugar Rush`);
-
       if (numericModifier("Initiative") < 850 && have($skill`Silent Hunter`)) {
         if (myClass() === $class`Seal Clubber`) ensureWithMPSwaps($effects`Silent Hunting`);
         else ensureWithMPSwaps($effects`Nearly Silent Hunting`);
       }
-      tryPlayApriling("-combat");
-
       if (
         have($item`designer sweatpants`) &&
         get("sweat", 0) >= 90 &&
@@ -84,6 +77,17 @@ const Alcove: Task[] = [
         // Use visit URL to avoid needing to equip the pants
         visitUrl("runskillz.php?action=Skillz&whichskill=7419&targetplayer=0&pwd&quantity=1");
       }
+
+      if (numericModifier("Initiative") < 850 && have($item`old bronzer`))
+        ensureEffect($effect`Sepia Tan`);
+      if (numericModifier("Initiative") < 850 && have($item`ant agonist`))
+        ensureEffect($effect`All Fired Up`);
+      if (numericModifier("Initiative") < 850 && have($item`Angry Farmer candy`))
+        ensureEffect($effect`Sugar Rush`);
+      if (numericModifier("Initiative") < 850 && haveLoathingIdolMicrophone())
+        ensureEffect($effect`Poppy Performance`);
+
+      if (numericModifier("Initiative") < 850) tryPlayApriling("-combat");
     },
     ready: () => myBasestat($stat`Muscle`) >= 62,
     completed: () => get("cyrptAlcoveEvilness") <= 13,

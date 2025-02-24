@@ -94,7 +94,7 @@ export const CasualTasks: Task[] = [
   getSummonTask({
     target: $monster`giant swarm of ghuol whelps`,
     after: ["Crypt/Start"],
-    ready: () => !have($effect`Everything Looks Purple`),
+    ready: () => !have($effect`Everything Looks Purple`) && myBasestat($stat`Muscle`) >= 62,
     completed: () => get("cyrptCrannyEvilness") <= 13,
     prepare: () => {
       changeMcd(10);
