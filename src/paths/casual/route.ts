@@ -33,8 +33,8 @@ export const casualRoute: string[] = [
   // Initial tasks for delay
   "Manor/Kitchen",
   "Macguffin/Forest", // Start before -combat buffs
+  "Macguffin/Milestone", // If we are using them
   "Mosquito/Burn Delay",
-  "Macguffin/Compass", // Unlock desert for ultrahydrated use
   "Manor/Start Floor2",
 
   // Get and use clovers
@@ -76,6 +76,7 @@ export const casualRoute: string[] = [
   "Hidden City/Bowling",
 
   // The following 3 tasks should always stay in this order
+  "Macguffin/Compass", // Unlock desert for ultrahydrated use
   "Macguffin/Oasis", // Get ultrahydrated as soon as needed
   "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
   "Macguffin/Desert", // charge camel for protestors
