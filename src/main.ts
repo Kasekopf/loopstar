@@ -90,7 +90,7 @@ export function main(command?: string): void {
 
   // Load the engine for this path
   const path = getActivePath();
-  if (step("questL13Final") > 11 && !args.aftercore.goal) {
+  if (step("questL13Final") === 999 && !args.aftercore.goal) {
     debug("");
     debug(
       'This script is designed to be run while inside of a run, but your run is complete! Run "loopstar help" for script options.'
