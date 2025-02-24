@@ -927,6 +927,9 @@ export const MiscQuest: Quest = {
         !have($item`2002 Mr. Store Catalog`) ||
         (get("availableMrStore2002Credits") === 0 && get("_2002MrStoreCreditsCollected")),
       do: () => {
+        if (!get("_2002MrStoreCreditsCollected")) {
+          use($item`2002 Mr. Store Catalog`);
+        }
         if (!haveLoathingIdolMicrophone()) {
           buy($coinmaster`Mr. Store 2002`, 1, $item`Loathing Idol Microphone`);
         }
