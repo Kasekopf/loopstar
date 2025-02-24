@@ -1,12 +1,13 @@
-import { drink, Item, itemAmount, mallPrice, toInt, visitUrl } from "kolmafia";
+import { cliExecute, drink, Item, itemAmount, mallPrice, toInt, visitUrl } from "kolmafia";
 import { args } from "../../args";
 import { NamedDeltaTask, Quest } from "../../engine/task";
-import { $item, $items, $location, $monsters, $skill, have } from "libram";
+import { $item, $items, $location, $monsters, $skill, get, have } from "libram";
 import { PullQuest } from "../../tasks/pulls";
 import { step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../../engine/combat";
 
 export const casualDeltas: NamedDeltaTask[] = [
+  // Use as many milestones as permitted by price
   {
     name: "Macguffin/Milestone",
     combine: {
@@ -19,6 +20,7 @@ export const casualDeltas: NamedDeltaTask[] = [
       limit: { tries: 20 },
     },
   },
+  // Do not worry about pulling anything
   ...PullQuest.tasks.map(
     (t) =>
       <NamedDeltaTask>{
@@ -26,6 +28,16 @@ export const casualDeltas: NamedDeltaTask[] = [
         delete: true,
       }
   ),
+  // No need for so many nuns buffs
+  {
+    name: "War/Nuns",
+    replace: {
+      prepare: () => {
+        if (have($item`SongBoom™ BoomBox`) && get("boomBoxSong") !== "Total Eclipse of Your Meat")
+          cliExecute("boombox meat");
+      },
+    },
+  },
 ];
 
 export const OrganQuest: Quest = {
