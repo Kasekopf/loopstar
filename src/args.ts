@@ -174,7 +174,7 @@ export const args = Args.create(
         default: 6500,
       }),
       milestoneprice: Args.number({
-        help: "Skip the desert with milestones, when their price is cheaper than this.",
+        help: "Skip the desert with milestones, when their price is cheaper than this (0 to always do desert).",
         default: 0,
       }),
       usedprice: Args.number({

@@ -12,7 +12,6 @@ import {
   Item,
   itemAmount,
   weaponHands as mafiaWeaponHands,
-  myBasestat,
   myMeat,
   myTurncount,
   numericModifier,
@@ -32,7 +31,6 @@ import {
   $skill,
   $slot,
   $slots,
-  $stat,
   clamp,
   DaylightShavings,
   get,
@@ -326,13 +324,6 @@ export function equipDefaults(outfit: Outfit, noFightingFamiliars: boolean): voi
 
   outfit.equip($item`mafia thumb ring`);
   if (atLevel(11)) outfit.equip($item`lucky gold ring`);
-
-  if (myBasestat($stat`moxie`) <= 200) {
-    // Equip some extra equipment for early survivability
-    outfit.equip($item`plastic vampire fangs`);
-    outfit.equip($item`warbear goggles`);
-    outfit.equip($item`burning paper slippers`);
-  }
 
   if (get("sweat") < 15) outfit.equip($item`designer sweatpants`);
 

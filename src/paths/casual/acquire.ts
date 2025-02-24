@@ -1,7 +1,7 @@
 import { step } from "grimoire-kolmafia";
 import {
+  ceil,
   equippedAmount,
-  floor,
   hippyStoneBroken,
   Item,
   itemAmount,
@@ -277,7 +277,7 @@ const acquireSpecs: AcquireSpec[] = [
     what: $item`milestone`,
     needed: () => {
       if (args.casual.milestoneprice === 0) return 0;
-      return floor(get("desertExploration") / 5);
+      return ceil((100 - get("desertExploration")) / 5);
     },
     price: () => args.casual.milestoneprice,
   },
@@ -438,7 +438,9 @@ export function getAcquireQuest(): Quest {
             const needed = a.needed() - itemAmount(a.what) - equippedAmount(a.what);
             if (needed <= 0) return;
             const maxPrice = realizePrice(a.price);
-            const obtained = withProperty("autoBuyPriceLimit", maxPrice, () => retrieveItem(a.what, needed));
+            const obtained = withProperty("autoBuyPriceLimit", maxPrice, () =>
+              retrieveItem(a.what, needed)
+            );
             if (!obtained) {
               debug(
                 `Unable to acquire ${a.what} at ${maxPrice} (cost per: ${retrievePrice(a.what)})`

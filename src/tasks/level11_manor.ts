@@ -2,6 +2,7 @@ import {
   changeMcd,
   create,
   currentMcd,
+  inCasual,
   myDaycount,
   myInebriety,
   myLevel,
@@ -33,6 +34,7 @@ import { CombatStrategy, killMacro } from "../engine/combat";
 import { Priorities } from "../engine/priority";
 import { tuneSnapper } from "../lib";
 import { tryPlayApriling } from "../lib";
+import { args } from "../args";
 
 const Manor1: Task[] = [
   {
@@ -62,7 +64,7 @@ const Manor1: Task[] = [
         ensureEffect($effect`Chalky Hand`);
       tryPlayApriling("-combat");
     },
-    ready: () => myInebriety() <= 15 && (myInebriety() === 1 || myDaycount() > 1), // Nonnegative contribution
+    ready: () => myInebriety() >= 1 || (inCasual() && args.casual.liver === 0) || myDaycount() > 1,
     do: $location`The Haunted Billiards Room`,
     choices: { 875: 1, 900: 2, 1436: 1 },
     outfit: () => {

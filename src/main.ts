@@ -71,14 +71,14 @@ export function main(command?: string): void {
     // Verify that all paths / goals can be loaded without exceptions
     for (const path of allPaths()) {
       debug(`Path ${path.name()}:`);
-      path.finished();  // Check this returns
+      path.finished(); // Check this returns
       const engine = loadEngine(path);
       debug(`- Loaded ${engine.tasks.length} tasks`);
     }
     const aftercore = new AftercoreInfo();
     for (const goal of ["level", "organ"]) {
       debug(`Goal ${goal}:`);
-      aftercore.finished(goal);  // Check this returns
+      aftercore.finished(goal); // Check this returns
       const engine = aftercore.getEngine(aftercore.getTasks(getAllTasks(), goal));
       debug(`- Loaded ${engine.tasks.length} tasks`);
     }

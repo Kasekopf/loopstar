@@ -1,5 +1,4 @@
 import {
-  canEquip,
   cliExecute,
   create,
   haveEquipped,
@@ -268,10 +267,9 @@ const Zepplin: Task[] = [
     name: "Protesters",
     after: ["Protesters Start", "Misc/Hermit Clover", "McLargeHuge/Clover Ore"],
     ready: () =>
-      canEquip($item`transparent pants`) &&
-      (itemAmount($item`11-leaf clover`) > cloversToSave() ||
-        have($item`Flamin' Whatshisname`) ||
-        step("questL11Shen") === 999),
+      itemAmount($item`11-leaf clover`) > cloversToSave() ||
+      have($item`Flamin' Whatshisname`) ||
+      step("questL11Shen") === 999,
     prepare: () => {
       if (have($item`lynyrd musk`)) ensureEffect($effect`Musky`);
       if (
