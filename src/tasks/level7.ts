@@ -49,7 +49,7 @@ function tuneCape(): void {
   }
 }
 
-function tryCape(sword: Item, ...rest: Item[]) {
+export function tryCape(sword: Item, ...rest: Item[]) {
   if (have($item`unwrapped knock-off retro superhero cape`)) {
     rest.unshift($item`unwrapped knock-off retro superhero cape`);
     rest.unshift(sword);
