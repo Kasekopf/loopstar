@@ -53,14 +53,15 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`Mmm-brr! brand mouthwash`,
     needed: () => {
+      if (atLevel(12)) return 0;
+      if (args.resources.saveember >= 6) return 3;
       if (
         have($item`Sept-Ember Censer`) &&
-        (get("availableSeptEmbers") >= 2 || !get("_septEmbersCollected", false)) &&
-        !args.resources.saveember
+        (get("availableSeptEmbers") - args.resources.saveember >= 2 ||
+          !get("_septEmbersCollected", false))
       ) {
         return 0;
       }
-      if (atLevel(12)) return 0;
       return 3;
     },
     price: Prices.Used,

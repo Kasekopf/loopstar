@@ -6,6 +6,7 @@ import {
   Item,
   itemAmount,
   mallPrice,
+  myBasestat,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -19,6 +20,7 @@ import {
   $monster,
   $monsters,
   $skill,
+  $stat,
   get,
   have,
   Macro,

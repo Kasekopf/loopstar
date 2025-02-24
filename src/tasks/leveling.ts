@@ -72,16 +72,13 @@ export const LevelingQuest: Quest = {
       completed: () => !have($item`Mmm-brr! brand mouthwash`) || atLevel(12),
       do: () => {
         // Use potions for cold resistance
-        if (have($item`rainbow glitter candle`)) use($item`rainbow glitter candle`);
-        if (have($item`pec oil`)) use($item`pec oil`);
+        if (have($item`rainbow glitter candle`)) ensureEffect($effect`Covered in the Rainbow`);
+        if (have($item`pec oil`)) ensureEffect($effect`Oiled-Up`);
         if (have($skill`Emotionally Chipped`) && get("_feelPeacefulUsed") < 3)
           ensureEffect($effect`Feeling Peaceful`);
         if (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
         if (have($item`scroll of Protection from Bad Stuff`))
-          use($item`scroll of Protection from Bad Stuff`);
-        if (have($item`bottle of antifreeze`)) use($item`bottle of antifreeze`);
-        if (have($item`recording of Rolando's Rondo of Resisto`))
-          use($item`recording of Rolando's Rondo of Resisto`);
+          ensureEffect($effect`Protection from Bad Stuff`);
         if (have($item`saucepan`) && have($skill`Scarysauce`)) ensureEffect($effect`Scarysauce`);
 
         use($item`Mmm-brr! brand mouthwash`);
