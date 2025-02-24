@@ -51,7 +51,7 @@ const Diary: Task[] = [
       if (have($effect`Really Quite Poisoned`)) uneffect($effect`Really Quite Poisoned`);
     },
     outfit: () => {
-      const equip = [$item`blackberry galoshes`];
+      const equip = [$item`blackberry galoshes`, $item`Everfull Dart Holster`];
       if (have($item`latte lovers member's mug`) && !get("latteUnlocks").includes("cajun")) {
         equip.push($item`latte lovers member's mug`);
       }
