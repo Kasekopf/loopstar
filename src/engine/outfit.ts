@@ -13,6 +13,7 @@ import {
   itemAmount,
   weaponHands as mafiaWeaponHands,
   myMeat,
+  myPath,
   myTurncount,
   numericModifier,
   outfitPieces,
@@ -28,6 +29,7 @@ import {
   $familiars,
   $item,
   $items,
+  $path,
   $skill,
   $slot,
   $slots,
@@ -328,14 +330,7 @@ export function equipDefaults(outfit: Outfit, noFightingFamiliars: boolean): voi
   if (get("sweat") < 15) outfit.equip($item`designer sweatpants`);
 
   if (
-    !have($item`Jurassic Parka`) ||
-    !have($skill`Torso Awareness`) ||
-    (!modifier.includes("-combat") && !modifier.includes("meat") && !modifier.includes("ML"))
-  ) {
-    outfit.equip($item`sea salt scrubs`);
-  }
-  if (
-    (outfit.haveEquipped($item`sea salt scrubs`) || outfit.haveEquipped($item`Jurassic Parka`)) &&
+    outfit.haveEquipped($item`Jurassic Parka`) &&
     myTurncount() > 10 &&
     DaylightShavings.buffAvailable() &&
     DaylightShavings.nextBuff() !== $effect`Gull-Wing Moustache` &&
@@ -343,9 +338,19 @@ export function equipDefaults(outfit: Outfit, noFightingFamiliars: boolean): voi
   ) {
     outfit.equip($item`Daylight Shavings Helmet`);
   }
-  if (!modifier.includes("+combat") && !modifier.includes(" combat")) {
-    // Allow for sombrero-mounted sparkler
-    outfit.equip($item`nurse's hat`);
+
+  if (myPath() === $path`A Shrunken Adventurer am I`) {
+    if (
+      !have($item`Jurassic Parka`) ||
+      (!modifier.includes("-combat") && !modifier.includes("meat") && !modifier.includes("ML"))
+    ) {
+      outfit.equip($item`sea salt scrubs`);
+    }
+
+    if (!modifier.includes("+combat") && !modifier.includes(" combat")) {
+      // Allow for sombrero-mounted sparkler
+      outfit.equip($item`nurse's hat`);
+    }
   }
 
   if (modifier.length === 0) {
