@@ -34,7 +34,7 @@ import {
 } from "libram";
 import { Quest, Resources, Task } from "../engine/task";
 import { Modes, OutfitSpec, step } from "grimoire-kolmafia";
-import { CombatStrategy, killMacro } from "../engine/combat";
+import { CombatStrategy } from "../engine/combat";
 import { Priorities } from "../engine/priority";
 import { tuneSnapper } from "../lib";
 import { tryPlayApriling } from "../lib";
@@ -180,18 +180,11 @@ const Manor2: Task[] = [
       step("questM21Dance") >= 2,
     do: $location`The Haunted Bathroom`,
     choices: { 881: 1, 105: 1, 892: 1 },
-    combat: new CombatStrategy()
-      .killHard($monster`cosmetics wraith`)
-      .macro(() => {
-        if (have($item`genie bottle`)) return new Macro();
-        return killMacro();
-      }, $monster`toilet papergeist`)
-      .banish($monsters`claw-foot bathtub, malevolent hair clog`),
+    combat: new CombatStrategy().killHard($monster`cosmetics wraith`),
     limit: { turns: 5 },
     delay: 5,
     // No need to search for cosmetics wraith
     orbtargets: () => [],
-    ignorebanishes: () => have($item`genie bottle`),
   },
   {
     name: "Bathroom",
@@ -200,17 +193,10 @@ const Manor2: Task[] = [
     do: $location`The Haunted Bathroom`,
     choices: { 881: 1, 105: 1, 892: 1 },
     outfit: { modifier: "-combat" },
-    combat: new CombatStrategy()
-      .killHard($monster`cosmetics wraith`)
-      .macro(() => {
-        if (have($item`genie bottle`)) return new Macro();
-        return killMacro();
-      }, $monster`toilet papergeist`)
-      .banish($monsters`claw-foot bathtub, malevolent hair clog`),
+    combat: new CombatStrategy().killHard($monster`cosmetics wraith`),
     limit: { soft: 15 },
     // No need to search for cosmetics wraith
     orbtargets: () => [],
-    ignorebanishes: () => have($item`genie bottle`),
   },
   {
     name: "Bedroom",

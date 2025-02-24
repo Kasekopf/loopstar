@@ -13,11 +13,24 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $effect, $effects, $item, $items, $skill, CursedMonkeyPaw, get, have } from "libram";
-import { Quest } from "../../engine/task";
+import {
+  $effect,
+  $effects,
+  $item,
+  $items,
+  $monster,
+  $monsters,
+  $skill,
+  CursedMonkeyPaw,
+  get,
+  have,
+  Macro,
+} from "libram";
+import { NamedDeltaTask, Quest } from "../../engine/task";
 import { atLevel } from "../../lib";
 import { args } from "../../args";
 import { customRestoreMp } from "../../engine/moods";
+import { CombatStrategy, killMacro } from "../../engine/combat";
 
 export const SmolQuest: Quest = {
   name: "Smol",
@@ -143,3 +156,33 @@ export const SmolQuest: Quest = {
     },
   ],
 };
+
+export const smolDeltas: NamedDeltaTask[] = [
+  // Get pocket wishes in-run
+  {
+    name: "Manor/Bathroom Delay",
+    replace: {
+      combat: new CombatStrategy()
+        .killHard($monster`cosmetics wraith`)
+        .macro(() => {
+          if (have($item`genie bottle`)) return new Macro();
+          return killMacro();
+        }, $monster`toilet papergeist`)
+        .banish($monsters`claw-foot bathtub, malevolent hair clog`),
+      ignorebanishes: () => have($item`genie bottle`),
+    },
+  },
+  {
+    name: "Manor/Bathroom",
+    replace: {
+      combat: new CombatStrategy()
+        .killHard($monster`cosmetics wraith`)
+        .macro(() => {
+          if (have($item`genie bottle`)) return new Macro();
+          return killMacro();
+        }, $monster`toilet papergeist`)
+        .banish($monsters`claw-foot bathtub, malevolent hair clog`),
+      ignorebanishes: () => have($item`genie bottle`),
+    },
+  },
+];

@@ -1,9 +1,9 @@
 import { $items, $path, $skill, set } from "libram";
 import { PathInfo } from "../pathinfo";
-import { Task } from "../../engine/task";
+import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { myPath, runChoice, visitUrl } from "kolmafia";
-import { SmolQuest } from "./tasks";
+import { smolDeltas, SmolQuest } from "./tasks";
 import { SmolPullQuest, smolPulls } from "./pulls";
 import { SmolEngine } from "./engine";
 import { getTasks, step } from "grimoire-kolmafia";
@@ -24,7 +24,7 @@ export class SmolInfo implements PathInfo {
 
   getTasks(tasks: Task[]): Task[] {
     const newTasks = getTasks([SmolQuest, SmolPullQuest], false, false);
-    return [...newTasks, ...tasks];
+    return findAndMerge([...newTasks, ...tasks], smolDeltas);
   }
 
   getRoute(route: string[]): string[] {
