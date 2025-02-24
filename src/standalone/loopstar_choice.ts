@@ -1,4 +1,5 @@
 import { availableChoiceOptions, getProperty, print, runChoice } from "kolmafia";
+import { $item, have } from "libram";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(choice: number, page: string) {
@@ -27,7 +28,7 @@ export function main(choice: number, page: string) {
   }
   // Random Lack of an Encounter
   else if (choice === 182) {
-    if (options[4]) {
+    if (options[4] && !have($item`Mohawk wig`)) {
       // Pick up a model airship
       runChoice(4);
     } else if (options[6]) {
