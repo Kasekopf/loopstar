@@ -22,6 +22,7 @@ export class AftercoreInfo implements PathInfo {
 
   finished(goalOverride: string | undefined = undefined): boolean {
     const goal = goalOverride ?? args.aftercore.goal;
+    if (!goal) return true;
     switch (goal) {
       case "organ":
         return have($skill`Liver of Steel`);
