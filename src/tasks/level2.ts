@@ -36,6 +36,7 @@ export const MosquitoQuest: Quest = {
       },
       choices: { 502: 2, 505: 1, 334: 1 },
       limit: { tries: 5 },
+      preferwanderer: true,
       delay: 5,
     },
     {

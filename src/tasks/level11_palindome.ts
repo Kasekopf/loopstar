@@ -1,6 +1,7 @@
 import {
   cliExecute,
   create,
+  getWorkshed,
   haveEquipped,
   Item,
   itemAmount,
@@ -23,6 +24,7 @@ import {
   $monsters,
   $phylum,
   $skill,
+  AsdonMartin,
   ensureEffect,
   get,
   have,
@@ -33,7 +35,7 @@ import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
-import { tuneSnapper } from "../lib";
+import { asdonFualable, tuneSnapper } from "../lib";
 import { Priorities } from "../engine/priority";
 import { tryPlayApriling } from "../lib";
 
@@ -128,6 +130,9 @@ const Copperhead: Task[] = [
     prepare: () => {
       restoreHp(myMaxhp());
       tryPlayApriling("+combat");
+      if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
+        AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
+      }
     },
     do: $location`Lair of the Ninja Snowmen`,
     outfit: () => {

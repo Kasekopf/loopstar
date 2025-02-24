@@ -34,7 +34,7 @@ export class CasualInfo implements PathInfo {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoute(route: string[]): string[] {
-    return casualRoute;
+    return casualRoute.filter((r) => args.casual.steelorgan || !r.startsWith("Organ"));
   }
 
   getEngine(tasks: Task[]): Engine {

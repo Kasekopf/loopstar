@@ -57,8 +57,8 @@ import { step } from "grimoire-kolmafia";
 
 function getRelevantEffects(): { [modifier: string]: Effect[] } {
   const result = {
-    "-combat": $effects`Smooth Movements, The Sonata of Sneakiness`,
-    "+combat": $effects`Carlweather's Cantata of Confrontation, Musk of the Moose`,
+    "-combat": $effects`Smooth Movements, The Sonata of Sneakiness, Hiding From Seekers`,
+    "+combat": $effects`Carlweather's Cantata of Confrontation, Musk of the Moose, Attracting Snakes`,
     "":
       myMeat() > 0 ? $effects`Empathy, Leash of Linguini, Astral Shell, Elemental Saucesphere` : [],
     "fam weight": $effects`Chorale of Companionship`,
@@ -90,6 +90,13 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
 
     if (have($skill`Emotionally Chipped`) && get("_feelLonelyUsed") < 3)
       result["-combat"].push($effect`Feeling Lonely`);
+  }
+
+  if (have($item`ultra-soft ferns`)) {
+    result["-combat"].push($effect`Ultra-Soft Steps`);
+  }
+  if (have($item`crunchy brush`)) {
+    result["-combat"].push($effect`Crunchy Steps`);
   }
 
   if (myClass() !== $class`Pastamancer`) {
@@ -152,14 +159,19 @@ export function moodCompatible(modifier: string | undefined): boolean {
   // while under -combat effects, and vice-versa.
   if (modifier === undefined) return true;
   if (modifier.includes("+combat") || modifier.includes(" combat")) {
-    return !have($effect`Smooth Movements`) && !have($effect`The Sonata of Sneakiness`);
+    return (
+      !have($effect`Smooth Movements`) &&
+      !have($effect`The Sonata of Sneakiness`) &&
+      !have($effect`Hiding From Seekers`)
+    );
   }
   if (modifier.includes("-combat")) {
     return (
       !have($effect`Musk of the Moose`) &&
       !have($effect`Carlweather's Cantata of Confrontation`) &&
       !have($effect`Romantically Roused`) &&
-      !have($effect`Fresh Breath`)
+      !have($effect`Fresh Breath`) &&
+      !have($effect`Attracting Snakes`)
     );
   }
   return true;
@@ -205,7 +217,8 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
 
   // Use asdon martin
   if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
-    // if (modifier.includes("-combat")) AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
+    if (modifier.includes("-combat") && have($effect`Silent Running`))
+      AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
     // else if (modifier.includes("+combat")) AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
     // else if (modifier.includes("init")) AsdonMartin.drive(AsdonMartin.Driving.Quickly);
     if (modifier.includes("meat") || modifier.includes("item")) {

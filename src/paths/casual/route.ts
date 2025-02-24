@@ -35,7 +35,6 @@ export const casualRoute: string[] = [
   "Macguffin/Forest", // Start before -combat buffs
   "Macguffin/Milestone", // If we are using them
   "Mosquito/Burn Delay",
-  "Manor/Start Floor2",
 
   // Get and use clovers
   "Misc/Hermit Clover",
@@ -49,20 +48,22 @@ export const casualRoute: string[] = [
   "Bat/Use Sonar 3", // Reveal more delay
   "Palindome/Cold Snake",
   "McLargeHuge/Climb",
+  "Manor/Start Floor2",
 
   // -combat tasks
-  "Manor/Gallery",
-  "Manor/Bedroom",
   "Giant/Basement Finish",
   "Crypt/Cranny",
+  "Manor/Gallery",
+  "Manor/Bedroom",
+  "Manor/Finish Floor2",
   "Hidden City/Forest Coin", // First to get meat
   "Hidden City/Forest Map",
   "Hidden City/Forest Fertilizer",
   "Hidden City/Forest Sapling", // Last to sell bar skins
   "Mosquito/Finish",
-  "Manor/Finish Floor2",
   "Giant/Finish",
   "Tavern/Finish",
+  "Manor/Ballroom",
 
   "McLargeHuge/Finish", // Get Eagle beast banish
   "Palindome/Talisman",
@@ -121,5 +122,9 @@ export const casualRoute: string[] = [
   // Finish last keys
   "Keys/All Heroes",
 
+  "Tower/Shadow",
+  "Organ/Unicorn", // -combat buffs will be cleared conveniently by NS
   "Tower/Naughty Sorceress",
+  "Organ/Comedy Club",
+  "Organ/Finish",
 ];

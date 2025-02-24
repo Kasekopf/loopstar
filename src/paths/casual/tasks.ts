@@ -3,6 +3,7 @@ import {
   cliExecute,
   currentMcd,
   drink,
+  getWorkshed,
   Item,
   itemAmount,
   mallPrice,
@@ -21,6 +22,7 @@ import {
   $monsters,
   $skill,
   $stat,
+  AsdonMartin,
   get,
   have,
   Macro,
@@ -31,6 +33,7 @@ import { CombatStrategy } from "../../engine/combat";
 import { getSummonTask } from "../../tasks/summons";
 import { tryCape } from "../../tasks/level7";
 import { fillHp } from "../../engine/moods";
+import { asdonFualable, tryPlayApriling } from "../../lib";
 
 export const casualDeltas: NamedDeltaTask[] = [
   // Use as many milestones as permitted by price
@@ -88,6 +91,31 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Giant/Unlock HITS",
     replace: {
       ready: () => false,
+    },
+  },
+  // Prefer to dump wanderers in digital realm
+  {
+    name: "Digital/Vanya",
+    replace: {
+      preferwanderer: true,
+    },
+  },
+  {
+    name: "Digital/Fungus",
+    replace: {
+      preferwanderer: true,
+    },
+  },
+  {
+    name: "Digital/Megalo",
+    replace: {
+      preferwanderer: true,
+    },
+  },
+  {
+    name: "Digital/Hero",
+    replace: {
+      preferwanderer: true,
     },
   },
 ];
@@ -187,6 +215,12 @@ export const OrganQuest: Quest = {
       name: "Unicorn",
       after: ["Arena"],
       completed: () => have($item`Azazel's unicorn`) || step("questM10Azazel") === 999,
+      prepare: () => {
+        tryPlayApriling("-combat");
+        if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
+          AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
+        }
+      },
       do: (): void => {
         const goals: { [name: string]: Item[] } = {
           Bognort: $items`giant marshmallow, gin-soaked blotter paper`,
@@ -208,8 +242,15 @@ export const OrganQuest: Quest = {
       name: "Comedy Club",
       after: ["Start"],
       completed: () => have($item`observational glasses`),
+      prepare: () => {
+        tryPlayApriling("+combat");
+        if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
+          AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
+        }
+      },
       do: $location`The Laugh Floor`,
       outfit: { modifier: "+combat" },
+      orbtargets: () => [],
       combat: new CombatStrategy().kill(
         $monsters`Carbuncle Top, Larry of the Field of Signs, Victor the Insult Comic Hellhound`
       ),

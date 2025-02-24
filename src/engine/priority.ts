@@ -30,6 +30,7 @@ export class Priorities {
   static Free: Priority = { score: 10000, reason: "Free action" };
   static LastCopyableMonster: Priority = { score: 4000, reason: "Copy last monster" };
   static GoodFeelNostalgia: Priority = { score: 3999, reason: "Feel Nostalgia is ready" };
+  static BestWanderer: Priority = { score: 2200, reason: "Best wanderer" };
   static Wanderer: Priority = { score: 2000, reason: "Wanderer" };
   static GoodForceNC: Priority = { score: 1000, reason: "Forcing NC" };
   static Start: Priority = { score: 900, reason: "Initial tasks" };
@@ -244,7 +245,11 @@ export class Prioritization {
         const outfit = new Outfit();
         if (outfitSpec !== undefined) outfit.equip(outfitSpec);
         if (canEquipResource(outfit, wanderer)) {
-          result.priorities.add(Priorities.Wanderer);
+          if (task.preferwanderer) {
+            result.priorities.add(Priorities.BestWanderer);
+          } else {
+            result.priorities.add(Priorities.Wanderer);
+          }
         }
       }
     }
