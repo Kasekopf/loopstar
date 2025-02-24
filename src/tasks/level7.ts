@@ -269,7 +269,8 @@ const Nook: Task[] = [
     prepare: tuneCape,
     priority: (): Priority => {
       if (AutumnAton.have()) {
-        if ($location`The Defiled Nook`.turnsSpent === 0) return Priorities.GoodAutumnaton;
+        if ($location`The Defiled Nook`.turnsSpent === 0 && myTurncount() >= 40)
+          return Priorities.GoodAutumnaton;
       }
       return Priorities.None;
     },

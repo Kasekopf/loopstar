@@ -118,6 +118,13 @@ export const casualDeltas: NamedDeltaTask[] = [
       preferwanderer: true,
     },
   },
+  // Only enable -combat once +combat is not needed
+  {
+    name: "Misc/Horsery",
+    replace: {
+      after: ["Palindome/Cold Snake"],
+    },
+  },
 ];
 
 export const CasualQuest: Quest = {
