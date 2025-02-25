@@ -274,7 +274,7 @@ export class Prioritization {
     return result;
   }
 
-  private fillWhenExists<T>(explanation: string, tag: string, replacement: T | undefined) {
+  private fillWhenExists(explanation: string, tag: string, replacement: string) {
     if (replacement) return explanation.replace(tag, `${replacement}`);
     return explanation;
   }
@@ -284,9 +284,9 @@ export class Prioritization {
       .map((priority) => priority.reason)
       .filter((priority) => priority !== undefined)
       .join(", ");
-    const withOrb = this.fillWhenExists(result, "orb monster", this._orbMonster);
-    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", this._wanderer);
-    const withChain = this.fillWhenExists(withWanderer, "Chain", this._chain);
+    const withOrb = this.fillWhenExists(result, "orb monster", `${this._orbMonster ?? ''}`);
+    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer ?? ''}`);
+    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain ?? ''}`);
     return withChain;
   }
 
@@ -303,9 +303,9 @@ export class Prioritization {
     if (result === undefined || result.length === 0) return undefined;
 
     const trimmedResult = result.slice(0, -1);
-    const withOrb = this.fillWhenExists(trimmedResult, "orb monster", this._orbMonster);
-    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", this._wanderer);
-    const withChain = this.fillWhenExists(withWanderer, "Chain", this._chain);
+    const withOrb = this.fillWhenExists(trimmedResult, "orb monster", `${this._orbMonster ?? ''}`);
+    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer ?? ''}`);
+    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain ?? ''}`);
     return withChain;
   }
 
