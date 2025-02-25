@@ -417,13 +417,13 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     equipCharging(outfit, mightKillSomething ?? false, task.nofightingfamiliars ?? false);
 
     // Prepare full outfit
+    const freecombat =
+      (task.freecombat ?? false) ||
+      wanderers.find((wanderer) => wanderer.chance() === 1) !== undefined ||
+      resources.has("killFree") ||
+      (task.activePriority?.has(Priorities.CosmicBowlingBall) ?? false);
     if (!outfit.skipDefaults) {
-      const freecombat =
-        task.freecombat ||
-        wanderers.find((wanderer) => wanderer.chance() === 1) ||
-        resources.has("killFree");
       const modifier = getModifiersFrom(outfit);
-
       const glass_useful =
         canChargeVoid() &&
         !modifier.includes("-combat") &&
@@ -446,7 +446,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       outfit.equip($item`miniature crystal ball`);
     }
 
-    equipDefaults(outfit, task.nofightingfamiliars ?? false, task.freecombat ?? false);
+    equipDefaults(outfit, task.nofightingfamiliars ?? false, freecombat);
 
     // Kill wanderers
     for (const wanderer of wanderers) {
