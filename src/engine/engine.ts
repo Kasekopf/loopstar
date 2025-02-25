@@ -421,7 +421,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       (task.freecombat ?? false) ||
       wanderers.find((wanderer) => wanderer.chance() === 1) !== undefined ||
       resources.has("killFree") ||
-      (task.activePriority?.has(Priorities.CosmicBowlingBall) ?? false);
+      (task.activePriority?.has(Priorities.CosmicBowlingBall) ?? false) ||
+      (task.activePriority?.has(Priorities.SpringShoes) ?? false);
     if (!outfit.skipDefaults) {
       const modifier = getModifiersFrom(outfit);
       const glass_useful =

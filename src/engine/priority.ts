@@ -23,6 +23,7 @@ import { args } from "../args";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { wandererSources } from "../resources/wanderer";
 import { getActiveBackupTarget } from "../resources/backup";
+import { cosmicBowlingBallReady } from "../lib";
 
 export class Priorities {
   static Always: Priority = { score: 40000, reason: "Forced" };
@@ -41,6 +42,7 @@ export class Priorities {
     reason: "Use cosmic bowling ball + Melodramedary",
   };
   static CosmicBowlingBall: Priority = { score: 11, reason: "Use cosmic bowling ball" };
+  static SpringShoes: Priority = { score: 11, reason: "Use spring shoes" };
   static GoodYR: Priority = { score: 10, reason: "Yellow ray" };
   static GoodCleaver: Priority = { score: 5, reason: "Cleaver is ready" };
   static GoodAutumnaton: Priority = { score: 4, reason: "Setup Autumnaton" };
@@ -186,18 +188,18 @@ export class Prioritization {
       task.do instanceof Location && location_blacklist.includes(task.do);
     const location_in_whitelist =
       task.do instanceof Location && location_whitelist.includes(task.do);
-    if (have($item`cosmic bowling ball`) || get("cosmicBowlingBallReturnCombats") === 0) {
-      if (
-        location_in_whitelist ||
-        (!task.freeaction &&
-          !task.freecombat &&
-          ball_useful &&
-          !ball_may_not_be_useful &&
-          !location_in_blacklist &&
-          !task.tags?.includes("NCForce"))
-      ) {
-        result.priorities.add(Priorities.CosmicBowlingBall);
-      }
+    if (
+      location_in_whitelist ||
+      (!task.freeaction &&
+        !task.freecombat &&
+        ball_useful &&
+        !ball_may_not_be_useful &&
+        !location_in_blacklist &&
+        !task.tags?.includes("NCForce"))
+    ) {
+      if (cosmicBowlingBallReady()) result.priorities.add(Priorities.CosmicBowlingBall);
+      else if (have($item`spring shoes`) && !have($effect`Everything Looks Green`))
+        result.priorities.add(Priorities.SpringShoes);
     }
 
     // Prioritize the parachute
