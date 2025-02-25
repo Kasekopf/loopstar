@@ -90,7 +90,7 @@ import { applyEffects, customRestoreMp } from "./moods";
 import { ROUTE_WAIT_TO_NCFORCE } from "../route";
 import { unusedBanishes } from "../resources/banish";
 import { CombatResource } from "../resources/lib";
-import { canChargeVoid, chainSources, wandererSources } from "../resources/wanderer";
+import { canChargeVoid, wandererSources } from "../resources/wanderer";
 import { getRunawaySources } from "../resources/runaway";
 import { freekillSources } from "../resources/freekill";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
@@ -214,31 +214,17 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // Setup forced wanderers
     const wanderers = [];
-    if (
-      task.activePriority?.has(Priorities.Wanderer) ||
-      task.activePriority?.has(Priorities.BestWanderer) ||
-      task.activePriority?.has(Priorities.ChainWanderer)
-    ) {
-      const prioritizedWanderer = wandererSources.find(
-        (source) => source.available() && source.chance() === 1
-      );
-      if (!prioritizedWanderer) throw `Wanderer prioritized but no wanderer found`;
+    const prioritizedWanderer = task.activePriority?.wanderer();
+    const prioritizedChain = task.activePriority?.chain();
+    if (prioritizedWanderer) {
       if (!equipFirst(outfit, [prioritizedWanderer]))
         throw `Wanderer equipment ${prioritizedWanderer.equip} conflicts with ${task.name}`;
-      if (task.activePriority?.has(Priorities.ChainWanderer)) {
-        const delayRemaing = hasDelay(task);
-        const prioritizedChain = chainSources.find(
-          (source) =>
-            source.available() && outfit.canEquip(source.equip) && source.length() <= delayRemaing
-        );
-        if (prioritizedChain) {
-          if (!outfit.equip(prioritizedChain.equip)) {
-            throw `Wanderer chain ${prioritizedChain.equip} conflicts with ${task.name}+${prioritizedWanderer.name}`;
-          }
-          combat.macro(prioritizedChain.do);
+      if (prioritizedChain) {
+        if (!equipFirst(outfit, [prioritizedChain])) {
+          throw `Chain equipment ${prioritizedChain.equip} conflicts with ${task.name}+${prioritizedWanderer.name}`;
         }
+        combat.macro(prioritizedChain.do, undelay(prioritizedWanderer.monsters));
       }
-      wanderers.push(prioritizedWanderer);
     }
 
     // Setup forced backups

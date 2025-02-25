@@ -21,7 +21,7 @@ import { canEquipResource, getModifiersFrom } from "./outfit";
 import { Outfit } from "grimoire-kolmafia";
 import { args } from "../args";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
-import { chainSources, wandererSources } from "../resources/wanderer";
+import { ChainSource, chainSources, WandererSource, wandererSources } from "../resources/wanderer";
 import { getActiveBackupTarget } from "../resources/backup";
 import { cosmicBowlingBallReady } from "../lib";
 
@@ -31,8 +31,8 @@ export class Priorities {
   static Free: Priority = { score: 10000, reason: "Free action" };
   static LastCopyableMonster: Priority = { score: 4000, reason: "Copy last monster" };
   static GoodFeelNostalgia: Priority = { score: 3999, reason: "Feel Nostalgia is ready" };
-  static ChainWanderer: Priority = { score: 2300, reason: "Wanderer + Candelabra" };
-  static BestWanderer: Priority = { score: 2200, reason: "Best wanderer" };
+  static ChainWanderer: Priority = { score: 2300, reason: "Wanderer + Chain" };
+  static BestWanderer: Priority = { score: 2200, reason: "Wanderer Preferred" };
   static Wanderer: Priority = { score: 2000, reason: "Wanderer" };
   static GoodForceNC: Priority = { score: 1000, reason: "Forcing NC" };
   static Start: Priority = { score: 900, reason: "Initial tasks" };
@@ -71,7 +71,9 @@ export class Priorities {
 
 export class Prioritization {
   private priorities = new Set<Priority>();
-  private orb_monster?: Monster = undefined;
+  private _orbMonster?: Monster = undefined;
+  private _wanderer?: WandererSource = undefined;
+  private _chain?: ChainSource = undefined;
 
   static fixed(priority: Priority) {
     const result = new Prioritization();
@@ -115,7 +117,7 @@ export class Prioritization {
     if (task.do instanceof Location) {
       const next_monster = globalStateCache.orb().prediction(task.do);
       if (next_monster !== undefined) {
-        result.orb_monster = next_monster;
+        result._orbMonster = next_monster;
         result.priorities.add(orbPriority(task, next_monster));
       }
     }
@@ -258,11 +260,13 @@ export class Prioritization {
           );
           if (chainable) {
             result.priorities.add(Priorities.ChainWanderer);
+            result._chain = chainable;
           } else if (task.preferwanderer) {
             result.priorities.add(Priorities.BestWanderer);
           } else {
             result.priorities.add(Priorities.Wanderer);
           }
+          result._wanderer = wanderer;
         }
       }
     }
@@ -270,13 +274,20 @@ export class Prioritization {
     return result;
   }
 
+  private fillWhenExists<T>(explanation: string, tag: string, replacement: T | undefined) {
+    if (replacement) return explanation.replace(tag, `${replacement}`);
+    return explanation;
+  }
+
   public explain(): string {
     const result = [...this.priorities]
       .map((priority) => priority.reason)
       .filter((priority) => priority !== undefined)
       .join(", ");
-    if (this.orb_monster) return result.replace("orb monster", `${this.orb_monster}`);
-    else return result;
+    const withOrb = this.fillWhenExists(result, "orb monster", this._orbMonster);
+    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", this._wanderer);
+    const withChain = this.fillWhenExists(withWanderer, "Chain", this._chain);
+    return withChain;
   }
 
   public explainWithColor(): string | undefined {
@@ -291,9 +302,11 @@ export class Prioritization {
       .join(" ");
     if (result === undefined || result.length === 0) return undefined;
 
-    const trimmed_result = result.slice(0, -1);
-    if (this.orb_monster) return trimmed_result.replace("orb monster", `${this.orb_monster}`);
-    else return trimmed_result;
+    const trimmedResult = result.slice(0, -1);
+    const withOrb = this.fillWhenExists(trimmedResult, "orb monster", this._orbMonster);
+    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", this._wanderer);
+    const withChain = this.fillWhenExists(withWanderer, "Chain", this._chain);
+    return withChain;
   }
 
   public has(priorty: Priority) {
@@ -301,6 +314,14 @@ export class Prioritization {
       if (prior.score === priorty.score) return true;
     }
     return false;
+  }
+
+  public wanderer(): WandererSource | undefined {
+    return this._wanderer;
+  }
+
+  public chain(): ChainSource | undefined {
+    return this._chain;
   }
 
   public score(): number {
