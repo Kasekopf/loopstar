@@ -1,5 +1,5 @@
 import { haveEquipped, Location, Monster, myLevel } from "kolmafia";
-import { $item, $skill, Macro } from "libram";
+import { $effect, $item, $skill, have, Macro } from "libram";
 import { ActionDefaults, CombatStrategy as BaseCombatStrategy } from "grimoire-kolmafia";
 
 const myActions = [
@@ -71,11 +71,17 @@ export function killMacro(hard?: boolean): Macro {
   const result = new Macro();
 
   if (haveEquipped($item`Everfull Dart Holster`)) {
-    if (!hard && myLevel() >= 12) {
+    if (!hard && myLevel() >= 12 && !have($effect`Everything Looks Red`)) {
       // Only once we don't need Ready to Eat for leveling
-      result.trySkill($skill`Darts: Aim for the Bullseye`);
+      result
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`);
+    } else {
+      result.trySkill($skill`Darts: Throw at %part1`);
     }
-    result.trySkill($skill`Darts: Throw at %part1`);
   }
 
   if (!haveEquipped($item`June cleaver`)) {

@@ -641,7 +641,7 @@ export const WarQuest: Quest = {
         if (have($item`candy cane sword cane`) || have($skill`Comprehensive Cartography`)) {
           return {
             which: Resources.NCForce,
-            benefit: 1 / 0.5,
+            benefit: (1 / 0.5) * 2, // boosted since it is early in the run
           };
         }
         return undefined;

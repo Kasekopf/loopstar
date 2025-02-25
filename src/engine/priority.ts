@@ -46,7 +46,7 @@ export class Priorities {
   static SpringShoes: Priority = { score: 11, reason: "Use spring shoes" };
   static GoodYR: Priority = { score: 10, reason: "Yellow ray" };
   static GoodDarts: Priority = { score: 9, reason: "Darts Bullseye is ready" };
-  static GoodCandelabra: Priority = { score: 7, reason: "Purple Candle is ready" };
+  static GoodCandelabra: Priority = { score: 8, reason: "Purple Candle is ready" };
   static GoodCleaver: Priority = { score: 5, reason: "Cleaver is ready" };
   static GoodAutumnaton: Priority = { score: 4, reason: "Setup Autumnaton" };
   static GoodCamel: Priority = { score: 3, reason: "Melodramedary is ready" };
@@ -291,9 +291,13 @@ export class Prioritization {
       .map((priority) => priority.reason)
       .filter((priority) => priority !== undefined)
       .join(", ");
-    const withOrb = this.fillWhenExists(result, "orb monster", `${this._orbMonster ?? ''}`);
-    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer?.name ?? ''}`);
-    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain?.name ?? ''}`);
+    const withOrb = this.fillWhenExists(result, "orb monster", `${this._orbMonster ?? ""}`);
+    const withWanderer = this.fillWhenExists(
+      withOrb,
+      "Wanderer",
+      `Wandering ${this._wanderer?.name ?? ""}`
+    );
+    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain?.name ?? ""}`);
     return withChain;
   }
 
@@ -310,9 +314,13 @@ export class Prioritization {
     if (result === undefined || result.length === 0) return undefined;
 
     const trimmedResult = result.slice(0, -1);
-    const withOrb = this.fillWhenExists(trimmedResult, "orb monster", `${this._orbMonster ?? ''}`);
-    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer?.name ?? ''}`);
-    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain?.name ?? ''}`);
+    const withOrb = this.fillWhenExists(trimmedResult, "orb monster", `${this._orbMonster ?? ""}`);
+    const withWanderer = this.fillWhenExists(
+      withOrb,
+      "Wanderer",
+      `Wandering ${this._wanderer?.name ?? ""}`
+    );
+    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain?.name ?? ""}`);
     return withChain;
   }
 
