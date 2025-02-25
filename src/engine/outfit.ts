@@ -280,7 +280,11 @@ export function equipCharging(
   }
 }
 
-export function equipDefaults(outfit: Outfit, noFightingFamiliars: boolean): void {
+export function equipDefaults(
+  outfit: Outfit,
+  noFightingFamiliars: boolean,
+  freecombat: boolean
+): void {
   if (have($familiar`Temporal Riftlet`)) {
     outfit.equip($familiar`Temporal Riftlet`);
   }
@@ -324,7 +328,7 @@ export function equipDefaults(outfit: Outfit, noFightingFamiliars: boolean): voi
 
   outfit.equip($familiar`Blood-Faced Volleyball`); // default
 
-  outfit.equip($item`mafia thumb ring`);
+  if (!freecombat) outfit.equip($item`mafia thumb ring`);
   if (atLevel(11)) outfit.equip($item`lucky gold ring`);
 
   if (get("sweat") < 15) outfit.equip($item`designer sweatpants`);

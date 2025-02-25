@@ -1205,9 +1205,10 @@ export const MiscQuest: Quest = {
             .trySkill($skill`Curse of Weaksauce`)
             .trySkill($skill`Stuffed Mortar Shell`)
             .while_(
-              "!pastround 27 && !hpbelow 100 && !mpbelow 8",
+              "!pastround 26 && !hpbelow 100 && !mpbelow 8",
               new Macro().skill($skill`Cannelloni Cannon`)
             )
+            .trySkill($skill`Darts: Throw at %part1`)
             .while_("!mpbelow 24", new Macro().skill($skill`Saucegeyser`))
             .attack()
             .repeat()
@@ -1215,7 +1216,7 @@ export const MiscQuest: Quest = {
         .killHard(),
       outfit: {
         familiar: $familiar`Frumious Bandersnatch`,
-        equip: $items`Greatest American Pants, familiar scrapbook, June cleaver, sea salt scrubs`,
+        equip: $items`Greatest American Pants, familiar scrapbook, yule hatchet, June cleaver, sea salt scrubs, Everfull Dart Holster, teacher's pen, toy Cupid bow`,
         modifier: "mainstat, 4exp, HP",
       },
       effects: $effects`Spirit of Peppermint`,

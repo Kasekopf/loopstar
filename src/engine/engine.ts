@@ -362,7 +362,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         this.tasks.every((t) => t.completed() || !t.combat?.can("killFree")) &&
         (get("sidequestNunsCompleted") !== "none" || warCleared())
       ) {
-        resources.provide("kill", equipFirst(outfit, freekillSources));
+        // Kills will be upgraded to free kills at the end of this function
+        resources.provide("killFree", equipFirst(outfit, freekillSources));
       }
 
       // Use an NC forcer if one is available and another task needs it.
@@ -417,7 +418,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // Prepare full outfit
     if (!outfit.skipDefaults) {
-      const freecombat = task.freecombat || wanderers.find((wanderer) => wanderer.chance() === 1);
+      const freecombat =
+        task.freecombat ||
+        wanderers.find((wanderer) => wanderer.chance() === 1) ||
+        resources.has("killFree");
       const modifier = getModifiersFrom(outfit);
 
       const glass_useful =
@@ -442,7 +446,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       outfit.equip($item`miniature crystal ball`);
     }
 
-    equipDefaults(outfit, task.nofightingfamiliars ?? false);
+    equipDefaults(outfit, task.nofightingfamiliars ?? false, task.freecombat ?? false);
 
     // Kill wanderers
     for (const wanderer of wanderers) {
