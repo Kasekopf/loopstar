@@ -258,7 +258,7 @@ export class Prioritization {
             (source) =>
               source.available() && outfit.canEquip(source.equip) && source.length() <= delayRemaing
           );
-          if (chainable) {
+          if (chainable && wanderer.chainable) {
             result.priorities.add(Priorities.ChainWanderer);
             result._chain = chainable;
           } else if (task.preferwanderer) {
