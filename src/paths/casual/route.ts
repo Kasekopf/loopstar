@@ -91,7 +91,7 @@ export const casualRoute: string[] = [
 
   // Setup for +meat/+item set
   "Hidden City/Office Boss", // Get Eagle dude banish
-  "Macguffin/Upper Chamber",
+
   "Orc Chasm/Start Peaks",
   "Orc Chasm/ABoo Carto",
   "War/Open Nuns",
@@ -101,23 +101,21 @@ export const casualRoute: string[] = [
   "Crypt/Nook",
   "Orc Chasm/ABoo Clues",
   "Orc Chasm/Oil Jar",
-  "Macguffin/Middle Chamber", // Avoid Eagle beast banish!
   "Orc Chasm/Twin Init Search",
   "Orc Chasm/Twin Init", // Use Eagle dude banish
 
   "Keys/Star Key", // Allow for better use of orb
-  "Macguffin/Finish",
   "Crypt/Finish",
   "War/Boss Hippie",
   "Orc Chasm/Finish",
 
-  // Finish up with last delay
   "Digital/Key",
-  "Bat/Finish",
-  "Knob/King",
 
   // Leave open a while for remaining runaways
   "Friar/Finish",
+  "Macguffin/Finish",
+  "Bat/Finish",
+  "Knob/King",
 
   // Finish last keys
   "Keys/All Heroes",
