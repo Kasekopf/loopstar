@@ -45,11 +45,14 @@ import { Modes, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
 import { atLevel, garboAverageValue, garboValue, haveLoathingLegion } from "../lib";
 import { args } from "../args";
 
-export function canEquipResource(outfit: Outfit, resource: Resource): boolean {
-  if (!resource.equip) return true;
-  if (Array.isArray(resource.equip))
-    return resource.equip.find((spec) => outfit.canEquip(spec)) !== undefined;
-  return outfit.canEquip(resource.equip);
+export function canEquipResource(
+  outfit: Outfit,
+  resource: Resource
+): Item | Familiar | OutfitSpec | undefined {
+  if (!resource.equip) return {};
+  if (Array.isArray(resource.equip)) return resource.equip.find((spec) => outfit.canEquip(spec));
+  if (outfit.canEquip(resource.equip)) return resource.equip;
+  return undefined;
 }
 
 export function equipFirst<T extends Resource>(outfit: Outfit, resources: T[]): T | undefined {

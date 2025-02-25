@@ -1,6 +1,14 @@
 import { DelayedMacro } from "grimoire-kolmafia";
-import { familiarWeight, haveEquipped, Monster, myFamiliar, totalTurnsPlayed } from "kolmafia";
 import {
+  familiarWeight,
+  haveEquipped,
+  Item,
+  Monster,
+  myFamiliar,
+  totalTurnsPlayed,
+} from "kolmafia";
+import {
+  $effect,
   $familiar,
   $item,
   $items,
@@ -21,6 +29,7 @@ export interface WandererSource extends Resource {
   chance: () => number;
   action?: DelayedMacro;
   possible: () => boolean; // If it is possible to encounter this on accident in the current character state.
+  chainable: boolean;
 }
 
 export const wandererSources: WandererSource[] = [
@@ -31,6 +40,7 @@ export const wandererSources: WandererSource[] = [
     monsters: () => [get("spookyVHSTapeMonster") ?? $monster`none`],
     chance: () => 1,
     possible: () => Counter.get("Spooky VHS Tape Monster") <= 0,
+    chainable: false,
   },
   {
     name: "Digitize",
@@ -54,6 +64,7 @@ export const wandererSources: WandererSource[] = [
       else return new Macro();
     },
     possible: () => SourceTerminal.have() && Counter.get("Digitize Monster") <= 5,
+    chainable: true, // Assuming the copy is chainable
   },
   {
     name: "Voted",
@@ -73,6 +84,7 @@ export const wandererSources: WandererSource[] = [
     ],
     chance: () => 1, // when available
     possible: () => haveEquipped($item`"I Voted!" sticker`),
+    chainable: false,
   },
   {
     name: "Cursed Magnifying Glass",
@@ -84,6 +96,7 @@ export const wandererSources: WandererSource[] = [
     monsters: [$monster`void guy`, $monster`void slab`, $monster`void spider`],
     chance: () => 1, // when available
     possible: () => haveEquipped($item`cursed magnifying glass`),
+    chainable: false,
   },
   {
     name: "Goth",
@@ -115,6 +128,7 @@ export const wandererSources: WandererSource[] = [
     ],
     chance: () => [0.5, 0.4, 0.3, 0.2, 0.1, 0.1, 0.1, 0][get("_hipsterAdv")],
     possible: () => myFamiliar() === $familiar`Artistic Goth Kid`,
+    chainable: true,
   },
   {
     name: "Hipster",
@@ -129,6 +143,7 @@ export const wandererSources: WandererSource[] = [
     ],
     chance: () => [0.5, 0.4, 0.3, 0.2, 0.1, 0.1, 0.1, 0][get("_hipsterAdv")],
     possible: () => myFamiliar() === $familiar`Mini-Hipster`,
+    chainable: true,
   },
   {
     name: "Kramco",
@@ -160,9 +175,28 @@ export const wandererSources: WandererSource[] = [
       return result;
     },
     possible: () => haveEquipped($item`Kramco Sausage-o-Matic™`),
+    chainable: true,
   },
 ];
 
 export function canChargeVoid(): boolean {
   return get("_voidFreeFights") < 5 && get("cursedMagnifyingGlassCount") < 13;
 }
+
+export interface ChainSource extends Resource {
+  name: string;
+  available: () => boolean;
+  equip: Item;
+  do: Macro;
+  length: () => number;
+}
+
+export const chainSources: ChainSource[] = [
+  {
+    name: "Roman Candelabra",
+    available: () => have($item`Roman Candelabra`) && !have($effect`Everything Looks Purple`),
+    equip: $item`Roman Candelabra`,
+    do: Macro.trySkill($skill`Blow the Purple Candle!`),
+    length: () => 2,
+  },
+];

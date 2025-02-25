@@ -21,7 +21,7 @@ import { canEquipResource, getModifiersFrom } from "./outfit";
 import { Outfit } from "grimoire-kolmafia";
 import { args } from "../args";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
-import { wandererSources } from "../resources/wanderer";
+import { chainSources, wandererSources } from "../resources/wanderer";
 import { getActiveBackupTarget } from "../resources/backup";
 import { cosmicBowlingBallReady } from "../lib";
 
@@ -31,6 +31,7 @@ export class Priorities {
   static Free: Priority = { score: 10000, reason: "Free action" };
   static LastCopyableMonster: Priority = { score: 4000, reason: "Copy last monster" };
   static GoodFeelNostalgia: Priority = { score: 3999, reason: "Feel Nostalgia is ready" };
+  static ChainWanderer: Priority = { score: 2300, reason: "Wanderer + Candelabra" };
   static BestWanderer: Priority = { score: 2200, reason: "Best wanderer" };
   static Wanderer: Priority = { score: 2000, reason: "Wanderer" };
   static GoodForceNC: Priority = { score: 1000, reason: "Forcing NC" };
@@ -227,7 +228,8 @@ export class Prioritization {
     }
 
     // Consider (more expensive to compute) ways to burn delay
-    if (hasDelay(task)) {
+    const delayRemaing = hasDelay(task);
+    if (delayRemaing) {
       // Consider backing up a monster into the task
       if (have($item`backup camera`) && get("_backUpUses") < 11 - args.resources.savebackups) {
         const backup = getActiveBackupTarget();
@@ -247,8 +249,16 @@ export class Prioritization {
       if (wanderer) {
         const outfit = new Outfit();
         if (outfitSpec !== undefined) outfit.equip(outfitSpec);
-        if (canEquipResource(outfit, wanderer)) {
-          if (task.preferwanderer) {
+        const matchedSpec = canEquipResource(outfit, wanderer);
+        if (matchedSpec !== undefined) {
+          outfit.equip(matchedSpec);
+          const chainable = chainSources.find(
+            (source) =>
+              source.available() && outfit.canEquip(source.equip) && source.length() <= delayRemaing
+          );
+          if (chainable) {
+            result.priorities.add(Priorities.ChainWanderer);
+          } else if (task.preferwanderer) {
             result.priorities.add(Priorities.BestWanderer);
           } else {
             result.priorities.add(Priorities.Wanderer);

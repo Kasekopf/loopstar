@@ -1,7 +1,7 @@
 import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
-import { Delayed, undelay } from "libram";
+import { clamp, Delayed, undelay } from "libram";
 import { debug } from "../lib";
 
 export type Quest = BaseQuest<Task>;
@@ -52,12 +52,13 @@ export type Priority = {
 };
 
 /**
- * Returns true if this task has delay remaining.
+ * Returns the number of delay turns remaining.
  */
-export function hasDelay(task: Task): boolean {
-  if (!task.delay) return false;
-  if (!(task.do instanceof Location)) return false;
-  return task.do.turnsSpent < undelay(task.delay);
+export function hasDelay(task: Task): number {
+  if (!task.delay) return 0;
+  if (!(task.do instanceof Location)) return 0;
+  const delay = undelay(task.delay);
+  return clamp(delay - task.do.turnsSpent, 0, delay);
 }
 
 /**
