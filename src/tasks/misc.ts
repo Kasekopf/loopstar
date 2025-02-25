@@ -919,6 +919,7 @@ export const MiscQuest: Quest = {
           (adv) => myAdventures() === adv // Assert we did not use an adventure
         ),
       },
+      freeaction: true,
     },
     {
       name: "2002 Store",
