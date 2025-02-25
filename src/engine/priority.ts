@@ -32,7 +32,7 @@ export class Priorities {
   static LastCopyableMonster: Priority = { score: 4000, reason: "Copy last monster" };
   static GoodFeelNostalgia: Priority = { score: 3999, reason: "Feel Nostalgia is ready" };
   static ChainWanderer: Priority = { score: 2300, reason: "Wanderer + Chain" };
-  static BestWanderer: Priority = { score: 2200, reason: "Wanderer Preferred" };
+  static BestWanderer: Priority = { score: 2200, reason: "Wanderer [Preferred]" };
   static Wanderer: Priority = { score: 2000, reason: "Wanderer" };
   static GoodForceNC: Priority = { score: 1000, reason: "Forcing NC" };
   static Start: Priority = { score: 900, reason: "Initial tasks" };
@@ -46,6 +46,7 @@ export class Priorities {
   static SpringShoes: Priority = { score: 11, reason: "Use spring shoes" };
   static GoodYR: Priority = { score: 10, reason: "Yellow ray" };
   static GoodDarts: Priority = { score: 9, reason: "Darts Bullseye is ready" };
+  static GoodCandelabra: Priority = { score: 7, reason: "Purple Candle is ready" };
   static GoodCleaver: Priority = { score: 5, reason: "Cleaver is ready" };
   static GoodAutumnaton: Priority = { score: 4, reason: "Setup Autumnaton" };
   static GoodCamel: Priority = { score: 3, reason: "Melodramedary is ready" };
@@ -162,50 +163,6 @@ export class Prioritization {
     )
       result.priorities.add(Priorities.BadProtonic);
 
-    // Prefer tasks where the cosmic bowling ball is useful
-    const ball_useful =
-      task.combat === undefined ||
-      task.combat.can("ignore") ||
-      task.combat.can("banish") ||
-      task.combat.getDefaultAction() === undefined;
-    const ball_may_not_be_useful =
-      task.combat?.can("kill") ||
-      task.combat?.can("killHard") ||
-      task.combat?.can("killItem") ||
-      task.combat?.can("killFree") ||
-      task.combat?.can("forceItems") ||
-      task.combat?.can("yellowRay");
-    const location_blacklist = [
-      $location`The Shore, Inc. Travel Agency`,
-      $location`The Hidden Temple`,
-      $location`The Oasis`,
-      $location`Lair of the Ninja Snowmen`,
-      $location`A-Boo Peak`,
-    ];
-    const location_whitelist = [
-      $location`The Haunted Bathroom`,
-      $location`The Castle in the Clouds in the Sky (Top Floor)`,
-      $location`Lair of the Ninja Snowmen`,
-      $location`The Batrat and Ratbat Burrow`,
-    ];
-    const location_in_blacklist =
-      task.do instanceof Location && location_blacklist.includes(task.do);
-    const location_in_whitelist =
-      task.do instanceof Location && location_whitelist.includes(task.do);
-    if (
-      location_in_whitelist ||
-      (!task.freeaction &&
-        !task.freecombat &&
-        ball_useful &&
-        !ball_may_not_be_useful &&
-        !location_in_blacklist &&
-        !task.tags?.includes("NCForce"))
-    ) {
-      if (cosmicBowlingBallReady()) result.priorities.add(Priorities.CosmicBowlingBall);
-      else if (have($item`spring shoes`) && !have($effect`Everything Looks Green`))
-        result.priorities.add(Priorities.SpringShoes);
-    }
-
     // Prioritize the parachute
     const parachuteTarget = undelay(task.parachute);
     if (
@@ -271,6 +228,56 @@ export class Prioritization {
       }
     }
 
+    // Prefer tasks where the cosmic bowling ball is useful
+    const ball_useful =
+      task.combat === undefined ||
+      task.combat.can("ignore") ||
+      task.combat.can("banish") ||
+      task.combat.getDefaultAction() === undefined;
+    const ball_may_not_be_useful =
+      task.combat?.can("kill") ||
+      task.combat?.can("killHard") ||
+      task.combat?.can("killItem") ||
+      task.combat?.can("killFree") ||
+      task.combat?.can("forceItems") ||
+      task.combat?.can("yellowRay");
+    const location_blacklist = [
+      $location`The Shore, Inc. Travel Agency`,
+      $location`The Hidden Temple`,
+      $location`The Oasis`,
+      $location`Lair of the Ninja Snowmen`,
+      $location`A-Boo Peak`,
+    ];
+    const location_whitelist = [
+      $location`The Haunted Bathroom`,
+      $location`The Castle in the Clouds in the Sky (Top Floor)`,
+      $location`Lair of the Ninja Snowmen`,
+      $location`The Batrat and Ratbat Burrow`,
+    ];
+    const location_in_blacklist =
+      task.do instanceof Location && location_blacklist.includes(task.do);
+    const location_in_whitelist =
+      task.do instanceof Location && location_whitelist.includes(task.do);
+    if (!result._wanderer) {
+      if (
+        location_in_whitelist ||
+        (!task.freeaction &&
+          !task.freecombat &&
+          ball_useful &&
+          !ball_may_not_be_useful &&
+          !location_in_blacklist &&
+          !task.tags?.includes("NCForce"))
+      ) {
+        if (cosmicBowlingBallReady()) result.priorities.add(Priorities.CosmicBowlingBall);
+        else if (have($item`spring shoes`) && !have($effect`Everything Looks Green`))
+          result.priorities.add(Priorities.SpringShoes);
+      }
+    }
+
+    if (result._wanderer) {
+      result.priorities.delete(Priorities.GoodDarts);
+    }
+
     return result;
   }
 
@@ -285,8 +292,8 @@ export class Prioritization {
       .filter((priority) => priority !== undefined)
       .join(", ");
     const withOrb = this.fillWhenExists(result, "orb monster", `${this._orbMonster ?? ''}`);
-    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer ?? ''}`);
-    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain ?? ''}`);
+    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer?.name ?? ''}`);
+    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain?.name ?? ''}`);
     return withChain;
   }
 
@@ -304,8 +311,8 @@ export class Prioritization {
 
     const trimmedResult = result.slice(0, -1);
     const withOrb = this.fillWhenExists(trimmedResult, "orb monster", `${this._orbMonster ?? ''}`);
-    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer ?? ''}`);
-    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain ?? ''}`);
+    const withWanderer = this.fillWhenExists(withOrb, "Wanderer", `Wandering ${this._wanderer?.name ?? ''}`);
+    const withChain = this.fillWhenExists(withWanderer, "Chain", `${this._chain?.name ?? ''}`);
     return withChain;
   }
 

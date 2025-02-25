@@ -160,6 +160,7 @@ export const CasualQuest: Quest = {
       after: ["Crypt/Start"],
       ready: () => !have($effect`Everything Looks Purple`) && myBasestat($stat`Muscle`) >= 62,
       completed: () => get("cyrptCrannyEvilness") <= 13,
+      priority: () => Priorities.GoodCandelabra,
       prepare: () => {
         changeMcd(10);
         fillHp();
