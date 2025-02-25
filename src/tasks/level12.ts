@@ -655,6 +655,12 @@ export const WarQuest: Quest = {
       name: "Open Orchard",
       after: ["Flyers End", "Lighthouse End", "Junkyard End"],
       completed: () => get("hippiesDefeated") >= 64,
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       outfit: () => {
         const jelly = args.minor.jellies ? $familiar`Space Jellyfish` : undefined;
         if (
@@ -696,6 +702,12 @@ export const WarQuest: Quest = {
       name: "Open Nuns",
       after: ["Orchard Finish"],
       completed: () => get("hippiesDefeated") >= 192,
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       outfit: () =>
         <OutfitSpec>{
           equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin`,
@@ -713,6 +725,12 @@ export const WarQuest: Quest = {
       name: "Clear",
       after: ["Nuns"],
       completed: () => get("hippiesDefeated") >= 1000,
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       outfit: () => {
         const result = <OutfitSpec>{
           equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin`,

@@ -238,6 +238,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       combat.action("killHard");
     }
 
+    // Setup encouraged darts
+    if (task.activePriority?.has(Priorities.GoodDarts)) {
+      outfit.equip($item`Everfull Dart Holster`);
+    }
+
     // Equip initial equipment
     equipInitial(outfit);
 

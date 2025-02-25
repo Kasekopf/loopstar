@@ -44,6 +44,7 @@ export class Priorities {
   static CosmicBowlingBall: Priority = { score: 11, reason: "Use cosmic bowling ball" };
   static SpringShoes: Priority = { score: 11, reason: "Use spring shoes" };
   static GoodYR: Priority = { score: 10, reason: "Yellow ray" };
+  static GoodDarts: Priority = { score: 9, reason: "Darts Bullseye is ready" };
   static GoodCleaver: Priority = { score: 5, reason: "Cleaver is ready" };
   static GoodAutumnaton: Priority = { score: 4, reason: "Setup Autumnaton" };
   static GoodCamel: Priority = { score: 3, reason: "Melodramedary is ready" };

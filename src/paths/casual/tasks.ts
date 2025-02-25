@@ -34,6 +34,7 @@ import { getSummonTask } from "../../tasks/summons";
 import { tryCape } from "../../tasks/level7";
 import { fillHp } from "../../engine/moods";
 import { asdonFualable, tryPlayApriling } from "../../lib";
+import { Priorities } from "../../engine/priority";
 
 export const casualDeltas: NamedDeltaTask[] = [
   // Use as many milestones as permitted by price
@@ -97,24 +98,48 @@ export const casualDeltas: NamedDeltaTask[] = [
   {
     name: "Digital/Vanya",
     replace: {
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       preferwanderer: true,
     },
   },
   {
     name: "Digital/Fungus",
     replace: {
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       preferwanderer: true,
     },
   },
   {
     name: "Digital/Megalo",
     replace: {
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       preferwanderer: true,
     },
   },
   {
     name: "Digital/Hero",
     replace: {
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       preferwanderer: true,
     },
   },
