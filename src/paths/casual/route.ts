@@ -28,7 +28,6 @@ export const casualRoute: string[] = [
   "War/Enrage",
   "War/Flyers Start", // Start the war and get flyers
   "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
-  "Casual/Giant Swarm Of Ghuol Whelps",
 
   // Initial tasks for delay
   "Macguffin/Forest", // Start before -combat buffs
@@ -36,6 +35,7 @@ export const casualRoute: string[] = [
   "Manor/Kitchen",
   "Manor/Start Floor2",
   "War/Junkyard End",
+  "Casual/Giant Swarm Of Ghuol Whelps",
 
   // The following 3 tasks should always stay in this order
   "Macguffin/Compass", // Unlock desert for ultrahydrated use

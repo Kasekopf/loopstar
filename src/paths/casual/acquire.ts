@@ -428,6 +428,14 @@ const acquireSpecs: AcquireSpec[] = [
     needed: () => clamp(13 - get("_shadowBricksUsed"), 0, 13),
     price: Prices.Adventure,
   },
+  {
+    what: $item`Spooky VHS Tape`,
+    needed: () => {
+      if (get("cyrptCrannyEvilness") <= 40) return 0;
+      return 1;
+    },
+    price: Prices.Adventure,
+  },
 ];
 
 export function getAcquireQuest(): Quest {

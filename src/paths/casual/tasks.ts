@@ -179,9 +179,8 @@ export const CasualQuest: Quest = {
     getSummonTask({
       target: $monster`giant swarm of ghuol whelps`,
       after: ["Crypt/Start"],
-      ready: () => !have($effect`Everything Looks Purple`) && myBasestat($stat`Muscle`) >= 62,
-      completed: () => get("cyrptCrannyEvilness") <= 13,
-      priority: () => Priorities.GoodCandelabra,
+      ready: () => myBasestat($stat`Muscle`) >= 62,
+      completed: () => get("cyrptCrannyEvilness") <= 45, // Only do once
       prepare: () => {
         changeMcd(10);
         fillHp();
@@ -194,7 +193,6 @@ export const CasualQuest: Quest = {
           equip: tryCape(
             $item`antique machete`,
             $item`gravy boat`,
-            $item`Roman Candelabra`,
             $item`unbreakable umbrella`,
             $item`barrel lid`,
             $item`carnivorous potted plant`
@@ -205,9 +203,9 @@ export const CasualQuest: Quest = {
         },
       combat: new CombatStrategy()
         .macro(() => {
-          const macro = Macro.trySkill($skill`Blow the Purple Candle!`).trySkill(
-            $skill`Slay the Dead`
-          );
+          const macro = new Macro();
+          if (get("spookyVHSTapeMonster") === null) macro.tryItem($item`Spooky VHS Tape`);
+          macro.trySkill($skill`Slay the Dead`);
           if (have($skill`Garbage Nova`))
             macro.while_("!mpbelow 50", Macro.skill($skill`Garbage Nova`));
           if (have($skill`Splattersmash`))

@@ -31,9 +31,38 @@ export interface WandererSource extends Resource {
   action?: DelayedMacro;
   possible: () => boolean; // If it is possible to encounter this on accident in the current character state.
   chainable: boolean;
+  fulloutfit?: boolean; // Prefer somewhere with no outfit requirements
 }
 
 export const wandererSources: WandererSource[] = [
+  {
+    name: "VHS Whelps",
+    available: () =>
+      Counter.get("Spooky VHS Tape Monster") <= 0 &&
+      get("spookyVHSTapeMonster") === $monster`giant swarm of ghuol whelps`,
+    monsters: () => [$monster`giant swarm of ghuol whelps`],
+    equip: [
+      {
+        equip: $items`gravy boat`,
+        familiar: $familiar`Left-Hand Man`,
+        modifier: "ML",
+        skipDefaults: true,
+      },
+      {
+        equip: $items`gravy boat`,
+        modifier: "ML",
+        skipDefaults: true,
+      },
+      {
+        modifier: "ML",
+        skipDefaults: true,
+      },
+    ],
+    chance: () => 1,
+    possible: () => Counter.get("Spooky VHS Tape Monster") <= 0,
+    chainable: false,
+    fulloutfit: true,
+  },
   {
     name: "VHS Tape",
     available: () => Counter.get("Spooky VHS Tape Monster") <= 0,

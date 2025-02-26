@@ -207,7 +207,7 @@ export class Prioritization {
       const wanderer = wandererSources.find(
         (source) => source.available() && source.chance() === 1
       );
-      if (wanderer) {
+      if (wanderer && (!wanderer.fulloutfit || !outfitSpec)) {
         const outfit = new Outfit();
         if (outfitSpec !== undefined) outfit.equip(outfitSpec);
         const matchedSpec = canEquipResource(outfit, wanderer);
