@@ -56,7 +56,6 @@ export function main(choice: number, page: string) {
       "Deal 25-50% extra damage": 10000,
       "Increase Dart Deleveling from deleveling targets": 100,
       "Deal 25-50% greater damage": 10000,
-      // "Extra stats from stats targets":39, - Dupe in ash script, not sure about the logic here
       "25% better chance to hit bullseyes": 18,
     };
 

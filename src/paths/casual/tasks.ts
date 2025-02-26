@@ -4,6 +4,7 @@ import {
   currentMcd,
   drink,
   getWorkshed,
+  haveEquipped,
   Item,
   itemAmount,
   mallPrice,
@@ -32,7 +33,7 @@ import {
 } from "libram";
 import { PullQuest } from "../../tasks/pulls";
 import { OutfitSpec, step } from "grimoire-kolmafia";
-import { CombatStrategy } from "../../engine/combat";
+import { CombatStrategy, killMacro } from "../../engine/combat";
 import { getSummonTask } from "../../tasks/summons";
 import { tryCape } from "../../tasks/level7";
 import { fillHp } from "../../engine/moods";
@@ -273,6 +274,11 @@ export const OrganQuest: Quest = {
         }
         return Priorities.None;
       },
+      combat: new CombatStrategy().macro(() => {
+        if (haveEquipped($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`))
+          return killMacro();
+        return new Macro();
+      }),
       do: $location`Infernal Rackets Backstage`,
       limit: { soft: 30 },
       outfit: { modifier: "-combat" },
@@ -329,9 +335,15 @@ export const OrganQuest: Quest = {
         familiar: $familiar`Jumpsuited Hound Dog`,
       },
       orbtargets: () => [],
-      combat: new CombatStrategy().kill(
-        $monsters`Carbuncle Top, Larry of the Field of Signs, Victor the Insult Comic Hellhound`
-      ),
+      combat: new CombatStrategy()
+        .killHard(
+          $monsters`Carbuncle Top, Larry of the Field of Signs, Victor the Insult Comic Hellhound`
+        )
+        .macro(() => {
+          if (haveEquipped($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`))
+            return killMacro();
+          return new Macro();
+        }, $monsters`BL Imp, CH Imp, Pr Imp`),
       limit: { soft: 30 },
     },
     {
