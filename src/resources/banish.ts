@@ -12,10 +12,12 @@ import { Task } from "../engine/task";
 
 type BanishSimpleDo = CombatResource & {
   do: Item | Skill;
+  free: boolean;
 };
 type BanishMacroDo = CombatResource & {
   do: Macro;
   tracker: Item | Skill;
+  free: boolean;
 };
 export type BanishSource = BanishSimpleDo | BanishMacroDo;
 function getTracker(source: BanishSource): Item | Skill {
@@ -29,6 +31,7 @@ const banishSources: BanishSource[] = [
     available: () =>
       have($item`cosmic bowling ball`) || get("cosmicBowlingBallReturnCombats") === 0,
     do: $skill`Bowl a Curveball`,
+    free: true,
   },
   {
     name: "Asdon Martin",
@@ -47,6 +50,7 @@ const banishSources: BanishSource[] = [
     },
     prepare: () => asdonFillTo(50),
     do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
+    free: true,
   },
   {
     name: "Spring Shoes Kick Away",
@@ -54,11 +58,13 @@ const banishSources: BanishSource[] = [
     equip: $item`spring shoes`,
     do: Macro.skill($skill`Spring Kick`).skill($skill`Spring Away`),
     tracker: $skill`Spring Kick`,
+    free: true,
   },
   {
     name: "Feel Hatred",
     available: () => get("_feelHatredUsed") < 3 && have($skill`Emotionally Chipped`),
     do: $skill`Feel Hatred`,
+    free: true,
   },
   {
     name: "Latte",
@@ -68,12 +74,14 @@ const banishSources: BanishSource[] = [
     prepare: refillLatte,
     do: $skill`Throw Latte on Opponent`,
     equip: $item`latte lovers member's mug`,
+    free: true,
   },
   {
     name: "Reflex Hammer",
     available: () => get("_reflexHammerUsed") < 3 && have($item`Lil' Doctor™ bag`),
     do: $skill`Reflex Hammer`,
     equip: $item`Lil' Doctor™ bag`,
+    free: true,
   },
   {
     name: "Snokebomb",
@@ -87,6 +95,7 @@ const banishSources: BanishSource[] = [
       { equip: $items`sea salt scrubs` },
       { equip: $items`hopping socks` },
     ],
+    free: true,
   },
   {
     name: "KGB dart",
@@ -94,18 +103,21 @@ const banishSources: BanishSource[] = [
       get("_kgbTranquilizerDartUses") < 3 && have($item`Kremlin's Greatest Briefcase`),
     do: $skill`KGB tranquilizer dart`,
     equip: $item`Kremlin's Greatest Briefcase`,
+    free: true,
   },
   {
     name: "Middle Finger",
     available: () => !get("_mafiaMiddleFingerRingUsed") && have($item`mafia middle finger ring`),
     do: $skill`Show them your ring`,
     equip: $item`mafia middle finger ring`,
+    free: true,
   },
   {
     name: "Monkey Paw",
     available: () => have($item`cursed monkey's paw`) && get("_monkeyPawWishesUsed", 0) === 0,
     equip: $item`cursed monkey's paw`,
     do: $skill`Monkey Slap`,
+    free: false,
   },
   {
     name: "Spring Shoes Kick",
@@ -113,6 +125,7 @@ const banishSources: BanishSource[] = [
     equip: $item`spring shoes`,
     do: Macro.skill($skill`Spring Kick`).step(killMacro()),
     tracker: $skill`Spring Kick`,
+    free: false,
   },
   {
     name: "Batter Up",
@@ -120,6 +133,7 @@ const banishSources: BanishSource[] = [
       have($skill`Batter Up!`) && myClass() === $class`Seal Clubber` && myFury() >= 5,
     do: $skill`Batter Up!`,
     equip: { weapon: $item`seal-clubbing club` },
+    free: false,
   },
 ];
 
