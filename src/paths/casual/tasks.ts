@@ -113,7 +113,7 @@ export const casualDeltas: NamedDeltaTask[] = [
         if (
           have($item`Everfull Dart Holster`) &&
           !have($effect`Everything Looks Red`) &&
-          myTurncount() >= 10
+          myTurncount() >= 30
         ) {
           return Priorities.GoodDarts;
         }
@@ -129,7 +129,7 @@ export const casualDeltas: NamedDeltaTask[] = [
         if (
           have($item`Everfull Dart Holster`) &&
           !have($effect`Everything Looks Red`) &&
-          myTurncount() >= 10
+          myTurncount() >= 30
         ) {
           return Priorities.GoodDarts;
         }
@@ -146,7 +146,7 @@ export const casualDeltas: NamedDeltaTask[] = [
         if (
           have($item`Everfull Dart Holster`) &&
           !have($effect`Everything Looks Red`) &&
-          myTurncount() >= 10
+          myTurncount() >= 30
         ) {
           return Priorities.GoodDarts;
         }
@@ -162,7 +162,7 @@ export const casualDeltas: NamedDeltaTask[] = [
         if (
           have($item`Everfull Dart Holster`) &&
           !have($effect`Everything Looks Red`) &&
-          myTurncount() >= 10
+          myTurncount() >= 30
         ) {
           return Priorities.GoodDarts;
         }
