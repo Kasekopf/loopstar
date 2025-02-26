@@ -40,6 +40,7 @@ import { councilSafe } from "./level12";
 import { customRestoreMp, fillHp } from "../engine/moods";
 import { stenchPlanner } from "../engine/outfit";
 import { tryPlayApriling } from "../lib";
+import { trainSetAvailable } from "./misc";
 
 const ABoo: Task[] = [
   {
@@ -413,13 +414,25 @@ export const ChasmQuest: Quest = {
       },
     },
     {
+      name: "Structural Ember",
+      after: ["Start"],
+      ready: () => have($item`structural ember`) && !trainSetAvailable(),
+      completed: () => get("_structuralEmberUsed"),
+      do: () => use($item`structural ember`),
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
       name: "Bridge Parts",
       after: ["Start"],
       ready: () =>
-        (have($item`morningwood plank`) ||
+        ((have($item`morningwood plank`) ||
           have($item`raging hardwood plank`) ||
           have($item`weirdwood plank`)) &&
-        (have($item`long hard screw`) || have($item`messy butt joint`) || have($item`thick caulk`)),
+          (have($item`long hard screw`) ||
+            have($item`messy butt joint`) ||
+            have($item`thick caulk`))) ||
+        have($item`snow boards`),
       completed: () => step("questL09Topping") >= 1,
       do: () => {
         visitUrl(`place.php?whichplace=orc_chasm&action=bridge${get("chasmBridgeProgress")}`); // use existing materials
@@ -429,7 +442,7 @@ export const ChasmQuest: Quest = {
     },
     {
       name: "Start Peaks",
-      after: ["Bridge", "Bridge Parts"],
+      after: ["Bridge", "Bat Wings Bridge Parts", "Bridge Parts"],
       completed: () => step("questL09Topping") >= 2,
       do: () => {
         visitUrl("place.php?whichplace=highlands&action=highlands_dude");

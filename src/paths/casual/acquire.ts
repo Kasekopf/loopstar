@@ -8,11 +8,23 @@ import {
   retrieveItem,
   retrievePrice,
 } from "kolmafia";
-import { $familiar, $item, $items, clamp, get, have, set, undelay, withProperty } from "libram";
+import {
+  $familiar,
+  $item,
+  $items,
+  clamp,
+  get,
+  have,
+  MayamCalendar,
+  set,
+  undelay,
+  withProperty,
+} from "libram";
 import { atLevel, debug, haveHugeLarge } from "../../lib";
 import { Keys, keyStrategy } from "../../tasks/keys";
 import { Quest, Task } from "../../engine/task";
 import { args, toTempPref } from "../../args";
+import { trainSetAvailable } from "../../tasks/misc";
 
 /**
  * what: The item to buy.
@@ -142,6 +154,33 @@ const acquireSpecs: AcquireSpec[] = [
       }
   ),
   // L9
+  {
+    what: $item`structural ember`,
+    needed: () => {
+      if (step("questL09Topping") >= 1) return 0;
+      if (get("_structuralEmberUsed")) return 0;
+      return 1;
+    },
+    price: Prices.Used,
+  },
+  {
+    what: $item`snow boards`,
+    needed: () => {
+      if (step("questL09Topping") >= 1) return 0;
+      // Wait for other sources to finish
+      if (trainSetAvailable()) return 0;
+      if (!get("_structuralEmberUsed")) return 0;
+      if (
+        MayamCalendar.have() &&
+        MayamCalendar.remainingUses() > 0 &&
+        MayamCalendar.available("wood")
+      )
+        return 0;
+      const goal = have($item`bat wings`) ? 30 : 25;
+      return clamp(ceil((goal - get("chasmBridgeProgress")) / 5), 0, 5);
+    },
+    price: Prices.Used,
+  },
   {
     what: $item`bubblin' crude`,
     needed: () => {
