@@ -15,6 +15,7 @@ import { args } from "../../args";
 import { NamedDeltaTask, Quest } from "../../engine/task";
 import {
   $effect,
+  $familiar,
   $item,
   $items,
   $location,
@@ -23,6 +24,7 @@ import {
   $skill,
   $stat,
   AsdonMartin,
+  ensureEffect,
   get,
   have,
   Macro,
@@ -280,9 +282,15 @@ export const OrganQuest: Quest = {
         if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
           AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
         }
+        if (have($item`autumn leaf`)) {
+          ensureEffect($effect`Crunching Leaves`);
+        }
       },
       do: $location`The Laugh Floor`,
-      outfit: { modifier: "+combat" },
+      outfit: {
+        modifier: "+combat",
+        familiar: $familiar`Jumpsuited Hound Dog`,
+      },
       orbtargets: () => [],
       combat: new CombatStrategy().kill(
         $monsters`Carbuncle Top, Larry of the Field of Signs, Victor the Insult Comic Hellhound`

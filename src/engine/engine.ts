@@ -368,7 +368,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         (combat.can("kill") || combat.can("killItem")) &&
         !task.boss &&
         this.tasks.every((t) => t.completed() || !t.combat?.can("killFree")) &&
-        (get("sidequestNunsCompleted") !== "none" || warCleared())
+        (get("sidequestNunsCompleted") !== "none" || warCleared()) &&
+        !task.activePriority?.has(Priorities.GoodDarts)
       ) {
         // Kills will be upgraded to free kills at the end of this function
         resources.provide("killFree", equipFirst(outfit, freekillSources));
@@ -386,6 +387,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         !have($effect`Teleportitis`) &&
         force_item_source?.equip !== $item`Fourth of May Cosplay Saber` &&
         !get("noncombatForcerActive") &&
+        prioritizedChain === undefined &&
         myTurncount() >= ROUTE_WAIT_TO_NCFORCE
       ) {
         if (

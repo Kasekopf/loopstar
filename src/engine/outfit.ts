@@ -21,6 +21,7 @@ import {
   Skill,
   Slot,
   toSlot,
+  weaponType,
   weightAdjustment,
 } from "kolmafia";
 import {
@@ -33,6 +34,7 @@ import {
   $skill,
   $slot,
   $slots,
+  $stat,
   clamp,
   DaylightShavings,
   get,
@@ -365,8 +367,10 @@ export function equipDefaults(
     outfit.equip($item`sea salt scrubs`);
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
-    outfit.equip($item`June cleaver`);
-    outfit.equip($item`industrial fire extinguisher`);
+    if (weaponType(outfit.equips.get($slot`weapon`) ?? $item`none`) !== $stat`Moxie`) {
+      outfit.equip($item`June cleaver`);
+      outfit.equip($item`industrial fire extinguisher`);
+    }
     if (have($skill`Torso Awareness`)) {
       outfit.equip($item`Jurassic Parka`);
       outfit.equip($item`fresh coat of paint`);

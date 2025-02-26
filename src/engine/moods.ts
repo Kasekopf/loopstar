@@ -96,7 +96,7 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
     result["-combat"].push($effect`Ultra-Soft Steps`);
   }
   if (have($item`crunchy brush`)) {
-    result["-combat"].push($effect`Crunchy Steps`);
+    result["+combat"].push($effect`Crunchy Steps`);
   }
 
   if (myClass() !== $class`Pastamancer`) {

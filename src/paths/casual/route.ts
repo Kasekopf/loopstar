@@ -91,6 +91,7 @@ export const casualRoute: string[] = [
 
   // Setup for +meat/+item set
   "Hidden City/Office Boss", // Get Eagle dude banish
+  "Macguffin/Open Pyramid",
 
   "Orc Chasm/Start Peaks",
   "Orc Chasm/ABoo Carto",
