@@ -314,7 +314,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         );
         debug(
           `Banishes available: ${Array.from(banishSources)
-            .map((b) => b.do)
+            .map((b) => b.name)
             .join(", ")}`
         );
       }
@@ -432,7 +432,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       wanderers.find((wanderer) => wanderer.chance() === 1) !== undefined ||
       resources.has("killFree") ||
       (task.activePriority?.has(Priorities.CosmicBowlingBall) ?? false) ||
-      (task.activePriority?.has(Priorities.SpringShoes) ?? false);
+      (task.activePriority?.has(Priorities.SpringShoes) ?? false) ||
+      (task.activePriority?.has(Priorities.AsdonMartin) ?? false);
     if (!outfit.skipDefaults) {
       const modifier = getModifiersFrom(outfit);
       const glass_useful =

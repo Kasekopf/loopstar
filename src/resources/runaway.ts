@@ -1,4 +1,4 @@
-import { CombatResource, Outfit, OutfitSpec } from "grimoire-kolmafia";
+import { Outfit, OutfitSpec } from "grimoire-kolmafia";
 import {
   cliExecute,
   familiarWeight,
@@ -28,11 +28,14 @@ import {
 } from "libram";
 import { asdonFualable } from "../lib";
 import { asdonFillTo } from "../lib";
+import { args } from "../args";
+import { CombatResource } from "./lib";
 
 export interface RunawaySource extends CombatResource {
   do: Macro;
   banishes: boolean;
   chance: () => number;
+  useactively?: boolean;
 }
 
 export const runawayValue =
@@ -49,7 +52,20 @@ function commaItemFinder(): Item | undefined {
   return commaItem;
 }
 
-export function getRunawaySources(location?: Location) {
+export function asdonBanishAvailable() {
+  if (args.debug.lastasdonbumperturn && myTurncount() - args.debug.lastasdonbumperturn > 30)
+    return false;
+  if (!asdonFualable(50)) return false;
+  // The boss bat minions are not banishable, which breaks the tracking
+  const banishes = get("banishedMonsters").split(":");
+  const bumperIndex = banishes
+    .map((string) => string.toLowerCase())
+    .indexOf("spring-loaded front bumper");
+  if (bumperIndex === -1) return true;
+  return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
+}
+
+export function getRunawaySources(location?: Location): RunawaySource[] {
   const runawayFamiliarPlan = planRunawayFamiliar();
 
   return [
@@ -72,6 +88,7 @@ export function getRunawaySources(location?: Location) {
       do: new Macro().skill($skill`Bowl a Curveball`),
       chance: () => 1,
       banishes: true,
+      useactively: true,
     },
     {
       name: "Spring Shoes",
@@ -80,6 +97,19 @@ export function getRunawaySources(location?: Location) {
       chance: () => 1,
       equip: $item`spring shoes`,
       banishes: false,
+      useactively: true,
+    },
+    {
+      name: "Asdon Martin",
+      available: (): boolean => {
+        if (location === $location`The Boss Bat's Lair`) return false;
+        return asdonBanishAvailable();
+      },
+      prepare: () => asdonFillTo(50),
+      do: new Macro().skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
+      chance: () => 1,
+      banishes: true,
+      useactively: true,
     },
     {
       name: "Bandersnatch",
@@ -130,24 +160,6 @@ export function getRunawaySources(location?: Location) {
       chance: () => 1,
       effect: $effect`Ode to Booze`,
       banishes: false,
-    },
-    {
-      name: "Asdon Martin",
-      available: (): boolean => {
-        if (!asdonFualable(50)) return false;
-        // The boss bat minions are not banishable, which breaks the tracking
-        if (location === $location`The Boss Bat's Lair`) return false;
-        const banishes = get("banishedMonsters").split(":");
-        const bumperIndex = banishes
-          .map((string) => string.toLowerCase())
-          .indexOf("spring-loaded front bumper");
-        if (bumperIndex === -1) return true;
-        return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
-      },
-      prepare: () => asdonFillTo(50),
-      do: new Macro().skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
-      chance: () => 1,
-      banishes: true,
     },
     {
       name: "GAP",

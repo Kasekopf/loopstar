@@ -24,6 +24,7 @@ import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { ChainSource, chainSources, WandererSource, wandererSources } from "../resources/wanderer";
 import { getActiveBackupTarget } from "../resources/backup";
 import { cosmicBowlingBallReady } from "../lib";
+import { asdonBanishAvailable } from "../resources/runaway";
 
 export class Priorities {
   static Always: Priority = { score: 40000, reason: "Forced" };
@@ -44,6 +45,7 @@ export class Priorities {
   };
   static CosmicBowlingBall: Priority = { score: 11, reason: "Use cosmic bowling ball" };
   static SpringShoes: Priority = { score: 11, reason: "Use spring shoes" };
+  static AsdonMartin: Priority = { score: 11, reason: "Use asdon martin" };
   static GoodYR: Priority = { score: 10, reason: "Yellow ray" };
   static GoodDarts: Priority = { score: 9, reason: "Darts Bullseye is ready" };
   static GoodCandelabra: Priority = { score: 8, reason: "Purple Candle is ready" };
@@ -229,48 +231,51 @@ export class Prioritization {
     }
 
     // Prefer tasks where the cosmic bowling ball is useful
-    const ball_useful =
+    const location = task.do instanceof Location ? task.do : $location`none`;
+    const runawayUseful =
       task.combat === undefined ||
       task.combat.can("ignore") ||
       task.combat.can("banish") ||
       task.combat.getDefaultAction() === undefined;
-    const ball_may_not_be_useful =
+    const runawayMayNotBeUseful =
       task.combat?.can("kill") ||
       task.combat?.can("killHard") ||
       task.combat?.can("killItem") ||
       task.combat?.can("killFree") ||
       task.combat?.can("forceItems") ||
       task.combat?.can("yellowRay");
-    const location_blacklist = [
+    const locationDenylist = [
       $location`The Shore, Inc. Travel Agency`,
       $location`The Hidden Temple`,
       $location`The Oasis`,
       $location`Lair of the Ninja Snowmen`,
       $location`A-Boo Peak`,
     ];
-    const location_whitelist = [
+    const locationAllowlist = [
       $location`The Haunted Bathroom`,
       $location`The Castle in the Clouds in the Sky (Top Floor)`,
       $location`Lair of the Ninja Snowmen`,
       $location`The Batrat and Ratbat Burrow`,
     ];
-    const location_in_blacklist =
-      task.do instanceof Location && location_blacklist.includes(task.do);
-    const location_in_whitelist =
-      task.do instanceof Location && location_whitelist.includes(task.do);
+    // Don't use asdon when it would mess up tracking
+    // (from non-banishable monsters)
+    const asdonDenylist = ["Tavern/Basement", "Bat/Boss Bat"];
     if (!result._wanderer) {
       if (
-        location_in_whitelist ||
+        locationAllowlist.includes(location) ||
         (!task.freeaction &&
           !task.freecombat &&
-          ball_useful &&
-          !ball_may_not_be_useful &&
-          !location_in_blacklist &&
-          !task.tags?.includes("NCForce"))
+          runawayUseful &&
+          !runawayMayNotBeUseful &&
+          !locationDenylist.includes(location) &&
+          !task.tags?.includes("NCForce") &&
+          !task.name.startsWith("Tower"))
       ) {
         if (cosmicBowlingBallReady()) result.priorities.add(Priorities.CosmicBowlingBall);
         else if (have($item`spring shoes`) && !have($effect`Everything Looks Green`))
           result.priorities.add(Priorities.SpringShoes);
+        else if (asdonBanishAvailable() && !asdonDenylist.includes(task.name))
+          result.priorities.add(Priorities.AsdonMartin);
       }
     }
 
