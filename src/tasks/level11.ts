@@ -310,6 +310,7 @@ const Pyramid: Task[] = [
     do: $location`The Upper Chamber`,
     outfit: { modifier: "+combat" },
     limit: { turns: 6 },
+    delay: 5,
   },
   {
     name: "Middle Chamber",
