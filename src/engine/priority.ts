@@ -250,6 +250,7 @@ export class Prioritization {
       $location`The Oasis`,
       $location`Lair of the Ninja Snowmen`,
       $location`A-Boo Peak`,
+      $location`The eXtreme Slope`,
     ];
     const locationAllowlist = [
       $location`The Haunted Bathroom`,
