@@ -5,11 +5,9 @@ This is a 1-day ascension script, using the [grimoire](https://github.com/Kaseko
 - Casual
 - A Shrunken Adventurer am I
 
-### Strategy
-
 The script is designed to be run as part of a loop. In particular, it expects that something like [garbo](https://github.com/Loathing-Associates-Scripting-Society/garbage-collector) will use the rest of the turns. This means that some profitable daily resources (e.g. copiers) may be saved for aftercore, but most resources (free runaways, kills, some wanderers) are used to save turns where possible.
 
-### Installation
+## Installation
 
 To install the script, use the following command in the KoLMafia CLI.
 
@@ -17,14 +15,16 @@ To install the script, use the following command in the KoLMafia CLI.
 git checkout https://github.com/Kasekopf/loopstar release
 ```
 
-### Usage
+## Usage
 
 1. In aftercore, run `loopstar sim` to verify that the script is installed, and to confirm that you meet the requirements. By default, the requirements will be listed to perform a "Casual" run. To view requirements for other paths, set the path argument like `loopstar sim path=smol`. See below for more details.
 2. Ensure you satisfy the pre-run requirements for your desired run, listed below.
 3. Ascend into your desired run, considering the recommendations below.
 4. Run `loopstar` and watch it go! If you are more hesitant, you can run `loopstar actions 10` to only do 10 things and stop.
 
-#### Requirements for Casual
+# Requirements
+
+## Requirements for Casual
 
 - Run `loopstar sim` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day.
 
@@ -32,13 +32,13 @@ Other Recommendations:
 
 - Seal Clubber is the most tested class.
 - Choose astral pilsners from The Deli Lama.
-- Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
+- Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. The best workshed is probably `Asdon Martin keyfob (on ring)`. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
 - Consider the `stomach`, `liver`, and `spleen` arguments. The default values are designed for maximally green players. If you are missing items, you will probably to increase these. If you run out of adventures during the run, you can increases these arguments and rerun.
 
-#### Requirements for Shrunken Adventurer
+## Requirements for Shrunken Adventurer
 
 - Run `loopstar sim path=smol` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day. As a baseline, 2021-2023 standard set and all skill perms is certainly enough to finish in one day.
-- **You must have a Pizza of Legend saved in Hagnk's Storage.** You will not be able to cook this item after ascending.
+- **You must have a Pizza of Legend (or one of the other 2 legend foods) saved in Hagnk's Storage.** You will not be able to cook this item after ascending.
 
 Other Recommendations:
 
@@ -48,7 +48,7 @@ Other Recommendations:
 - Prefer candles for your eurdora.
 - Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
 
-### Options
+# Options
 
 Options can be changed in a few different ways:
 
@@ -134,7 +134,7 @@ Debug Options:
   halt NUMBER - Halt when you have this number of adventures remaining or fewer [default: 0] [setting: loopstar_halt]
 ```
 
-### Will this script work for me?
+# Will this script work for me?
 
 Run `loopstar sim` to see "Is the script intended to work unmodified on my character?". By default, this will be for a "Casual" run; to view requirements for other paths, set the path argument like `loopstar sim path=smol`. See below for more details. A sample output is below, but it may be slightly out of date.
 
