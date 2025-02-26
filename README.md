@@ -34,6 +34,7 @@ Other Recommendations:
 - Choose astral pilsners from The Deli Lama.
 - Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. The best workshed is probably `Asdon Martin keyfob (on ring)`. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
 - Consider the `stomach`, `liver`, and `spleen` arguments. The default values are designed for maximally green players. If you are missing items, you will probably to increase these. If you run out of adventures during the run, you can increases these arguments and rerun.
+- If you are running something like [philter](https://github.com/Loathing-Associates-Scripting-Society/philter) or [keeping tabs](https://github.com/loathers/keeping-tabs), it may be worth checking that you are not autoselling anything that the script needs (or it will rebuy it every run). See [this file](src/paths/casual/acquire.ts) for a list.
 
 ## Requirements for Shrunken Adventurer
 
