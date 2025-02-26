@@ -5,7 +5,6 @@ import {
   Item,
   Monster,
   myFamiliar,
-  myTurncount,
   totalTurnsPlayed,
 } from "kolmafia";
 import {
@@ -224,10 +223,7 @@ export interface ChainSource extends Resource {
 export const chainSources: ChainSource[] = [
   {
     name: "Roman Candelabra",
-    available: () =>
-      have($item`Roman Candelabra`) &&
-      !have($effect`Everything Looks Purple`) &&
-      myTurncount() >= 10,
+    available: () => have($item`Roman Candelabra`) && !have($effect`Everything Looks Purple`),
     equip: $item`Roman Candelabra`,
     do: Macro.trySkill($skill`Blow the Purple Candle!`),
     length: () => 2,
