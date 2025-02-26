@@ -517,12 +517,15 @@ const Nuns: Task[] = [
         return {
           modifier: "meat",
           familiar: $familiar`Trick-or-Treating Tot`,
-          equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin, li'l pirate costume`,
+          equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin, li'l pirate costume, backup camera`,
+          modes: { backupcamera: "meat" },
         };
       }
       return {
         modifier: "meat",
-        equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin, amulet coin`, // Use amulet coin (if we have) to avoid using orb
+        // Use amulet coin (if we have) to avoid using orb
+        equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin, amulet coin, backup camera`,
+        modes: { backupcamera: "meat" },
       };
     },
     freecombat: true, // Do not equip cmg or carn plant

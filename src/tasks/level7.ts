@@ -208,7 +208,10 @@ const Niche: Task[] = [
     priority: () => {
       if (have($familiar`Patriotic Eagle`)) {
         if (!have($effect`Everything Looks Red, White and Blue`)) {
-          if (!have($effect`Everything Looks Yellow`) && myTurncount() < 10) {
+          if (
+            (!have($effect`Everything Looks Yellow`) || !have($effect`Everything Looks Red`)) &&
+            myTurncount() < 10
+          ) {
             return Priorities.None; // Give a bit of time to kick off countdowns
           } else {
             return { score: 8, reason: "Launch RWB" };

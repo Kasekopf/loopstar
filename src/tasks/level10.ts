@@ -91,10 +91,12 @@ export const GiantQuest: Quest = {
         }
       },
       outfit: () => {
-        if (forceItemPossible()) return { modifier: "-combat", equip: $items`bat wings` };
+        const turns = $location`The Penultimate Fantasy Airship`.turnsSpent;
+        if (forceItemPossible())
+          return { modifier: turns < 5 ? "-combat" : undefined, equip: $items`bat wings` };
         else
           return {
-            modifier: "-combat, item",
+            modifier: turns < 5 ? "-combat, item" : "item",
             equip: $items`bat wings`,
             avoid: $items`broken champagne bottle`,
           };
@@ -122,7 +124,11 @@ export const GiantQuest: Quest = {
         if (have($effect`Temporary Amnesia`)) cliExecute("uneffect Temporary Amnesia");
       },
       orbtargets: () => [],
-      outfit: { modifier: "-combat", equip: $items`bat wings` },
+      outfit: () => {
+        const turns = $location`The Penultimate Fantasy Airship`.turnsSpent;
+        if (turns < 5) return {};
+        return { modifier: "-combat", equip: $items`bat wings` };
+      },
       limit: { soft: 50 },
       delay: () => {
         if (have($item`bat wings`)) {
