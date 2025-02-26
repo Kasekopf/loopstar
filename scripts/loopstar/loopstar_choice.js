@@ -523,7 +523,6 @@ function main(choice, page) {
       "Deal 25-50% extra damage": 1e4,
       "Increase Dart Deleveling from deleveling targets": 100,
       "Deal 25-50% greater damage": 1e4,
-      // "Extra stats from stats targets":39, - Dupe in ash script, not sure about the logic here
       "25% better chance to hit bullseyes": 18
     };
     var currentScore = 999999999;
