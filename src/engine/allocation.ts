@@ -23,117 +23,128 @@ type Allocator = {
   delta: DeltaTask | ((which: ResourceType) => DeltaTask); // The change to make on the task if a resource is allocated
 };
 
-const allocators: Allocator[] = [
-  // Pulls
-  {
-    name: "Pull",
-    appliesTo: (which) => which === Resources.Pull,
-    amount: () => {
-      if (inHardcore() || myTurncount() >= 1000) return 0;
-      return pullsRemaining() - (20 - args.major.pulls);
+function getAllocators(): Allocator[] {
+  // NCForces are fungible, so despite which NCForce is allocated to what,
+  // always use the next noncombat source in the delta.
+  // (We keep them as separate allocators for debugging)
+  const nextNCForce = noncombatForceNCSources.find((s) => s.available());
+
+  return [
+    // Pulls
+    {
+      name: "Pull",
+      appliesTo: (which) => which === Resources.Pull,
+      amount: () => {
+        if (inHardcore() || myTurncount() >= 1000) return 0;
+        return pullsRemaining() - (20 - args.major.pulls);
+      },
+      delta: {
+        tag: "Pull",
+      },
     },
-    delta: {
-      tag: "Pull",
+    // NC Forcers
+    {
+      name: "NC Force Active",
+      appliesTo: (which) => which === Resources.NCForce,
+      amount: () => (get("noncombatForcerActive") ? 1 : 0),
+      delta: {
+        tag: "NCForce",
+      },
     },
-  },
-  // NC Forcers
-  {
-    name: "NC Force Active",
-    appliesTo: (which) => which === Resources.NCForce,
-    amount: () => (get("noncombatForcerActive") ? 1 : 0),
-    delta: {
-      tag: "NCForce",
-    },
-  },
-  ...noncombatForceNCSources.map(
-    (s) =>
-      <Allocator>{
-        name: s.name,
-        appliesTo: (which) => which === Resources.NCForce,
-        amount: () => s.remaining(),
-        delta: {
-          tag: "NCForce",
-          combine: {
-            priority: () => {
-              if (get("noncombatForcerActive")) return Priorities.None;
-              if (s.available()) return Priorities.None;
-              return Priorities.BadForcingNC;
-            },
-            prepare: () => {
-              if (!get("noncombatForcerActive")) s.prepare();
-            },
-          },
-        },
-      }
-  ),
-  ...forceNCSources.map(
-    (s) =>
-      <Allocator>{
-        name: s.name,
-        appliesTo: (which) => which === Resources.NCForce,
-        amount: () => s.remaining(),
-        delta: {
-          tag: "NCForce",
-          combine: {
-            priority: () => {
-              if (get("noncombatForcerActive")) return Priorities.None;
-              return Priorities.BadForcingNC;
-            },
-          },
-        },
-      }
-  ),
-  // Summons
-  ...summonSources.map(
-    (s) =>
-      <Allocator>{
-        name: s.name,
-        appliesTo: (which: ResourceType) =>
-          typeof which === "object" && "summon" in which && s.canFight(which.summon),
-        amount: () => s.available(),
-        delta: (req) =>
-          <DeltaTask>{
-            replace: {
-              do: () => {
-                // Perform the actual summon
-                debug(`Summon source: ${s.name}`);
-                s.summon((req as ResourceSummon).summon);
-                runCombat();
+    ...noncombatForceNCSources.map(
+      (s) =>
+        <Allocator>{
+          name: s.name,
+          appliesTo: (which) => which === Resources.NCForce,
+          amount: () => s.remaining(),
+          delta: {
+            tag: "NCForce",
+            combine: {
+              priority: () => {
+                if (get("noncombatForcerActive")) return Priorities.None;
+                if (nextNCForce) return Priorities.None;
+                return Priorities.BadForcingNC;
+              },
+              prepare: () => {
+                if (!get("noncombatForcerActive") && nextNCForce) nextNCForce.prepare();
               },
             },
+          },
+        }
+    ),
+    ...forceNCSources.map(
+      (s) =>
+        <Allocator>{
+          name: s.name,
+          appliesTo: (which) => which === Resources.NCForce,
+          amount: () => s.remaining(),
+          delta: {
+            tag: "NCForce",
             combine: {
-              ready: s.ready,
+              priority: () => {
+                if (get("noncombatForcerActive")) return Priorities.None;
+                if (nextNCForce) return Priorities.None;
+                return Priorities.BadForcingNC;
+              },
+              prepare: () => {
+                if (!get("noncombatForcerActive") && nextNCForce) nextNCForce.prepare();
+              },
             },
-            tag: s.name,
           },
-      }
-  ),
-  // Lucky
-  {
-    name: "Lucky Active",
-    appliesTo: (which) => which === Resources.Lucky,
-    amount: () => (have($effect`Lucky!`) ? 1 : 0),
-    delta: {
-      tag: "Lucky",
+        }
+    ),
+    // Summons
+    ...summonSources.map(
+      (s) =>
+        <Allocator>{
+          name: s.name,
+          appliesTo: (which: ResourceType) =>
+            typeof which === "object" && "summon" in which && s.canFight(which.summon),
+          amount: () => s.available(),
+          delta: (req) =>
+            <DeltaTask>{
+              replace: {
+                do: () => {
+                  // Perform the actual summon
+                  debug(`Summon source: ${s.name}`);
+                  s.summon((req as ResourceSummon).summon);
+                  runCombat();
+                },
+              },
+              combine: {
+                ready: s.ready,
+              },
+              tag: s.name,
+            },
+        }
+    ),
+    // Lucky
+    {
+      name: "Lucky Active",
+      appliesTo: (which) => which === Resources.Lucky,
+      amount: () => (have($effect`Lucky!`) ? 1 : 0),
+      delta: {
+        tag: "Lucky",
+      },
     },
-  },
-  ...luckySources.map(
-    (s) =>
-      <Allocator>{
-        name: s.name,
-        appliesTo: (which) => which === Resources.Lucky,
-        amount: () => s.remaining(),
-        delta: {
-          tag: "Lucky",
-          combine: {
-            prepare: () => {
-              if (!have($effect`Lucky!`)) s.prepare();
+    ...luckySources.map(
+      (s) =>
+        <Allocator>{
+          name: s.name,
+          appliesTo: (which) => which === Resources.Lucky,
+          amount: () => s.remaining(),
+          delta: {
+            tag: "Lucky",
+            combine: {
+              prepare: () => {
+                if (!have($effect`Lucky!`)) s.prepare();
+              },
             },
           },
-        },
-      }
-  ),
-];
+        }
+    ),
+  ];
+}
 
 export function allocateResources(tasks: Task[], verbose = false): Map<string, DeltaTask> {
   // Order tasks by the value fulfilling their resource request will give.
@@ -145,6 +156,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
   );
 
   const fulfillments = new Map<string, DeltaTask>();
+  const allocators = getAllocators();
   const remainingToAllocate = allocators.map((s) => s.amount());
   for (const task of tasksByResource) {
     const request = undelay(task.resources);
