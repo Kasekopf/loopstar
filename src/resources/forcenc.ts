@@ -1,4 +1,4 @@
-import { floor, max, useSkill } from "kolmafia";
+import { floor, max, use, useSkill } from "kolmafia";
 import { $item, $items, $skill, AprilingBandHelmet, CinchoDeMayo, get, have, Macro } from "libram";
 import { args } from "../args";
 import { CombatResource } from "./lib";
@@ -66,6 +66,15 @@ export const noncombatForceNCSources: ForceNCSource[] = [
     remaining: () => {
       if (!CinchoDeMayo.have()) return 0;
       return floor(CinchoDeMayo.totalAvailableCinch() / 60);
+    },
+  },
+  {
+    name: "Clara",
+    available: () => have($item`Clara's bell`) && !get("_claraBellUsed"),
+    prepare: () => use($item`Clara's bell`),
+    remaining: () => {
+      if (!have($item`Clara's bell`) || !get("_claraBellUsed")) return 0;
+      return 1;
     },
   },
 ];
