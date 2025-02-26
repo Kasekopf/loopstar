@@ -147,7 +147,6 @@ const Desert: Task[] = [
   {
     name: "Compass",
     after: ["Misc/Unlock Beach", "Scrip"],
-    ready: () => !have($item`milestone`),
     completed: () => have($item`UV-resistant compass`) || get("desertExploration") >= 100,
     do: () => buy($coinmaster`The Shore, Inc. Gift Shop`, 1, $item`UV-resistant compass`),
     limit: { tries: 1 },

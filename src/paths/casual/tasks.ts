@@ -49,8 +49,16 @@ export const casualDeltas: NamedDeltaTask[] = [
         return mallPrice($item`milestone`) < args.casual.milestoneprice;
       },
     },
-    replace: {
-      limit: { tries: 20 },
+  },
+  {
+    name: "Macguffin/Compass",
+    combine: {
+      ready: () => {
+        if (args.casual.milestoneprice === 0) return true;
+        if (mallPrice($item`milestone`) >= args.casual.milestoneprice) return true;
+        if (get("desertExploration") > 0) return true; // If something went wrong with the milestones
+        return false;
+      },
     },
   },
   // Do not worry about pulling anything
