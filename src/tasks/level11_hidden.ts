@@ -493,8 +493,8 @@ const Bowling: Task[] = [
       .banish($monster`pygmy janitor`)
       .banish($monster`pygmy orderlies`),
     outfit: () => {
+      if (bowlingBallsGathered()) return {};
       const result: OutfitSpec = {
-        equip: $items`nurse's hat, deft pirate hook`,
         modifier: "item",
         avoid: $items`broken champagne bottle`,
       };
