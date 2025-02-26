@@ -267,6 +267,12 @@ export const OrganQuest: Quest = {
         if (count($items`booze-soaked cherry, comfy pillow, sponge cake`) < 2) return false;
         return true;
       },
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       do: $location`Infernal Rackets Backstage`,
       limit: { soft: 30 },
       outfit: { modifier: "-combat" },
@@ -302,6 +308,12 @@ export const OrganQuest: Quest = {
       name: "Comedy Club",
       after: ["Start"],
       completed: () => have($item`observational glasses`),
+      priority: () => {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       prepare: () => {
         tryPlayApriling("+combat");
         if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
