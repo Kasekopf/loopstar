@@ -509,7 +509,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   dress(task: ActiveTask, outfit: Outfit): void {
     const effects: Effect[] = undelay(task.effects) ?? [];
     const otherEffects = task.otherEffects ?? [];
-    applyEffects(outfit.modifier.join(","), [...effects, ...otherEffects]);
+
+    let modifier = outfit.modifier.join(",");
+    // No need to buff -combat if we just force the NC
+    if (task.tags?.includes("NCForce") || get("noncombatForcerActive"))
+      modifier = modifier.replace("-combat", "");
+    applyEffects(modifier, [...effects, ...otherEffects]);
 
     try {
       cacheDress(outfit);
