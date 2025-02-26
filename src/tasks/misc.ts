@@ -886,8 +886,7 @@ export const MiscQuest: Quest = {
       ready: () => CinchoDeMayo.currentCinch() + CinchoDeMayo.cinchRestoredBy() <= 100,
       completed: () =>
         !have($item`Cincho de Mayo`) ||
-        get("timesRested") >= totalFreeRests() ||
-        get("timesRested") >= 17,
+        get("timesRested") >= totalFreeRests(),
       do: () => {
         if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
           // We cannot rest with full HP and MP, so burn 1 MP with a starting skill.
@@ -913,7 +912,7 @@ export const MiscQuest: Quest = {
         }
       },
       limit: {
-        tries: 26, // Total unrestricted free rests
+        tries: 60, // Round off at a cincho usage
         guard: Guards.create(
           () => myAdventures(),
           (adv) => myAdventures() === adv // Assert we did not use an adventure
