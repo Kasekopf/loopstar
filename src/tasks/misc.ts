@@ -884,9 +884,7 @@ export const MiscQuest: Quest = {
       name: "Cincho Rest",
       after: [],
       ready: () => CinchoDeMayo.currentCinch() + CinchoDeMayo.cinchRestoredBy() <= 100,
-      completed: () =>
-        !have($item`Cincho de Mayo`) ||
-        get("timesRested") >= totalFreeRests(),
+      completed: () => !have($item`Cincho de Mayo`) || get("timesRested") >= totalFreeRests(),
       do: () => {
         if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
           // We cannot rest with full HP and MP, so burn 1 MP with a starting skill.
