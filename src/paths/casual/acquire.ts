@@ -488,8 +488,9 @@ export function getAcquireQuest(): Quest {
             itemAmount(a.what) + equippedAmount(a.what) >= a.needed() ||
             get(toTempPref(`_failedacquire_${a.what.id}`), false),
           do: () => {
-            const needed = a.needed() - itemAmount(a.what) - equippedAmount(a.what);
+            const needed = a.needed();
             if (needed <= 0) return;
+            if (needed <= itemAmount(a.what) + equippedAmount(a.what)) return;
             const maxPrice = realizePrice(a.price);
             const obtained = withProperty("autoBuyPriceLimit", maxPrice, () =>
               retrieveItem(a.what, needed)
