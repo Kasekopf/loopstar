@@ -169,6 +169,13 @@ export const GiantQuest: Quest = {
       resources: {
         which: Resources.NCForce,
         benefit: 1 / 0.65,
+        delta: {
+          replace: {
+            // Just finish the zone directly
+            outfit: { equip: $items`amulet of extreme plot significance` },
+            choices: { 670: 4, 669: 1, 671: 4 },
+          },
+        },
       },
     },
     {

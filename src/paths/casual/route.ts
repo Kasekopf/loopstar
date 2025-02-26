@@ -34,12 +34,14 @@ export const casualRoute: string[] = [
   "Manor/Kitchen",
   "Macguffin/Forest", // Start before -combat buffs
   "Macguffin/Milestone", // If we are using them
-  "Mosquito/Burn Delay",
+  "Manor/Start Floor2",
+  "War/Junkyard End",
 
-  // Get and use clovers
-  "Misc/Hermit Clover",
-  "McLargeHuge/Trapper Return",
-  "Palindome/Protesters",
+  // The following 3 tasks should always stay in this order
+  "Macguffin/Compass", // Unlock desert for ultrahydrated use
+  "Macguffin/Oasis", // Get ultrahydrated as soon as needed
+  "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
+  "Macguffin/Desert", // charge camel for protestors
 
   // Setup additional -combats
   "Palindome/Copperhead",
@@ -48,26 +50,11 @@ export const casualRoute: string[] = [
   "Bat/Use Sonar 3", // Reveal more delay
   "Palindome/Cold Snake",
   "McLargeHuge/Climb",
-  "Manor/Start Floor2",
 
-  // -combat tasks
-  "Giant/Basement Finish",
-  "Crypt/Cranny",
-  "Manor/Gallery",
-  "Manor/Bedroom",
-  "Manor/Finish Floor2",
-  "Hidden City/Forest Coin", // First to get meat
-  "Hidden City/Forest Map",
-  "Hidden City/Forest Fertilizer",
-  "Hidden City/Forest Sapling", // Last to sell bar skins
-  "Mosquito/Finish",
-  "Giant/Finish",
-  "Tavern/Finish",
-  "Manor/Ballroom",
-
-  "McLargeHuge/Finish", // Get Eagle beast banish
-  "Palindome/Talisman",
-  "Palindome/Palindome Dudes", // Use Eagle beast banish
+  // Get and use clovers
+  "Misc/Hermit Clover",
+  "McLargeHuge/Trapper Return",
+  "Palindome/Protesters",
 
   // Hidden City
   "Hidden City/Banish Janitors",
@@ -75,22 +62,33 @@ export const casualRoute: string[] = [
   "Hidden City/Apartment",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
+  "Hidden City/Office Boss",
 
-  // The following 3 tasks should always stay in this order
-  "Macguffin/Compass", // Unlock desert for ultrahydrated use
-  "Macguffin/Oasis", // Get ultrahydrated as soon as needed
-  "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
-  "Macguffin/Desert", // charge camel for protestors
+  "Crypt/Alcove",
+  "Crypt/Nook",
+  "Crypt/Cranny",
+
+  // -combat tasks
+  "Giant/Basement Finish",
+  "Manor/Gallery",
+  "Manor/Bedroom",
+  "Tavern/Finish",
+  "Manor/Finish Floor2",
+  "Mosquito/Finish",
+  "Giant/Finish",
+  "Manor/Ballroom",
+
+  "McLargeHuge/Finish", // Get Eagle beast banish
+  "Palindome/Talisman",
+  "Palindome/Palindome Dudes", // Use Eagle beast banish
+  "Palindome/Boss",
 
   // Finish remaining quests
-  "Crypt/Alcove",
   "Manor/Boss",
   "Giant/Finish",
   "Crypt/Niche",
-  "War/Junkyard End",
 
   // Setup for +meat/+item set
-  "Hidden City/Office Boss", // Get Eagle dude banish
   "Macguffin/Open Pyramid",
 
   "Orc Chasm/Start Peaks",
@@ -99,7 +97,6 @@ export const casualRoute: string[] = [
 
   // Bulk +meat/+item tasks
   "War/Nuns",
-  "Crypt/Nook",
   "Orc Chasm/ABoo Clues",
   "Orc Chasm/Oil Jar",
   "Orc Chasm/Twin Init Search",
