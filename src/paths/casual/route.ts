@@ -31,9 +31,9 @@ export const casualRoute: string[] = [
   "Casual/Giant Swarm Of Ghuol Whelps",
 
   // Initial tasks for delay
-  "Manor/Kitchen",
   "Macguffin/Forest", // Start before -combat buffs
   "Macguffin/Milestone", // If we are using them
+  "Manor/Kitchen",
   "Manor/Start Floor2",
   "War/Junkyard End",
 

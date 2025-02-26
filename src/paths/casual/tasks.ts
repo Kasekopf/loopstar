@@ -8,6 +8,7 @@ import {
   itemAmount,
   mallPrice,
   myBasestat,
+  myTurncount,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -101,7 +102,7 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Digital/Vanya",
     replace: {
       priority: () => {
-        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`) && myTurncount() >= 10) {
           return Priorities.GoodDarts;
         }
         return Priorities.None;
@@ -113,11 +114,12 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Digital/Fungus",
     replace: {
       priority: () => {
-        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`) && myTurncount() >= 10) {
           return Priorities.GoodDarts;
         }
         return Priorities.None;
       },
+      delay: 5,
       preferwanderer: true,
     },
   },
@@ -125,7 +127,7 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Digital/Megalo",
     replace: {
       priority: () => {
-        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`) && myTurncount() >= 10) {
           return Priorities.GoodDarts;
         }
         return Priorities.None;
@@ -137,11 +139,12 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Digital/Hero",
     replace: {
       priority: () => {
-        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
+        if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`) && myTurncount() >= 10) {
           return Priorities.GoodDarts;
         }
         return Priorities.None;
       },
+      delay: 5,
       preferwanderer: true,
     },
   },
