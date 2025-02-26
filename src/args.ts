@@ -158,7 +158,7 @@ export const args = Args.create(
       }),
       stomach: Args.number({
         help: "Amount of stomach to fill.",
-        default: 5,
+        default: 6,
       }),
       liver: Args.number({
         help: "Amount of liver to fill.",
@@ -166,7 +166,7 @@ export const args = Args.create(
       }),
       spleen: Args.number({
         help: "Amount of spleen to fill.",
-        default: 5,
+        default: 0,
       }),
       voa: Args.number({
         help: "Value of an adventure, in meat",

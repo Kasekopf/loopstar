@@ -33,6 +33,7 @@ Other Recommendations:
 - Seal Clubber is the most tested class.
 - Choose astral pilsners from The Deli Lama.
 - Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
+- Consider the `stomach`, `liver`, and `spleen` arguments. The default values are designed for maximally green players. If you are missing items, you will probably to increase these. If you run out of adventures during the run, you can increases these arguments and rerun.
 
 #### Requirements for Shrunken Adventurer
 
@@ -109,9 +110,9 @@ Path: A Shrunken Adventurer am I:
 
 Path: Casual:
   steelorgan BOOLEAN - Get the steel organ [default: true] [setting: loopstar_steelorgan]
-  stomach NUMBER - Amount of stomach to fill. [default: 5] [setting: loopstar_stomach]
+  stomach NUMBER - Amount of stomach to fill. [default: 6] [setting: loopstar_stomach]
   liver NUMBER - Amount of liver to fill. [default: 10] [setting: loopstar_liver]
-  spleen NUMBER - Amount of spleen to fill. [default: 5] [setting: loopstar_spleen]
+  spleen NUMBER - Amount of spleen to fill. [default: 0] [setting: loopstar_spleen]
   voa NUMBER - Value of an adventure, in meat [default: 6500] [setting: valueOfAdventure]
   milestoneprice NUMBER - Skip the desert with milestones, when their price is cheaper than this. [default: 0] [setting: loopstar_milestoneprice]
   usedprice NUMBER - Maximum price to pay for items to be used up during the run. [default: 10000] [setting: loopstar_usedprice]
