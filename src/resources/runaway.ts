@@ -1,6 +1,7 @@
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
 import {
   cliExecute,
+  Familiar,
   familiarWeight,
   getProperty,
   Item,
@@ -24,7 +25,6 @@ import {
   getActiveEffects,
   have,
   Macro,
-  Modes,
 } from "libram";
 import { asdonFualable } from "../lib";
 import { asdonFillTo } from "../lib";
@@ -194,7 +194,7 @@ interface RunawayFamiliarSpec {
 
 type FamweightOption = {
   thing: Item;
-  modes?: Partial<Modes>;
+  rider?: Familiar;
 };
 
 const famweightOptions: FamweightOption[] = [
@@ -213,6 +213,11 @@ const famweightOptions: FamweightOption[] = [
   { thing: $item`familiar scrapbook` },
   // Shirts
   { thing: $item`Stephen's lab coat` },
+  // Back
+  {
+    thing: $item`Buddy Bjorn`,
+    rider: $familiar`Gelatinous Cubeling`,
+  },
   // Pants
   { thing: $item`repaid diaper` },
   { thing: $item`Great Wolf's beastly trousers` },
@@ -255,8 +260,10 @@ function planRunawayFamiliar(): RunawayFamiliarSpec {
     outfit.equip(chosenFamiliar);
     for (const option of famweightOptions) {
       if (attainableWeight >= goalWeight) break;
+      if (option.rider && !have(option.rider)) continue;
       if (outfit.equip(option.thing)) {
         attainableWeight += numericModifier(option.thing, "Familiar Weight");
+        if (option.rider) outfit.equip({ riders: { "buddy-bjorn": option.rider } });
       }
     }
 
