@@ -1,7 +1,6 @@
 import {
   cliExecute,
   create,
-  getWorkshed,
   haveEquipped,
   Item,
   itemAmount,
@@ -24,7 +23,6 @@ import {
   $monsters,
   $phylum,
   $skill,
-  AsdonMartin,
   ensureEffect,
   get,
   have,
@@ -35,9 +33,8 @@ import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
-import { asdonFualable, tuneSnapper } from "../lib";
+import { tuneSnapper } from "../lib";
 import { Priorities } from "../engine/priority";
-import { tryPlayApriling } from "../lib";
 
 function shenItem(item: Item) {
   return (
@@ -129,34 +126,9 @@ const Copperhead: Task[] = [
       (myDaycount() === 1 && step("questL11Shen") > 3),
     prepare: () => {
       restoreHp(myMaxhp());
-      tryPlayApriling("+combat");
-      if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
-        AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
-      }
     },
     do: $location`Lair of the Ninja Snowmen`,
-    outfit: () => {
-      const spec: OutfitSpec = {
-        modifier: "50 combat, init",
-        skipDefaults: true,
-        familiar: $familiar`Jumpsuited Hound Dog`,
-        avoid: $items`miniature crystal ball`,
-      };
-      if (have($familiar`Trick-or-Treating Tot`) && !have($item`li'l ninja costume`))
-        spec.familiar = $familiar`Trick-or-Treating Tot`;
-      if (
-        have($item`latte lovers member's mug`) &&
-        get("latteModifier").includes("Combat Rate: 10")
-      ) {
-        // Ensure kramco does not override +combat
-        spec.offhand = $item`latte lovers member's mug`;
-      }
-      return spec;
-    },
-    combat: new CombatStrategy().killHard([
-      $monster`Frozen Solid Snake`,
-      $monster`ninja snowman assassin`,
-    ]),
+    combat: new CombatStrategy().killHard([$monster`Frozen Solid Snake`]),
     orbtargets: () => undefined, // no assassins in orbs
     limit: { soft: 10 },
     delay: 5,
