@@ -117,7 +117,7 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
         runawayFamiliarPlan.available &&
         runawayFamiliarPlan.outfit.familiar === $familiar`Frumious Bandersnatch`,
       equip: runawayFamiliarPlan.outfit,
-      do: new Macro().runaway(),
+      do: new Macro().step(runawayFamiliarPlan.macro).runaway(),
       chance: () => 1,
       effect: $effect`Ode to Booze`,
       banishes: false,
@@ -128,7 +128,7 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
         runawayFamiliarPlan.available &&
         runawayFamiliarPlan.outfit.familiar === $familiar`Pair of Stomping Boots`,
       equip: runawayFamiliarPlan.outfit,
-      do: new Macro().runaway(),
+      do: new Macro().step(runawayFamiliarPlan.macro).runaway(),
       chance: () => 1,
       banishes: false,
     },
@@ -156,7 +156,7 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
         return false;
       },
       equip: runawayFamiliarPlan.outfit,
-      do: new Macro().runaway(),
+      do: new Macro().step(runawayFamiliarPlan.macro).runaway(),
       chance: () => 1,
       effect: $effect`Ode to Booze`,
       banishes: false,
@@ -190,6 +190,7 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
 interface RunawayFamiliarSpec {
   available: boolean;
   outfit: OutfitSpec;
+  macro: Macro;
 }
 
 type FamweightOption = {
@@ -267,14 +268,27 @@ function planRunawayFamiliar(): RunawayFamiliarSpec {
       }
     }
 
+    const macro = new Macro();
+    if (
+      attainableWeight < goalWeight &&
+      attainableWeight + 20 >= goalWeight &&
+      have($skill`Meteor Lore`) &&
+      get("_meteorShowerUses") < 5
+    ) {
+      macro.trySkill($skill`Meteor Shower`);
+      attainableWeight += 20;
+    }
+
     return {
       outfit: outfit.spec(),
       available: attainableWeight >= goalWeight,
+      macro: macro,
     };
   }
   return {
     available: false,
     outfit: {},
+    macro: new Macro(),
   };
 }
 /**
