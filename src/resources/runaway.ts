@@ -162,6 +162,13 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
       banishes: false,
     },
     {
+      name: "Peppermint Parasol",
+      available: () => have($item`peppermint parasol`) && get("_navelRunaways") < 9,
+      do: new Macro().item($item`peppermint parasol`),
+      chance: () => (get("_navelRunaways") < 3 ? 1 : 0.2),
+      banishes: false,
+    },
+    {
       name: "GAP",
       available: () => have($item`Greatest American Pants`),
       equip: $item`Greatest American Pants`,
@@ -174,13 +181,6 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
       available: () => have($item`navel ring of navel gazing`),
       equip: $item`navel ring of navel gazing`,
       do: new Macro().runaway(),
-      chance: () => (get("_navelRunaways") < 3 ? 1 : 0.2),
-      banishes: false,
-    },
-    {
-      name: "Peppermint Parasol",
-      available: () => have($item`peppermint parasol`) && get("_navelRunaways") < 9,
-      do: new Macro().item($item`peppermint parasol`),
       chance: () => (get("_navelRunaways") < 3 ? 1 : 0.2),
       banishes: false,
     },
