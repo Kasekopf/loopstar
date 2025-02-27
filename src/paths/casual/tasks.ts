@@ -30,6 +30,7 @@ import {
   get,
   have,
   Macro,
+  undelay,
 } from "libram";
 import { PullQuest } from "../../tasks/pulls";
 import { OutfitSpec, step } from "grimoire-kolmafia";
@@ -84,6 +85,38 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Tower/Maze",
     replace: {
       effects: [],
+    },
+  },
+  // Skip some unimportant combats
+  {
+    name: "Tavern/Basement",
+    replace: {
+      combat: new CombatStrategy()
+        .macro(() => {
+          const ratchets =
+            itemAmount($item`tomb ratchet`) + itemAmount($item`crumbling wooden wheel`);
+          const needed = have($item`ancient bomb`) ? 3 : have($item`ancient bronze token`) ? 7 : 10;
+          if (!get("pyramidBombUsed") && ratchets < needed) {
+            // We failed to buy enough ratchets, we need to kill the kings
+            if (have($skill`Saucegeyser`))
+              return Macro.while_("!mpbelow 24", Macro.skill($skill`Saucegeyser`));
+            else return killMacro(true);
+          }
+          return new Macro();
+        }, $monster`drunken rat king`)
+        .ignore(),
+    },
+    amend: {
+      outfit: (oldOutfit) => {
+        const ratchets =
+          itemAmount($item`tomb ratchet`) + itemAmount($item`crumbling wooden wheel`);
+        const needed = have($item`ancient bomb`) ? 3 : have($item`ancient bronze token`) ? 7 : 10;
+        if (!get("pyramidBombUsed") && ratchets < needed) {
+          // We failed to buy enough ratchets, we need to kill the kings
+          return undelay(oldOutfit);
+        }
+        return { equip: $items`June cleaver`, modifier: "-combat" };
+      },
     },
   },
   // Save some additional resources for aftercore

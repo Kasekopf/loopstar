@@ -62,7 +62,7 @@ export const TavernQuest: Quest = {
           if (have($skill`Saucegeyser`))
             return Macro.while_("!mpbelow 24", Macro.skill($skill`Saucegeyser`));
           else return new Macro();
-        })
+        }, $monster`drunken rat king`)
         .killHard($monster`drunken rat king`)
         .ignore(),
       choices: () => {
