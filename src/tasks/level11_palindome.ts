@@ -128,6 +128,11 @@ const Copperhead: Task[] = [
       restoreHp(myMaxhp());
     },
     do: $location`Lair of the Ninja Snowmen`,
+    outfit: () => {
+      if (have($familiar`Trick-or-Treating Tot`) && !have($item`li'l ninja costume`))
+        return { familiar: $familiar`Trick-or-Treating Tot` };
+      return {};
+    },
     combat: new CombatStrategy().killHard([$monster`Frozen Solid Snake`]),
     orbtargets: () => undefined, // no assassins in orbs
     limit: { soft: 10 },
