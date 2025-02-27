@@ -211,6 +211,8 @@ const famweightOptions: FamweightOption[] = [
   { thing: $item`ghostly reins` },
   { thing: $item`iFlail` },
   { thing: $item`familiar scrapbook` },
+  // Shirts
+  { thing: $item`Stephen's lab coat` },
   // Pants
   { thing: $item`repaid diaper` },
   { thing: $item`Great Wolf's beastly trousers` },
