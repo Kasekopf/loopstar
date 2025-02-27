@@ -9,6 +9,7 @@ import {
   gamedayToInt,
   getCampground,
   getClanName,
+  getDwelling,
   getWorkshed,
   haveEquipped,
   hermit,
@@ -1289,6 +1290,37 @@ export const MiscQuest: Quest = {
       do: () => use($item`distilled resin`),
       limit: { tries: 5, unready: true },
       freeaction: true,
+    },
+    {
+      name: "Leaf Canopy Bed",
+      after: ["Leaflet"],
+      ready: () => {
+        if (!CinchoDeMayo.have()) return false;
+        if (
+          getDwelling() === $item`big rock` &&
+          !have($item`Frobozz Real-Estate Company Instant House (TM)`)
+        )
+          return false;
+        // Only when the extra free rests push over the next cincho threshold
+        if (
+          totalFreeRests() < 8 ||
+          (totalFreeRests() >= 12 && totalFreeRests() < 17) ||
+          (totalFreeRests() >= 24 && totalFreeRests() < 29) ||
+          (totalFreeRests() >= 36 && totalFreeRests() < 41)
+        ) {
+          return have($item`forest canopy bed`) || BurningLeaves.numberOfLeaves() >= 74;
+        }
+        return false;
+      },
+      completed: () => "forest canopy bed" in getCampground(),
+      do: () => {
+        if (getDwelling() === $item`big rock`) {
+          use($item`Frobozz Real-Estate Company Instant House (TM)`);
+        }
+        retrieveItem($item`forest canopy bed`);
+        use($item`forest canopy bed`);
+      },
+      limit: { tries: 1 },
     },
     {
       name: "Acquire Tuba",
