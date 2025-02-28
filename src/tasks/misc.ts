@@ -1321,6 +1321,7 @@ export const MiscQuest: Quest = {
         use($item`forest canopy bed`);
       },
       limit: { tries: 1 },
+      freeaction: true,
     },
     {
       name: "Acquire Tuba",
