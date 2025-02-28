@@ -151,18 +151,18 @@ Skills (Required)
 ✓ Saucestorm - Combat
 
 IoTMs
-✓ 2002 Mr. Store Catalog - +item, +init, wanderers
+✓ Apriling band helmet - -combat, NC forces
 ✓ august scepter - Protestors, Nuns
 ✓ autumn-aton - Lobsterfrogman
 ✓ baby camelCalf - Desert progress
 ✓ backup camera - ML, init
 ✓ Bastille Battalion control rig - +exp
+✓ bat wings - Adv, orcs
 ✓ Boxing Daycare - +exp
 ✓ candy cane sword cane - NS key, protestors, black forest, war start, bowling, shore
 ✓ Chateau Mantegna - Free rests, +exp
 ✓ Cincho de Mayo - -combat forces
 ✓ Clan VIP Lounge key - YRs, +combat
-✓ closed-circuit pay phone - Shadow bricks, +meat
 ✓ Cold medicine cabinet - Get Extrovermectin for profit
 ✓ Comprehensive Cartography - Billiards, Friars, Nook, Castle, War start
 ✓ Cosmic bowling ball - Banishes
@@ -174,6 +174,7 @@ IoTMs
 ✓ designer sweatpants - Sleaze damage, +init
 ✓ Distant Woods Getaway Brochure - +exp
 ✓ Emotionally Chipped - Banish, -combat, items
+✓ Everfull Dart Holster - Free kills
 ✓ familiar scrapbook - +exp
 ✓ Fourth of May Cosplay Saber - Familiar Weight
 ✓ industrial fire extinguisher - Harem outfit, Bat hole, stone wool, Crypt, Ultrahydrated, Shadow bricks
@@ -188,17 +189,22 @@ IoTMs
 ✓ Lil' Doctor™ bag - Banish, instakill, +item
 ✓ Lovebugs - Crypt, Desert
 ✓ LOV Tunnel - +exp
+✓ Mayam Calendar - Adv, rests, orcs
+✓ McHugeLarge duffel bag - Extreme slopes, NC forces
 ✓ miniature crystal ball - Monster prediction
 ✓ Model train set - Meat, MP, Ore, Orc bridge parts, and res
 ✓ Moping Artistic Goth Kid - Wanderers
 ✓ protonic accelerator pack - Wanderers
+✓ Roman Candelabra - Copied wanderers
 ✓ S.I.T. Course Completion Certificate - Profit, +meat
 ✓ shortest-order cook - Kill the Wall of Skin, initial exp
 ✓ sinistral homunculus - Carn plant
 ✓ sleeping patriotic eagle - Niche, Palindome, Twin Paak
 ✓ SongBoom™ BoomBox - Meat and special seasonings
 ✓ space planula - Stench jellies for profit; see the argument "jellies"
+✓ spring shoes - Free runaways
 ✓ Summon Clip Art - Amulet coin
+✓ toy Cupid bow - Fam exp
 ✓ Unagnimated Gnome - Adv
 ✓ unbreakable umbrella - -combat modifier, ML
 ✓ unwrapped knock-off retro superhero cape - Slay the dead in crypt
