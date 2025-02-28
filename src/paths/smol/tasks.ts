@@ -65,6 +65,7 @@ export const SmolQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Drink",
@@ -85,6 +86,7 @@ export const SmolQuest: Quest = {
       effects: $effects`Ode to Booze`,
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Numberology",
@@ -100,6 +102,7 @@ export const SmolQuest: Quest = {
       },
       limit: { tries: 5 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Tune after Diet",

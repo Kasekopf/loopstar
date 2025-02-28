@@ -229,20 +229,12 @@ function buildIotmRequirements(): Requirement[] {
       why: "Profit, +meat",
     },
     {
-      thing: $item`closed-circuit pay phone`,
-      why: "Shadow bricks, +meat",
-    },
-    {
       thing: $item`cursed monkey's paw`,
       why: "Banishes",
     },
     {
       thing: $item`Cincho de Mayo`,
       why: "-combat forces",
-    },
-    {
-      thing: $item`2002 Mr. Store Catalog`,
-      why: "+item, +init, wanderers",
     },
     {
       thing: $familiar`Patriotic Eagle`,
@@ -263,6 +255,38 @@ function buildIotmRequirements(): Requirement[] {
     {
       thing: $item`candy cane sword cane`,
       why: "NS key, protestors, black forest, war start, bowling, shore",
+    },
+    {
+      thing: $item`spring shoes`,
+      why: "Free runaways",
+    },
+    {
+      thing: $item`Everfull Dart Holster`,
+      why: "Free kills",
+    },
+    {
+      thing: $item`Apriling band helmet`,
+      why: "-combat, NC forces",
+    },
+    {
+      thing: $item`Mayam Calendar`,
+      why: "Adv, rests, orcs",
+    },
+    {
+      thing: $item`Roman Candelabra`,
+      why: "Copied wanderers",
+    },
+    {
+      thing: $item`bat wings`,
+      why: "Adv, orcs",
+    },
+    {
+      thing: $item`McHugeLarge duffel bag`,
+      why: "Extreme slopes, NC forces",
+    },
+    {
+      thing: $item`toy Cupid bow`,
+      why: "Fam exp",
     },
   ].map((r) => <Requirement>{ ...r, category: RequirementCategory.IOTM });
 }
@@ -455,6 +479,21 @@ function buildNonCasualRequirements(): Requirement[] {
     {
       thing: $familiar`Grey Goose`,
       why: "Duplication drones",
+      category: RequirementCategory.IOTM,
+    },
+    {
+      thing: $item`closed-circuit pay phone`,
+      why: "Shadow bricks, +meat",
+      category: RequirementCategory.IOTM,
+    },
+    {
+      thing: $item`2002 Mr. Store Catalog`,
+      why: "+item, +init, wanderers",
+      category: RequirementCategory.IOTM,
+    },
+    {
+      thing: $item`Sept-Ember Censer`,
+      why: "Leveling",
       category: RequirementCategory.IOTM,
     },
     {
