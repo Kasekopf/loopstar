@@ -312,6 +312,12 @@ export const OrganQuest: Quest = {
           return killMacro();
         return new Macro();
       }),
+      prepare: () => {
+        tryPlayApriling("-combat");
+        if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
+          AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
+        }
+      },
       do: $location`Infernal Rackets Backstage`,
       limit: { soft: 30 },
       outfit: { modifier: "-combat" },
@@ -320,12 +326,6 @@ export const OrganQuest: Quest = {
       name: "Unicorn",
       after: ["Arena"],
       completed: () => have($item`Azazel's unicorn`) || step("questM10Azazel") === 999,
-      prepare: () => {
-        tryPlayApriling("-combat");
-        if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
-          AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
-        }
-      },
       do: (): void => {
         const goals: { [name: string]: Item[] } = {
           Bognort: $items`giant marshmallow, gin-soaked blotter paper`,
