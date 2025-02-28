@@ -464,7 +464,12 @@ export const DigitalQuest: Quest = {
             equip: $items`continuum transfunctioner, li'l ninja costume`,
             avoid: $items`Roman Candelabra`,
           };
-        else return { modifier: "item", equip: $items`continuum transfunctioner` };
+        else
+          return {
+            modifier: "item",
+            equip: $items`continuum transfunctioner`,
+            avoid: $items`Roman Candelabra`,
+          };
       },
       combat: new CombatStrategy().killItem(),
       limit: { soft: 16 },
