@@ -112,6 +112,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
   public getNextTask(): ActiveTask | undefined {
     this.updatePlan();
+
+    if (myAdventures() === 0) {
+      // Try to generate adv, or die
+      return this.tasks.find((task) => task.withnoadventures && this.available(task));
+    }
+
     const resourcesAllocated = allocateResources(this.tasks);
     const tasksWithResources = this.tasks.map((task) => {
       const allocation = resourcesAllocated.get(task.name);

@@ -4,6 +4,7 @@ import {
   cliExecute,
   haveEquipped,
   itemAmount,
+  myAdventures,
   myMaxmp,
   myMeat,
   runChoice,
@@ -397,6 +398,7 @@ const Pyramid: Task[] = [
   {
     name: "Boss",
     after: ["Use Bomb"],
+    ready: () => myAdventures() >= 7,
     completed: () => step("questL11Pyramid") === 999,
     do: () => visitUrl("place.php?whichplace=pyramid&action=pyramid_state1a"),
     post: () => {

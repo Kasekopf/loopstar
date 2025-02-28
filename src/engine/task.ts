@@ -20,6 +20,7 @@ export type Task = {
   freecombat?: boolean;
   boss?: boolean;
   nofightingfamiliars?: boolean;
+  withnoadventures?: boolean; // should the task run without any adventures?
 
   // Resources
   delay?: number | (() => number);

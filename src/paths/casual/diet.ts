@@ -89,6 +89,7 @@ export const CasualDietQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Numberology",
@@ -101,6 +102,7 @@ export const CasualDietQuest: Quest = {
       },
       limit: { tries: 5 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Sausage",
@@ -125,6 +127,7 @@ export const CasualDietQuest: Quest = {
       },
       limit: { tries: 23 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Hourglass",
@@ -135,6 +138,7 @@ export const CasualDietQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
   ],
 };
