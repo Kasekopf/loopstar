@@ -8,7 +8,11 @@ export const yellowRaySources: YellowRaySource[] = [
   {
     name: "Jurassic Parka",
     available: () => have($skill`Torso Awareness`) && have($item`Jurassic Parka`),
-    equip: { equip: $items`Jurassic Parka`, modes: { parka: "dilophosaur" } },
+    equip: {
+      equip: $items`Jurassic Parka`,
+      modes: { parka: "dilophosaur" },
+      avoid: $items`bat wings`,
+    },
     do: $skill`Spit jurassic acid`,
   },
   {

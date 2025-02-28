@@ -376,11 +376,11 @@ export function equipDefaults(
       outfit.equip($item`fresh coat of paint`);
     }
     outfit.equip($item`familiar scrapbook`);
-    if (have($item`bat wings`) && get("_batWingsFreeFights", 0) < 5) {
+    if (have($item`bat wings`) && get("_batWingsFreeFights") < 5 && !freecombat) {
       outfit.equip($item`bat wings`);
     } else {
       outfit.equip($item`protonic accelerator pack`);
-      outfit.equip($item`bat wings`);
+      if (!freecombat || get("_batWingsFreeFights") === 5) outfit.equip($item`bat wings`);
     }
     outfit.equip($item`unwrapped knock-off retro superhero cape`);
     outfit.equip($item`designer sweatpants`);
