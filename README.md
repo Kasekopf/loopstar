@@ -22,21 +22,23 @@ git checkout https://github.com/Kasekopf/loopstar release
 3. Ascend into your desired run, considering the recommendations below.
 4. Run `loopstar` and watch it go! If you are more hesitant, you can run `loopstar actions 10` to only do 10 things and stop.
 
-# Requirements
+# Path-Specific Instructions
 
-## Requirements for Casual
+## Instructions for Casual
 
 - Run `loopstar sim` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day.
+- For safety, this script will not touch anything that is in your closet (with a few minor exceptions, e.g. `bowling ball`). If you want to be extra safe, you could closet most of your meat before running the script; 1mil of available meat should be more than enough (unlike `loop-casual`, this script will not automatically do this extra-meat closeting).
+- Upon completion, the script will _not_ break the prism; you'll have to do that yourself.
 
 Other Recommendations:
 
 - Seal Clubber is the most tested class.
 - Choose astral pilsners from The Deli Lama.
 - Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. The best workshed is probably `Asdon Martin keyfob (on ring)`. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
-- Consider the `stomach`, `liver`, and `spleen` arguments. The default values are designed for maximally green players. If you are missing items, you will probably want to increase these. If you run out of adventures during the run, you can increases these arguments and rerun.
+- Consider the `stomach`, `liver`, and `spleen` arguments. The default values are designed for maximally green players. If you are missing items, you will probably want to increase these. If you run out of adventures during the run, you can increase these arguments and rerun.
 - If you are running something like [philter](https://github.com/Loathing-Associates-Scripting-Society/philter) or [keeping tabs](https://github.com/loathers/keeping-tabs), it may be worth checking that you are not autoselling anything that the script needs (or it will rebuy it every run). See [this file](src/paths/casual/acquire.ts) for a list.
 
-## Requirements for Shrunken Adventurer
+## Instructions for Shrunken Adventurer
 
 - Run `loopstar sim path=smol` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day. As a baseline, 2021-2023 standard set and all skill perms is certainly enough to finish in one day.
 - **You must have a Pizza of Legend (or one of the other 2 legend foods) saved in Hagnk's Storage.** You will not be able to cook this item after ascending.
