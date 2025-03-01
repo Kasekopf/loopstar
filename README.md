@@ -5,6 +5,8 @@ This is a 1-day ascension script, using the [grimoire](https://github.com/Kaseko
 - Casual
 - A Shrunken Adventurer am I
 
+Moreover, this script can perform some loop-friendly tasks in aftercore (leveling up, or the steel organ quest) with the `goal` arg.
+
 The script is designed to be run as part of a loop. In particular, it expects that something like [garbo](https://github.com/Loathing-Associates-Scripting-Society/garbage-collector) will use the rest of the turns. This means that some profitable daily resources (e.g. copiers) may be saved for aftercore, but most resources (free runaways, kills, some wanderers) are used to save turns where possible.
 
 ## Installation
