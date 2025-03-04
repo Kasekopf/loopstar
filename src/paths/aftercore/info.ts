@@ -6,9 +6,10 @@ import { getTasks } from "grimoire-kolmafia";
 import { FriarQuest } from "../../tasks/level6";
 import { OrganQuest } from "../casual/tasks";
 import { LevelingQuest } from "../../tasks/leveling";
-import { $skill, get, have } from "libram";
+import { $item, $skill, get, have } from "libram";
 import { Requirement } from "../../sim";
 import { atLevel } from "../../lib";
+import { MenagerieQuest } from "../../tasks/level5";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {
@@ -28,6 +29,8 @@ export class AftercoreInfo implements PathInfo {
         return have($skill`Liver of Steel`);
       case "level":
         return atLevel(12);
+      case "menagerie":
+        return have($item`Cobb's Knob Menagerie key`);
       default:
         throw `Unknown goal ${goal}`;
     }
@@ -49,6 +52,8 @@ export class AftercoreInfo implements PathInfo {
             },
           },
         ]);
+      case "menagerie":
+        return getTasks([MenagerieQuest]);
       default:
         throw `Unknown goal ${goal}`;
     }
