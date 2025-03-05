@@ -96,11 +96,7 @@ import { warCleared } from "./level12";
 const meatBuffer = 1000;
 
 function Leprecondo(): number[] {
-  const furnitureFound = new Set(
-    get("leprecondoDiscovered", "")
-      .split(",")
-      .map(Number)
-  );
+  const furnitureFound = new Set(get("leprecondoDiscovered", "").split(",").map(Number));
 
   // Prioritizing familiar weight/Experience, then Meat Find, then random Booze
   const f1 = furnitureFound.has(21) ? 21 : 0; // Whiskeybed First to prevent overriding anything important
@@ -147,7 +143,9 @@ export const MiscQuest: Quest = {
         const furniture = Leprecondo();
         // eslint-disable-next-line libram/verify-constants
         directlyUse($item`Leprecondo`);
-        visitUrl(`choice.php?pwd&option=1&whichchoice=1556&r0=${furniture[0]}&r1=${furniture[1]}&r2=${furniture[2]}&r3=${furniture[3]}`);
+        visitUrl(
+          `choice.php?pwd&option=1&whichchoice=1556&r0=${furniture[0]}&r1=${furniture[1]}&r2=${furniture[2]}&r3=${furniture[3]}`
+        );
       },
       limit: { tries: 1 },
       freeaction: true,
