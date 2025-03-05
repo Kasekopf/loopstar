@@ -66,6 +66,7 @@ import {
   Clan,
   ClosedCircuitPayphone,
   DaylightShavings,
+  directlyUse,
   ensureEffect,
   get,
   getSaleValue,
@@ -107,6 +108,27 @@ export const MiscQuest: Quest = {
         else cliExecute("acquire 1 desert bus pass");
       },
       outfit: { equip: $items`designer sweatpants` },
+      limit: { tries: 1 },
+      freeaction: true,
+    },
+    {
+      name: "Leprecondo",
+      // eslint-disable-next-line libram/verify-constants
+      ready: () => have($item`Leprecondo`),
+      completed: () => get("_condoDone", false) || get("_leprecondoRearrangements", 0) >= 3,
+      do: () => {
+        const furnitureFound = get("leprecondoDiscovered");
+        // Below I'm prioritizing familiar weight/Experience, then Meat Find, then random Booze. We could make a maximizer, but this is "fine".
+        const f1 = furnitureFound.includes("21") ? 21 : 0; // Whiskeybed First to prevent overriding anything important
+        const f2 = furnitureFound.includes("8") ? 8 : 0; // Karaoke is good exercise and dumb entertainment, but we want familiar weight not item find so we overwrite with treadmill
+        const f3 = furnitureFound.includes("9") ? 9 : 0; // Treadmill next, we want the exercise and don't care about the food
+        const f4 = furnitureFound.includes("13") ? 13 : 0; // Finally, sous vide gives us meat% and random food
+
+        // eslint-disable-next-line libram/verify-constants
+        directlyUse($item`Leprecondo`);
+        visitUrl(`choice.php?pwd&option=1&whichchoice=1556&r0=${f1}&r1=${f2}&r2=${f3}&r3=${f4}`);
+        set("_condoDone", true);
+      },
       limit: { tries: 1 },
       freeaction: true,
     },
