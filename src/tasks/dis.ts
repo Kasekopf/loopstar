@@ -1,5 +1,3 @@
-import "core-js/actual/array/flat-map";
-
 import { Item, Location, myAscensions, myMaxhp, Phylum, restoreHp, visitUrl } from "kolmafia";
 import {
   $effect,
