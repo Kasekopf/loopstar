@@ -108,7 +108,7 @@ function chooseBestLeprecondo(): number[] {
 }
 
 function isLeprecondoComplete(): boolean {
-  return get("leprecondoInstalled", "0,0,0,0") === chooseBestLeprecondo().join(",")
+  return get("leprecondoInstalled", "0,0,0,0") === chooseBestLeprecondo().join(",");
 }
 
 export const MiscQuest: Quest = {
