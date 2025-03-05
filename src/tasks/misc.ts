@@ -95,7 +95,7 @@ import { warCleared } from "./level12";
 
 const meatBuffer = 1000;
 
-function Leprecondo(): number[] {
+function chooseBestLeprecondo(): number[] {
   const furnitureFound = new Set(get("leprecondoDiscovered", "").split(",").map(Number));
 
   // Prioritizing familiar weight/Experience, then Meat Find, then random Booze
@@ -108,7 +108,7 @@ function Leprecondo(): number[] {
 }
 
 function isLeprecondoComplete(): boolean {
-  return get("leprecondoInstalled", "0,0,0,0") === Leprecondo().join(",")
+  return get("leprecondoInstalled", "0,0,0,0") === chooseBestLeprecondo().join(",")
 }
 
 export const MiscQuest: Quest = {
@@ -133,7 +133,7 @@ export const MiscQuest: Quest = {
       ready: () => have($item`Leprecondo`),
       completed: () => isLeprecondoComplete() || get("_leprecondoRearrangements", 0) >= 3,
       do: () => {
-        const furniture = Leprecondo();
+        const furniture = chooseBestLeprecondo();
         // eslint-disable-next-line libram/verify-constants
         directlyUse($item`Leprecondo`);
         visitUrl(
