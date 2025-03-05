@@ -129,6 +129,7 @@ Path: Aftercore:
     goal level - Level up to level 13.
     goal organ - Get your steel organ.
     goal menagerie - Unlock the Cobb's Knob Menagerie
+    goal dis - Complete the Suburbs of Dis quest
 
 Debug Options:
   actions NUMBER - Maximum number of actions to perform, if given. Can be used to execute just a few steps at a time. [setting: loopstar_actions]
