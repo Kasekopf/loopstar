@@ -9,7 +9,7 @@ import { LevelingQuest } from "../../tasks/leveling";
 import { $item, $skill, get, have } from "libram";
 import { Requirement } from "../../sim";
 import { atLevel } from "../../lib";
-import { MenagerieQuest } from "../../tasks/level5";
+import { KnobQuest, MenagerieQuest } from "../../tasks/level5";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {
@@ -53,7 +53,7 @@ export class AftercoreInfo implements PathInfo {
           },
         ]);
       case "menagerie":
-        return getTasks([MenagerieQuest]);
+        return getTasks([KnobQuest, MenagerieQuest]);
       default:
         throw `Unknown goal ${goal}`;
     }
