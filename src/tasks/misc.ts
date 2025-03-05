@@ -95,6 +95,33 @@ import { warCleared } from "./level12";
 
 const meatBuffer = 1000;
 
+function Leprecondo(): number[] {
+  const furnitureFound = new Set(
+    get("leprecondoDiscovered", "")
+      .split(",")
+      .map(Number)
+  );
+
+  // Prioritizing familiar weight/Experience, then Meat Find, then random Booze
+  const f1 = furnitureFound.has(21) ? 21 : 0; // Whiskeybed First to prevent overriding anything important
+  const f2 = furnitureFound.has(8) ? 8 : 0; // Karaoke -> overwritten with treadmill for familiar weight
+  const f3 = furnitureFound.has(9) ? 9 : 0; // Treadmill -> exercise, don't care about the food
+  const f4 = furnitureFound.has(13) ? 13 : 0; // Sous vide -> meat% and random food
+
+  return [f1, f2, f3, f4];
+}
+
+function isLeprecondoComplete(): boolean {
+  const installed = get("leprecondoInstalled", "")
+    .split(",")
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const target = Leprecondo().sort((a, b) => a - b);
+
+  return installed.length === target.length && installed.every((v, i) => v === target[i]);
+}
+
 export const MiscQuest: Quest = {
   name: "Misc",
   tasks: [
@@ -115,19 +142,12 @@ export const MiscQuest: Quest = {
       name: "Leprecondo",
       // eslint-disable-next-line libram/verify-constants
       ready: () => have($item`Leprecondo`),
-      completed: () => get("_condoDone", false) || get("_leprecondoRearrangements", 0) >= 3,
+      completed: () => isLeprecondoComplete() || get("_leprecondoRearrangements", 0) >= 3,
       do: () => {
-        const furnitureFound = get("leprecondoDiscovered");
-        // Below I'm prioritizing familiar weight/Experience, then Meat Find, then random Booze. We could make a maximizer, but this is "fine".
-        const f1 = furnitureFound.includes("21") ? 21 : 0; // Whiskeybed First to prevent overriding anything important
-        const f2 = furnitureFound.includes("8") ? 8 : 0; // Karaoke is good exercise and dumb entertainment, but we want familiar weight not item find so we overwrite with treadmill
-        const f3 = furnitureFound.includes("9") ? 9 : 0; // Treadmill next, we want the exercise and don't care about the food
-        const f4 = furnitureFound.includes("13") ? 13 : 0; // Finally, sous vide gives us meat% and random food
-
+        const furniture = Leprecondo();
         // eslint-disable-next-line libram/verify-constants
         directlyUse($item`Leprecondo`);
-        visitUrl(`choice.php?pwd&option=1&whichchoice=1556&r0=${f1}&r1=${f2}&r2=${f3}&r3=${f4}`);
-        set("_condoDone", true);
+        visitUrl(`choice.php?pwd&option=1&whichchoice=1556&r0=${furniture[0]}&r1=${furniture[1]}&r2=${furniture[2]}&r3=${furniture[3]}`);
       },
       limit: { tries: 1 },
       freeaction: true,
