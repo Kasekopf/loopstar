@@ -108,14 +108,7 @@ function Leprecondo(): number[] {
 }
 
 function isLeprecondoComplete(): boolean {
-  const installed = get("leprecondoInstalled", "")
-    .split(",")
-    .map(Number)
-    .sort((a, b) => a - b);
-
-  const target = Leprecondo().sort((a, b) => a - b);
-
-  return installed.length === target.length && installed.every((v, i) => v === target[i]);
+  return get("leprecondoInstalled", "0,0,0,0") === Leprecondo().join(",")
 }
 
 export const MiscQuest: Quest = {
