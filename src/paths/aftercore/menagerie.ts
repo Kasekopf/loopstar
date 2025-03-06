@@ -2,7 +2,6 @@ import { $item, $location, $monster, $monsters, have } from "libram";
 import { CombatStrategy } from "../../engine/combat";
 import { Quest } from "../../engine/task";
 
-
 export const MenagerieQuest: Quest = {
   name: "Unlock Menagerie",
   tasks: [

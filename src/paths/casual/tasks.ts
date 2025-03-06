@@ -9,18 +9,7 @@ import {
 } from "kolmafia";
 import { args } from "../../args";
 import { NamedDeltaTask, Quest } from "../../engine/task";
-import {
-  $effect,
-  $item,
-  $items,
-  $monster,
-  $skill,
-  $stat,
-  get,
-  have,
-  Macro,
-  undelay,
-} from "libram";
+import { $effect, $item, $items, $monster, $skill, $stat, get, have, Macro, undelay } from "libram";
 import { PullQuest } from "../../tasks/pulls";
 import { OutfitSpec } from "grimoire-kolmafia";
 import { CombatStrategy, killMacro } from "../../engine/combat";
@@ -249,5 +238,3 @@ export const CasualQuest: Quest = {
     }),
   ],
 };
-
-

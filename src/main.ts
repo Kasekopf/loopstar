@@ -77,7 +77,7 @@ export function main(command?: string): void {
     }
     const aftercore = new AftercoreInfo();
     const goalArgSpec = Args.getMetadata(args).spec.aftercore.args.goal;
-    const goals = goalArgSpec.options?.map(i => i[0]) ?? [];
+    const goals = goalArgSpec.options?.map((i) => i[0]) ?? [];
     for (const goal of goals) {
       debug(`Goal ${goal}:`);
       aftercore.finished(goal); // Check this returns

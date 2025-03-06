@@ -1,11 +1,22 @@
 import { step } from "grimoire-kolmafia";
 import { drink, getWorkshed, haveEquipped, Item, itemAmount, toInt, visitUrl } from "kolmafia";
-import { $effect, $familiar, $item, $items, $location, $monsters, $skill, AsdonMartin, ensureEffect, have, Macro } from "libram";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $items,
+  $location,
+  $monsters,
+  $skill,
+  AsdonMartin,
+  ensureEffect,
+  have,
+  Macro,
+} from "libram";
 import { CombatStrategy, killMacro } from "../../engine/combat";
 import { Priorities } from "../../engine/priority";
 import { Quest } from "../../engine/task";
 import { asdonFualable, tryPlayApriling } from "../../lib";
-
 
 export const OrganQuest: Quest = {
   name: "Organ",
@@ -72,7 +83,7 @@ export const OrganQuest: Quest = {
       after: ["Arena"],
       completed: () => have($item`Azazel's unicorn`) || step("questM10Azazel") === 999,
       do: (): void => {
-        const goals: { [name: string]: Item[]; } = {
+        const goals: { [name: string]: Item[] } = {
           Bognort: $items`giant marshmallow, gin-soaked blotter paper`,
           Stinkface: $items`beer-scented teddy bear, gin-soaked blotter paper`,
           Flargwurm: $items`booze-soaked cherry, sponge cake`,
