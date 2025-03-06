@@ -183,7 +183,7 @@ function haveEquipmentToCast(effect: Effect): boolean {
   if (skill === $skill`none`) return true;
   if (skill.class === $class`Turtle Tamer`) return have($item`turtle totem`);
   if (skill.class === $class`Sauceror`) return have($item`saucepan`);
-  if (skill.class === $class`Accordion Thief`) return have($item`stolen accordion`);
+  if (skill.class === $class`Accordion Thief`) return have($item`toy accordion`);
   return true;
 }
 

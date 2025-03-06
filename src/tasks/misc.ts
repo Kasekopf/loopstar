@@ -99,7 +99,7 @@ export const MiscQuest: Quest = {
   tasks: [
     {
       name: "Unlock Beach",
-      after: ["Sewer Accordion", "Sewer Saucepan", "Sewer Totem"],
+      after: ["Toy Accordion", "Sewer Saucepan", "Sewer Totem"],
       ready: () => myMeat() >= meatBuffer + (knollAvailable() ? 538 : 5000),
       completed: () => have($item`bitchin' meatcar`) || have($item`Desert Bus pass`),
       do: () => {
@@ -1113,18 +1113,18 @@ export const MiscQuest: Quest = {
       freeaction: true,
     },
     {
-      name: "Sewer Accordion",
+      name: "Toy Accordion",
       after: [],
       ready: () => myMeat() >= 1000,
-      completed: () => have($item`stolen accordion`),
-      do: () => retrieveItem($item`stolen accordion`),
+      completed: () => have($item`toy accordion`),
+      do: () => retrieveItem($item`toy accordion`),
       outfit: { equip: $items`designer sweatpants` },
       limit: { tries: 1 },
       freeaction: true,
     },
     {
       name: "Sewer Totem",
-      after: ["Sewer Accordion"],
+      after: ["Toy Accordionn"],
       ready: () => myMeat() >= 1000,
       completed: () => have($item`turtle totem`),
       do: () => retrieveItem($item`turtle totem`),
@@ -1134,7 +1134,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Sewer Saucepan",
-      after: ["Sewer Accordion", "Sewer Totem"],
+      after: ["Toy Accordion", "Sewer Totem"],
       ready: () => myMeat() >= 1000,
       completed: () => have($item`saucepan`),
       do: () => retrieveItem($item`saucepan`),
