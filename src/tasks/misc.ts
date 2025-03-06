@@ -1124,7 +1124,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Sewer Totem",
-      after: ["Toy Accordionn"],
+      after: ["Toy Accordion"],
       ready: () => myMeat() >= 1000,
       completed: () => have($item`turtle totem`),
       do: () => retrieveItem($item`turtle totem`),
