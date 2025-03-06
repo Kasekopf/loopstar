@@ -6557,7 +6557,7 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
   aftercore: Args.group("Path: Aftercore", {
     goal: Args.string({
       help: "An aftercore goal to accomplish.",
-      options: [["level", "Level up to level 13."], ["organ", "Get your steel organ."]],
+      options: [["level", "Level up to level 13."], ["organ", "Get your steel organ."], ["menagerie", "Unlock the Cobb's Knob Menagerie"], ["dis", "Complete the Suburbs of Dis quest"]],
       setting: ""
     })
   }),
