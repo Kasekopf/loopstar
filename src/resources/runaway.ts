@@ -5,7 +5,6 @@ import {
   familiarWeight,
   getProperty,
   Item,
-  Location,
   mySign,
   myTurncount,
   numericModifier,
@@ -19,7 +18,6 @@ import {
   $familiars,
   $item,
   $items,
-  $location,
   $skill,
   get,
   getActiveEffects,
@@ -65,7 +63,7 @@ export function asdonBanishAvailable() {
   return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
 }
 
-export function getRunawaySources(location?: Location): RunawaySource[] {
+export function getRunawaySources(taskName: string): RunawaySource[] {
   const runawayFamiliarPlan = planRunawayFamiliar();
 
   return [
@@ -102,7 +100,7 @@ export function getRunawaySources(location?: Location): RunawaySource[] {
     {
       name: "Asdon Martin",
       available: (): boolean => {
-        if (location === $location`The Boss Bat's Lair`) return false;
+        if (taskName === "Tavern/Basement" || taskName === "Bat/Boss Bat") return false;
         return asdonBanishAvailable();
       },
       prepare: () => asdonFillTo(50),
