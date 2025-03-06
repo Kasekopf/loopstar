@@ -4,14 +4,15 @@ import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { getTasks } from "grimoire-kolmafia";
 import { FriarQuest } from "../../tasks/level6";
-import { OrganQuest } from "../casual/tasks";
+import { OrganQuest } from "./organ";
 import { LevelingQuest } from "../../tasks/leveling";
 import { $item, $skill, get, have } from "libram";
 import { Requirement } from "../../sim";
 import { atLevel } from "../../lib";
-import { KnobQuest, MenagerieQuest } from "../../tasks/level5";
+import { KnobQuest } from "../../tasks/level5";
+import { MenagerieQuest } from "./menagerie";
 import { myAscensions } from "kolmafia";
-import { DisQuest } from "../../tasks/dis";
+import { DisQuest } from "./dis";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {

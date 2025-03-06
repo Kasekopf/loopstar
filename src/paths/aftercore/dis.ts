@@ -13,8 +13,8 @@ import {
 } from "libram";
 import { step } from "grimoire-kolmafia";
 import { StringProperty } from "libram/dist/propertyTypes";
-import { CombatStrategy } from "../engine/combat";
-import { Quest, Task } from "../engine/task";
+import { CombatStrategy } from "../../engine/combat";
+import { Quest, Task } from "../../engine/task";
 
 type SubQuest = {
   name: string;
