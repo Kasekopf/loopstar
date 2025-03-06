@@ -10,6 +10,8 @@ import { $item, $skill, get, have } from "libram";
 import { Requirement } from "../../sim";
 import { atLevel } from "../../lib";
 import { KnobQuest, MenagerieQuest } from "../../tasks/level5";
+import { myAscensions } from "kolmafia";
+import { DisQuest } from "../../tasks/dis";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {
@@ -31,6 +33,8 @@ export class AftercoreInfo implements PathInfo {
         return atLevel(12);
       case "menagerie":
         return have($item`Cobb's Knob Menagerie key`);
+      case "dis":
+        return get("lastThingWithNoNameDefeated") === myAscensions();
       default:
         throw `Unknown goal ${goal}`;
     }
@@ -54,6 +58,8 @@ export class AftercoreInfo implements PathInfo {
         ]);
       case "menagerie":
         return getTasks([KnobQuest, MenagerieQuest]);
+      case "dis":
+        return getTasks([DisQuest]);
       default:
         throw `Unknown goal ${goal}`;
     }
