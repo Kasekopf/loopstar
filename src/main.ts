@@ -76,7 +76,9 @@ export function main(command?: string): void {
       debug(`- Loaded ${engine.tasks.length} tasks`);
     }
     const aftercore = new AftercoreInfo();
-    for (const goal of ["level", "organ"]) {
+    const goalArgSpec = Args.getMetadata(args).spec.aftercore.args.goal;
+    const goals = goalArgSpec.options?.map(i => i[0]) ?? [];
+    for (const goal of goals) {
       debug(`Goal ${goal}:`);
       aftercore.finished(goal); // Check this returns
       const engine = aftercore.getEngine(aftercore.getTasks(getAllTasks(), goal));
