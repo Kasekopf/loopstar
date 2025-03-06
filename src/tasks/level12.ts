@@ -545,6 +545,7 @@ const Nuns: Task[] = [
 
 export const WarQuest: Quest = {
   name: "War",
+  completed: () => step("questL12War") === 999,
   tasks: [
     {
       name: "Start",
