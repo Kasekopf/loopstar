@@ -13,11 +13,13 @@ import { Task } from "../engine/task";
 type BanishSimpleDo = CombatResource & {
   do: Item | Skill;
   free: boolean;
+  blocked?: string[];
 };
 type BanishMacroDo = CombatResource & {
   do: Macro;
   tracker: Item | Skill;
   free: boolean;
+  blocked?: string[];
 };
 export type BanishSource = BanishSimpleDo | BanishMacroDo;
 function getTracker(source: BanishSource): Item | Skill {
@@ -51,6 +53,7 @@ const banishSources: BanishSource[] = [
     prepare: () => asdonFillTo(50),
     do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
     free: true,
+    blocked: ["Tavern/Basement", "Bat/Boss Bat"],
   },
   {
     name: "Spring Shoes Kick Away",
@@ -138,7 +141,11 @@ const banishSources: BanishSource[] = [
 ];
 
 // Return a list of all banishes not allocated to some available task
-export function unusedBanishes(banishState: BanishState, tasks: Task[]): BanishSource[] {
+export function unusedBanishes(
+  banishState: BanishState,
+  tasks: Task[],
+  taskName: string
+): BanishSource[] {
   const used_banishes = new Set<Item | Skill>();
   for (const task of tasks) {
     if (task.combat === undefined) continue;
@@ -150,6 +157,9 @@ export function unusedBanishes(banishState: BanishState, tasks: Task[]): BanishS
   }
 
   return banishSources.filter(
-    (banish) => banish.available() && !used_banishes.has(getTracker(banish))
+    (banish) =>
+      banish.available() &&
+      !banish.blocked?.includes(taskName) &&
+      !used_banishes.has(getTracker(banish))
   );
 }

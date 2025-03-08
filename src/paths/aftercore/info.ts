@@ -4,12 +4,15 @@ import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { getTasks } from "grimoire-kolmafia";
 import { FriarQuest } from "../../tasks/level6";
-import { OrganQuest } from "../casual/tasks";
+import { OrganQuest } from "./organ";
 import { LevelingQuest } from "../../tasks/leveling";
 import { $item, $skill, get, have } from "libram";
 import { Requirement } from "../../sim";
 import { atLevel } from "../../lib";
-import { KnobQuest, MenagerieQuest } from "../../tasks/level5";
+import { KnobQuest } from "../../tasks/level5";
+import { MenagerieQuest } from "./menagerie";
+import { myAscensions } from "kolmafia";
+import { DisQuest } from "./dis";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {
@@ -31,6 +34,8 @@ export class AftercoreInfo implements PathInfo {
         return atLevel(12);
       case "menagerie":
         return have($item`Cobb's Knob Menagerie key`);
+      case "dis":
+        return get("lastThingWithNoNameDefeated") === myAscensions();
       default:
         throw `Unknown goal ${goal}`;
     }
@@ -54,6 +59,8 @@ export class AftercoreInfo implements PathInfo {
         ]);
       case "menagerie":
         return getTasks([KnobQuest, MenagerieQuest]);
+      case "dis":
+        return getTasks([DisQuest]);
       default:
         throw `Unknown goal ${goal}`;
     }

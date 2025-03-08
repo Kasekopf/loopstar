@@ -309,7 +309,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       }
 
       const banishState = globalStateCache.banishes();
-      const banishSources = unusedBanishes(banishState, task.availableTasks ?? []);
+      const banishSources = unusedBanishes(banishState, task.availableTasks ?? [], task.name);
       if (combat.can("banish") && !banishState.isFullyBanished(task)) {
         resources.provide("banish", equipFirst(outfit, banishSources));
         debug(
@@ -344,7 +344,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
       // Set up a runaway if there are combats we do not care about
       if (!outfit.skipDefaults) {
-        const runawaySources = getRunawaySources(task.do instanceof Location ? task.do : undefined);
+        const runawaySources = getRunawaySources(task.name);
         let runaway: (CombatResource & { banishes?: boolean }) | undefined = undefined;
         if (combat.can("ignore") || combat.can("ignoreSoftBanish")) {
           // First, try guaranteed runaways

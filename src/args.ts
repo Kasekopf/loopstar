@@ -193,6 +193,7 @@ export const args = Args.create(
           ["level", "Level up to level 13."],
           ["organ", "Get your steel organ."],
           ["menagerie", "Unlock the Cobb's Knob Menagerie"],
+          ["dis", "Complete the Suburbs of Dis quest"],
         ],
         setting: "",
       }),

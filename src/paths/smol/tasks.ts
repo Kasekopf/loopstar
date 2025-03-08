@@ -119,7 +119,7 @@ export const SmolQuest: Quest = {
     {
       name: "Acquire Red Rocket",
       after: [
-        "Misc/Sewer Accordion",
+        "Misc/Toy Accordion",
         "Misc/Sewer Totem",
         "Misc/Sewer Saucepan",
         "Leveling/Acquire Mouthwash",
