@@ -30,7 +30,7 @@ import { getAllTasks } from "./tasks/all";
 const svn_name = "Kasekopf-loop-casual-branches-release";
 
 export function main(command?: string): void {
-  sinceKolmafiaRevision(28258);
+  sinceKolmafiaRevision(28425);
 
   Args.fill(args, command);
 

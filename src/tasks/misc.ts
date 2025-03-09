@@ -95,22 +95,6 @@ import { warCleared } from "./level12";
 
 const meatBuffer = 1000;
 
-function chooseBestLeprecondo(): number[] {
-  const furnitureFound = new Set(get("leprecondoDiscovered", "").split(",").map(Number));
-
-  // Prioritizing familiar weight/Experience, then Meat Find, then random Booze
-  const f1 = furnitureFound.has(21) ? 21 : 0; // Whiskeybed First to prevent overriding anything important
-  const f2 = furnitureFound.has(8) ? 8 : 0; // Karaoke -> overwritten with treadmill for familiar weight
-  const f3 = furnitureFound.has(9) ? 9 : 0; // Treadmill -> exercise, don't care about the food
-  const f4 = furnitureFound.has(13) ? 13 : 0; // Sous vide -> meat% and random food
-
-  return [f1, f2, f3, f4];
-}
-
-function isLeprecondoComplete(): boolean {
-  return get("leprecondoInstalled", "0,0,0,0") === chooseBestLeprecondo().join(",");
-}
-
 export const MiscQuest: Quest = {
   name: "Misc",
   tasks: [
@@ -1639,4 +1623,20 @@ function getDesiredTrainsetConfig(): TrainSet.Cycle {
   config.push(Station.GRAIN_SILO);
   config.push(Station.CANDY_FACTORY);
   return config.slice(0, 8) as TrainSet.Cycle;
+}
+
+function chooseBestLeprecondo(): number[] {
+  const furnitureFound = new Set(get("leprecondoDiscovered", "").split(",").map(Number));
+
+  // Prioritizing familiar weight/Experience, then Meat Find, then random Booze
+  const f1 = furnitureFound.has(21) ? 21 : 0; // Whiskeybed First to prevent overriding anything important
+  const f2 = furnitureFound.has(8) ? 8 : 0; // Karaoke -> overwritten with treadmill for familiar weight
+  const f3 = furnitureFound.has(9) ? 9 : 0; // Treadmill -> exercise, don't care about the food
+  const f4 = furnitureFound.has(13) ? 13 : 0; // Sous vide -> meat% and random food
+
+  return [f1, f2, f3, f4];
+}
+
+function isLeprecondoComplete(): boolean {
+  return get("leprecondoInstalled", "0,0,0,0") === chooseBestLeprecondo().join(",");
 }
