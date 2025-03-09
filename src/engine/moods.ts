@@ -141,6 +141,12 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
       all_attributes.push($effect`Total Protonic Reversal`);
   }
 
+  if (myPath() === $path`Grey You`) {
+    result["-combat"].push($effect`Shifted Phase`);
+    result["-combat"].push($effect`Darkened Photons`);
+    result["+combat"].push($effect`Hooooooooonk!`);
+  }
+
   result[" combat"] = result["+combat"];
   result["muscle"].push(...all_attributes);
   result["mysticality"].push(...all_attributes);
@@ -162,7 +168,10 @@ export function moodCompatible(modifier: string | undefined): boolean {
     return (
       !have($effect`Smooth Movements`) &&
       !have($effect`The Sonata of Sneakiness`) &&
-      !have($effect`Hiding From Seekers`)
+      !have($effect`Hiding From Seekers`) &&
+      // Gyou Effects
+      !have($effect`Shifted Phase`) &&
+      !have($effect`Darkened Photons`)
     );
   }
   if (modifier.includes("-combat")) {
@@ -171,7 +180,9 @@ export function moodCompatible(modifier: string | undefined): boolean {
       !have($effect`Carlweather's Cantata of Confrontation`) &&
       !have($effect`Romantically Roused`) &&
       !have($effect`Fresh Breath`) &&
-      !have($effect`Attracting Snakes`)
+      !have($effect`Attracting Snakes`) &&
+      // Gyou Effects
+      !have($effect`Hooooooooonk!`)
     );
   }
   return true;

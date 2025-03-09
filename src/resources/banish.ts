@@ -64,6 +64,12 @@ const banishSources: BanishSource[] = [
     free: true,
   },
   {
+    name: "System Sweep",
+    available: () => have($skill`System Sweep`),
+    do: $skill`System Sweep`,
+    free: false,
+  },
+  {
     name: "Feel Hatred",
     available: () => get("_feelHatredUsed") < 3 && have($skill`Emotionally Chipped`),
     do: $skill`Feel Hatred`,

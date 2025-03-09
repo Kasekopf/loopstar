@@ -231,8 +231,6 @@ export function equipCharging(
   mightKillSomething: boolean,
   noFightingFamiliars: boolean
 ): void {
-  if (outfit.skipDefaults) return;
-
   const modifier = getModifiersFrom(outfit);
 
   // Try and get the Spooky Forest ghost first
@@ -631,6 +629,8 @@ export class ElementalPlanner {
 }
 
 export const coldPlanner = new ElementalPlanner([
+  { thing: $skill`Nanofur`, value: 3 },
+  { thing: $skill`Microweave`, value: 2 },
   { thing: $effect`Hot Soupy Garbage`, value: 2 },
   { thing: $effect`Double Hot Soupy Garbage`, value: 2 },
   { thing: $effect`Astral Shell`, value: 1 },
@@ -654,6 +654,8 @@ export const coldPlanner = new ElementalPlanner([
 ]);
 
 export const stenchPlanner = new ElementalPlanner([
+  { thing: $skill`Conifer Polymers`, value: 3 },
+  { thing: $skill`Clammy Microcilia`, value: 2 },
   { thing: $effect`Shivering Spine`, value: 2 },
   { thing: $effect`Doubly Shivering Spine`, value: 4 },
   { thing: $effect`Astral Shell`, value: 1 },

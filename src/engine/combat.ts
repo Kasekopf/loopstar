@@ -90,3 +90,11 @@ export function killMacro(hard?: boolean): Macro {
 
   return result.attack().repeat();
 }
+
+export function replaceActions<T extends string>(combat: BaseCombatStrategy<T>, from: T, to: T) {
+  combat.action(
+    to,
+    (combat.where(from) ?? []).filter((mon: Monster) => !mon.boss)
+  );
+  if (combat.getDefaultAction() === from) combat.action(to);
+}

@@ -62,10 +62,11 @@ import {
   Engine as BaseEngine,
   CombatResources,
   CombatStrategy,
+  EngineOptions,
   lastEncounterWasWanderingNC,
   Outfit,
 } from "grimoire-kolmafia";
-import { CombatActions, MyActionDefaults } from "./combat";
+import { CombatActions, MyActionDefaults, replaceActions } from "./combat";
 import {
   cacheDress,
   equipCharging,
@@ -106,8 +107,9 @@ export type ActiveTask = Task & {
 };
 
 export class Engine extends BaseEngine<CombatActions, ActiveTask> {
-  constructor(tasks: Task[]) {
-    super(tasks, { combat_defaults: new MyActionDefaults() });
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
+    if (!options.combat_defaults) options.combat_defaults = new MyActionDefaults();
+    super(tasks, options);
   }
 
   public getNextTask(): ActiveTask | undefined {
@@ -253,7 +255,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
 
     // Equip initial equipment
-    equipInitial(outfit);
+    this.customizeOutfitInitial(outfit);
 
     // Force the June cleaver if we really want it
     if (task.activePriority?.has(Priorities.GoodCleaver)) outfit.equip($item`June cleaver`);
@@ -414,7 +416,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       const nc_blacklist = new Set<Location>(
         $locations`The Enormous Greater-Than Sign, The Copperhead Club, The Black Forest`
       );
-      const nc_task_blacklist = new Set<string>(["Misc/Protonic Ghost"]);
+      const nc_task_blacklist = new Set<string>([
+        "Misc/Protonic Ghost",
+        "Summon/Spectral Jellyfish", // gyou
+      ]);
       if (
         forceNCPossible() &&
         !(task.do instanceof Location && nc_blacklist.has(task.do)) &&
@@ -450,16 +455,23 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     )
       wanderers.push(...equipUntilCapped(outfit, wandererSources));
 
-    const mightKillSomething =
-      task.activePriority?.has(Priorities.Wanderer) ||
-      task.combat?.can("kill") ||
-      task.combat?.can("killHard") ||
-      task.combat?.can("killItem") ||
-      task.combat?.can("killFree") ||
-      task.combat?.can("forceItems") ||
-      task.combat?.can("yellowRay") ||
-      (!resources.has("ignore") && !resources.has("banish"));
-    equipCharging(outfit, mightKillSomething ?? false, task.nofightingfamiliars ?? false);
+    if (!outfit.skipDefaults) {
+      const mightKillSomething =
+        task.activePriority?.has(Priorities.Wanderer) ||
+        task.combat?.can("kill") ||
+        task.combat?.can("killHard") ||
+        task.combat?.can("killItem") ||
+        task.combat?.can("killFree") ||
+        task.combat?.can("forceItems") ||
+        task.combat?.can("yellowRay") ||
+        (!resources.has("ignore") && !resources.has("banish"));
+      this.customizeOutfitCharging(
+        task,
+        outfit,
+        mightKillSomething ?? false,
+        task.nofightingfamiliars ?? false
+      );
+    }
 
     // Prepare full outfit
     const freecombat =
@@ -512,17 +524,22 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // Upgrade normal kills to free kills if provided
     if (resources.has("killFree") && !task.boss) {
-      combat.action(
-        "killFree",
-        (combat.where("kill") ?? []).filter((mon) => !mon.boss)
-      );
-      combat.action(
-        "killFree",
-        (combat.where("killItem") ?? []).filter((mon) => !mon.boss)
-      );
-      if (combat.getDefaultAction() === "kill") combat.action("killFree");
-      if (combat.getDefaultAction() === "killItem") combat.action("killFree");
+      replaceActions(combat, "kill", "killFree");
+      replaceActions(combat, "killItem", "killFree");
     }
+  }
+
+  customizeOutfitInitial(outfit: Outfit): void {
+    equipInitial(outfit);
+  }
+
+  customizeOutfitCharging(
+    task: ActiveTask,
+    outfit: Outfit,
+    mightKillSomething: boolean,
+    noFightingFamiliars: boolean
+  ): void {
+    equipCharging(outfit, mightKillSomething, noFightingFamiliars);
   }
 
   createOutfit(task: Task): Outfit {

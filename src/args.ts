@@ -186,6 +186,12 @@ export const args = Args.create(
         default: 50000,
       }),
     }),
+    gyou: Args.group("Path: Grey You", {
+      absorb: Args.string({
+        help: "A comma-separated list of skills to get, in addition to skills that will directly help the run.",
+        default: "",
+      }),
+    }),
     aftercore: Args.group("Path: Aftercore", {
       goal: Args.string({
         help: "An aftercore goal to accomplish.",

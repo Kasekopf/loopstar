@@ -2,11 +2,22 @@
  * Temporary priorities that override the routing.
  */
 
-import { getCounter, Location, Monster, myLocation } from "kolmafia";
+import {
+  familiarWeight,
+  getCounter,
+  Location,
+  Monster,
+  myAdventures,
+  myDaycount,
+  myLocation,
+  myPath,
+} from "kolmafia";
 import {
   $effect,
+  $familiar,
   $item,
   $location,
+  $path,
   $skill,
   get,
   getTodaysHolidayWanderers,
@@ -25,6 +36,8 @@ import { ChainSource, chainSources, WandererSource, wandererSources } from "../r
 import { getActiveBackupTarget } from "../resources/backup";
 import { cosmicBowlingBallReady } from "../lib";
 import { asdonBanishAvailable } from "../resources/runaway";
+import { mayLaunchGooseForStats } from "../paths/gyou/engine";
+import { globalAbsorbState } from "../paths/gyou/absorb";
 
 export class Priorities {
   static Always: Priority = { score: 40000, reason: "Forced" };
@@ -284,6 +297,44 @@ export class Prioritization {
       result.priorities.delete(Priorities.GoodDarts);
     }
 
+    if (myPath() === $path`Grey You`) {
+      // Check if Grey Goose is charged
+      if (
+        task.do instanceof Location &&
+        globalAbsorbState.hasReprocessTargets(task.do) &&
+        familiarWeight($familiar`Grey Goose`) >= 6 &&
+        !mayLaunchGooseForStats()
+      ) {
+        result.priorities.add({ score: 1, reason: "Goose charged" });
+      }
+
+      // Go places with more adventures if we need them
+      if (myAdventures() < 10 && myDaycount() > 1) {
+        const adv = adventuresRemaining(task);
+        if (adv > 0) {
+          const score = 200 + 0.001 * adv; // Prefer locations with more adventures
+          result.priorities.add({ score: score, reason: "Low on adventures" });
+        }
+      }
+
+      // Wait until we get a -combat skill before doing any -combat
+      if (
+        modifier?.includes("-combat") &&
+        !have($skill`Phase Shift`) &&
+        !(
+          // All these add up to -25 combat fine, no need to wait
+          (
+            have($item`Space Trip safety headphones`) &&
+            have($item`unbreakable umbrella`) &&
+            have($item`protonic accelerator pack`) &&
+            (!get("_olympicSwimmingPool") || have($effect`Silent Running`))
+          )
+        )
+      ) {
+        result.priorities.add(Priorities.BadMood);
+      }
+    }
+
     return result;
   }
 
@@ -357,17 +408,27 @@ export class Prioritization {
 function orbPriority(task: Task, monster: Monster): Priority {
   if (!(task.do instanceof Location)) return Priorities.None;
 
+  // Determine any path-specific orb targetting
+  let pathTargets = new Set<Monster>();
+  if (myPath() === $path`Grey You`) {
+    // If the goose is not charged, do not aim to reprocess
+    if (globalAbsorbState.isReprocessTarget(monster) && familiarWeight($familiar`Grey Goose`) < 6)
+      return Priorities.None;
+    pathTargets = globalAbsorbState.getActiveTargets(task.do);
+  }
+
   // Determine if a monster is useful or not based on the combat goals
   if (task.orbtargets === undefined) {
     const task_combat = task.combat ?? new CombatStrategy();
     const next_monster_strategy = task_combat.currentStrategy(monster);
 
     const next_useless =
-      next_monster_strategy === "ignore" ||
-      next_monster_strategy === "ignoreNoBanish" ||
-      next_monster_strategy === "ignoreSoftBanish" ||
-      next_monster_strategy === "banish" ||
-      next_monster_strategy === undefined;
+      !pathTargets.has(monster) &&
+      (next_monster_strategy === "ignore" ||
+        next_monster_strategy === "ignoreNoBanish" ||
+        next_monster_strategy === "ignoreSoftBanish" ||
+        next_monster_strategy === "banish" ||
+        next_monster_strategy === undefined);
 
     const others_useless =
       task_combat.can("ignore") ||
@@ -380,7 +441,8 @@ function orbPriority(task: Task, monster: Monster): Priority {
       task_combat.can("kill") ||
       task_combat.can("killFree") ||
       task_combat.can("killHard") ||
-      task_combat.can("killItem");
+      task_combat.can("killItem") ||
+      pathTargets.size;
 
     if (next_useless && others_useful) {
       return Priorities.BadOrb;
@@ -392,7 +454,8 @@ function orbPriority(task: Task, monster: Monster): Priority {
   }
 
   // Use orbtargets to decide if the next monster is useful
-  const targets = task.orbtargets();
+  const taskTargets = task.orbtargets() ?? [];
+  const targets = [...taskTargets, ...pathTargets];
   if (targets === undefined) return Priorities.None;
   if (targets.length === 0) return Priorities.None;
   if (targets.find((t) => t === monster) === undefined) {
@@ -400,4 +463,9 @@ function orbPriority(task: Task, monster: Monster): Priority {
   } else {
     return Priorities.GoodOrb;
   }
+}
+
+function adventuresRemaining(task: Task): number {
+  if (task.do instanceof Location) return globalAbsorbState.remainingAdventures(task.do);
+  return 0;
 }
