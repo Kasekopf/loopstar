@@ -2,13 +2,14 @@ import { getTasks, step } from "grimoire-kolmafia";
 import { myPath, runChoice, Skill, visitUrl } from "kolmafia";
 import { $familiar, $item, $monster, $path, get, set } from "libram";
 import { PathInfo } from "../pathinfo";
-import { Task } from "../../engine/task";
+import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { buildPullRequirements, Hardcoded, Requirement, RequirementCategory } from "../../sim";
 import { GyouEngine } from "./engine";
 import { AbsorbQuest } from "./absorb";
 import { MenagerieQuest } from "../aftercore/menagerie";
-import { gyouPulls } from "./tasks";
+import { gyouDeltas, gyouPulls, GyouQuest } from "./tasks";
+import { gyouRoute } from "./route";
 
 export class GyouInfo implements PathInfo {
   name(): string {
@@ -24,12 +25,13 @@ export class GyouInfo implements PathInfo {
   }
 
   getTasks(tasks: Task[]): Task[] {
-    const newTasks = getTasks([AbsorbQuest, MenagerieQuest], false, false);
-    return [...tasks, ...newTasks];
+    const newTasks = getTasks([AbsorbQuest, MenagerieQuest, GyouQuest], false, false);
+    return findAndMerge([...newTasks, ...tasks], gyouDeltas);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoute(route: string[]): string[] {
-    return route;
+    return gyouRoute;
   }
 
   getEngine(tasks: Task[]): Engine {

@@ -93,7 +93,7 @@ export const gyouDeltas: NamedDeltaTask[] = [
   },
   // Get the Spectral Jellyfish faster if we need to
   {
-    name: "Knob/Outskips",
+    name: "Knob/Outskirts",
     combine: {
       priority: prioritizeJellyfish,
     },
@@ -345,25 +345,25 @@ export const gyouDeltas: NamedDeltaTask[] = [
     },
   },
   {
-    name: "War/Jankyard Hammer",
+    name: "War/Junkyard Hammer",
     combine: {
       priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
     },
   },
   {
-    name: "War/Jankyard Wrench",
+    name: "War/Junkyard Wrench",
     combine: {
       priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
     },
   },
   {
-    name: "War/Jankyard Pliers",
+    name: "War/Junkyard Pliers",
     combine: {
       priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
     },
   },
   {
-    name: "War/Jankyard Screwdriver",
+    name: "War/Junkyard Screwdriver",
     combine: {
       priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
     },
@@ -593,8 +593,7 @@ export const gyouSummons: SummonTarget[] = [
   },
   {
     target: $monster`white lion`,
-    after: ["Hidden City/Bowling Skills"],
-    ready: () => have($item`white page`),
+    ready: () => have($item`white page`) && have($skill`Double Nanovision`),
     completed: () => have($skill`Piezoelectric Honk`) || inHardcore() || !have($item`white page`),
     choices: { 940: 2 },
     outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
