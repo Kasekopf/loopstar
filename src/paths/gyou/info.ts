@@ -7,6 +7,7 @@ import { Engine } from "../../engine/engine";
 import { Requirement } from "../../sim";
 import { GyouEngine } from "./engine";
 import { AbsorbQuest } from "./absorb";
+import { MenagerieQuest } from "../aftercore/menagerie";
 
 export class GyouInfo implements PathInfo {
   name(): string {
@@ -22,7 +23,7 @@ export class GyouInfo implements PathInfo {
   }
 
   getTasks(tasks: Task[]): Task[] {
-    const newTasks = getTasks([AbsorbQuest], false, false);
+    const newTasks = getTasks([AbsorbQuest, MenagerieQuest], false, false);
     return [...tasks, ...newTasks];
   }
 

@@ -1,6 +1,7 @@
 import { Location, Monster } from "kolmafia";
 import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
+import { CombatStrategy as BaseCombatStrategy } from "grimoire-kolmafia";
 import { clamp, Delayed, undelay } from "libram";
 import { debug } from "../lib";
 
@@ -8,7 +9,7 @@ export type Quest = BaseQuest<Task>;
 
 export type Task = {
   priority?: () => Priority | Priority[];
-  combat?: CombatStrategy;
+  combat?: CombatStrategy | BaseCombatStrategy<CombatActions>;
 
   // Control safeguards
   limit: Limit;
@@ -25,7 +26,7 @@ export type Task = {
   // Resources
   delay?: number | (() => number);
   ignorebanishes?: () => boolean;
-  map_the_monster?: Monster | (() => Monster); // Try and map to the given monster, if possible
+  map_the_monster?: Monster | (() => Monster | undefined); // Try and map to the given monster, if possible
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
   resources?: Delayed<ResourceRequest | undefined>;
   tags?: string[];
@@ -140,7 +141,7 @@ export type DeltaTask = {
   tag?: string;
   replace?: Partial<Task>;
   amend?: Partial<Amend<Task>>;
-  combine?: Partial<Pick<Task, "prepare" | "ready" | "priority">>;
+  combine?: Partial<Pick<Task, "prepare" | "ready" | "priority" | "after">>;
 };
 
 /**
@@ -200,6 +201,7 @@ export function merge(task: Task, delta: DeltaTask): Task {
       const bArr = Array.isArray(b) ? b : [b];
       return [...aArr, ...bArr];
     });
+    result.after = [...(result.after ?? []), ...(delta.combine.after ?? [])];
   }
   return result;
 }

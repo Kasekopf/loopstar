@@ -544,7 +544,7 @@ const Bowling: Task[] = [
   },
 ];
 
-function bowlingBallsGathered(): boolean {
+export function bowlingBallsGathered(): boolean {
   let balls = 0;
   balls += itemAmount($item`bowling ball`);
   balls += closetAmount($item`bowling ball`);

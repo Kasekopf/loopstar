@@ -8,11 +8,13 @@ import { CasualInfo } from "./casual/info";
 import { PathInfo } from "./pathinfo";
 import { SmolInfo } from "./smol/info";
 import { getAllTasks } from "../tasks/all";
+import { GyouInfo } from "./gyou/info";
 
 const pathInfos = {
   smol: new SmolInfo(),
   casual: new CasualInfo(),
   aftercore: new AftercoreInfo(),
+  gyou: new GyouInfo(),
 } as const;
 
 export function getActivePath(overridePath: string | undefined = undefined): PathInfo | undefined {

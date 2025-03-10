@@ -34,13 +34,12 @@ import {
 import { CombatActions, CombatStrategy, replaceActions } from "../../engine/combat";
 import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
-import { debug } from "console";
 import { globalAbsorbState } from "./absorb";
 import { Priorities } from "../../engine/priority";
 import { globalStateCache } from "../../engine/state";
 import { getModifiersFrom } from "../../engine/outfit";
 import { toTempPref } from "../../args";
-import { atLevel } from "../../lib";
+import { atLevel, debug } from "../../lib";
 import { GyouActionDefaults } from "./combat";
 import { Task } from "../../engine/task";
 

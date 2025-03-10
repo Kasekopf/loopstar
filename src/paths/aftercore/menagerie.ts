@@ -3,10 +3,10 @@ import { CombatStrategy } from "../../engine/combat";
 import { Quest } from "../../engine/task";
 
 export const MenagerieQuest: Quest = {
-  name: "Unlock Menagerie",
+  name: "Menagerie",
   tasks: [
     {
-      name: "Get Menagerie Key",
+      name: "Key",
       after: ["Knob/King"],
       ready: () => have($item`Cobb's Knob lab key`),
       completed: () => have($item`Cobb's Knob Menagerie key`),

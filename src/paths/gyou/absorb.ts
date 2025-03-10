@@ -134,17 +134,17 @@ const absorbTasks: AbsorbTask[] = [
   },
   {
     do: $location`Cobb's Knob Menagerie, Level 1`,
-    after: ["Knob/Open Menagerie"],
+    after: ["Menagerie/Key"],
   },
   {
     do: $location`Cobb's Knob Menagerie, Level 2`,
-    after: ["Knob/Open Menagerie"],
+    after: ["Menagerie/Key"],
     skill: $skill`Fluid Dynamics Simulation`,
     effects: () => (get("greyYouPoints") < 11 ? $effects`Butt-Rock Hair` : []),
   },
   {
     do: $location`Cobb's Knob Menagerie, Level 3`,
-    after: ["Knob/Open Menagerie"],
+    after: ["Menagerie/Key"],
     skill: $skill`Phase Shift`,
     effects: () => (get("greyYouPoints") < 11 ? $effects`Butt-Rock Hair` : []),
     outfit: () => {
@@ -1046,7 +1046,7 @@ export const AbsorbQuest: Quest = {
           name: task.skill?.name ?? "",
           completed: () => globalAbsorbState.skillCompleted(task.skill ?? $skill`none`),
           ...task,
-          combat: (task.combat ?? new CombatStrategy()).ignoreSoftBanish(), // killing targetting monsters is set in the engine
+          combat: (task.combat ?? new CombatStrategy()).action("ignoreSoftBanish"), // killing targetting monsters is set in the engine
           limit: { soft: 25 },
         };
         if (result.outfit === undefined) result.outfit = { equip: $items`miniature crystal ball` };
@@ -1082,7 +1082,7 @@ export const ReprocessQuest: Quest = {
         after: [...(task.after ?? []), `AdvAbsorb/${task.do.toString()}`],
         ready: () =>
           (task.ready === undefined || task.ready()) && familiarWeight($familiar`Grey Goose`) >= 6,
-        combat: (task.combat ?? new CombatStrategy()).ignoreSoftBanish(), // killing targetting monsters is set in the engine
+        combat: (task.combat ?? new CombatStrategy()).action("ignoreSoftBanish"), // killing targetting monsters is set in the engine
         limit: { soft: 25 },
       };
       if (result.outfit === undefined) result.outfit = { equip: $items`miniature crystal ball` };
@@ -1114,7 +1114,7 @@ export const AdvAbsorbQuest: Quest = {
         completed: () => globalAbsorbState.remainingAdventures(task.do) === 0,
         ...task,
         after: task.skill ? [...(task.after ?? []), `Absorb/${task.skill.name}`] : task.after,
-        combat: (task.combat ?? new CombatStrategy()).ignoreSoftBanish(), // killing targetting monsters is set in the engine
+        combat: (task.combat ?? new CombatStrategy()).action("ignoreSoftBanish"), // killing targetting monsters is set in the engine
         limit: { soft: 25 },
       };
       if (result.outfit === undefined) result.outfit = { equip: $items`miniature crystal ball` };
