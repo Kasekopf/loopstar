@@ -466,14 +466,14 @@ export const gyouPulls: PullSpec[] = [
     optional: true,
     benefit: 3,
   },
-  { pull: $item`portable cassette player`, optional: true, benefit: 3 },
+  { pull: $item`portable cassette player`, benefit: 3 },
   {
     pull: $items`Space Trip safety headphones, HOA regulation book`,
     name: "-ML",
     optional: true,
     benefit: 6,
   },
-  { pull: $item`yule hatchet`, optional: true, benefit: 3 },
+  { pull: $item`yule hatchet`, benefit: 3 },
   {
     pull: $item`grey down vest`,
     useful: () =>
