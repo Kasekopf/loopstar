@@ -1,13 +1,14 @@
 import { getTasks, step } from "grimoire-kolmafia";
-import { myPath, runChoice, visitUrl } from "kolmafia";
-import { $path, set } from "libram";
+import { myPath, runChoice, Skill, visitUrl } from "kolmafia";
+import { $familiar, $item, $monster, $path, get, set } from "libram";
 import { PathInfo } from "../pathinfo";
 import { Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
-import { Requirement } from "../../sim";
+import { buildPullRequirements, Hardcoded, Requirement, RequirementCategory } from "../../sim";
 import { GyouEngine } from "./engine";
 import { AbsorbQuest } from "./absorb";
 import { MenagerieQuest } from "../aftercore/menagerie";
+import { gyouPulls } from "./tasks";
 
 export class GyouInfo implements PathInfo {
   name(): string {
@@ -43,6 +44,50 @@ export class GyouInfo implements PathInfo {
   }
 
   getRequirements(reqs: Requirement[]): Requirement[] {
-    return reqs;
+    return [
+      ...reqs
+        .filter((r) => !(r.thing instanceof Skill))
+        .map((r) => {
+          if (r.thing === $familiar`Grey Goose`) return { ...r, required: true, why: "Adventures" };
+          if (r.thing === $item`Clan VIP Lounge key`) return { ...r, required: true };
+          return r;
+        }),
+      ...buildPullRequirements(gyouPulls),
+      {
+        thing: $familiar`Vampire Vintner`,
+        why: "Pygmy killing",
+        category: RequirementCategory.IOTM,
+      },
+      {
+        thing: $item`hewn moon-rune spoon`,
+        why: "Access to an extra monster absorb (see tune arg)",
+        category: RequirementCategory.IOTM,
+      },
+      {
+        thing: new Hardcoded(get("hasMaydayContract"), "MayDay™ contract"),
+        why: "+combat, early meat",
+        category: RequirementCategory.IOTM,
+      },
+      {
+        thing: $monster`pygmy witch lawyer`,
+        why: "Infinite Loop",
+        category: RequirementCategory.Locket,
+      },
+      {
+        thing: $monster`Spectral Jellyfish`,
+        why: "-Combat skill",
+        category: RequirementCategory.Locket,
+      },
+      {
+        thing: $monster`anglerbush`,
+        why: "Meat skill",
+        category: RequirementCategory.Locket,
+      },
+      {
+        thing: $monster`Big Wheelin' Twins`,
+        why: "Init skill",
+        category: RequirementCategory.Locket,
+      },
+    ];
   }
 }

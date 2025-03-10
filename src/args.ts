@@ -30,6 +30,7 @@ export const args = Args.create(
         options: [
           ["smol", "A Shrunken Adventurer am I"],
           ["casual", "Casual"],
+          ["gyou", "Grey You"],
           ["aftercore", "Aftercore"],
         ],
         setting: "",
@@ -196,8 +197,8 @@ export const args = Args.create(
       goal: Args.string({
         help: "An aftercore goal to accomplish.",
         options: [
-          ["level", "Level up to level 13."],
-          ["organ", "Get your steel organ."],
+          ["level", "Level up to level 13"],
+          ["organ", "Get your steel organ"],
           ["menagerie", "Unlock the Cobb's Knob Menagerie"],
           ["dis", "Complete the Suburbs of Dis quest"],
         ],
