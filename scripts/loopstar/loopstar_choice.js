@@ -253,6 +253,12 @@ var _templateObject33;
 var _templateObject34;
 var _templateObject35;
 var _templateObject36;
+var _templateObject49;
+var _templateObject50;
+var _templateObject51;
+var _templateObject52;
+var _templateObject53;
+var _templateObject54;
 function _createForOfIteratorHelper2(o, allowArrayLike) {
   var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
@@ -387,10 +393,12 @@ var byClass = makeByXFunction(function() {
 });
 function makeScalerCalcFunction(cache, pattern) {
   return function(monster) {
-    var _pattern$exec$, _pattern$exec;
+    var _find, _pattern$exec$slice, _pattern$exec;
     var current = cache.get(monster);
     if (current !== void 0) return (0, import_kolmafia2.monsterEval)(current);
-    var result = (_pattern$exec$ = (_pattern$exec = pattern.exec(monster.attributes)) === null || _pattern$exec === void 0 ? void 0 : _pattern$exec[1]) !== null && _pattern$exec$ !== void 0 ? _pattern$exec$ : "0";
+    var result = (_find = ((_pattern$exec$slice = (_pattern$exec = pattern.exec(monster.attributes)) === null || _pattern$exec === void 0 ? void 0 : _pattern$exec.slice(1)) !== null && _pattern$exec$slice !== void 0 ? _pattern$exec$slice : []).find(function(m) {
+      return m !== void 0;
+    })) !== null && _find !== void 0 ? _find : "0";
     cache.set(monster, result);
     return (0, import_kolmafia2.monsterEval)(result);
   };
@@ -427,7 +435,10 @@ var bulkTakeDisplay = makeBulkFunction(import_kolmafia2.takeDisplay);
 var bulkTakeShop = makeBulkFunction(import_kolmafia2.takeShop);
 var bulkTakeStash = makeBulkFunction(import_kolmafia2.takeStash);
 var bulkTakeStorage = makeBulkFunction(import_kolmafia2.takeStorage);
-var familiarTags = Object.freeze(["animal", "insect", "haseyes", "haswings", "fast", "bite", "flies", "hashands", "wearsclothes", "organic", "vegetable", "hovers", "edible", "food", "sentient", "cute", "mineral", "polygonal", "object", "undead", "cantalk", "evil", "orb", "spooky", "sleaze", "aquatic", "swims", "isclothes", "phallic", "stench", "hot", "hasbeak", "haslegs", "robot", "technological", "hard", "cold", "hasbones", "hasclaws", "reallyevil", "good", "person", "humanoid", "animatedart", "software", "pokefam", "hasshell", "hasstinger"]);
+var regularFamiliarTags = Object.freeze(["animal", "insect", "haseyes", "haswings", "fast", "bite", "flies", "hashands", "wearsclothes", "organic", "vegetable", "hovers", "edible", "food", "sentient", "cute", "mineral", "polygonal", "object", "undead", "cantalk", "evil", "orb", "spooky", "sleaze", "aquatic", "swims", "isclothes", "phallic", "stench", "hot", "hasbeak", "haslegs", "robot", "technological", "hard", "cold", "hasbones", "hasclaws", "reallyevil", "good", "person", "humanoid", "animatedart", "software", "hasshell", "hasstinger"]);
+var regularFamiliarTagSet = new Set(regularFamiliarTags);
+var pokefamUltTags = Object.freeze(["ult_bearhug", "ult_sticktreats", "ult_owlstare", "ult_bloodbath", "ult_pepperscorn", "ult_rainbowstorm"]);
+var SPECIAL_ULTS = /* @__PURE__ */ new Map([[$familiar(_templateObject49 || (_templateObject49 = _taggedTemplateLiteral(["Nursine"]))), ["ult_bearhug"]], [$familiar(_templateObject50 || (_templateObject50 = _taggedTemplateLiteral(["Caramel"]))), ["ult_sticktreats"]], [$familiar(_templateObject51 || (_templateObject51 = _taggedTemplateLiteral(["Smashmoth"]))), ["ult_owlstare"]], [$familiar(_templateObject52 || (_templateObject52 = _taggedTemplateLiteral(["Slotter"]))), ["ult_bloodbath"]], [$familiar(_templateObject53 || (_templateObject53 = _taggedTemplateLiteral(["Cornbeefadon"]))), ["ult_pepperscorn"]], [$familiar(_templateObject54 || (_templateObject54 = _taggedTemplateLiteral(["Mu"]))), ["ult_rainbowstorm"]]]);
 
 // src/standalone/loopstar_choice.ts
 var _templateObject;
