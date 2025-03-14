@@ -232,8 +232,7 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
     // else if (modifier.includes("+combat")) AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
     // else if (modifier.includes("init")) AsdonMartin.drive(AsdonMartin.Driving.Quickly);
     if (modifier.includes("meat") || modifier.includes("item")) {
-      if (!have($effect`Driving Observantly`))
-        AsdonMartin.drive(AsdonMartin.Driving.Observantly);
+      if (!have($effect`Driving Observantly`)) AsdonMartin.drive(AsdonMartin.Driving.Observantly);
     }
   }
 }
