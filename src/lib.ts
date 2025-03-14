@@ -1,11 +1,8 @@
 import { step } from "grimoire-kolmafia";
 import {
   appearanceRates,
-  buy,
   getFuel,
-  getWorkshed,
   Item,
-  itemAmount,
   Location,
   Monster,
   myAscensions,
@@ -15,9 +12,6 @@ import {
   myPrimestat,
   Phylum,
   print,
-  retrieveItem,
-  toInt,
-  use,
   visitUrl,
 } from "kolmafia";
 import {
@@ -193,36 +187,6 @@ export function stableSort<T>(items: T[], key: (item: T) => number): T[] {
     return a.score - b.score;
   });
   return scoredItems.map((scoredItem) => scoredItem.item);
-}
-
-/**
- * Actually fuel the asdon to the required amount.
- */
-export function asdonFillTo(amount: number): boolean {
-  if (getWorkshed() !== $item`Asdon Martin keyfob (on ring)`) return false;
-
-  const remaining = amount - getFuel();
-  const count = Math.ceil(remaining / 5) + 1; // 5 is minimum adv gain from loaf of soda bread, +1 buffer
-  if (!have($item`bugbear bungguard`) || !have($item`bugbear beanie`)) {
-    // Prepare enough wad of dough from all-purpose flower
-    // We must do this ourselves since retrieveItem($item`loaf of soda bread`)
-    // in libram will not consider all-purpose flower
-    if (itemAmount($item`wad of dough`) < count) {
-      buy($item`all-purpose flower`);
-      use($item`all-purpose flower`);
-    }
-  }
-
-  retrieveItem(count, $item`loaf of soda bread`);
-  visitUrl(
-    `campground.php?action=fuelconvertor&pwd&qty=${count}&iid=${toInt(
-      $item`loaf of soda bread`
-    )}&go=Convert%21`
-  );
-  if (getFuel() < amount) {
-    throw new Error("Soda bread did not generate enough fuel");
-  }
-  return true;
 }
 
 /**
