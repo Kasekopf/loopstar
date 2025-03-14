@@ -19,13 +19,13 @@ import {
   $item,
   $items,
   $skill,
+  AsdonMartin,
   get,
   getActiveEffects,
   have,
   Macro,
 } from "libram";
 import { asdonFualable } from "../lib";
-import { asdonFillTo } from "../lib";
 import { args } from "../args";
 import { CombatResource } from "./lib";
 
@@ -103,7 +103,7 @@ export function getRunawaySources(taskName: string): RunawaySource[] {
         if (taskName === "Tavern/Basement" || taskName === "Bat/Boss Bat") return false;
         return asdonBanishAvailable();
       },
-      prepare: () => asdonFillTo(50),
+      prepare: () => AsdonMartin.fillTo(50),
       do: new Macro().skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
       chance: () => 1,
       banishes: true,

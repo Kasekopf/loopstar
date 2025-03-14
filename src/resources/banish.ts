@@ -1,11 +1,10 @@
 import { Item, myClass, myFury, myMaxmp, myMp, myTurncount, Skill } from "kolmafia";
 import { BanishState } from "../engine/state";
-import { $class, $effect, $item, $items, $skill, get, have, Macro } from "libram";
+import { $class, $effect, $item, $items, $skill, AsdonMartin, get, have, Macro } from "libram";
 import { args } from "../args";
 import { killMacro } from "../engine/combat";
 import { customRestoreMp } from "../engine/moods";
 import { asdonFualable } from "../lib";
-import { asdonFillTo } from "../lib";
 import { refillLatte } from "./runaway";
 import { CombatResource } from "./lib";
 import { Task } from "../engine/task";
@@ -50,7 +49,7 @@ const banishSources: BanishSource[] = [
       if (bumperIndex === -1) return true;
       return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
     },
-    prepare: () => asdonFillTo(50),
+    prepare: () => AsdonMartin.fillTo(50),
     do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
     free: true,
     blocked: ["Tavern/Basement", "Bat/Boss Bat"],
