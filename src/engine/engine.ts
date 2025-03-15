@@ -418,7 +418,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       );
       const nc_task_blacklist = new Set<string>([
         "Misc/Protonic Ghost",
-        "Summon/Spectral Jellyfish", // gyou
+        "Gyou/Spectral Jellyfish", // gyou
       ]);
       if (
         forceNCPossible() &&
