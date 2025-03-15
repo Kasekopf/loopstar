@@ -39021,7 +39021,7 @@ var Engine2 = /* @__PURE__ */ function(_BaseEngine) {
         var nc_blacklist = new Set($locations(_templateObject2728 || (_templateObject2728 = _taggedTemplateLiteral101(["The Enormous Greater-Than Sign, The Copperhead Club, The Black Forest"]))));
         var nc_task_blacklist = /* @__PURE__ */ new Set([
           "Misc/Protonic Ghost",
-          "Summon/Spectral Jellyfish"
+          "Gyou/Spectral Jellyfish"
           // gyou
         ]);
         if (forceNCPossible() && !(task.do instanceof import_kolmafia114.Location && nc_blacklist.has(task.do)) && !nc_task_blacklist.has(task.name) && !have($effect(_templateObject2826 || (_templateObject2826 = _taggedTemplateLiteral101(["Teleportitis"])))) && ((_force_item_source = force_item_source) === null || _force_item_source === void 0 ? void 0 : _force_item_source.equip) !== $item(_templateObject2926 || (_templateObject2926 = _taggedTemplateLiteral101(["Fourth of May Cosplay Saber"]))) && !get("noncombatForcerActive") && prioritizedChain === void 0 && (0, import_kolmafia114.myTurncount)() >= ROUTE_WAIT_TO_NCFORCE) {
@@ -43731,7 +43731,7 @@ function checkRequirements(path3) {
 }
 
 // src/_git_commit.ts
-var lastCommitHash = "fc53f53";
+var lastCommitHash = "4d24216";
 
 // src/tasks/level6.ts
 var import_kolmafia122 = require("kolmafia");
@@ -47293,7 +47293,7 @@ var SmolQuest = {
     name: "Limit Stats",
     after: ["Tower/Start"],
     completed: function() {
-      return get("nsContestants2") > -1 || have($effect(_templateObject31102 || (_templateObject31102 = _taggedTemplateLiteral121(["Feeling Insignificant"])))) || !have($item(_templateObject3245 || (_templateObject3245 = _taggedTemplateLiteral121(["pocket wish"])))) || !CursedMonkeyPaw_exports.have() || CursedMonkeyPaw_exports.wishes() === 0;
+      return get("nsContestants2") > -1 || have($effect(_templateObject31102 || (_templateObject31102 = _taggedTemplateLiteral121(["Feeling Insignificant"])))) || !have($item(_templateObject3245 || (_templateObject3245 = _taggedTemplateLiteral121(["pocket wish"])))) && (!CursedMonkeyPaw_exports.have() || CursedMonkeyPaw_exports.wishes() === 0);
     },
     do: function() {
       if (have($item(_templateObject3345 || (_templateObject3345 = _taggedTemplateLiteral121(["pocket wish"]))))) (0, import_kolmafia134.cliExecute)("genie effect Feeling Insignificant");
@@ -47329,6 +47329,24 @@ var smolDeltas = [
       ignorebanishes: function() {
         return have($item(_templateObject4429 || (_templateObject4429 = _taggedTemplateLiteral121(["genie bottle"]))));
       }
+    }
+  },
+  {
+    name: "Tower/Moxie Challenge",
+    combine: {
+      after: ["Smol/Limit Stats"]
+    }
+  },
+  {
+    name: "Tower/Muscle Challenge",
+    combine: {
+      after: ["Smol/Limit Stats"]
+    }
+  },
+  {
+    name: "Tower/Mysticality Challenge",
+    combine: {
+      after: ["Smol/Limit Stats"]
     }
   }
 ];
