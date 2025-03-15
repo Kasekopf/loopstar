@@ -147,9 +147,7 @@ export const SmolQuest: Quest = {
       completed: () =>
         get("nsContestants2") > -1 ||
         have($effect`Feeling Insignificant`) ||
-        !have($item`pocket wish`) ||
-        !CursedMonkeyPaw.have() ||
-        CursedMonkeyPaw.wishes() === 0,
+        (!have($item`pocket wish`) && (!CursedMonkeyPaw.have() || CursedMonkeyPaw.wishes() === 0)),
       do: () => {
         if (have($item`pocket wish`)) cliExecute("genie effect Feeling Insignificant");
         else CursedMonkeyPaw.wishFor($effect`Feeling Insignificant`);
@@ -186,6 +184,24 @@ export const smolDeltas: NamedDeltaTask[] = [
         }, $monster`toilet papergeist`)
         .banish($monsters`claw-foot bathtub, malevolent hair clog`),
       ignorebanishes: () => have($item`genie bottle`),
+    },
+  },
+  {
+    name: "Tower/Moxie Challenge",
+    combine: {
+      after: ["Smol/Limit Stats"],
+    },
+  },
+  {
+    name: "Tower/Muscle Challenge",
+    combine: {
+      after: ["Smol/Limit Stats"],
+    },
+  },
+  {
+    name: "Tower/Mysticality Challenge",
+    combine: {
+      after: ["Smol/Limit Stats"],
     },
   },
 ];
