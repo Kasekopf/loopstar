@@ -548,7 +548,7 @@ export const gyouPulls: PullSpec[] = [
   },
   {
     pull: $item`white page`,
-    useful: () => !have($skill`Piezoelectric Honk`),
+    useful: () => !have($skill`Piezoelectric Honk`) && !AutumnAton.have(),
     optional: true,
     benefit: 3,
   },
@@ -680,7 +680,11 @@ export const gyouSummons: SummonTarget[] = [
   {
     target: $monster`white lion`,
     ready: () => have($item`white page`) && have($skill`Double Nanovision`),
-    completed: () => have($skill`Piezoelectric Honk`) || inHardcore() || !have($item`white page`),
+    completed: () =>
+      have($skill`Piezoelectric Honk`) ||
+      inHardcore() ||
+      !have($item`white page`) ||
+      AutumnAton.have(),
     choices: { 940: 2 },
     outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
     combat: new CombatStrategy().killItem(),
