@@ -86,11 +86,11 @@ export const gyouDeltas: NamedDeltaTask[] = [
     replace: {
       priority: () =>
         (atLevel(17) || !have($item`backup camera`)) &&
-        (!have($item`June cleaver`) ||
-          (get("_juneCleaverStench") >= 20 &&
-            get("_juneCleaverSpooky") >= 20 &&
-            get("_juneCleaverHot") >= 20 &&
-            get("_juneCleaverCold") >= 20))
+          (!have($item`June cleaver`) ||
+            (get("_juneCleaverStench") >= 20 &&
+              get("_juneCleaverSpooky") >= 20 &&
+              get("_juneCleaverHot") >= 20 &&
+              get("_juneCleaverCold") >= 20))
           ? Priorities.None
           : Priorities.BadMood, // Wait for backup camera to max out
     },
@@ -481,6 +481,49 @@ export const gyouDeltas: NamedDeltaTask[] = [
   {
     name: "Leveling/Mouthwash",
     delete: true,
+  },
+  // Avoid star key skip unless we have +HP
+  {
+    name: "Summon/Astrologer Of Shub-Jigguwatt",
+    amend: {
+      completed: (old) => () => {
+        if (old()) return true;
+        if (
+          !have($item`vampyric cloake`) ||
+          !have($item`June cleaver`) ||
+          !have($item`Roman Candelabra`) ||
+          !have($item`Space Trip safety headphones`) ||
+          !have($item`tearaway pants`)
+        ) {
+          return true;
+        }
+        return false;
+      },
+    },
+    replace: {
+      outfit: {
+        equip: $items`June cleaver, vampyric cloake, Roman Candelabra, Space Trip safety headphones, tearaway pants, your cowboy boots`,
+      },
+      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+    },
+  },
+  {
+    name: "Summon/Camel's Toe",
+    amend: {
+      completed: (old) => () => {
+        if (old()) return true;
+        if (
+          !have($item`vampyric cloake`) ||
+          !have($item`June cleaver`) ||
+          !have($item`Roman Candelabra`) ||
+          !have($item`Space Trip safety headphones`) ||
+          !have($item`tearaway pants`)
+        ) {
+          return true;
+        }
+        return false;
+      },
+    },
   },
 ];
 
