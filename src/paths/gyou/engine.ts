@@ -42,6 +42,7 @@ import { toTempPref } from "../../args";
 import { atLevel, debug } from "../../lib";
 import { GyouActionDefaults } from "./combat";
 import { Task } from "../../engine/task";
+import { getRunawaySources } from "../../resources/runaway";
 
 export class GyouEngine extends Engine {
   constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
@@ -115,7 +116,8 @@ export class GyouEngine extends Engine {
     }
 
     // Getting to L11 and charging the goose are both more important than running away
-    if (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6) {
+    const activeRunaways = getRunawaySources(task.name).find((s) => s.useactively && s.available());
+    if (!activeRunaways && (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6)) {
       replaceActions(combat, "ignore", "kill");
       replaceActions(combat, "ignoreSoftBanish", "kill");
       replaceActions(combat, "ignoreNoBanish", "kill");
