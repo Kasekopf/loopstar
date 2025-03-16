@@ -17,6 +17,7 @@ export const gyouRoute: string[] = [
   // Do other skill summons early
   "Gyou/Spectral Jellyfish",
   "Gyou/Anglerbush",
+  "Absorb/Ponzi Apparatus",
   "Gyou/Big Wheelin' Twins",
 
   // "Absorb/Ponzi Apparatus", // Get +meat early, we'll want a lot

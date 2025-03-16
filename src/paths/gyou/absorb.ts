@@ -35,7 +35,6 @@ import {
   $skill,
   $skills,
   $slot,
-  CombatLoversLocket,
   ensureEffect,
   get,
   getBanishedMonsters,
@@ -405,12 +404,9 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`The Haunted Conservatory`,
     after: ["Manor/Start"],
     choices: { 899: 2 },
-    ready: () =>
-      atLevel(12) ||
-      !CombatLoversLocket.have() ||
-      !CombatLoversLocket.availableLocketMonsters().includes($monster`anglerbush`), // For now, get this manually if we get far without it
     skill: $skill`Ponzi Apparatus`,
     outfit: { equip: $items`miniature crystal ball, combat lover's locket` },
+    parachute: $monster`anglerbush`,
   },
   {
     do: $location`The Haunted Kitchen`,

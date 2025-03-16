@@ -86,11 +86,11 @@ export const gyouDeltas: NamedDeltaTask[] = [
     replace: {
       priority: () =>
         (atLevel(17) || !have($item`backup camera`)) &&
-        (!have($item`June cleaver`) ||
-          (get("_juneCleaverStench") >= 20 &&
-            get("_juneCleaverSpooky") >= 20 &&
-            get("_juneCleaverHot") >= 20 &&
-            get("_juneCleaverCold") >= 20))
+          (!have($item`June cleaver`) ||
+            (get("_juneCleaverStench") >= 20 &&
+              get("_juneCleaverSpooky") >= 20 &&
+              get("_juneCleaverHot") >= 20 &&
+              get("_juneCleaverCold") >= 20))
           ? Priorities.None
           : Priorities.BadMood, // Wait for backup camera to max out
     },
@@ -665,7 +665,7 @@ export const gyouSummons: SummonTarget[] = [
   {
     target: $monster`anglerbush`,
     after: [],
-    completed: () => have($skill`Ponzi Apparatus`),
+    completed: () => have($skill`Ponzi Apparatus`) || have($item`crepe paper parachute cape`),
     combat: new CombatStrategy().kill(),
     benefit: 5,
   },
@@ -675,7 +675,7 @@ export const gyouSummons: SummonTarget[] = [
     ready: () => atLevel(11),
     completed: () => have($skill`Overclocking`),
     combat: new CombatStrategy().kill(),
-    benefit: 4,
+    benefit: 3,
   },
   {
     target: $monster`white lion`,
@@ -688,7 +688,7 @@ export const gyouSummons: SummonTarget[] = [
     choices: { 940: 2 },
     outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
     combat: new CombatStrategy().killItem(),
-    benefit: 3,
+    benefit: 2,
   },
 ];
 
