@@ -73,12 +73,16 @@ export class GyouEngine extends Engine {
 
     // Check if Grey Goose is charged
     const familiar = outfitSpec?.familiar;
+    // Tasks where we sneak the goose for one turn with orb
+    const sneakGoose = ["Macguffin/Forest", "Macguffin/Desert"];
     if (
       task.do instanceof Location &&
       globalAbsorbState.hasReprocessTargets(task.do) &&
       familiarWeight($familiar`Grey Goose`) >= 6 &&
       !mayLaunchGooseForStats() &&
-      (familiar === undefined || familiar === $familiar`Grey Goose`)
+      (familiar === undefined ||
+        familiar === $familiar`Grey Goose` ||
+        (have($item`miniature crystal ball`) && sneakGoose.includes(task.name)))
     ) {
       result.add({ score: 1, reason: "Goose charged" });
     }
