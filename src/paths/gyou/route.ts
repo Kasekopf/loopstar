@@ -95,7 +95,8 @@ export const gyouRoute: string[] = [
   "Summon/Astrologer Of Shub-Jigguwatt",
 
   // Finish remaining quests
-  "McLargeHuge/Finish",
+  "McLargeHuge/Finish", // get beast banish
+  "Palindome/Dudes", // use beast banish
   "Manor/Boss",
   "Crypt/Niche",
   "Crypt/Niche",

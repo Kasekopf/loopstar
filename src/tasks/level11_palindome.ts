@@ -352,17 +352,13 @@ const Dome: Task[] = [
     prepare: () => tuneSnapper($phylum`dudes`),
     do: $location`Inside the Palindome`,
     outfit: () => {
-      if (have($item`stunt nuts`))
-        return {
-          equip: $items`Talisman o' Namsilat`,
-          modifier: "-combat",
-          familiar: $familiar`Red-Nosed Snapper`,
-        };
+      const familiar = get("banishedPhyla") === "beast" ? undefined : $familiar`Red-Nosed Snapper`;
+      const modifier = have($item`stunt nuts`) ? "-combat" : "-combat, item";
       return {
         equip: $items`Talisman o' Namsilat`,
-        modifier: "-combat, item",
+        modifier: modifier,
         avoid: $items`broken champagne bottle`,
-        familiar: $familiar`Red-Nosed Snapper`,
+        familiar: familiar,
       };
     },
     combat: new CombatStrategy()
@@ -382,17 +378,13 @@ const Dome: Task[] = [
     do: $location`Inside the Palindome`,
     prepare: () => tuneSnapper($phylum`dudes`),
     outfit: () => {
-      if (have($item`stunt nuts`))
-        return {
-          equip: $items`Talisman o' Namsilat`,
-          modifier: "-combat",
-          familiar: $familiar`Red-Nosed Snapper`,
-        };
+      const familiar = get("banishedPhyla") === "beast" ? undefined : $familiar`Red-Nosed Snapper`;
+      const modifier = have($item`stunt nuts`) ? "-combat" : "-combat, item";
       return {
         equip: $items`Talisman o' Namsilat`,
-        modifier: "-combat, item",
+        modifier: modifier,
         avoid: $items`broken champagne bottle`,
-        familiar: $familiar`Red-Nosed Snapper`,
+        familiar: familiar,
       };
     },
     combat: new CombatStrategy()
