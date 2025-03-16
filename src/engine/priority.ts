@@ -130,15 +130,6 @@ export class Prioritization {
       } else result.priorities.add(Priorities.GoodYR);
     }
 
-    // Dodge useless monsters with the orb
-    if (task.do instanceof Location) {
-      const next_monster = globalStateCache.orb().prediction(task.do);
-      if (next_monster !== undefined) {
-        result._orbMonster = next_monster;
-        result.priorities.add(orbPriority(task, next_monster));
-      }
-    }
-
     // Ensure that the current +/- combat effects are compatible
     //  (Macguffin/Forest is tough and doesn't need much +combat; just power though)
     const modifier = getModifiersFrom(outfitSpec);
@@ -200,6 +191,15 @@ export class Prioritization {
       // Prefer parachute if the last location is set correctly
       if (task.do instanceof Location && task.do === myLocation())
         result.priorities.add(Priorities.GoodLocation);
+    }
+
+    // Dodge useless monsters with the orb
+    if (task.do instanceof Location && !result.priorities.has(Priorities.GoodLocation)) {
+      const next_monster = globalStateCache.orb().prediction(task.do);
+      if (next_monster !== undefined) {
+        result._orbMonster = next_monster;
+        result.priorities.add(orbPriority(task, next_monster));
+      }
     }
 
     // Consider (more expensive to compute) ways to burn delay
