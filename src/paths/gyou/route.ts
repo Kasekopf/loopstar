@@ -107,6 +107,7 @@ export const gyouRoute: string[] = [
   "Orc Chasm/Start Peaks",
   "Orc Chasm/Finish",
   "Keys/Star Key", // Allow for better use of orb
+  "Misc/Shadow Rift",
   "War/Boss Hippie",
 
   "Crypt/Finish", // Finish nook late for autumnaton

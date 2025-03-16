@@ -86,11 +86,11 @@ export const gyouDeltas: NamedDeltaTask[] = [
     replace: {
       priority: () =>
         (atLevel(17) || !have($item`backup camera`)) &&
-          (!have($item`June cleaver`) ||
-            (get("_juneCleaverStench") >= 20 &&
-              get("_juneCleaverSpooky") >= 20 &&
-              get("_juneCleaverHot") >= 20 &&
-              get("_juneCleaverCold") >= 20))
+        (!have($item`June cleaver`) ||
+          (get("_juneCleaverStench") >= 20 &&
+            get("_juneCleaverSpooky") >= 20 &&
+            get("_juneCleaverHot") >= 20 &&
+            get("_juneCleaverCold") >= 20))
           ? Priorities.None
           : Priorities.BadMood, // Wait for backup camera to max out
     },
