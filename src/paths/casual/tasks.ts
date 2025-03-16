@@ -120,16 +120,6 @@ export const casualDeltas: NamedDeltaTask[] = [
   {
     name: "Digital/Vanya",
     replace: {
-      priority: () => {
-        if (
-          have($item`Everfull Dart Holster`) &&
-          !have($effect`Everything Looks Red`) &&
-          myTurncount() >= 30
-        ) {
-          return Priorities.GoodDarts;
-        }
-        return Priorities.None;
-      },
       preferwanderer: true,
     },
   },
@@ -153,16 +143,6 @@ export const casualDeltas: NamedDeltaTask[] = [
   {
     name: "Digital/Megalo",
     replace: {
-      priority: () => {
-        if (
-          have($item`Everfull Dart Holster`) &&
-          !have($effect`Everything Looks Red`) &&
-          myTurncount() >= 30
-        ) {
-          return Priorities.GoodDarts;
-        }
-        return Priorities.None;
-      },
       preferwanderer: true,
     },
   },

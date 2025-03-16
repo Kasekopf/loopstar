@@ -45,6 +45,7 @@ import { args, toTempPref } from "../args";
 import { trainSetAvailable } from "./misc";
 import { haveFlorest, underStandard } from "../lib";
 import { castWithMpSwaps, ensureWithMPSwaps } from "../engine/moods";
+import { Priorities } from "../engine/priority";
 
 export enum Keys {
   Deck = "Deck",
@@ -386,6 +387,16 @@ export const DigitalQuest: Quest = {
       name: "Vanya",
       after: ["Open"],
       completed: () => getScore() >= 10000,
+      priority: () => {
+        if (
+          have($item`Everfull Dart Holster`) &&
+          !have($effect`Everything Looks Red`) &&
+          myTurncount() >= 30
+        ) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       prepare: () => {
         if (numericModifier("Initiative") < 600 && have($skill`Silent Hunter`)) {
           if (myClass() === $class`Seal Clubber`) ensureWithMPSwaps($effects`Silent Hunting`);
@@ -419,6 +430,16 @@ export const DigitalQuest: Quest = {
       name: "Megalo",
       after: ["Open"],
       completed: () => getScore() >= 10000,
+      priority: () => {
+        if (
+          have($item`Everfull Dart Holster`) &&
+          !have($effect`Everything Looks Red`) &&
+          myTurncount() >= 30
+        ) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
       prepare: () => {
         // Get the GAP DA buff, saving 1 for after the run
         if (haveEquipped($item`Greatest American Pants`) && get("_gapBuffs") < 4) {
