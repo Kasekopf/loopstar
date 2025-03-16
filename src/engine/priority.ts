@@ -2,16 +2,7 @@
  * Temporary priorities that override the routing.
  */
 
-import {
-  familiarWeight,
-  getCounter,
-  Location,
-  Monster,
-  myAdventures,
-  myDaycount,
-  myLocation,
-  myPath,
-} from "kolmafia";
+import { familiarWeight, getCounter, Location, Monster, myLocation, myPath } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -36,7 +27,6 @@ import { ChainSource, chainSources, WandererSource, wandererSources } from "../r
 import { getActiveBackupTarget } from "../resources/backup";
 import { cosmicBowlingBallReady } from "../lib";
 import { asdonBanishAvailable } from "../resources/runaway";
-import { mayLaunchGooseForStats } from "../paths/gyou/engine";
 import { globalAbsorbState } from "../paths/gyou/absorb";
 
 export class Priorities {
@@ -298,44 +288,6 @@ export class Prioritization {
       result.priorities.delete(Priorities.GoodDarts);
     }
 
-    if (myPath() === $path`Grey You`) {
-      // Check if Grey Goose is charged
-      if (
-        task.do instanceof Location &&
-        globalAbsorbState.hasReprocessTargets(task.do) &&
-        familiarWeight($familiar`Grey Goose`) >= 6 &&
-        !mayLaunchGooseForStats()
-      ) {
-        result.priorities.add({ score: 1, reason: "Goose charged" });
-      }
-
-      // Go places with more adventures if we need them
-      if (myAdventures() < 10 && myDaycount() > 1) {
-        const adv = adventuresRemaining(task);
-        if (adv > 0) {
-          const score = 200 + 0.001 * adv; // Prefer locations with more adventures
-          result.priorities.add({ score: score, reason: "Low on adventures" });
-        }
-      }
-
-      // Wait until we get a -combat skill before doing any -combat
-      if (
-        modifier?.includes("-combat") &&
-        !have($skill`Phase Shift`) &&
-        !(
-          // All these add up to -25 combat fine, no need to wait
-          (
-            have($item`Space Trip safety headphones`) &&
-            have($item`unbreakable umbrella`) &&
-            have($item`protonic accelerator pack`) &&
-            (!get("_olympicSwimmingPool") || have($effect`Silent Running`))
-          )
-        )
-      ) {
-        result.priorities.add(Priorities.BadMood);
-      }
-    }
-
     return result;
   }
 
@@ -399,6 +351,10 @@ export class Prioritization {
 
   public delete(p: Priority) {
     this.priorities.delete(p);
+  }
+
+  public add(p: Priority) {
+    this.priorities.add(p);
   }
 
   public score(): number {
@@ -468,9 +424,4 @@ function orbPriority(task: Task, monster: Monster): Priority {
   } else {
     return Priorities.GoodOrb;
   }
-}
-
-function adventuresRemaining(task: Task): number {
-  if (task.do instanceof Location) return globalAbsorbState.remainingAdventures(task.do);
-  return 0;
 }

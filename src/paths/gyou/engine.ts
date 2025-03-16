@@ -8,6 +8,7 @@ import {
   itemAmount,
   Location,
   myAdventures,
+  myDaycount,
   myPath,
   myTurncount,
   overdrink,
@@ -18,6 +19,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $effect,
   $familiar,
   $item,
   $items,
@@ -58,15 +60,57 @@ export class GyouEngine extends Engine {
   }
 
   prioritize(task: ActiveTask): Prioritization {
-    const prioritization = Prioritization.from(task);
+    const result = Prioritization.from(task);
 
     // Getting to L11 and charging the goose are both more important than running away
     if (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6) {
-      prioritization.delete(Priorities.CosmicBowlingBall);
-      prioritization.delete(Priorities.AsdonMartin);
-      prioritization.delete(Priorities.SpringShoes);
+      result.delete(Priorities.CosmicBowlingBall);
+      result.delete(Priorities.AsdonMartin);
+      result.delete(Priorities.SpringShoes);
     }
-    return prioritization;
+
+    const outfitSpec = undelay(task.outfit);
+
+    // Check if Grey Goose is charged
+    const familiar = outfitSpec?.familiar;
+    if (
+      task.do instanceof Location &&
+      globalAbsorbState.hasReprocessTargets(task.do) &&
+      familiarWeight($familiar`Grey Goose`) >= 6 &&
+      !mayLaunchGooseForStats() &&
+      (familiar === undefined || familiar === $familiar`Grey Goose`)
+    ) {
+      result.add({ score: 1, reason: "Goose charged" });
+    }
+
+    // Go places with more adventures if we need them
+    if (myAdventures() < 10 && myDaycount() > 1) {
+      const adv = adventuresRemaining(task);
+      if (adv > 0) {
+        const score = 200 + 0.001 * adv; // Prefer locations with more adventures
+        result.add({ score: score, reason: "Low on adventures" });
+      }
+    }
+
+    // Wait until we get a -combat skill before doing any -combat
+    const modifier = getModifiersFrom(outfitSpec);
+    if (
+      modifier?.includes("-combat") &&
+      !have($skill`Phase Shift`) &&
+      !(
+        // All these add up to -25 combat fine, no need to wait
+        (
+          have($item`Space Trip safety headphones`) &&
+          have($item`unbreakable umbrella`) &&
+          have($item`protonic accelerator pack`) &&
+          (!get("_olympicSwimmingPool") || have($effect`Silent Running`))
+        )
+      )
+    ) {
+      result.add(Priorities.BadMood);
+    }
+
+    return result;
   }
 
   customize(
@@ -322,4 +366,9 @@ function needGooseCharge(task: ActiveTask, outfit: Outfit): boolean {
     return true;
 
   return false;
+}
+
+function adventuresRemaining(task: Task): number {
+  if (task.do instanceof Location) return globalAbsorbState.remainingAdventures(task.do);
+  return 0;
 }
