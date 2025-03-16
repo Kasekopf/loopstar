@@ -9,7 +9,7 @@ import {
   visitUrl,
   wait,
 } from "kolmafia";
-import { $item, $monster, CombatLoversLocket, get, have } from "libram";
+import { $item, $monster, $skill, CombatLoversLocket, get, have } from "libram";
 import { args } from "../args";
 import { underStandard } from "../lib";
 
@@ -24,6 +24,7 @@ export const summonSources: SummonSource[] = [
   {
     name: "Numberology",
     available: () => {
+      if (!have($skill`Calculate the Universe`)) return 0;
       if (get("skillLevel144") === 0) return 0;
       if (get("_universeCalculated") === 3) return 0;
       return get("_universeCalculated") < get("skillLevel144") ? 1 : 0;

@@ -35,7 +35,7 @@ import { CombatActions, CombatStrategy, replaceActions } from "../../engine/comb
 import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 import { globalAbsorbState } from "./absorb";
-import { Priorities } from "../../engine/priority";
+import { Priorities, Prioritization } from "../../engine/priority";
 import { globalStateCache } from "../../engine/state";
 import { getModifiersFrom } from "../../engine/outfit";
 import { toTempPref } from "../../args";
@@ -56,6 +56,18 @@ export class GyouEngine extends Engine {
     return super.available(task);
   }
 
+  prioritize(task: ActiveTask): Prioritization {
+    const prioritization = Prioritization.from(task);
+
+    // Getting to L11 and charging the goose are both more important than running away
+    if (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6) {
+      prioritization.delete(Priorities.CosmicBowlingBall);
+      prioritization.delete(Priorities.AsdonMartin);
+      prioritization.delete(Priorities.SpringShoes);
+    }
+    return prioritization;
+  }
+
   customize(
     task: ActiveTask,
     outfit: Outfit,
@@ -63,6 +75,9 @@ export class GyouEngine extends Engine {
     resources: CombatResources<CombatActions>
   ): void {
     let goose_weight_in_use = false;
+
+    // Prepare combat macro
+    if (combat.getDefaultAction() === undefined) combat.action("ignore");
 
     // Try to use the goose for stats, if we can
     if (
@@ -87,7 +102,7 @@ export class GyouEngine extends Engine {
         } else {
           debug(`Target: ${monster.name}`, "purple");
         }
-        const strategy = combat.currentStrategy(monster);
+        const strategy = combat.currentStrategy(monster) ?? "ignore";
         if (
           strategy === "ignore" ||
           strategy === "banish" ||
@@ -99,8 +114,8 @@ export class GyouEngine extends Engine {
       }
     }
 
-    // Before L11, it is more important to level up than runaway
-    if (!atLevel(11)) {
+    // Getting to L11 and charging the goose are both more important than running away
+    if (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6) {
       replaceActions(combat, "ignore", "kill");
       replaceActions(combat, "ignoreSoftBanish", "kill");
       replaceActions(combat, "ignoreNoBanish", "kill");

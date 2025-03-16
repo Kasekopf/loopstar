@@ -15,7 +15,6 @@ import {
 import {
   $effect,
   $familiar,
-  $familiars,
   $item,
   $items,
   $skill,
@@ -229,64 +228,69 @@ const famweightOptions: FamweightOption[] = [
 ];
 
 function planRunawayFamiliar(): RunawayFamiliarSpec {
-  const bestFamiliar = $familiars`Frumious Bandersnatch, Pair of Stomping Boots`.find((f) =>
-    have(f)
-  );
-  const altFamiliar =
+  const familiarOptions = [];
+  if (have($familiar`Frumious Bandersnatch`) && have($skill`The Ode to Booze`)) {
+    familiarOptions.push($familiar`Frumious Bandersnatch`);
+  }
+  if (have($familiar`Pair of Stomping Boots`)) {
+    familiarOptions.push($familiar`Pair of Stomping Boots`);
+  }
+  if (
     have($familiar`Comma Chameleon`) &&
     (getProperty("commaFamiliar") === "Frumious Bandersnatch" ||
       getProperty("commaFamiliar") === "Pair of Stomping Boots" ||
-      getProperty("_commaRunDone"));
+      getProperty("_commaRunDone"))
+  ) {
+    familiarOptions.push($familiar`Comma Chameleon`);
+  }
 
-  const chosenFamiliar =
-    bestFamiliar ?? (altFamiliar === true ? $familiar`Comma Chameleon` : false);
-
-  if (chosenFamiliar) {
-    const goalWeight = 5 * (1 + get("_banderRunaways"));
-    let attainableWeight = familiarWeight(chosenFamiliar);
-
-    // Include passive skills
-    if (have($skill`Crimbo Training: Concierge`)) attainableWeight += 1;
-    if (have($skill`Amphibian Sympathy`)) attainableWeight += 5;
-    if (mySign() === "Platypus") attainableWeight += 5;
-
-    // Include active effects
-    for (const effect of getActiveEffects())
-      attainableWeight += numericModifier(effect, "Familiar Weight");
-
-    // Include as much equipment as needed
-    const outfit = new Outfit();
-    outfit.equip(chosenFamiliar);
-    for (const option of famweightOptions) {
-      if (attainableWeight >= goalWeight) break;
-      if (option.rider && !have(option.rider)) continue;
-      if (outfit.equip(option.thing)) {
-        attainableWeight += numericModifier(option.thing, "Familiar Weight");
-        if (option.rider) outfit.equip({ riders: { "buddy-bjorn": option.rider } });
-      }
-    }
-
-    const macro = new Macro();
-    if (
-      attainableWeight < goalWeight &&
-      attainableWeight + 20 >= goalWeight &&
-      have($skill`Meteor Lore`) &&
-      get("_meteorShowerUses") < 5
-    ) {
-      macro.trySkill($skill`Meteor Shower`);
-      attainableWeight += 20;
-    }
-
+  if (familiarOptions.length === 0) {
     return {
-      outfit: outfit.spec(),
-      available: attainableWeight >= goalWeight,
-      macro: macro,
+      available: false,
+      outfit: {},
+      macro: new Macro(),
     };
   }
+  const chosenFamiliar = familiarOptions[0];
+  const goalWeight = 5 * (1 + get("_banderRunaways"));
+  let attainableWeight = familiarWeight(chosenFamiliar);
+
+  // Include passive skills
+  if (have($skill`Crimbo Training: Concierge`)) attainableWeight += 1;
+  if (have($skill`Amphibian Sympathy`)) attainableWeight += 5;
+  if (mySign() === "Platypus") attainableWeight += 5;
+
+  // Include active effects
+  for (const effect of getActiveEffects())
+    attainableWeight += numericModifier(effect, "Familiar Weight");
+
+  // Include as much equipment as needed
+  const outfit = new Outfit();
+  outfit.equip(chosenFamiliar);
+  for (const option of famweightOptions) {
+    if (attainableWeight >= goalWeight) break;
+    if (option.rider && !have(option.rider)) continue;
+    if (outfit.equip(option.thing)) {
+      attainableWeight += numericModifier(option.thing, "Familiar Weight");
+      if (option.rider) outfit.equip({ riders: { "buddy-bjorn": option.rider } });
+    }
+  }
+
+  const macro = new Macro();
+  if (
+    attainableWeight < goalWeight &&
+    attainableWeight + 20 >= goalWeight &&
+    have($skill`Meteor Lore`) &&
+    get("_meteorShowerUses") < 5
+  ) {
+    macro.trySkill($skill`Meteor Shower`);
+    attainableWeight += 20;
+  }
+
   return {
-    available: false,
-    outfit: {},
-    macro: new Macro(),
+    outfit: outfit.spec(),
+    available: attainableWeight >= goalWeight,
+    macro: macro,
   };
 }
 /**

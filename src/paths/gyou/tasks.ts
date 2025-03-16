@@ -139,9 +139,21 @@ export const gyouDeltas: NamedDeltaTask[] = [
     },
   },
   {
+    name: "Knob/King",
+    combine: {
+      priority: prioritizeJellyfish,
+    },
+  },
+  {
     name: "Menagerie/Key",
     combine: {
       ready: () => !have($skill`Phase Shift`),
+      priority: prioritizeJellyfish,
+    },
+  },
+  {
+    name: "Absorb/Phase Shift",
+    combine: {
       priority: prioritizeJellyfish,
     },
   },
@@ -439,6 +451,27 @@ export const gyouDeltas: NamedDeltaTask[] = [
       outfit: { modifier: "-combat, init", familiar: $familiar`Grey Goose` },
     },
   },
+  {
+    name: "Misc/LOV Tunnel",
+    delete: true,
+  },
+  // Nonstandard leveling
+  {
+    name: "Leveling/Cloud Talk",
+    delete: true,
+  },
+  {
+    name: "Leveling/Acquire Mouthwash",
+    delete: true,
+  },
+  {
+    name: "Leveling/Cut Melodramedary",
+    delete: true,
+  },
+  {
+    name: "Leveling/Mouthwash",
+    delete: true,
+  },
 ];
 
 export const gyouPulls: PullSpec[] = [
@@ -574,14 +607,14 @@ export const gyouSummons: SummonTarget[] = [
       modes: { retrocape: ["heck", "hold"] },
       modifier: "10 init, moxie",
     },
-    benefit: 5,
+    benefit: 4,
   },
   {
     target: $monster`anglerbush`,
     after: [],
     completed: () => have($skill`Ponzi Apparatus`),
     combat: new CombatStrategy().kill(),
-    benefit: 4,
+    benefit: 5,
   },
   {
     target: $monster`Big Wheelin' Twins`,

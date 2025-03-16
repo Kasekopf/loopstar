@@ -396,6 +396,10 @@ export class Prioritization {
     return this._chain;
   }
 
+  public delete(p: Priority) {
+    this.priorities.delete(p);
+  }
+
   public score(): number {
     let result = 0;
     for (const priority of this.priorities) {

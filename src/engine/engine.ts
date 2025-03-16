@@ -150,7 +150,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // Otherwise, choose from all available tasks
     const taskPriorities = availableTasks.map((task) => {
-      return { ...task, activePriority: Prioritization.from(task), availableTasks: availableTasks };
+      return { ...task, activePriority: this.prioritize(task), availableTasks: availableTasks };
     });
 
     // Sort tasks in a stable way, by priority (decreasing) and then by route
@@ -173,6 +173,10 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
     // No next task
     return undefined;
+  }
+
+  prioritize(task: ActiveTask): Prioritization {
+    return Prioritization.from(task);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -693,7 +697,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const result = typeof task.do === "function" ? task.do() : task.do;
     if (result instanceof Location) {
       const monster_to_map = undelay(task.map_the_monster) ?? $monster`none`;
-      if (task.map_the_monster && monster_to_map !== $monster`none` && get("_monstersMapped") < 3) {
+      if (
+        task.map_the_monster &&
+        monster_to_map !== $monster`none` &&
+        get("_monstersMapped") < 3 &&
+        have($skill`Map the Monsters`)
+      ) {
         useSkill($skill`Map the Monsters`);
         if (get("mappingMonsters")) {
           for (let i = 0; i < 4; i++) {
