@@ -351,7 +351,7 @@ export const gyouDeltas: NamedDeltaTask[] = [
     combine: {
       priority: () => {
         // Wait to be higher level
-        if (AutumnAton.have() && myBasestat($stat`Moxie`) < 200) return Priorities.BadMood;
+        if (AutumnAton.have() && myBasestat($stat`Moxie`) < 150) return Priorities.BadStats;
         return Priorities.None;
       },
     },
@@ -359,25 +359,25 @@ export const gyouDeltas: NamedDeltaTask[] = [
   {
     name: "War/Junkyard Hammer",
     combine: {
-      priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
+      priority: () => (myBasestat($stat`Moxie`) < 200 ? Priorities.BadStats : Priorities.None),
     },
   },
   {
     name: "War/Junkyard Wrench",
     combine: {
-      priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
+      priority: () => (myBasestat($stat`Moxie`) < 200 ? Priorities.BadStats : Priorities.None),
     },
   },
   {
     name: "War/Junkyard Pliers",
     combine: {
-      priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
+      priority: () => (myBasestat($stat`Moxie`) < 200 ? Priorities.BadStats : Priorities.None),
     },
   },
   {
     name: "War/Junkyard Screwdriver",
     combine: {
-      priority: () => (myBasestat($stat`Moxie`) < 300 ? Priorities.BadMood : Priorities.None),
+      priority: () => (myBasestat($stat`Moxie`) < 200 ? Priorities.BadStats : Priorities.None),
     },
   },
   {
@@ -454,6 +454,12 @@ export const gyouDeltas: NamedDeltaTask[] = [
   {
     name: "Misc/LOV Tunnel",
     delete: true,
+  },
+  {
+    name: "Keys/Star Key",
+    combine: {
+      after: ["Macguffin/Desert"],
+    },
   },
   // Nonstandard leveling
   {

@@ -5,6 +5,7 @@ import {
   floor,
   haveEquipped,
   inCasual,
+  inebrietyLimit,
   myDaycount,
   myInebriety,
   myLevel,
@@ -66,7 +67,7 @@ const Manor1: Task[] = [
     prepare: () => {
       const poolSkill = sumNumbers([
         floor(2 * squareRoot(get("poolSharkCount"))),
-        myInebriety() >= 10 ? myInebriety() : 20 - 2 * myInebriety(),
+        myInebriety() < 10 ? myInebriety() : 20 - 2 * myInebriety(),
         haveEquipped($item`government-issued eyeshade`) ? 5 : 0,
         have($effect`Chalky Hand`) ? 3 : 0,
         have($effect`Video... Games?`) ? 5 : 0,
@@ -80,7 +81,11 @@ const Manor1: Task[] = [
         ensureEffect($effect`Chalky Hand`);
       tryPlayApriling("-combat");
     },
-    ready: () => myInebriety() >= 1 || (inCasual() && args.casual.liver === 0) || myDaycount() > 1,
+    ready: () =>
+      inebrietyLimit() === 0 ||
+      myInebriety() >= 1 ||
+      (inCasual() && args.casual.liver === 0) ||
+      myDaycount() > 1,
     do: $location`The Haunted Billiards Room`,
     choices: () => {
       const poolSkill = sumNumbers([
@@ -94,7 +99,7 @@ const Manor1: Task[] = [
       return { 875: 1, 900: 2, 1436: poolSkill >= 18 ? 2 : 1 };
     },
     outfit: () => {
-      const equip = [];
+      const equip = [$item`pool cue`];
       if (myInebriety() < 8 || myInebriety() >= 11) {
         equip.push($item`government-issued eyeshade`);
       }

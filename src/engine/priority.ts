@@ -81,6 +81,7 @@ export class Priorities {
   static BadYR: Priority = { score: -16, reason: "Too early for yellow ray" };
   static BadSweat: Priority = { score: -20, reason: "Not enough sweat" };
   static BadProtonic: Priority = { score: -40, reason: "Protonic ghost here" };
+  static BadStats: Priority = { score: -50, reason: "Low stats" };
   static BadMood: Priority = { score: -100, reason: "Wrong effects" };
   static Last: Priority = { score: -10000, reason: "Only if nothing else" };
 }

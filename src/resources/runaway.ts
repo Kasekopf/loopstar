@@ -267,6 +267,11 @@ function planRunawayFamiliar(): RunawayFamiliarSpec {
   // Include as much equipment as needed
   const outfit = new Outfit();
   outfit.equip(chosenFamiliar);
+  if (chosenFamiliar === $familiar`Pair of Stomping Boots`) {
+    // Avoid reducing ML too much
+    outfit.equip({ avoid: $items`Space Trip safety headphones, HOA regulation book` });
+  }
+
   for (const option of famweightOptions) {
     if (attainableWeight >= goalWeight) break;
     if (option.rider && !have(option.rider)) continue;
