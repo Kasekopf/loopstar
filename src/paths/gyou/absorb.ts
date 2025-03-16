@@ -406,7 +406,10 @@ const absorbTasks: AbsorbTask[] = [
     choices: { 899: 2 },
     skill: $skill`Ponzi Apparatus`,
     outfit: { equip: $items`miniature crystal ball, combat lover's locket` },
-    parachute: $monster`anglerbush`,
+    parachute: () => {
+      if (!have($skill`Ponzi Apparatus`)) return $monster`anglerbush`;
+      return undefined;
+    },
   },
   {
     do: $location`The Haunted Kitchen`,
