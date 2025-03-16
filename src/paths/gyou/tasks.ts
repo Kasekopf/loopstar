@@ -1,5 +1,6 @@
 import {
   abort,
+  buy,
   canadiaAvailable,
   cliExecute,
   equippedAmount,
@@ -8,6 +9,7 @@ import {
   gnomadsAvailable,
   inHardcore,
   initiativeModifier,
+  itemAmount,
   knollAvailable,
   myAdventures,
   myAscensions,
@@ -20,6 +22,7 @@ import {
   mySign,
   myTurncount,
   numericModifier,
+  putCloset,
   retrieveItem,
   use,
   visitUrl,
@@ -51,6 +54,7 @@ import { args } from "../../args";
 import { Keys, keyStrategy } from "../../tasks/keys";
 import { getPullTask, PullSpec } from "../../tasks/pulls";
 import { getSummonTask, SummonTarget } from "../../tasks/summons";
+import { bowlingBallsGathered } from "../../tasks/level11_hidden";
 
 export const gyouDeltas: NamedDeltaTask[] = [
   // Make sure passives are high before doing Digital Key
@@ -801,6 +805,39 @@ export const GyouQuest: Quest = {
       do: () => use($item`wardrobe-o-matic`),
       limit: { tries: 1 },
       freeaction: true,
+    },
+    {
+      name: "Bowling Skills",
+      after: ["Hidden City/Open Bowling"],
+      ready: () => myMeat() >= 500 && !bowlingBallsGathered(),
+      acquire: [{ item: $item`Bowl of Scorpions`, optional: true }],
+      completed: () =>
+        bowlingBallsGathered() ||
+        ((have($skill`System Sweep`) || get("relocatePygmyJanitor") === myAscensions()) &&
+          have($skill`Double Nanovision`)),
+      prepare: () => {
+        // No need for more bowling progress after we beat the boss
+        if (!bowlingBallsGathered() && have($item`bowling ball`))
+          putCloset($item`bowling ball`, itemAmount($item`bowling ball`));
+
+        // Open the hidden tavern if it is available.
+        if (get("hiddenTavernUnlock") < myAscensions() && have($item`book of matches`)) {
+          use($item`book of matches`);
+          buy($item`Bowl of Scorpions`);
+        }
+      },
+      do: $location`The Hidden Bowling Alley`,
+      combat: new CombatStrategy()
+        .killHard($monster`ancient protector spirit (The Hidden Bowling Alley)`)
+        .killItem($monster`pygmy bowler`)
+        .autoattack(new Macro().trySkill($skill`Infinite Loop`), $monster`drunk pygmy`)
+        .banish($monster`pygmy orderlies`),
+      outfit: {
+        modifier: "item",
+        avoid: $items`broken champagne bottle`,
+      },
+      choices: { 788: 1 },
+      limit: { soft: 15 },
     },
     ...gyouPulls.map((s) => getPullTask(s)),
     ...gyouSummons.map((s) => getSummonTask(s)),

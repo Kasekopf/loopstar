@@ -49,7 +49,7 @@ export const gyouRoute: string[] = [
   "Gyou/Fortune",
 
   // Aim for remaining pygmies
-  "Hidden City/Bowling",
+  "Gyou/Bowling Skills",
   "Absorb/System Sweep", // Get from hidden park in hardcore
   "War/Flyers Start", // Start the war and get flyers
   "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
@@ -90,6 +90,9 @@ export const gyouRoute: string[] = [
   "Macguffin/Desert", // charge camel for protestors
 
   "Palindome/Protesters",
+
+  // Summon when strong enough
+  "Summon/Astrologer Of Shub-Jigguwatt",
 
   // Finish remaining quests
   "McLargeHuge/Finish",
