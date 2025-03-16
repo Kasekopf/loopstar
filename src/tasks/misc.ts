@@ -984,7 +984,10 @@ export const MiscQuest: Quest = {
       choices: { 1498: 1 },
       combat: new CombatStrategy()
         .macro((): Macro => {
-          const result = Macro.while_("hasskill 226", Macro.skill($skill`Perpetrate Mild Evil`));
+          const result = Macro.while_(
+            "hasskill 226",
+            Macro.skill($skill`Perpetrate Mild Evil`)
+          ).trySkill($skill`Swoop like a Bat`);
           // Use all but the last extinguisher uses on polar vortex.
           const vortex_count = (get("_fireExtinguisherCharge") - 20) / 10;
           if (vortex_count > 0) {
@@ -1010,6 +1013,9 @@ export const MiscQuest: Quest = {
           result.equip?.push($item`Daylight Shavings Helmet`);
         if (have($item`Flash Liquidizer Ultra Dousing Accessory`) && get("_douseFoeUses") < 3)
           result.equip?.push($item`Flash Liquidizer Ultra Dousing Accessory`);
+        if (have($item`bat wings`) && get("_batWingsFreeFights") === 5) {
+          result.equip?.push($item`bat wings`);
+        }
         return result;
       },
       boss: true,
