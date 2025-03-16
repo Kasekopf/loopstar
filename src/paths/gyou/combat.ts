@@ -2,15 +2,17 @@ import { ActionDefaults } from "grimoire-kolmafia";
 import {
   appearanceRates,
   floor,
+  haveEquipped,
   Location,
   Monster,
   myBuffedstat,
+  myLevel,
   myMp,
   numericModifier,
   Skill,
   Stat,
 } from "kolmafia";
-import { $skill, $stat, have, Macro } from "libram";
+import { $effect, $item, $skill, $stat, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
 
 export class GyouActionDefaults implements ActionDefaults<CombatActions> {
@@ -23,11 +25,11 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
   }
 
   kill(target?: Monster | Location) {
-    return this.killWith(target, $skill`Infinite Loop`, $stat`Moxie`);
+    return this.killWith(target, $skill`Infinite Loop`, $stat`Moxie`, "any");
   }
 
   killHard(target?: Monster | Location) {
-    return this.kill(target);
+    return this.killWith(target, $skill`Infinite Loop`, $stat`Moxie`, "train");
   }
 
   ignoreNoBanish(target?: Monster | Location) {
@@ -48,7 +50,7 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
 
   killItem(target?: Monster | Location) {
     if (have($skill`Double Nanovision`))
-      return this.killWith(target, $skill`Double Nanovision`, $stat`Mysticality`);
+      return this.killWith(target, $skill`Double Nanovision`, $stat`Mysticality`, "skip");
     else return this.kill(target);
   }
 
@@ -63,14 +65,29 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
   private killWith(
     target: Monster | Location | undefined,
     killing_blow: Skill,
-    killing_stat: Stat
+    killing_stat: Stat,
+    darts: "train" | "skip" | "any"
   ): Macro {
+    const result = new Macro();
+    if (haveEquipped($item`Everfull Dart Holster`) && myLevel() >= 12) {
+      if (darts === "any" && !have($effect`Everything Looks Red`)) {
+        result
+          .trySkill($skill`Darts: Aim for the Bullseye`)
+          .trySkill($skill`Darts: Aim for the Bullseye`)
+          .trySkill($skill`Darts: Aim for the Bullseye`)
+          .trySkill($skill`Darts: Aim for the Bullseye`)
+          .trySkill($skill`Darts: Aim for the Bullseye`);
+      } else if (darts !== "skip") {
+        result.trySkill($skill`Darts: Throw at %part1`);
+      }
+    }
+
     if (
       (target instanceof Monster && target.physicalResistance >= 70) ||
       myMp() < 20 ||
       !have(killing_blow)
     )
-      return new Macro().attack().repeat();
+      return result.attack().repeat();
 
     // Weaken monsters with Pseudopod slap until they are in range of our kill.
     // Since monsterhpabove is locked behind manuel/factoids, just do the maximum
@@ -79,14 +96,14 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
       const HPgap = maxHP(target) - myBuffedstat(killing_stat) * floor(myMp() / 20);
       const slaps = Math.ceil(HPgap / 10);
       if (slaps > 0) {
-        return new Macro()
+        return result
           .while_(`!times ${slaps}`, new Macro().skill($skill`Pseudopod Slap`))
           .while_("!mpbelow 20", new Macro().skill(killing_blow))
           .attack()
           .repeat();
       }
     }
-    return new Macro().while_("!mpbelow 20", new Macro().skill(killing_blow)).attack().repeat();
+    return result.while_("!mpbelow 20", new Macro().skill(killing_blow)).attack().repeat();
   }
 }
 
