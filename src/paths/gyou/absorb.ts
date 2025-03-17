@@ -270,6 +270,7 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`Twin Peak`,
     after: ["Orc Chasm/Twin Init"],
     skill: $skill`Overclocking`,
+    parachute: $monster`Big Wheelin' Twins`,
   },
   {
     do: $location`Oil Peak`,
@@ -888,6 +889,10 @@ export class AbsorbState {
       $skill`Nantlers`,
       $skill`Financial Spreadsheets`,
     ]);
+
+    if (get("cyrptAlcoveEvilness") <= 13) {
+      ignored_skills.add($skill`Overclocking`);
+    }
 
     // Ignore the elemental skills that are not useful for the tower
     const needed_elem_skills: { [elem: string]: Skill[] } = {
