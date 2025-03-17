@@ -109,12 +109,16 @@ export const gyouRoute: string[] = [
   "Macguffin/Finish",
 
   "Orc Chasm/Start Peaks",
-  "Orc Chasm/Finish",
   "Keys/Star Key", // Allow for better use of orb
   "Misc/Shadow Rift",
+  "War/Nuns",
+  "Crypt/Finish",
+  "Digital/Hero",
+  "Orc Chasm/ABoo Clues",
+  "Orc Chasm/Finish",
+  "Digital/Key",
   "War/Boss Hippie",
 
-  "Crypt/Finish", // Finish nook late for autumnaton
   "Bat/Finish", // Finish up with last delay
   "Knob/King",
   "Tower/Naughty Sorceress",
