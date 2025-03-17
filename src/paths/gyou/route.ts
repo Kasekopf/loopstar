@@ -99,6 +99,7 @@ export const gyouRoute: string[] = [
   // Finish remaining quests
   "McLargeHuge/Finish", // get beast banish
   "Palindome/Palindome Dudes", // use beast banish
+  "War/Junkyard End",
   "Manor/Boss",
   "Crypt/Niche",
   "Crypt/Niche",
