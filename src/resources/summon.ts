@@ -50,11 +50,15 @@ export const summonSources: SummonSource[] = [
   },
   {
     name: "Cargo Shorts",
-    available: () => (have($item`Cargo Cultist Shorts`) && !get("_cargoPocketEmptied") ? 1 : 0),
+    available: () =>
+      have($item`Cargo Cultist Shorts`) &&
+      (!get("_cargoPocketEmptied") || have($item`greasy desk bell`))
+        ? 1
+        : 0,
     canFight: (mon: Monster) => mon === $monster`Astrologer of Shub-Jigguwatt`,
     summon: (mon: Monster) => {
       if (mon === $monster`Astrologer of Shub-Jigguwatt`) {
-        cliExecute("cargo 533");
+        if (!have($item`greasy desk bell`)) cliExecute("cargo 533");
         use($item`greasy desk bell`);
       }
     },

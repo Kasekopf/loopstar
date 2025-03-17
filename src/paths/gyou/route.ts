@@ -19,6 +19,7 @@ export const gyouRoute: string[] = [
   "Gyou/Anglerbush",
   "Absorb/Ponzi Apparatus",
   "Gyou/Big Wheelin' Twins",
+  "Summon/Astrologer Of Shub-Jigguwatt", // Summon early so our stats are low
 
   // "Absorb/Ponzi Apparatus", // Get +meat early, we'll want a lot
 

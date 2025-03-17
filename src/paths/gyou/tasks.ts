@@ -59,14 +59,6 @@ import { bowlingBallsGathered } from "../../tasks/level11_hidden";
 export const gyouDeltas: NamedDeltaTask[] = [
   // Make sure passives are high before doing Digital Key
   {
-    name: "Digital/Vanya",
-    combine: {
-      after: ["Gyou/Big Wheelin' Twins"],
-      // +init passive scales by Muscle
-      ready: () => myBasestat($stat`Muscle`) >= 200,
-    },
-  },
-  {
     name: "Digital/Fungus",
     combine: {
       // +meat passive scales by Moxie
@@ -488,6 +480,8 @@ export const gyouDeltas: NamedDeltaTask[] = [
     amend: {
       completed: (old) => () => {
         if (old()) return true;
+        if (myBasestat($stat`Moxie`) > 100) return true;
+        if (myBasestat($stat`Muscle`) > 100) return true;
         if (
           !have($item`vampyric cloake`) ||
           !have($item`June cleaver`) ||
@@ -504,7 +498,7 @@ export const gyouDeltas: NamedDeltaTask[] = [
       outfit: {
         equip: $items`June cleaver, vampyric cloake, Roman Candelabra, Space Trip safety headphones, tearaway pants, your cowboy boots`,
       },
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().macro(Macro.attack().repeat()).killHard(),
     },
   },
   {
@@ -652,6 +646,7 @@ export const gyouSummons: SummonTarget[] = [
   {
     target: $monster`Spectral Jellyfish`,
     after: [],
+    priority: prioritizeJellyfish,
     ready: () => atLevel(6),
     completed: () => have($skill`Phase Shift`),
     combat: new CombatStrategy().kill(),

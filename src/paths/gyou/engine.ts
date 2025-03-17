@@ -61,14 +61,6 @@ export class GyouEngine extends Engine {
 
   prioritize(task: ActiveTask): Prioritization {
     const result = Prioritization.from(task);
-
-    // Getting to L11 and charging the goose are both more important than running away
-    if (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6) {
-      result.delete(Priorities.CosmicBowlingBall);
-      result.delete(Priorities.AsdonMartin);
-      result.delete(Priorities.SpringShoes);
-    }
-
     const outfitSpec = undelay(task.outfit);
 
     // Check if Grey Goose is charged

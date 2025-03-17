@@ -75,7 +75,7 @@ const summonTargets: SummonTarget[] = [
       have($item`Richard's star key`) ||
       get("nsTowerDoorKeysUsed").includes("Richard's star key") ||
       !have($item`Cargo Cultist Shorts`) ||
-      get("_cargoPocketEmptied"),
+      (get("_cargoPocketEmptied") && !have($item`greasy desk bell`)),
     prepare: () => {
       fillHp();
     },

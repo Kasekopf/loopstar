@@ -405,7 +405,7 @@ export const DigitalQuest: Quest = {
 
         if (
           have($item`designer sweatpants`) &&
-          get("sweat", 0) >= 90 &&
+          get("sweat", 0) >= 15 &&
           numericModifier("Initiative") < 600
         ) {
           // Use visit URL to avoid needing to equip the pants
@@ -417,7 +417,7 @@ export const DigitalQuest: Quest = {
       outfit: () => {
         return {
           modifier: "init",
-          equip: $items`continuum transfunctioner, backup camera`,
+          equip: $items`continuum transfunctioner, backup camera, bat wings`,
           modes: { backupcamera: "init" },
           avoid: $items`Roman Candelabra`,
         };

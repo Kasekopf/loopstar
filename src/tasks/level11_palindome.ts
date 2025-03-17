@@ -352,7 +352,9 @@ const Dome: Task[] = [
     prepare: () => tuneSnapper($phylum`dudes`),
     do: $location`Inside the Palindome`,
     outfit: () => {
-      const familiar = get("banishedPhyla") === "beast" ? undefined : $familiar`Red-Nosed Snapper`;
+      const familiar = get("banishedPhyla").includes("beast")
+        ? undefined
+        : $familiar`Red-Nosed Snapper`;
       const modifier = have($item`stunt nuts`) ? "-combat" : "-combat, item";
       return {
         equip: $items`Talisman o' Namsilat`,
@@ -378,7 +380,9 @@ const Dome: Task[] = [
     do: $location`Inside the Palindome`,
     prepare: () => tuneSnapper($phylum`dudes`),
     outfit: () => {
-      const familiar = get("banishedPhyla") === "beast" ? undefined : $familiar`Red-Nosed Snapper`;
+      const familiar = get("banishedPhyla").includes("beast")
+        ? undefined
+        : $familiar`Red-Nosed Snapper`;
       const modifier = have($item`stunt nuts`) ? "-combat" : "-combat, item";
       return {
         equip: $items`Talisman o' Namsilat`,

@@ -69,7 +69,7 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
     darts: "train" | "skip" | "any"
   ): Macro {
     const result = new Macro();
-    if (haveEquipped($item`Everfull Dart Holster`) && myLevel() >= 12) {
+    if (haveEquipped($item`Everfull Dart Holster`)) {
       if (darts === "any" && !have($effect`Everything Looks Red`)) {
         result
           .trySkill($skill`Darts: Aim for the Bullseye`)
@@ -77,7 +77,7 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
           .trySkill($skill`Darts: Aim for the Bullseye`)
           .trySkill($skill`Darts: Aim for the Bullseye`)
           .trySkill($skill`Darts: Aim for the Bullseye`);
-      } else if (darts !== "skip") {
+      } else if (darts !== "skip" && myLevel() >= 11) {
         result.trySkill($skill`Darts: Throw at %part1`);
       }
     }

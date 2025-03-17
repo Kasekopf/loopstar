@@ -1110,7 +1110,10 @@ export const AdvAbsorbQuest: Quest = {
     ...absorbTasks.map((task): Task => {
       const result = {
         name: task.do.toString(),
+        completed: () => globalAbsorbState.remainingAdventures(task.do) === 0,
+        ...task,
         ready: () => {
+          if (task.ready && !task.ready()) return false;
           if (myDaycount() > 1) return true;
           if (step("questL13Final") > 11) return false;
 
@@ -1122,15 +1125,12 @@ export const AdvAbsorbQuest: Quest = {
             familiarWeight($familiar`Grey Goose`) >= 6 &&
             have($item`crepe paper parachute cape`) &&
             !have($effect`Everything looks Beige`) &&
-            (task.do === myLocation() ||
-              (have($item`June cleaver`) && get("_juneCleaverFightsLeft") === 0))
+            task.do === myLocation()
           ) {
             return true;
           }
           return false;
         },
-        completed: () => globalAbsorbState.remainingAdventures(task.do) === 0,
-        ...task,
         after: task.skill ? [...(task.after ?? []), `Absorb/${task.skill.name}`] : task.after,
         combat: (task.combat ?? new CombatStrategy()).action("ignoreSoftBanish"), // killing targetting monsters is set in the engine
         parachute: () => {
