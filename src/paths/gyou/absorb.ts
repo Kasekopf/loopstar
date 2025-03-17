@@ -14,6 +14,7 @@ import {
   Monster,
   myAscensions,
   myDaycount,
+  myLocation,
   numericModifier,
   print,
   putCloset,
@@ -1102,7 +1103,6 @@ export const ReprocessQuest: Quest = {
   ],
 };
 
-// Only used on day 2+
 export const AdvAbsorbQuest: Quest = {
   name: "AdvAbsorb",
   tasks: [
@@ -1110,10 +1110,35 @@ export const AdvAbsorbQuest: Quest = {
     ...absorbTasks.map((task): Task => {
       const result = {
         name: task.do.toString(),
+        ready: () => {
+          if (myDaycount() > 1) return true;
+          if (step("questL13Final") > 11) return false;
+
+          const allReprocesses = globalAbsorbState.remainingReprocess(task.do);
+          if (allReprocesses.length === 0) return false;
+          const reprocess = allReprocesses[0];
+          if (reprocessTargets.get(reprocess) !== 10) return false;
+          if (
+            familiarWeight($familiar`Grey Goose`) >= 6 &&
+            have($item`crepe paper parachute cape`) &&
+            !have($effect`Everything looks Beige`) &&
+            (task.do === myLocation() ||
+              (have($item`June cleaver`) && get("_juneCleaverFightsLeft") === 0))
+          ) {
+            return true;
+          }
+          return false;
+        },
         completed: () => globalAbsorbState.remainingAdventures(task.do) === 0,
         ...task,
         after: task.skill ? [...(task.after ?? []), `Absorb/${task.skill.name}`] : task.after,
         combat: (task.combat ?? new CombatStrategy()).action("ignoreSoftBanish"), // killing targetting monsters is set in the engine
+        parachute: () => {
+          if (familiarWeight($familiar`Grey Goose`) < 6) return undefined;
+          const allReprocesses = globalAbsorbState.remainingReprocess(task.do);
+          if (allReprocesses.length === 0) return undefined;
+          return allReprocesses[0];
+        },
         limit: { soft: 25 },
       };
       if (result.outfit === undefined) result.outfit = { equip: $items`miniature crystal ball` };

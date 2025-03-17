@@ -6,7 +6,7 @@ import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { buildPullRequirements, Hardcoded, Requirement, RequirementCategory } from "../../sim";
 import { GyouEngine } from "./engine";
-import { AbsorbQuest } from "./absorb";
+import { AbsorbQuest, AdvAbsorbQuest } from "./absorb";
 import { MenagerieQuest } from "../aftercore/menagerie";
 import { gyouDeltas, gyouPulls, GyouQuest } from "./tasks";
 import { gyouRoute } from "./route";
@@ -25,7 +25,11 @@ export class GyouInfo implements PathInfo {
   }
 
   getTasks(tasks: Task[]): Task[] {
-    const newTasks = getTasks([AbsorbQuest, MenagerieQuest, GyouQuest], false, false);
+    const newTasks = getTasks(
+      [AbsorbQuest, MenagerieQuest, GyouQuest, AdvAbsorbQuest],
+      false,
+      false
+    );
     return findAndMerge([...newTasks, ...tasks], gyouDeltas);
   }
 
