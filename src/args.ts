@@ -190,6 +190,10 @@ export const args = Args.create(
         help: "Maximum price to pay for equipment or items that will not be used up.",
         default: 50000,
       }),
+      pantogram: Args.boolean({
+        help: "Make Pantogram pants for in-run farming.",
+        default: false,
+      }),
     }),
     gyou: Args.group("Path: Grey You", {
       absorb: Args.string({

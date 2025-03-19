@@ -9,15 +9,19 @@ import {
   Familiar,
   familiarWeight,
   holiday,
+  inCasual,
   Item,
   itemAmount,
   weaponHands as mafiaWeaponHands,
+  mallPrice,
   myMeat,
   myPath,
+  myPrimestat,
   myTurncount,
   numericModifier,
   outfitPieces,
   print,
+  retrieveItem,
   Skill,
   Slot,
   toSlot,
@@ -40,6 +44,7 @@ import {
   get,
   have,
   maxBy,
+  Pantogram,
 } from "libram";
 import { Resource } from "../resources/lib";
 import { Keys, keyStrategy } from "../tasks/keys";
@@ -199,6 +204,36 @@ export function yellowSubmarinePossible(assumePulls = false) {
   // )
   //   return false;
   // return true;
+}
+
+export function pantogramReady(): boolean {
+  if (!inCasual() || !args.casual.pantogram) return false;
+  if (!Pantogram.have() || Pantogram.havePants()) return false;
+  const pantogramValue = 100 * 300; // ~100 meat per turn on average over 300 turns used
+
+  const cloverPrice = Math.min(
+    ...$items`ten-leaf clover, disassembled clover`.map((item) => mallPrice(item))
+  );
+  if (cloverPrice + mallPrice($item`porquoise`) > pantogramValue) {
+    return false;
+  }
+  retrieveItem($item`porquoise`, 1);
+  if (!have($item`porquoise`)) return false;
+  return true;
+}
+
+export function pantogram(): boolean {
+  if (!Pantogram.have() || Pantogram.havePants()) return true;
+  retrieveItem($item`ten-leaf clover`);
+  retrieveItem($item`bubblin' crude`);
+  Pantogram.makePants(
+    myPrimestat().toString(),
+    "Sleaze Resistance: 2",
+    "MP Regen Max: 15",
+    "Drops Items: true",
+    "Meat Drop: 60"
+  );
+  return true;
 }
 
 export function equipInitial(outfit: Outfit): void {
@@ -381,6 +416,7 @@ export function equipDefaults(
       if (!freecombat || get("_batWingsFreeFights") === 5) outfit.equip($item`bat wings`);
     }
     outfit.equip($item`unwrapped knock-off retro superhero cape`);
+    outfit.equip($item`pantogram pants`);
     outfit.equip($item`designer sweatpants`);
     outfit.equip($item`warbear long johns`);
     outfit.equip($item`square sponge pants`);
