@@ -100,7 +100,7 @@ function getAllocators(): Allocator[] {
           name: s.name,
           appliesTo: (which: ResourceType) =>
             typeof which === "object" && "summon" in which && s.canFight(which.summon),
-          amount: () => s.available(),
+          amount: () => s.remaining(),
           delta: (req) =>
             <DeltaTask>{
               replace: {
