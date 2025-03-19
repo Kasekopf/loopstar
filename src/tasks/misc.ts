@@ -1074,17 +1074,7 @@ export const MiscQuest: Quest = {
       completed: () => get("_daycareGymScavenges") !== 0,
       do: (): void => {
         if ((get("daycareOpen") || get("_daycareToday")) && !get("_daycareSpa")) {
-          switch (myPrimestat()) {
-            case $stat`Muscle`:
-              cliExecute("daycare muscle");
-              break;
-            case $stat`Mysticality`:
-              cliExecute("daycare myst");
-              break;
-            case $stat`Moxie`:
-              cliExecute("daycare moxie");
-              break;
-          }
+          cliExecute("daycare myst");
         }
         visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
         runChoice(3);
