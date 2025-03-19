@@ -1037,7 +1037,7 @@ export const MiscQuest: Quest = {
       name: "Eldritch Tentacle",
       after: ["Keys/Star Key", "Crypt/Cranny"],
       ready: () => get("questL02Larva") !== "unstarted",
-      completed: () => get("_eldritchTentacleFought"),
+      completed: () => get("_eldritchTentacleFought") || step("questL13Final") > -1,
       do: () => {
         visitUrl("place.php?whichplace=forestvillage&action=fv_scientist", false);
         runChoice(1);
