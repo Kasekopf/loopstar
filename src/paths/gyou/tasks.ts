@@ -487,7 +487,9 @@ export const gyouDeltas: NamedDeltaTask[] = [
           !have($item`June cleaver`) ||
           !have($item`Roman Candelabra`) ||
           !have($item`Space Trip safety headphones`) ||
-          !have($item`tearaway pants`)
+          !have($item`tearaway pants`) ||
+          !have($item`Apriling band helmet`) ||
+          !have($item`Lil' Doctor™ bag`)
         ) {
           return true;
         }
@@ -496,7 +498,7 @@ export const gyouDeltas: NamedDeltaTask[] = [
     },
     replace: {
       outfit: {
-        equip: $items`June cleaver, vampyric cloake, Roman Candelabra, Space Trip safety headphones, tearaway pants, your cowboy boots`,
+        equip: $items`June cleaver, vampyric cloake, Roman Candelabra, Space Trip safety headphones, tearaway pants, your cowboy boots, Apriling band helmet, Lil' Doctor™ bag`,
       },
       combat: new CombatStrategy().macro(Macro.attack().repeat()).killHard(),
     },
@@ -653,7 +655,7 @@ export const gyouSummons: SummonTarget[] = [
     outfit: {
       equip: $items`unwrapped knock-off retro superhero cape`,
       modes: { retrocape: ["heck", "hold"] },
-      modifier: "10 init, moxie",
+      modifier: "10 init",
     },
     benefit: 4,
   },
