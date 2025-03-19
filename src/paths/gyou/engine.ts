@@ -121,37 +121,39 @@ export class GyouEngine extends Engine {
     // Prepare combat macro
     if (combat.getDefaultAction() === undefined) combat.action("ignore");
 
-    // Try to use the goose for stats, if we can
-    if (
-      mayLaunchGooseForStats() &&
-      !undelay(task.freeaction) &&
-      task.name !== "Summon/Pygmy Witch Lawyer"
-    ) {
-      if (outfit.equip($familiar`Grey Goose`)) {
-        combat.macro(new Macro().trySkill($skill`Convert Matter to Pomade`), undefined, true);
-        goose_weight_in_use = true;
-      }
-    }
-
-    // Absorb targeted monsters
-    if (task.do instanceof Location) {
-      for (const monster of globalAbsorbState.getActiveTargets(task.do)) {
-        if (globalAbsorbState.isReprocessTarget(monster) && !goose_weight_in_use) {
-          outfit.equip($familiar`Grey Goose`);
-          combat.autoattack(new Macro().trySkill($skill`Re-Process Matter`), monster);
-          combat.macro(new Macro().trySkill($skill`Re-Process Matter`), monster, true);
-          debug(`Target x2: ${monster.name}`, "purple");
-        } else {
-          debug(`Target: ${monster.name}`, "purple");
+    if (task.activePriority?.wanderer() === undefined) {
+      // Try to use the goose for stats, if we can
+      if (
+        mayLaunchGooseForStats() &&
+        !undelay(task.freeaction) &&
+        task.name !== "Summon/Pygmy Witch Lawyer"
+      ) {
+        if (outfit.equip($familiar`Grey Goose`)) {
+          combat.macro(new Macro().trySkill($skill`Convert Matter to Pomade`), undefined, true);
+          goose_weight_in_use = true;
         }
-        const strategy = combat.currentStrategy(monster) ?? "ignore";
-        if (
-          strategy === "ignore" ||
-          strategy === "banish" ||
-          strategy === "ignoreNoBanish" ||
-          strategy === "ignoreSoftBanish"
-        ) {
-          combat.action("kill", monster); // TODO: KillBanish for Banish, KillNoBanish for IgnoreNoBanish
+      }
+
+      // Absorb targeted monsters
+      if (task.do instanceof Location) {
+        for (const monster of globalAbsorbState.getActiveTargets(task.do)) {
+          if (globalAbsorbState.isReprocessTarget(monster) && !goose_weight_in_use) {
+            outfit.equip($familiar`Grey Goose`);
+            combat.autoattack(new Macro().trySkill($skill`Re-Process Matter`), monster);
+            combat.macro(new Macro().trySkill($skill`Re-Process Matter`), monster, true);
+            debug(`Target x2: ${monster.name}`, "purple");
+          } else {
+            debug(`Target: ${monster.name}`, "purple");
+          }
+          const strategy = combat.currentStrategy(monster) ?? "ignore";
+          if (
+            strategy === "ignore" ||
+            strategy === "banish" ||
+            strategy === "ignoreNoBanish" ||
+            strategy === "ignoreSoftBanish"
+          ) {
+            combat.action("kill", monster); // TODO: KillBanish for Banish, KillNoBanish for IgnoreNoBanish
+          }
         }
       }
     }
