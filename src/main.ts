@@ -15,7 +15,6 @@ import {
 import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
 import { get, set, sinceKolmafiaRevision } from "libram";
-import { Prioritization } from "./engine/priority";
 import { Args, step } from "grimoire-kolmafia";
 import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
@@ -26,6 +25,7 @@ import { allPaths, getActivePath, loadEngine } from "./paths/all";
 import { PathInfo } from "./paths/pathinfo";
 import { AftercoreInfo } from "./paths/aftercore/info";
 import { getAllTasks } from "./tasks/all";
+import { getChainSources } from "./resources/wanderer";
 
 const svn_name = "Kasekopf-loop-casual-branches-release";
 
@@ -165,6 +165,7 @@ function printVersionInfo(): void {
 function listTasks(engine: Engine, show_phyla = false): void {
   engine.updatePlan();
   const resourceAllocations = allocateResources(engine.tasks);
+  const chainSources = getChainSources();
   for (const task of engine.tasks) {
     if (task.completed()) {
       debug(`${getTaggedName(task)}: Done`, "blue");
@@ -172,7 +173,7 @@ function listTasks(engine: Engine, show_phyla = false): void {
       const allocation = resourceAllocations.get(task.name);
       const allocatedTask = allocation ? merge(task, allocation) : task;
       if (engine.available(allocatedTask)) {
-        const priority = Prioritization.from(task);
+        const priority = engine.prioritize(task, chainSources);
         const reason = priority.explain();
         const why = reason === "" ? "Route" : reason;
         debug(`${getTaggedName(allocatedTask)}: Available[${priority.score()}: ${why}]`);

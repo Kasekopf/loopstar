@@ -45,6 +45,7 @@ import { atLevel, debug } from "../../lib";
 import { GyouActionDefaults } from "./combat";
 import { Task } from "../../engine/task";
 import { getRunawaySources } from "../../resources/runaway";
+import { ChainSource } from "../../resources/wanderer";
 
 export class GyouEngine extends Engine {
   constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
@@ -59,9 +60,9 @@ export class GyouEngine extends Engine {
     return super.available(task);
   }
 
-  prioritize(task: ActiveTask): Prioritization {
+  prioritize(task: ActiveTask, chainSources: ChainSource[]): Prioritization {
     const outfit = this.createOutfit(task);
-    const result = Prioritization.from(task, outfit);
+    const result = Prioritization.from(task, outfit, chainSources);
 
     // Check if Grey Goose is charged
     const familiar = outfit.familiar;

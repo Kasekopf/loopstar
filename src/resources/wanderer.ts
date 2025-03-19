@@ -221,15 +221,17 @@ export interface ChainSource extends Resource {
   length: () => number;
 }
 
-export const chainSources: ChainSource[] = [
-  {
-    name: "Roman Candelabra",
-    available: () =>
-      have($item`Roman Candelabra`) &&
-      !have($effect`Everything Looks Purple`) &&
-      myAdventures() > 1,
-    equip: $item`Roman Candelabra`,
-    do: Macro.trySkill($skill`Blow the Purple Candle!`),
-    length: () => 2,
-  },
-];
+export function getChainSources(): ChainSource[] {
+  return [
+    {
+      name: "Roman Candelabra",
+      available: () =>
+        have($item`Roman Candelabra`) &&
+        !have($effect`Everything Looks Purple`) &&
+        myAdventures() > 1,
+      equip: $item`Roman Candelabra`,
+      do: Macro.trySkill($skill`Blow the Purple Candle!`),
+      length: () => 2,
+    },
+  ];
+}

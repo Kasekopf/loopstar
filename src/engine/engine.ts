@@ -91,7 +91,12 @@ import { applyEffects, customRestoreMp } from "./moods";
 import { ROUTE_WAIT_TO_NCFORCE } from "../route";
 import { unusedBanishes } from "../resources/banish";
 import { CombatResource } from "../resources/lib";
-import { canChargeVoid, wandererSources } from "../resources/wanderer";
+import {
+  canChargeVoid,
+  ChainSource,
+  getChainSources,
+  wandererSources,
+} from "../resources/wanderer";
 import { getRunawaySources } from "../resources/runaway";
 import { freekillSources } from "../resources/freekill";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
@@ -149,8 +154,13 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
 
     // Otherwise, choose from all available tasks
+    const chainSources = getChainSources();
     const taskPriorities = availableTasks.map((task) => {
-      return { ...task, activePriority: this.prioritize(task), availableTasks: availableTasks };
+      return {
+        ...task,
+        activePriority: this.prioritize(task, chainSources),
+        availableTasks: availableTasks,
+      };
     });
 
     // Sort tasks in a stable way, by priority (decreasing) and then by route
@@ -175,8 +185,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     return undefined;
   }
 
-  prioritize(task: ActiveTask): Prioritization {
-    return Prioritization.from(task, this.createOutfit(task));
+  prioritize(task: ActiveTask, chainSources: ChainSource[]): Prioritization {
+    return Prioritization.from(task, this.createOutfit(task), chainSources);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -204,7 +214,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     } else if (!(task.ready?.() ?? true)) {
       debug(`${task.name} not completed! [Again? Not ready]`, "blue");
     } else {
-      const priority_explain = this.prioritize(task).explain();
+      const priority_explain = this.prioritize(task, getChainSources()).explain();
       if (priority_explain !== "") {
         debug(`${task.name} not completed! [Again? ${priority_explain}]`, "blue");
       } else {

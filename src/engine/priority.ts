@@ -23,7 +23,7 @@ import { canEquipResource, getModifiersFrom } from "./outfit";
 import { Outfit } from "grimoire-kolmafia";
 import { args } from "../args";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
-import { ChainSource, chainSources, WandererSource, wandererSources } from "../resources/wanderer";
+import { ChainSource, WandererSource, wandererSources } from "../resources/wanderer";
 import { getActiveBackupTarget } from "../resources/backup";
 import { cosmicBowlingBallReady } from "../lib";
 import { asdonBanishAvailable } from "../resources/runaway";
@@ -88,7 +88,7 @@ export class Prioritization {
     return result;
   }
 
-  static from(task: Task, outfit: Outfit): Prioritization {
+  static from(task: Task, outfit: Outfit, chainSources: ChainSource[]): Prioritization {
     const result = new Prioritization();
     const base = task.priority?.() ?? Priorities.None;
 
