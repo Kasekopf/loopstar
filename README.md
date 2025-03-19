@@ -4,6 +4,7 @@ This is a 1-day ascension script, using the [grimoire](https://github.com/Kaseko
 
 - Casual
 - A Shrunken Adventurer am I
+- Grey You
 
 Moreover, this script can perform some loop-friendly tasks in aftercore (leveling up, or the steel organ quest) with the `goal` arg.
 
@@ -54,6 +55,17 @@ Other Recommendations:
 - Prefer candles for your eurdora.
 - Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
 
+## Instructions for Grey You
+
+- Run `loopstar sim path=gyou` to see requirements. Note that the required items listed are enough that the script will not crash, but _not_ necessarily enough to finish the run in one day. **Upon breaking the prism, your organs will be filled and your adventures will be reduced to 40.** Consider farming in-run if you have any extra adventures before breaking the prism.
+
+Other Recommendations:
+
+- Prefer Vole sign until you have gotten a few runs of path progression.
+- Astral mask or astral belt are both useful, but neither is required.
+- Prefer candles for your eurdora.
+- Workshed will be set to `model train set` by default at the start of the run, but this can be changed with the `workshed` argument. A `TakerSpace letter of Marque` is also a good option; in that case, see the `swapworkshed` arg as well.
+
 # Options
 
 Options can be changed in a few different ways:
@@ -78,6 +90,7 @@ Information:
   path TEXT - Path to provide information for in sim. [default: casual]
     path smol - A Shrunken Adventurer am I
     path casual - Casual
+    path gyou - Grey You
     path aftercore - Aftercore
   version - Show script version and exit.
   help - Show this message and exit.
@@ -120,16 +133,19 @@ Path: Casual:
   liver NUMBER - Amount of liver to fill. [default: 10] [setting: loopstar_liver]
   spleen NUMBER - Amount of spleen to fill. [default: 0] [setting: loopstar_spleen]
   voa NUMBER - Value of an adventure, in meat [default: 6500] [setting: valueOfAdventure]
-  milestoneprice NUMBER - Skip the desert with milestones, when their price is cheaper than this. [default: 0] [setting: loopstar_milestoneprice]
+  milestoneprice NUMBER - Skip the desert with milestones, when their price is cheaper than this (0 to always do desert). [default: 0] [setting: loopstar_milestoneprice]
   usedprice NUMBER - Maximum price to pay for items to be used up during the run. [default: 10000] [setting: loopstar_usedprice]
   equipprice NUMBER - Maximum price to pay for equipment or items that will not be used up. [default: 50000] [setting: loopstar_equipprice]
 
+Path: Grey You:
+  absorb TEXT - A comma-separated list of skills to get, in addition to skills that will directly help the run. [default: ] [setting: loopstar_absorb]
+
 Path: Aftercore:
   goal TEXT - An aftercore goal to accomplish.
-    goal level - Level up to level 13.
-    goal organ - Get your steel organ.
-    goal menagerie - Unlock the Cobb's Knob Menagerie
-    goal dis - Complete the Suburbs of Dis quest
+    goal level - Level up to level 13
+    goal organ - Get your steel organ
+    goal menagerie - Unlock the Cobb's Knob Menagerie
+    goal dis - Complete the Suburbs of Dis quest
 
 Debug Options:
   actions NUMBER - Maximum number of actions to perform, if given. Can be used to execute just a few steps at a time. [setting: loopstar_actions]
