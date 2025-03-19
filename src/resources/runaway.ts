@@ -183,10 +183,11 @@ export function getRunawaySources(): RunawaySource[] {
   ];
 }
 
-interface RunawayFamiliarSpec {
+interface FamiliarWeightSpec {
   available: boolean;
   outfit: OutfitSpec;
   macro: Macro;
+  weight: number;
 }
 
 type FamweightOption = {
@@ -194,7 +195,7 @@ type FamweightOption = {
   rider?: Familiar;
 };
 
-const famweightOptions: FamweightOption[] = [
+export const famweightOptions: FamweightOption[] = [
   // Fam equip
   { thing: $item`amulet coin` },
   { thing: $item`astral pet sweater` },
@@ -226,7 +227,60 @@ const famweightOptions: FamweightOption[] = [
   { thing: $item`Beach Comb` },
 ];
 
-function planRunawayFamiliar(): RunawayFamiliarSpec {
+export function planFamiliarGear(
+  familiar: Familiar,
+  goal: number,
+  useCombatEffects: boolean
+): FamiliarWeightSpec {
+  let attainableWeight = familiarWeight(familiar);
+
+  // Include passive skills
+  if (have($skill`Crimbo Training: Concierge`)) attainableWeight += 1;
+  if (have($skill`Amphibian Sympathy`)) attainableWeight += 5;
+  if (mySign() === "Platypus") attainableWeight += 5;
+
+  // Include active effects
+  for (const effect of getActiveEffects())
+    attainableWeight += numericModifier(effect, "Familiar Weight");
+
+  // Include as much equipment as needed
+  const outfit = new Outfit();
+  outfit.equip(familiar);
+  if (familiar === $familiar`Pair of Stomping Boots`) {
+    // Avoid reducing ML too much
+    outfit.equip({ avoid: $items`Space Trip safety headphones, HOA regulation book` });
+  }
+
+  for (const option of famweightOptions) {
+    if (attainableWeight >= goal) break;
+    if (option.rider && !have(option.rider)) continue;
+    if (outfit.equip(option.thing)) {
+      attainableWeight += numericModifier(option.thing, "Familiar Weight");
+      if (option.rider) outfit.equip({ riders: { "buddy-bjorn": option.rider } });
+    }
+  }
+
+  const macro = new Macro();
+  if (
+    useCombatEffects &&
+    attainableWeight < goal &&
+    attainableWeight + 20 >= goal &&
+    have($skill`Meteor Lore`) &&
+    get("_meteorShowerUses") < 5
+  ) {
+    macro.trySkill($skill`Meteor Shower`);
+    attainableWeight += 20;
+  }
+
+  return {
+    outfit: outfit.spec(),
+    available: attainableWeight >= goal,
+    macro: macro,
+    weight: attainableWeight,
+  };
+}
+
+function planRunawayFamiliar(): FamiliarWeightSpec {
   const familiarOptions = [];
   if (have($familiar`Frumious Bandersnatch`) && have($skill`The Ode to Booze`)) {
     familiarOptions.push($familiar`Frumious Bandersnatch`);
@@ -248,55 +302,14 @@ function planRunawayFamiliar(): RunawayFamiliarSpec {
       available: false,
       outfit: {},
       macro: new Macro(),
+      weight: 0,
     };
   }
   const chosenFamiliar = familiarOptions[0];
   const goalWeight = 5 * (1 + get("_banderRunaways"));
-  let attainableWeight = familiarWeight(chosenFamiliar);
-
-  // Include passive skills
-  if (have($skill`Crimbo Training: Concierge`)) attainableWeight += 1;
-  if (have($skill`Amphibian Sympathy`)) attainableWeight += 5;
-  if (mySign() === "Platypus") attainableWeight += 5;
-
-  // Include active effects
-  for (const effect of getActiveEffects())
-    attainableWeight += numericModifier(effect, "Familiar Weight");
-
-  // Include as much equipment as needed
-  const outfit = new Outfit();
-  outfit.equip(chosenFamiliar);
-  if (chosenFamiliar === $familiar`Pair of Stomping Boots`) {
-    // Avoid reducing ML too much
-    outfit.equip({ avoid: $items`Space Trip safety headphones, HOA regulation book` });
-  }
-
-  for (const option of famweightOptions) {
-    if (attainableWeight >= goalWeight) break;
-    if (option.rider && !have(option.rider)) continue;
-    if (outfit.equip(option.thing)) {
-      attainableWeight += numericModifier(option.thing, "Familiar Weight");
-      if (option.rider) outfit.equip({ riders: { "buddy-bjorn": option.rider } });
-    }
-  }
-
-  const macro = new Macro();
-  if (
-    attainableWeight < goalWeight &&
-    attainableWeight + 20 >= goalWeight &&
-    have($skill`Meteor Lore`) &&
-    get("_meteorShowerUses") < 5
-  ) {
-    macro.trySkill($skill`Meteor Shower`);
-    attainableWeight += 20;
-  }
-
-  return {
-    outfit: outfit.spec(),
-    available: attainableWeight >= goalWeight,
-    macro: macro,
-  };
+  return planFamiliarGear(chosenFamiliar, goalWeight, true);
 }
+
 /**
  * Return true if we have all of our final latte ingredients, but they are not in the latte.
  */
