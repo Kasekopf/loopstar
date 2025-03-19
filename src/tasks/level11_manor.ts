@@ -55,6 +55,7 @@ const Manor1: Task[] = [
     combat: new CombatStrategy().kill(),
     limit: { soft: 21 },
     delay: 7,
+    nochain: true,
   },
   {
     name: "Billiards",

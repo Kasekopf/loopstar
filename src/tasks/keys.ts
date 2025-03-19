@@ -382,6 +382,7 @@ export const DigitalQuest: Quest = {
       },
       combat: new CombatStrategy().kill(),
       limit: { soft: 16 },
+      nochain: true,
     },
     {
       name: "Vanya",
@@ -425,6 +426,7 @@ export const DigitalQuest: Quest = {
       combat: new CombatStrategy().kill(),
       limit: { soft: 16 },
       delay: 16,
+      nochain: true,
     },
     {
       name: "Megalo",
@@ -465,6 +467,7 @@ export const DigitalQuest: Quest = {
       combat: new CombatStrategy().kill(),
       limit: { soft: 16 },
       delay: 16,
+      nochain: true,
     },
     {
       name: "Hero",
@@ -494,6 +497,7 @@ export const DigitalQuest: Quest = {
       },
       combat: new CombatStrategy().killItem(),
       limit: { soft: 16 },
+      nochain: true,
     },
     {
       name: "Key",

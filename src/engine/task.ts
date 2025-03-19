@@ -32,6 +32,7 @@ export type Task = {
   tags?: string[];
   ignoremonsters?: () => Monster[]; // Extra monsters to ignore on the combat strategy
   preferwanderer?: boolean;
+  nochain?: boolean;
 
   // The monsters to search for with orb.
   // In addition, absorb targets are always searched with the orb.
