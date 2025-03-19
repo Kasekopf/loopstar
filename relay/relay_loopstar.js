@@ -6518,6 +6518,10 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
     voterbooth: Args.boolean({
       help: "Attempt to use the voter booth if we have access.",
       default: true
+    }),
+    pocketprofessor: Args.boolean({
+      help: "Attempt to use the pocket professor.",
+      default: true
     })
   }),
   smol: Args.group("Path: A Shrunken Adventurer am I", {
