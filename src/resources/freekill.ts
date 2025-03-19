@@ -3,7 +3,7 @@ import { $effect, $item, $items, $skill, AsdonMartin, get, have } from "libram";
 import { asdonFualable } from "../lib";
 import { CombatResource } from "./lib";
 
-export interface FreekillSource extends CombatResource {
+interface FreekillSource extends CombatResource {
   do: Item | Skill;
 }
 

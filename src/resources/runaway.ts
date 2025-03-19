@@ -28,7 +28,7 @@ import { asdonFualable } from "../lib";
 import { args } from "../args";
 import { CombatResource } from "./lib";
 
-export interface RunawaySource extends CombatResource {
+interface RunawaySource extends CombatResource {
   do: Macro;
   banishes: boolean;
   chance: () => number;
