@@ -3,8 +3,8 @@ import { $item, $items, $skill, AprilingBandHelmet, CinchoDeMayo, get, have, Mac
 import { args } from "../args";
 import { CombatResource } from "./lib";
 
-export type ForceNCSorce = CombatResource & { do: Macro; remaining: () => number };
-export const forceNCSources: ForceNCSorce[] = [
+type CombatForceNCSource = CombatResource & { do: Macro; remaining: () => number };
+export const forceNCSources: CombatForceNCSource[] = [
   {
     name: "Parka",
     available: () =>
@@ -40,7 +40,7 @@ export function forceNCPossible(): boolean {
   return forceNCSources.find((s) => s.available()) !== undefined;
 }
 
-type ForceNCSource = {
+type NoncombatForceNCSource = {
   name: string;
   available: () => boolean;
   prepare: () => void;
@@ -49,7 +49,7 @@ type ForceNCSource = {
 
 const tuba = $item`Apriling band tuba`;
 
-export const noncombatForceNCSources: ForceNCSource[] = [
+export const noncombatForceNCSources: NoncombatForceNCSource[] = [
   {
     name: "Apriling band tuba",
     available: () => have(tuba) && tuba.dailyusesleft > 0,
