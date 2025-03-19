@@ -88,10 +88,9 @@ export class Prioritization {
     return result;
   }
 
-  static from(task: Task): Prioritization {
+  static from(task: Task, outfit: Outfit): Prioritization {
     const result = new Prioritization();
     const base = task.priority?.() ?? Priorities.None;
-    const outfitSpec = undelay(task.outfit);
 
     if (Array.isArray(base)) {
       for (const priority of base) result.priorities.add(priority);
@@ -122,7 +121,7 @@ export class Prioritization {
 
     // Ensure that the current +/- combat effects are compatible
     //  (Macguffin/Forest is tough and doesn't need much +combat; just power though)
-    const modifier = getModifiersFrom(outfitSpec);
+    const modifier = getModifiersFrom(outfit);
     if (!moodCompatible(modifier) && task.name !== "Macguffin/Forest") {
       result.priorities.add(Priorities.BadMood);
     }
@@ -199,8 +198,6 @@ export class Prioritization {
       if (have($item`backup camera`) && get("_backUpUses") < 11 - args.resources.savebackups) {
         const backup = getActiveBackupTarget();
         if (backup) {
-          const outfit = new Outfit();
-          if (outfitSpec !== undefined) outfit.equip(outfitSpec);
           if (outfit.canEquip($item`backup camera`)) {
             result.priorities.add(Priorities.LastCopyableMonster);
           }
@@ -211,15 +208,16 @@ export class Prioritization {
       const wanderer = wandererSources.find(
         (source) => source.available() && source.chance() === 1
       );
-      if (wanderer && (!wanderer.fulloutfit || !outfitSpec)) {
-        const outfit = new Outfit();
-        if (outfitSpec !== undefined) outfit.equip(outfitSpec);
+      if (wanderer && (!wanderer.fulloutfit || !undelay(task.outfit))) {
         const matchedSpec = canEquipResource(outfit, wanderer);
         if (matchedSpec !== undefined) {
-          outfit.equip(matchedSpec);
+          const wandererOutfit = outfit.clone();
+          wandererOutfit.equip(matchedSpec);
           const chainable = chainSources.find(
             (source) =>
-              source.available() && outfit.canEquip(source.equip) && source.length() <= delayRemaing
+              source.available() &&
+              wandererOutfit.canEquip(source.equip) &&
+              source.length() <= delayRemaing
           );
           if (chainable && wanderer.chainable) {
             result.priorities.add(Priorities.ChainWanderer);

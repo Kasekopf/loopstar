@@ -176,7 +176,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   }
 
   prioritize(task: ActiveTask): Prioritization {
-    return Prioritization.from(task);
+    return Prioritization.from(task, this.createOutfit(task));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -204,7 +204,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     } else if (!(task.ready?.() ?? true)) {
       debug(`${task.name} not completed! [Again? Not ready]`, "blue");
     } else {
-      const priority_explain = Prioritization.from(task).explain();
+      const priority_explain = this.prioritize(task).explain();
       if (priority_explain !== "") {
         debug(`${task.name} not completed! [Again? ${priority_explain}]`, "blue");
       } else {

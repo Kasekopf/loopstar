@@ -60,11 +60,11 @@ export class GyouEngine extends Engine {
   }
 
   prioritize(task: ActiveTask): Prioritization {
-    const result = Prioritization.from(task);
-    const outfitSpec = undelay(task.outfit);
+    const outfit = this.createOutfit(task);
+    const result = Prioritization.from(task, outfit);
 
     // Check if Grey Goose is charged
-    const familiar = outfitSpec?.familiar;
+    const familiar = outfit.familiar;
     // Tasks where we sneak the goose for one turn with orb
     const sneakGoose = ["Macguffin/Forest", "Macguffin/Desert"];
     if (
@@ -89,7 +89,7 @@ export class GyouEngine extends Engine {
     }
 
     // Wait until we get a -combat skill before doing any -combat
-    const modifier = getModifiersFrom(outfitSpec);
+    const modifier = getModifiersFrom(outfit);
     if (
       modifier?.includes("-combat") &&
       !have($skill`Phase Shift`) &&
