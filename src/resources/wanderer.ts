@@ -1,4 +1,4 @@
-import { DelayedMacro } from "grimoire-kolmafia";
+import { DelayedMacro, OutfitSpec } from "grimoire-kolmafia";
 import {
   familiarWeight,
   haveEquipped,
@@ -20,10 +20,13 @@ import {
   getKramcoWandererChance,
   have,
   Macro,
+  PocketProfessor,
   SourceTerminal,
 } from "libram";
 import { atLevel } from "../lib";
 import { Resource } from "./lib";
+import { FamiliarWeightSpec, planFamiliarGear } from "./runaway";
+import { args } from "../args";
 
 export interface WandererSource extends Resource {
   monsters: Monster[] | (() => Monster[]);
@@ -216,12 +219,14 @@ export function canChargeVoid(): boolean {
 export interface ChainSource extends Resource {
   name: string;
   available: () => boolean;
-  equip: Item;
+  equip: Item | OutfitSpec;
   do: Macro;
-  length: () => number;
+  length: number;
 }
 
 export function getChainSources(): ChainSource[] {
+  const pocketProfessorPlan = planPocketProfessor();
+
   return [
     {
       name: "Roman Candelabra",
@@ -231,7 +236,68 @@ export function getChainSources(): ChainSource[] {
         myAdventures() > 1,
       equip: $item`Roman Candelabra`,
       do: Macro.trySkill($skill`Blow the Purple Candle!`),
-      length: () => 2,
+      length: 2,
+    },
+    {
+      name: "Pocket Professor",
+      available: () => pocketProfessorPlan.available && have($familiar`Pocket Professor`),
+      equip: pocketProfessorPlan.outfit,
+      do: Macro.trySkill($skill`lecture on relativity`),
+      length: pocketProfessorPlan.length,
     },
   ];
+}
+
+function planPocketProfessor(): FamiliarWeightSpec & { length: number } {
+  if (!have($familiar`Pocket Professor`) || !args.resources.pocketprofessor) {
+    return {
+      available: false,
+      outfit: {},
+      macro: new Macro(),
+      weight: 0,
+      length: 0,
+    };
+  }
+
+  if (have($item`toy Cupid bow`) && !have($item`Pocket Professor memory chip`)) {
+    // Give enough lectures just to trigger the memory chip
+    const lecturesDone = get("_pocketProfessorLectures");
+    const goal = (lecturesDone + 3) ** 2 - 1; // 5 more combats to get memory chip
+    const plan = planFamiliarGear($familiar`Pocket Professor`, goal, false, [$item`toy Cupid bow`]);
+    return {
+      ...plan,
+      length: PocketProfessor.currentlyAvailableLectures(plan.weight) + 1,
+    };
+  }
+
+  // Include the memory chip if we have it
+  const forced = [$item`Pocket Professor memory chip`].filter((i) => have(i));
+  const includeChip = forced.length > 0;
+
+  // Determine the maximum number of lectures we can possibly get
+  const maxWeightPlan = planFamiliarGear($familiar`Pocket Professor`, 394, false, forced);
+  const lectures = PocketProfessor.currentlyAvailableLectures(maxWeightPlan.weight, includeChip);
+  if (lectures <= 0) {
+    return {
+      available: false,
+      outfit: {},
+      macro: new Macro(),
+      weight: 0,
+      length: 0,
+    };
+  }
+
+  // Now, plan only to get that many lectures
+  // (without needlessly going over the threshold)
+  const lastLectureWeight = Math.floor(Math.sqrt(maxWeightPlan.weight - 1)) ** 2 + 1;
+  const usefulPlan = planFamiliarGear(
+    $familiar`Pocket Professor`,
+    lastLectureWeight,
+    false,
+    forced
+  );
+  return {
+    ...usefulPlan,
+    length: PocketProfessor.currentlyAvailableLectures(usefulPlan.weight, includeChip) + 1,
+  };
 }

@@ -121,6 +121,7 @@ Resource Usage:
   saveparka NUMBER - Number of spikolodon spikes to save (max 5). [default: 0] [setting: loopstar_saveparka]
   saveapriling NUMBER - Number of apriling band instruments to save (max 2). [default: 0] [setting: loopstar_saveapriling]
   voterbooth BOOLEAN - Attempt to use the voter booth if we have access. [default: true] [setting: loopstar_voterbooth]
+  pocketprofessor BOOLEAN - Attempt to use the pocket professor. [default: true] [setting: loopstar_pocketprofessor]
 
 Path: A Shrunken Adventurer am I:
   skipfork - Skip salad forking; note that this may cause failure due to lack of remaining adventures [default: false] [setting: loopstar_skipfork]

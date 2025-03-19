@@ -183,7 +183,7 @@ export function getRunawaySources(): RunawaySource[] {
   ];
 }
 
-interface FamiliarWeightSpec {
+export interface FamiliarWeightSpec {
   available: boolean;
   outfit: OutfitSpec;
   macro: Macro;
@@ -230,7 +230,8 @@ export const famweightOptions: FamweightOption[] = [
 export function planFamiliarGear(
   familiar: Familiar,
   goal: number,
-  useCombatEffects: boolean
+  useCombatEffects: boolean,
+  forcedEquips: Item[]
 ): FamiliarWeightSpec {
   let attainableWeight = familiarWeight(familiar);
 
@@ -249,6 +250,10 @@ export function planFamiliarGear(
   if (familiar === $familiar`Pair of Stomping Boots`) {
     // Avoid reducing ML too much
     outfit.equip({ avoid: $items`Space Trip safety headphones, HOA regulation book` });
+  }
+
+  for (const equip of forcedEquips) {
+    outfit.equip(equip);
   }
 
   for (const option of famweightOptions) {
@@ -307,7 +312,7 @@ function planRunawayFamiliar(): FamiliarWeightSpec {
   }
   const chosenFamiliar = familiarOptions[0];
   const goalWeight = 5 * (1 + get("_banderRunaways"));
-  return planFamiliarGear(chosenFamiliar, goalWeight, true);
+  return planFamiliarGear(chosenFamiliar, goalWeight, true, []);
 }
 
 /**

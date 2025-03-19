@@ -137,6 +137,10 @@ export const args = Args.create(
         help: "Attempt to use the voter booth if we have access.",
         default: true,
       }),
+      pocketprofessor: Args.boolean({
+        help: "Attempt to use the pocket professor.",
+        default: true,
+      }),
     }),
     smol: Args.group("Path: A Shrunken Adventurer am I", {
       skipfork: Args.flag({
