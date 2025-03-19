@@ -1,4 +1,4 @@
-import { Item, myClass, myFury, myMaxmp, myMp, myTurncount, Skill } from "kolmafia";
+import { Item, Monster, myClass, myFury, myMaxmp, myMp, myTurncount, Skill } from "kolmafia";
 import { BanishState } from "../engine/state";
 import { $class, $effect, $item, $items, $skill, AsdonMartin, get, have, Macro } from "libram";
 import { args } from "../args";
@@ -13,12 +13,14 @@ type BanishSimpleDo = CombatResource & {
   do: Item | Skill;
   free: boolean;
   blocked?: string[];
+  parallel?: number;
 };
 type BanishMacroDo = CombatResource & {
   do: Macro;
   tracker: Item | Skill;
   free: boolean;
   blocked?: string[];
+  parallel?: number;
 };
 export type BanishSource = BanishSimpleDo | BanishMacroDo;
 function getTracker(source: BanishSource): Item | Skill {
@@ -151,13 +153,17 @@ export function unusedBanishes(
   tasks: Task[],
   taskName: string
 ): BanishSource[] {
-  const used_banishes = new Set<Item | Skill>();
+  const activelyBanished = new Map<Item | Skill, Set<Monster>>();
   for (const task of tasks) {
     if (task.combat === undefined) continue;
     if (task.ignorebanishes?.()) continue;
     for (const monster of task.combat.where("banish")) {
-      const banished_with = banishState.already_banished.get(monster);
-      if (banished_with !== undefined) used_banishes.add(banished_with);
+      const banishedWith = banishState.already_banished.get(monster);
+      if (banishedWith) {
+        const banishList = activelyBanished.get(banishedWith);
+        if (banishList) banishList.add(monster);
+        else activelyBanished.set(banishedWith, new Set([monster]));
+      }
     }
   }
 
@@ -165,6 +171,6 @@ export function unusedBanishes(
     (banish) =>
       banish.available() &&
       !banish.blocked?.includes(taskName) &&
-      !used_banishes.has(getTracker(banish))
+      (activelyBanished.get(getTracker(banish))?.size ?? 0) < (banish.parallel ?? 1)
   );
 }
