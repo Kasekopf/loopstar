@@ -33,6 +33,7 @@ export interface RunawaySource extends CombatResource {
   banishes: boolean;
   chance: () => number;
   useactively?: boolean;
+  blocked?: string[];
 }
 
 export const runawayValue =
@@ -62,7 +63,7 @@ export function asdonBanishAvailable() {
   return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
 }
 
-export function getRunawaySources(taskName: string): RunawaySource[] {
+export function getRunawaySources(): RunawaySource[] {
   const runawayFamiliarPlan = planRunawayFamiliar();
 
   return [
@@ -98,15 +99,13 @@ export function getRunawaySources(taskName: string): RunawaySource[] {
     },
     {
       name: "Asdon Martin",
-      available: (): boolean => {
-        if (taskName === "Tavern/Basement" || taskName === "Bat/Boss Bat") return false;
-        return asdonBanishAvailable();
-      },
+      available: () => asdonBanishAvailable(),
       prepare: () => AsdonMartin.fillTo(50),
       do: new Macro().skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
       chance: () => 1,
       banishes: true,
       useactively: true,
+      blocked: ["Tavern/Basement", "Bat/Boss Bat"],
     },
     {
       name: "Bandersnatch",

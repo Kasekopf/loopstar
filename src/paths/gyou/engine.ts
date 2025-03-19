@@ -156,7 +156,9 @@ export class GyouEngine extends Engine {
     }
 
     // Getting to L11 and charging the goose are both more important than running away
-    const activeRunaways = getRunawaySources(task.name).find((s) => s.useactively && s.available());
+    const activeRunaways = getRunawaySources().find(
+      (s) => s.useactively && s.available() && !s.blocked?.includes(task.name)
+    );
     if (!activeRunaways && (!atLevel(11) || familiarWeight($familiar`Grey Goose`) < 6)) {
       replaceActions(combat, "ignore", "kill");
       replaceActions(combat, "ignoreSoftBanish", "kill");
