@@ -55,7 +55,9 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
   }
 
   yellowRay(target?: Monster | Location) {
-    return this.killItem(target);
+    if (have($skill`Double Nanovision`))
+      return this.killWith(target, $skill`Double Nanovision`, $stat`Mysticality`, "skip");
+    else return this.killWith(target, $skill`Infinite Loop`, $stat`Moxie`, "skip");
   }
 
   forceItems(target?: Monster | Location) {
