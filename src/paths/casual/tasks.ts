@@ -5,11 +5,25 @@ import {
   itemAmount,
   mallPrice,
   myBasestat,
+  myPrimestat,
   myTurncount,
+  retrieveItem,
 } from "kolmafia";
 import { args } from "../../args";
 import { NamedDeltaTask, Quest } from "../../engine/task";
-import { $effect, $item, $items, $monster, $skill, $stat, get, have, Macro, undelay } from "libram";
+import {
+  $effect,
+  $item,
+  $items,
+  $monster,
+  $skill,
+  $stat,
+  get,
+  have,
+  Macro,
+  Pantogram,
+  undelay,
+} from "libram";
 import { PullQuest } from "../../tasks/pulls";
 import { OutfitSpec } from "grimoire-kolmafia";
 import { CombatStrategy, killMacro } from "../../engine/combat";
@@ -172,9 +186,46 @@ export const casualDeltas: NamedDeltaTask[] = [
   },
 ];
 
+function pantogramReady(): boolean {
+  if (!Pantogram.have() || Pantogram.havePants()) return false;
+  const pantogramValue = 100 * 300; // ~100 meat per turn on average over 300 turns used
+
+  const cloverPrice = Math.min(
+    ...$items`ten-leaf clover, disassembled clover`.map((item) => mallPrice(item))
+  );
+  if (cloverPrice + mallPrice($item`porquoise`) > pantogramValue) {
+    return false;
+  }
+  retrieveItem($item`porquoise`, 1);
+  if (!have($item`porquoise`)) return false;
+  return true;
+}
+
+export function pantogram(): boolean {
+  if (!Pantogram.have() || Pantogram.havePants()) return true;
+  retrieveItem($item`ten-leaf clover`);
+  retrieveItem($item`bubblin' crude`);
+  Pantogram.makePants(
+    myPrimestat().toString(),
+    "Sleaze Resistance: 2",
+    "MP Regen Max: 15",
+    "Drops Items: true",
+    "Meat Drop: 60"
+  );
+  return true;
+}
+
 export const CasualQuest: Quest = {
   name: "Casual",
   tasks: [
+    {
+      name: "Pantogramming",
+      ready: () => pantogramReady(),
+      completed: () => have($item`pantogram pants`),
+      do: () => pantogram(),
+      limit: { tries: 1 },
+      freeaction: true,
+    },
     getSummonTask({
       target: $monster`giant swarm of ghuol whelps`,
       after: ["Crypt/Start"],

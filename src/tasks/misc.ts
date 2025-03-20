@@ -14,7 +14,6 @@ import {
   haveEquipped,
   hermit,
   hippyStoneBroken,
-  inCasual,
   Item,
   itemAmount,
   knollAvailable,
@@ -88,7 +87,7 @@ import { Engine } from "../engine/engine";
 import { Keys, keyStrategy } from "./keys";
 import { atLevel, haveLoathingIdolMicrophone, primestatId, underStandard } from "../lib";
 import { args, toTempPref } from "../args";
-import { coldPlanner, pantogram, pantogramReady, yellowSubmarinePossible } from "../engine/outfit";
+import { coldPlanner, yellowSubmarinePossible } from "../engine/outfit";
 import { fillHp } from "../engine/moods";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { getActiveBackupTarget } from "../resources/backup";
@@ -125,14 +124,6 @@ export const MiscQuest: Quest = {
           `choice.php?pwd&option=1&whichchoice=1556&r0=${furniture[0]}&r1=${furniture[1]}&r2=${furniture[2]}&r3=${furniture[3]}`
         );
       },
-      limit: { tries: 1 },
-      freeaction: true,
-    },
-    {
-      name: "Pantogramming",
-      ready: () => pantogramReady() && inCasual(),
-      completed: () => pantogram(),
-      do: () => pantogram(),
       limit: { tries: 1 },
       freeaction: true,
     },
