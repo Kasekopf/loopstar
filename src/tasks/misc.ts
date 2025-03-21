@@ -2,7 +2,9 @@ import { CombatStrategy, killMacro } from "../engine/combat";
 import {
   buy,
   cliExecute,
+  equip,
   equippedAmount,
+  equippedItem,
   familiarWeight,
   floristAvailable,
   fullnessLimit,
@@ -79,6 +81,7 @@ import {
   TrainSet,
   undelay,
   uneffect,
+  unequip,
 } from "libram";
 import { Quest, Task } from "../engine/task";
 import { Guards, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
@@ -88,7 +91,7 @@ import { Keys, keyStrategy } from "./keys";
 import { atLevel, haveLoathingIdolMicrophone, primestatId, underStandard } from "../lib";
 import { args, toTempPref } from "../args";
 import { coldPlanner, yellowSubmarinePossible } from "../engine/outfit";
-import { fillHp } from "../engine/moods";
+import { fillHp, swapEquipmentForMp } from "../engine/moods";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { getActiveBackupTarget } from "../resources/backup";
 import { warCleared } from "./level12";
@@ -904,24 +907,46 @@ export const MiscQuest: Quest = {
       ready: () => CinchoDeMayo.currentCinch() + CinchoDeMayo.cinchRestoredBy() <= 100,
       completed: () => !have($item`Cincho de Mayo`) || get("timesRested") >= totalFreeRests(),
       do: () => {
-        if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
-          // We cannot rest with full HP and MP, so burn 1 MP with a starting skill.
-          useSkill(
-            byClass({
-              "Seal Clubber": $skill`Seal Clubbing Frenzy`,
-              "Turtle Tamer": $skill`Patience of the Tortoise`,
-              Pastamancer: $skill`Manicotti Meditation`,
-              Sauceror: $skill`Sauce Contemplation`,
-              "Disco Bandit": $skill`Disco Aerobics`,
-              "Accordion Thief": $skill`Moxie of the Mariachi`,
-              default: $skill`none`,
-            })
-          );
-        }
-
         if (get("chateauAvailable") && !underStandard()) {
           visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
-        } else if (get("getawayCampsiteUnlocked") && !underStandard()) {
+          return;
+        }
+
+        // For other sources, we cannot rest with full HP and MP.
+        // First, try burning 1 MP with a starting skill.
+        if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
+          const drainer = byClass({
+            "Seal Clubber": $skill`Seal Clubbing Frenzy`,
+            "Turtle Tamer": $skill`Patience of the Tortoise`,
+            Pastamancer: $skill`Manicotti Meditation`,
+            Sauceror: $skill`Sauce Contemplation`,
+            "Disco Bandit": $skill`Disco Aerobics`,
+            "Accordion Thief": $skill`Moxie of the Mariachi`,
+            default: $skill`none`,
+          });
+          if (drainer !== $skill`none`) {
+            useSkill(drainer);
+          } else {
+            // Next, try putting on some extra gear for max MP
+            swapEquipmentForMp(myMaxmp() + 1);
+          }
+        }
+
+        // Finally, try unequiping some existing gear that provides MP/HP and re-equip it
+        if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
+          for (const slot of $slots`shirt, acc1, acc2, acc3, pants, back, hat`) {
+            const item = equippedItem(slot);
+            if (
+              numericModifier(item, "Maximum HP") >= 0 &&
+              numericModifier(item, "Maximum MP") >= 0
+            ) {
+              unequip(slot);
+              equip(item, slot);
+            }
+          }
+        }
+
+        if (get("getawayCampsiteUnlocked") && !underStandard()) {
           visitUrl("place.php?whichplace=campaway&action=campaway_tentclick");
         } else {
           visitUrl("campground.php?action=rest");
