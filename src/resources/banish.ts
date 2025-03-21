@@ -1,6 +1,17 @@
 import { Item, Monster, myClass, myFury, myMaxmp, myMp, myTurncount, Skill } from "kolmafia";
 import { BanishState } from "../engine/state";
-import { $class, $effect, $item, $items, $skill, AsdonMartin, get, have, Macro } from "libram";
+import {
+  $class,
+  $effect,
+  $item,
+  $items,
+  $skill,
+  AsdonMartin,
+  Delayed,
+  get,
+  have,
+  Macro,
+} from "libram";
 import { args } from "../args";
 import { killMacro } from "../engine/combat";
 import { customRestoreMp } from "../engine/moods";
@@ -16,7 +27,7 @@ type BanishSimpleDo = CombatResource & {
   parallel?: number;
 };
 type BanishMacroDo = CombatResource & {
-  do: Macro;
+  do: Macro | Delayed<Macro>;
   tracker: Item | Skill;
   free: boolean;
   blocked?: string[];
@@ -133,7 +144,7 @@ const banishSources: BanishSource[] = [
     name: "Spring Shoes Kick",
     available: () => have($item`spring shoes`),
     equip: $item`spring shoes`,
-    do: Macro.skill($skill`Spring Kick`).step(killMacro()),
+    do: () => Macro.skill($skill`Spring Kick`).step(killMacro()),
     tracker: $skill`Spring Kick`,
     free: false,
   },

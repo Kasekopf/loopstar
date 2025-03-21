@@ -49,7 +49,7 @@ export const forceItemSources: ForceItemSource[] = [
   {
     name: "Envy",
     available: () => have($skill`Emotionally Chipped`) && get("_feelEnvyUsed") < 3,
-    do: Macro.skill($skill`Feel Envy`).step(killMacro()),
+    do: () => Macro.skill($skill`Feel Envy`).step(killMacro()),
   },
 ];
 

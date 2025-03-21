@@ -84,7 +84,7 @@ export function killMacro(hard?: boolean): Macro {
     }
   }
 
-  if (!haveEquipped($item`June cleaver`)) {
+  if (!haveEquipped($item`June cleaver`) && have($skill`Saucestorm`)) {
     result.while_("!mpbelow 6", new Macro().skill($skill`Saucestorm`));
   }
 
