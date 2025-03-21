@@ -1,5 +1,6 @@
 import {
   canEquip,
+  cliExecute,
   Effect,
   equip,
   equippedAmount,
@@ -237,7 +238,7 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
   }
 }
 
-export function ensureWithMPSwaps(effects: Effect[]) {
+export function ensureWithMPSwaps(effects: Effect[], required = true) {
   // Apply all relevant effects
   const hotswapped: [Slot, Item][] = []; //
   for (const effect of effects) {
@@ -254,7 +255,11 @@ export function ensureWithMPSwaps(effects: Effect[]) {
       hotswapped.push(...swapEquipmentForMp(mpcost));
     }
     if (myMp() < mpcost) customRestoreMp(mpcost);
-    ensureEffect(effect);
+    if (required) {
+      ensureEffect(effect);
+    } else {
+      cliExecute(effect.default);
+    }
   }
 
   // If we hotswapped equipment, restore our old equipment (in-reverse, to work well if we moved equipment around)

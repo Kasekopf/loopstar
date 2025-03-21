@@ -1,11 +1,20 @@
-import { getProperty, numericModifier, runChoice, runCombat, visitUrl } from "kolmafia";
-import { $item, $items, $monster, $skill, have, Macro } from "libram";
+import {
+  getProperty,
+  myMaxmp,
+  myMp,
+  numericModifier,
+  runChoice,
+  runCombat,
+  visitUrl,
+} from "kolmafia";
+import { $effect, $item, $items, $monster, $skill, have, Macro } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
+import { customRestoreMp, ensureWithMPSwaps } from "../engine/moods";
 
 export const TavernQuest: Quest = {
   name: "Tavern",
@@ -32,6 +41,18 @@ export const TavernQuest: Quest = {
       name: "Basement",
       after: ["Tavernkeep"],
       completed: () => step("questL03Rat") >= 2,
+      prepare: () => {
+        if (have($skill`Saucestorm`)) {
+          // Gain some +spelldmg if we can to help kill the rat kings
+          if (have($skill`Carol of the Hells`)) {
+            ensureWithMPSwaps([$effect`Carol of the Hells`], false);
+          } else if (have($skill`Song of Sauce`)) {
+            ensureWithMPSwaps([$effect`Song of Sauce`], false);
+          }
+          if (myMp() < 40 && myMaxmp() >= 40) customRestoreMp(40);
+          if (myMp() < 20) customRestoreMp(20);
+        }
+      },
       do: (): void => {
         visitUrl("cellar.php");
         const layout = getProperty("tavernLayout");
