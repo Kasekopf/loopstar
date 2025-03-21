@@ -12,7 +12,7 @@ import {
   Skill,
   Stat,
 } from "kolmafia";
-import { $effect, $item, $skill, $stat, have, Macro } from "libram";
+import { $effect, $item, $location, $skill, $stat, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
 
 export class GyouActionDefaults implements ActionDefaults<CombatActions> {
@@ -86,6 +86,7 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
 
     if (
       (target instanceof Monster && target.physicalResistance >= 70) ||
+      target === $location`Shadow Rift (The Misspelled Cemetary)` ||
       myMp() < 20 ||
       !have(killing_blow)
     )
