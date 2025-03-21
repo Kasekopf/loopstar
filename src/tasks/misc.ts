@@ -317,6 +317,7 @@ export const MiscQuest: Quest = {
           ["Monster Level: +10", 5],
           [`${myPrimestat()} Percent: +25`, 3],
           [`Experience (${myPrimestat()}): +4`, 2],
+          [`Cold Damage: +10`, 1],
           ["Meat Drop: -30", -2],
           ["Item Drop: -15", -2],
           ["Familiar Experience: -2", -2],
