@@ -199,8 +199,12 @@ function dailyDungeonTask(): Omit<Task, "completed" | "name" | "after"> {
     outfit: { equip: $items`ring of Detect Boring Doors, candy cane sword cane` },
     combat: new CombatStrategy()
       .macro(() => {
-        if (!get("_dailyDungeonMalwareUsed") && have($item`daily dungeon malware`))
-          return Macro.item($item`daily dungeon malware`);
+        if (
+          !get("_dailyDungeonMalwareUsed") &&
+          have($item`daily dungeon malware`) &&
+          keyStrategy.useful(Keys.Malware)
+        )
+          return Macro.tryItem($item`daily dungeon malware`);
         return new Macro();
       })
       .killHard(),
