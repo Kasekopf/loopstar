@@ -117,7 +117,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     super(tasks, options);
   }
 
-  public getNextTask(): ActiveTask | undefined {
+  public override getNextTask(): ActiveTask | undefined {
     this.updatePlan();
 
     if (myAdventures() === 0) {
@@ -194,12 +194,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     // Ignore since we printout in execute
   }
 
-  public run(actions?: number): void {
+  public override run(actions?: number): void {
     this.initPropetiesManagerOnRun();
     super.run(actions);
   }
 
-  public execute(task: ActiveTask): void {
+  public override execute(task: ActiveTask): void {
     debug(``);
     const name = getTaggedName(task);
     const reason = task.activePriority?.explain() ?? "";
@@ -223,7 +223,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
   }
 
-  customize(
+  override customize(
     task: ActiveTask,
     outfit: Outfit,
     combat: CombatStrategy<CombatActions>,
@@ -551,7 +551,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     task: ActiveTask,
     outfit: Outfit,
     mightKillSomething: boolean,
-    noFightingFamiliars: boolean
+    noFightingFamiliars: boolean,
   ): void {
     equipCharging(outfit, mightKillSomething, noFightingFamiliars);
   }
@@ -568,11 +568,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
    * @param _task The current executing task.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  acquireEffects(task: ActiveTask): void {
+  override acquireEffects(task: ActiveTask): void {
     // Do nothing; effects will be added in dress instead
   }
 
-  dress(task: ActiveTask, outfit: Outfit): void {
+  override dress(task: ActiveTask, outfit: Outfit): void {
     const effects: Effect[] = undelay(task.effects) ?? [];
     const otherEffects = task.otherEffects ?? [];
 
@@ -636,7 +636,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
   }
 
-  setChoices(task: ActiveTask, manager: PropertiesManager): void {
+  override setChoices(task: ActiveTask, manager: PropertiesManager): void {
     super.setChoices(task, manager);
     if (equippedAmount($item`June cleaver`) > 0) {
       this.propertyManager.setChoices({
@@ -655,7 +655,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     this.propertyManager.set({ stillsuitFamiliar: args.minor.stillsuit });
   }
 
-  setCombat(
+  override setCombat(
     task: ActiveTask,
     task_combat: CombatStrategy<CombatActions>,
     task_resources: CombatResources<CombatActions>
@@ -688,7 +688,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     super.setCombat(task, task_combat, task_resources);
   }
 
-  do(task: ActiveTask): void {
+  override do(task: ActiveTask): void {
     const beaten_turns = haveEffect($effect`Beaten Up`);
     const start_advs = myAdventures();
 
@@ -780,7 +780,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  initPropertiesManager(manager: PropertiesManager): void {
+  override initPropertiesManager(manager: PropertiesManager): void {
     // Initialize on engine.run() instead of constructor
   }
 

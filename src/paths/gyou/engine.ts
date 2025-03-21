@@ -53,14 +53,14 @@ export class GyouEngine extends Engine {
     super(tasks, options);
   }
 
-  public available(task: ActiveTask): boolean {
+  public override available(task: ActiveTask): boolean {
     // Wait until we get Infinite Loop before doing most things
     if (task.do instanceof Location && !have($skill`Infinite Loop`)) return false;
 
     return super.available(task);
   }
 
-  prioritize(task: ActiveTask, chainSources: ChainSource[]): Prioritization {
+  override prioritize(task: ActiveTask, chainSources: ChainSource[]): Prioritization {
     const outfit = this.createOutfit(task);
     const result = Prioritization.from(task, outfit, chainSources);
 
@@ -110,7 +110,7 @@ export class GyouEngine extends Engine {
     return result;
   }
 
-  customize(
+  override customize(
     task: ActiveTask,
     outfit: Outfit,
     combat: CombatStrategy,
@@ -171,7 +171,7 @@ export class GyouEngine extends Engine {
     super.customize(task, outfit, combat, resources);
   }
 
-  do(task: ActiveTask): void {
+  override do(task: ActiveTask): void {
     const start_advs = myAdventures();
     const goose_weight = familiarWeight($familiar`Grey Goose`);
     const reprocess_targets = get("gooseReprocessed");
@@ -195,7 +195,7 @@ export class GyouEngine extends Engine {
     }
   }
 
-  customizeOutfitInitial(outfit: Outfit): void {
+  override customizeOutfitInitial(outfit: Outfit): void {
     // Use goose for +item instead of jill
     const modifier = getModifiersFrom(outfit);
     if (modifier.includes("item")) {
@@ -204,7 +204,7 @@ export class GyouEngine extends Engine {
     super.customizeOutfitInitial(outfit);
   }
 
-  customizeOutfitCharging(
+  override customizeOutfitCharging(
     task: ActiveTask,
     outfit: Outfit,
     mightKillSomething: boolean,
@@ -264,7 +264,7 @@ export class GyouEngine extends Engine {
     super.customizeOutfitCharging(task, outfit, mightKillSomething, noFightingFamiliars);
   }
 
-  post(task: ActiveTask): void {
+  override post(task: ActiveTask): void {
     super.post(task);
     absorbConsumables();
     globalAbsorbState.refresh();

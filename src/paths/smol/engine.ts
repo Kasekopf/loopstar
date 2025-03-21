@@ -5,7 +5,7 @@ import { CombatResources, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 
 export class SmolEngine extends Engine {
-  customize(
+  override customize(
     task: ActiveTask,
     outfit: Outfit,
     combat: CombatStrategy,
