@@ -381,6 +381,7 @@ export function equipDefaults(
       if (!freecombat || get("_batWingsFreeFights") === 5) outfit.equip($item`bat wings`);
     }
     outfit.equip($item`unwrapped knock-off retro superhero cape`);
+    outfit.equip($item`pantogram pants`);
     outfit.equip($item`designer sweatpants`);
     outfit.equip($item`warbear long johns`);
     outfit.equip($item`square sponge pants`);
