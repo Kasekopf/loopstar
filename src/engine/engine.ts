@@ -551,7 +551,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     task: ActiveTask,
     outfit: Outfit,
     mightKillSomething: boolean,
-    noFightingFamiliars: boolean,
+    noFightingFamiliars: boolean
   ): void {
     equipCharging(outfit, mightKillSomething, noFightingFamiliars);
   }
