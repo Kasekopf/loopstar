@@ -46,71 +46,66 @@ export const borisRoute: string[] = [
   "Manor/Start Floor2",
   "Manor/Bedroom",
 
-  // Open the War ASAP for Yellow rays
-  "Misc/Unlock Island Submarine",
-  "Misc/Unlock Island",
-  "War/Enrage",
-  "War/Flyers Start", // Start the war and get flyers
-  "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
-
-  // Initial tasks for delay
-  "Macguffin/Milestone", // If we are using them
-  "Manor/Kitchen",
-  "Manor/Start Floor2",
-  "War/Junkyard End",
-  // "Casual/Giant Swarm Of Ghuol Whelps",
-
-  // The following 3 tasks should always stay in this order
-  "Macguffin/Compass", // Unlock desert for ultrahydrated use
-  "Macguffin/Oasis", // Get ultrahydrated as soon as needed
-  "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
-  "Macguffin/Desert", // charge camel for protestors
-
-  // Setup additional -combats
-  "Palindome/Copperhead",
-  "Manor/Bedroom",
-  "McLargeHuge/Climb",
-
   // Get and use clovers
   "Misc/Hermit Clover",
-  "McLargeHuge/Trapper Return",
   "Palindome/Protesters",
+  "Palindome/Zepplin",
 
   // Hidden City
-  "Hidden City/Banish Janitors",
   "Hidden City/Office Files",
   "Hidden City/Apartment",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
   "Hidden City/Office Boss",
 
-  "Crypt/Alcove",
-  "Crypt/Nook",
-  "Crypt/Cranny",
+  // Open the War ASAP for Yellow rays
+  "Misc/Unlock Island Submarine",
+  "Misc/Unlock Island",
 
   // -combat tasks
   "Giant/Basement Finish",
+  "War/Enrage",
   "Manor/Gallery",
   "Manor/Bedroom",
   "Tavern/Finish",
   "Manor/Finish Floor2",
   "Mosquito/Finish",
-  "Giant/Finish",
   "Manor/Ballroom",
+  "Manor/Learn Recipe",
+  "Friar/Finish",
+  "Giant/Finish",
+  "War/Flyers Start", // Start the war and get flyers
+  "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
 
-  "McLargeHuge/Finish", // Get Eagle beast banish
+  "Palindome/Copperhead",
   "Palindome/Talisman",
-  "Palindome/Palindome Dudes", // Use Eagle beast banish
+  "Palindome/Palindome Dudes",
+
+  "War/Junkyard End",
+  "McLargeHuge/Climb",
+  "McLargeHuge/Finish",
   "Palindome/Boss",
+
+  // Initial tasks for delay
+  // "Casual/Giant Swarm Of Ghuol Whelps",
+
+  // Do the desert
+  "Macguffin/Milestone",
+  "Macguffin/Oasis", // Get ultrahydrated as soon as needed
+  "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
+  "Macguffin/Desert", // charge camel for protestors
+
+  // Do the crypt when we can get Breathitins
+  "Crypt/Alcove",
+  "Crypt/Cranny",
+  "Crypt/Niche",
 
   // Finish remaining quests
   "Manor/Boss",
   "Giant/Finish",
-  "Crypt/Niche",
 
   // Setup for +meat/+item set
   "Macguffin/Open Pyramid",
-
   "Orc Chasm/Start Peaks",
   "Orc Chasm/ABoo Carto",
   "War/Open Nuns",
@@ -121,19 +116,18 @@ export const borisRoute: string[] = [
   "Orc Chasm/Oil Jar",
   "Orc Chasm/Twin Init Search",
   "Orc Chasm/Twin Init", // Use Eagle dude banish
-
-  "Keys/Star Key", // Allow for better use of orb
-  "Crypt/Finish",
+  "Keys/Star Key",
+  "Crypt/Nook",
   "War/Boss Hippie",
   "Orc Chasm/Finish",
 
   "Digital/Key",
 
   // Leave open a while for remaining runaways
-  "Friar/Finish",
   "Macguffin/Finish",
   "Bat/Finish",
   "Knob/King",
+  "Crypt/Finish",
 
   // Finish last keys
   "Keys/All Heroes",
