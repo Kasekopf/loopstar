@@ -36,14 +36,15 @@ export const borisRoute: string[] = [
   "Macguffin/Forest", // Start before -combat buffs
   "BorisDiet/Such Great Heights", // Finish using mayam calendar for cheese
 
-  "Manor/Kitchen",
-  "Manor/Start Floor2",
-  "Manor/Bedroom",
-
   "Palindome/Copperhead",
   "Palindome/Bat Snake",
   "Bat/Use Sonar 3", // Reveal more delay
   "Palindome/Cold Snake",
+  "Boris/Ninja", // Get all the +combat out of the way
+
+  "Manor/Kitchen",
+  "Manor/Start Floor2",
+  "Manor/Bedroom",
 
   // Open the War ASAP for Yellow rays
   "Misc/Unlock Island Submarine",
