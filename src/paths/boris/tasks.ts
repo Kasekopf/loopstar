@@ -60,6 +60,13 @@ const deletedTasks = [
   "Manor/Fulminate",
   "Manor/Boiler Room",
   "Manor/Blow Wall",
+  // No WAND needed
+  "Tower/Wand W",
+  "Tower/Wand A",
+  "Tower/Wand N",
+  "Tower/Wand D",
+  "Tower/Wand Parts",
+  "Tower/Wand",
 ];
 
 export const borisDeltas: NamedDeltaTask[] = [
