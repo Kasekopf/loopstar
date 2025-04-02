@@ -4,12 +4,13 @@ import {
   cliExecute,
   isOnline,
   Monster,
+  myPath,
   reverseNumberology,
   use,
   visitUrl,
   wait,
 } from "kolmafia";
-import { $item, $monster, $skill, CombatLoversLocket, get, have } from "libram";
+import { $item, $monster, $path, $skill, CombatLoversLocket, get, have } from "libram";
 import { args } from "../args";
 import { underStandard } from "../lib";
 
@@ -66,6 +67,7 @@ export const summonSources: SummonSource[] = [
   {
     name: "Fax",
     remaining: () => {
+      if (myPath() === $path`Avatar of Boris`) return 0;
       if (
         args.resources.fax &&
         !underStandard() &&
