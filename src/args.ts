@@ -107,6 +107,10 @@ export const args = Args.create(
         help: "Once we have 20 gauze garters, convert war items into items that autosell for meat",
         default: false,
       }),
+      breathitin: Args.flag({
+        help: "With cold medicine cabinet out, reroute to gain more Breathitins",
+        default: false,
+      }),
     }),
     resources: Args.group("Resource Usage", {
       fax: Args.boolean({

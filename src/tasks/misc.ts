@@ -175,6 +175,7 @@ export const MiscQuest: Quest = {
         });
         return { 793: swordReady ? 5 : statChoice };
       },
+      nofight: true,
       limit: { tries: 5 },
     },
     {

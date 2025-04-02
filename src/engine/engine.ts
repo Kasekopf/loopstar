@@ -880,12 +880,13 @@ function getCMCPills(): void {
   if (get("_nextColdMedicineConsult") > totalTurnsPlayed()) return;
   if (getWorkshed() !== $item`cold medicine cabinet`) return;
 
+  const goal = args.minor.breathitin ? $item`Breathitin™` : $item`Extrovermectin™`;
   const options = visitUrl("campground.php?action=workshed");
   let match;
   const regexp = /descitem\((\d+)\)/g;
   while ((match = regexp.exec(options)) !== null) {
     const item = descToItem(match[1]);
-    if (item === $item`Breathitin™`) {
+    if (item === goal) {
       visitUrl("campground.php?action=workshed");
       runChoice(5);
       return;

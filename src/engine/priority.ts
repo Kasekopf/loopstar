@@ -10,6 +10,7 @@ import {
   $location,
   $path,
   $skill,
+  Environment,
   get,
   getTodaysHolidayWanderers,
   have,
@@ -25,7 +26,7 @@ import { args } from "../args";
 import { forceItemSources, yellowRaySources } from "../resources/yellowray";
 import { ChainSource, WandererSource, wandererSources } from "../resources/wanderer";
 import { getActiveBackupTarget } from "../resources/backup";
-import { cosmicBowlingBallReady } from "../lib";
+import { breathitinProgress, BreathitinStates, cosmicBowlingBallReady } from "../lib";
 import { asdonBanishAvailable } from "../resources/runaway";
 import { globalAbsorbState } from "../paths/gyou/absorb";
 
@@ -60,6 +61,8 @@ export class Priorities {
   static GoodBanish3: Priority = { score: 0.7, reason: "3+ banishes committed" };
   static GoodBanish2: Priority = { score: 0.6, reason: "2 banishes committed" };
   static GoodBanish: Priority = { score: 0.5, reason: "1 banish committed" };
+  static GoodExtend: Priority = { score: 0.11, reason: "No-fight for Breathitin" };
+  static GoodUnderground: Priority = { score: 0.1, reason: "Underground for Breathitin" };
   static SeekJellyfish: Priority = { score: 0.1, reason: "Get Spectral Jellyfish" };
   static None: Priority = { score: 0 };
   static BadForcingNC: Priority = { score: -0.4, reason: "Not forcing NC" };
@@ -286,6 +289,18 @@ export class Prioritization {
       result.priorities.delete(Priorities.GoodDarts);
     }
 
+    if (args.minor.breathitin) {
+      const breathStatus = breathitinProgress();
+      if (
+        breathStatus === BreathitinStates.UNDERGROUND &&
+        task.do instanceof Location &&
+        task.do.environment === Environment.Underground
+      ) {
+        result.priorities.add(Priorities.GoodUnderground);
+      } else if (breathStatus === BreathitinStates.EXTEND && task.nofight) {
+        result.priorities.add(Priorities.GoodExtend);
+      }
+    }
     return result;
   }
 
