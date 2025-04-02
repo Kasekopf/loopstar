@@ -1,10 +1,16 @@
 import { CombatActions, CombatStrategy } from "../../engine/combat";
-import { CombatResources, Outfit } from "grimoire-kolmafia";
+import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 import { $item, undelay } from "libram";
 import { Task } from "../../engine/task";
+import { BorisActionDefaults } from "./combat";
 
 export class BorisEngine extends Engine {
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
+    if (!options.combat_defaults) options.combat_defaults = new BorisActionDefaults();
+    super(tasks, options);
+  }
+
   customize(
     task: ActiveTask,
     outfit: Outfit,

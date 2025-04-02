@@ -1,11 +1,12 @@
 import { PathInfo } from "../pathinfo";
 import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
-import { inCasual } from "kolmafia";
+import { myPath } from "kolmafia";
 import { getTasks, step } from "grimoire-kolmafia";
 import { Requirement } from "../../sim";
 import { borisRoute } from "./route";
 import { borisDeltas, BorisQuest, SlowManorQuest } from "./tasks";
+import { $path } from "libram";
 
 export class BorisInfo implements PathInfo {
   name(): string {
@@ -13,7 +14,7 @@ export class BorisInfo implements PathInfo {
   }
 
   active(): boolean {
-    return inCasual();
+    return myPath() === $path`Avatar of Boris`;
   }
 
   finished(): boolean {
