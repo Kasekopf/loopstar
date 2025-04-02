@@ -23,6 +23,7 @@ import {
 import { set } from "libram/dist/counter";
 import {
   $effect,
+  $effects,
   $item,
   $items,
   $location,
@@ -386,6 +387,7 @@ export const BorisDietQuest: Quest = {
         (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
       completed: () => !have($item`jumping horseradish`) || myFullness() >= fullnessLimit(),
       do: () => eat($item`jumping horseradish`),
+      effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 15 },
       freeaction: true,
       withnoadventures: true,
@@ -401,6 +403,7 @@ export const BorisDietQuest: Quest = {
           cliExecute("genie effect got milk");
       },
       do: () => eat($item`ice rice`),
+      effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 1 },
       freeaction: true,
       withnoadventures: true,
@@ -417,6 +420,7 @@ export const BorisDietQuest: Quest = {
         runChoice(2);
         runChoice(1, `foodid=8697`);
       },
+      effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 3 },
       freeaction: true,
       withnoadventures: true,
@@ -433,6 +437,7 @@ export const BorisDietQuest: Quest = {
         retrieveItem($item`Pizza of Legend`);
         eat($item`Pizza of Legend`);
       },
+      effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 1 },
       freeaction: true,
       withnoadventures: true,
@@ -445,6 +450,7 @@ export const BorisDietQuest: Quest = {
         retrieveItem($item`Boris's bread`);
         eat($item`Boris's bread`);
       },
+      effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 1 },
       freeaction: true,
       withnoadventures: true,
@@ -455,6 +461,7 @@ export const BorisDietQuest: Quest = {
       ready: () => have($item`Special Seasoning`) || myAdventures() === 0,
       completed: () => !have($item`yam and swiss`) || myFullness() >= fullnessLimit(),
       do: () => eat($item`yam and swiss`),
+      effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 1 },
       freeaction: true,
       withnoadventures: true,
