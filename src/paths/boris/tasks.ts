@@ -47,7 +47,8 @@ import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
 import { OutfitSpec, step } from "grimoire-kolmafia";
-import { atLevel } from "../../lib";
+import { atLevel, tryPlayApriling } from "../../lib";
+import { coldPlanner } from "../../engine/outfit";
 
 const deletedTasks = [
   "Misc/Snojo",
@@ -72,6 +73,9 @@ const deletedTasks = [
   "Tower/Wand D",
   "Tower/Wand Parts",
   "Tower/Wand",
+  "McLargeHuge/Extreme Outfit",
+  "McLargeHuge/Extreme Snowboard Initial",
+  "McLargeHude/Extreme Snowboard",
 ];
 
 export const borisDeltas: NamedDeltaTask[] = [
@@ -122,6 +126,20 @@ export const borisDeltas: NamedDeltaTask[] = [
           else cliExecute("cheat mine");
         }
       },
+    },
+  },
+  {
+    name: "Cold Snake",
+    replace: {
+      outfit: { modifier: "+combat" },
+    },
+  },
+  {
+    name: "McLargeHuge/Climb",
+    replace: {
+      after: ["Boris/Ninja"],
+      ready: () => coldPlanner.maximumPossible(true) >= 5,
+      outfit: () => coldPlanner.outfitFor(5),
     },
   },
 ];
@@ -333,6 +351,25 @@ export const BorisQuest: Quest = {
       combat: new CombatStrategy()
         .yellowRay($monster`Burly Sidekick`)
         .yellowRay($monster`Quiet Healer`),
+    },
+    {
+      name: "Ninja",
+      after: ["McLargeHuge/Trapper Return", "Palindome/Cold Snake"],
+      completed: () =>
+        (have($item`ninja rope`) && have($item`ninja carabiner`) && have($item`ninja crampons`)) ||
+        step("questL08Trapper") >= 3,
+      prepare: () => {
+        fillHp();
+        tryPlayApriling("+combat");
+      },
+      ready: () => !get("noncombatForcerActive"),
+      do: $location`Lair of the Ninja Snowmen`,
+      outfit: () =>
+        <OutfitSpec>{
+          modifier: "50 combat, init",
+          skipDefaults: true,
+        },
+      limit: { soft: 30 },
     },
   ],
 };
