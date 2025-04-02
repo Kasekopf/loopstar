@@ -5,7 +5,7 @@ import { myPath } from "kolmafia";
 import { getTasks, step } from "grimoire-kolmafia";
 import { Requirement } from "../../sim";
 import { borisRoute } from "./route";
-import { borisDeltas, BorisQuest, SlowManorQuest } from "./tasks";
+import { borisDeltas, BorisDietQuest, BorisQuest, SlowManorQuest } from "./tasks";
 import { $path } from "libram";
 
 export class BorisInfo implements PathInfo {
@@ -23,7 +23,7 @@ export class BorisInfo implements PathInfo {
 
   getTasks(tasks: Task[]): Task[] {
     const changedTasks = findAndMerge(tasks, borisDeltas, "Boris");
-    const newQuests = [BorisQuest, SlowManorQuest];
+    const newQuests = [BorisQuest, BorisDietQuest, SlowManorQuest];
     const newTasks = getTasks(newQuests, false, false);
     return [...newTasks, ...changedTasks];
   }

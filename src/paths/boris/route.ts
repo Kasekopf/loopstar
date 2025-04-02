@@ -58,7 +58,7 @@ export const borisRoute: string[] = [
   "Manor/Kitchen",
   "Manor/Start Floor2",
   "War/Junkyard End",
-  "Casual/Giant Swarm Of Ghuol Whelps",
+  // "Casual/Giant Swarm Of Ghuol Whelps",
 
   // The following 3 tasks should always stay in this order
   "Macguffin/Compass", // Unlock desert for ultrahydrated use
@@ -139,8 +139,5 @@ export const borisRoute: string[] = [
   "Keys/All Heroes",
 
   "Tower/Shadow",
-  "Organ/Unicorn", // -combat buffs will be cleared conveniently by NS
   "Tower/Naughty Sorceress",
-  "Organ/Comedy Club",
-  "Organ/Finish",
 ];

@@ -75,7 +75,7 @@ const deletedTasks = [
   "Tower/Wand",
   "McLargeHuge/Extreme Outfit",
   "McLargeHuge/Extreme Snowboard Initial",
-  "McLargeHude/Extreme Snowboard",
+  "McLargeHuge/Extreme Snowboard",
 ];
 
 export const borisDeltas: NamedDeltaTask[] = [
@@ -129,7 +129,7 @@ export const borisDeltas: NamedDeltaTask[] = [
     },
   },
   {
-    name: "Cold Snake",
+    name: "Palindome/Cold Snake",
     replace: {
       outfit: { modifier: "+combat" },
     },
@@ -389,7 +389,7 @@ export const BorisDietQuest: Quest = {
     },
     {
       name: "Sausage",
-      after: ["Consume"],
+      after: [],
       completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
       ready: () => have($item`magical sausage casing`) && myMeat() >= 10000,
       do: (): void => {
@@ -546,7 +546,7 @@ export const BorisDietQuest: Quest = {
       withnoadventures: true,
     },
     {
-      name: "Yam And Swiss",
+      name: "Yam and Swiss",
       after: ["Boris/Mayam Calendar 1"],
       ready: () => have($item`Special Seasoning`) || myAdventures() === 0,
       completed: () => !have($item`yam and swiss`) || myFullness() >= fullnessLimit(),
