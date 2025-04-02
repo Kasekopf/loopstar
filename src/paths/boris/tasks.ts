@@ -1,10 +1,12 @@
 import { NamedDeltaTask, Quest } from "../../engine/task";
-import { toTempPref } from "../../args";
+import { args, toTempPref } from "../../args";
 import {
   cliExecute,
   drink,
   eat,
   fullnessLimit,
+  getWorkshed,
+  gnomadsAvailable,
   itemAmount,
   min,
   myAdventures,
@@ -13,6 +15,7 @@ import {
   myInebriety,
   myLevel,
   myMeat,
+  mySign,
   myTurncount,
   retrieveItem,
   runChoice,
@@ -43,7 +46,7 @@ import { fillHp } from "../../engine/moods";
 import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
-import { step } from "grimoire-kolmafia";
+import { OutfitSpec, step } from "grimoire-kolmafia";
 import { atLevel } from "../../lib";
 
 const deletedTasks = [
@@ -55,6 +58,7 @@ const deletedTasks = [
   "Misc/Barrel Lid",
   "Misc/Clan Photo Booth Free Kill",
   "Misc/Boombox",
+  "Misc/Goose Exp",
   "Misc/Mayam Calendar",
   "Manor/Wine Cellar",
   "Manor/Laundry Room",
@@ -176,7 +180,6 @@ export const BorisQuest: Quest = {
         get("snojoAvailable") &&
         // Wait until bowling ball is thrown
         !have($item`cosmic bowling ball`),
-      priority: () => Priorities.Start,
       prepare: (): void => {
         if (get("snojoSetting") === null) {
           visitUrl("place.php?whichplace=snojo&action=snojo_controller");
@@ -282,6 +285,55 @@ export const BorisQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
+    {
+      name: "Gnome Shirt",
+      after: ["Misc/Unlock Beach"],
+      ready: () =>
+        (myMeat() >= 11000 || (myMeat() >= 6000 && getWorkshed() === $item`model train set`)) &&
+        gnomadsAvailable(),
+      completed: () => have($skill`Torso Awareness`),
+      freeaction: true,
+      do: () => {
+        visitUrl("gnomes.php?action=trainskill&whichskill=12");
+      },
+      limit: { tries: 1 },
+    },
+    {
+      name: "Tune after Diet",
+      after: [],
+      ready: () =>
+        (mySign() === "Blender" && myInebriety() > 0 && have($skill`Torso Awareness`)) ||
+        (mySign() === "Opossum" && myFullness() > 0),
+      completed: () =>
+        !have($item`hewn moon-rune spoon`) ||
+        args.minor.tune === undefined ||
+        get("moonTuned", false),
+      freeaction: true,
+      do: () => cliExecute(`spoon ${args.minor.tune}`),
+      limit: { tries: 1 },
+    },
+    {
+      name: "Airship YR Anything",
+      after: ["Giant/Grow Beanstalk", "Gnome Shirt"],
+      completed: () => have($item`amulet of extreme plot significance`) || have($item`Mohawk wig`),
+      do: $location`The Penultimate Fantasy Airship`,
+      // Other options (bat wings) are sometimes chosen by choice script
+      choices: { 182: 1 },
+      post: () => {
+        if (have($effect`Temporary Amnesia`)) cliExecute("uneffect Temporary Amnesia");
+      },
+      limit: { soft: 50 },
+      delay: 15,
+      outfit: () =>
+        <OutfitSpec>{
+          modifier: "item",
+          equip: $items`bat wings`,
+          avoid: $items`broken champagne bottle`,
+        },
+      combat: new CombatStrategy()
+        .yellowRay($monster`Burly Sidekick`)
+        .yellowRay($monster`Quiet Healer`),
+    },
   ],
 };
 
@@ -295,6 +347,7 @@ export const BorisDietQuest: Quest = {
       completed: () => get("_loveChocolatesUsed") > 0,
       do: () => use($item`LOV Extraterrestrial Chocolate`),
       limit: { tries: 1 },
+      freeaction: true,
       withnoadventures: true,
     },
     {
