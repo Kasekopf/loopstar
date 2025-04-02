@@ -736,7 +736,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     while (inMultiFight()) runCombat();
     if (choiceFollowsFight()) runChoice(-1);
 
-    if (myAdventures() !== start_advs) getExtros();
+    if (myAdventures() !== start_advs) getCMCPills();
 
     // Crash if we unexpectedly lost the fight
     if (
@@ -863,7 +863,7 @@ function autosellJunk(): void {
   }
 }
 
-function getExtros(): void {
+function getCMCPills(): void {
   // Mafia doesn't always notice the workshed
   if (!get(toTempPref("checkWorkshed"), false)) {
     const workshed = visitUrl("campground.php?action=workshed");
@@ -885,7 +885,7 @@ function getExtros(): void {
   const regexp = /descitem\((\d+)\)/g;
   while ((match = regexp.exec(options)) !== null) {
     const item = descToItem(match[1]);
-    if (item === $item`Extrovermectin™`) {
+    if (item === $item`Breathitin™`) {
       visitUrl("campground.php?action=workshed");
       runChoice(5);
       return;
