@@ -453,18 +453,6 @@ export const BorisDietQuest: Quest = {
       withnoadventures: true,
     },
     {
-      name: "Borrowed Time",
-      after: [],
-      completed: () => !have($skill`Summon Clip Art`) || get("tomeSummons") >= 3,
-      do: () => {
-        if (!have($item`borrowed time`)) retrieveItem($item`borrowed time`);
-        use($item`borrowed time`);
-      },
-      limit: { tries: 1 },
-      freeaction: true,
-      withnoadventures: true,
-    },
-    {
       name: "Such Great Heights",
       after: ["Boris/Mayam Calendar 1", "Hidden City/Open City"],
       ready: () => have($item`stone wool`),
