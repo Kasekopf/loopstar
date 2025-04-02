@@ -77,6 +77,8 @@ const deletedTasks = [
   "McLargeHuge/Extreme Snowboard Initial",
   "McLargeHuge/Extreme Snowboard",
   "Hidden City/Get Machete",
+  "Hidden City/Banish Janitors",
+  "Macguffin/Compass",
 ];
 
 export const borisDeltas: NamedDeltaTask[] = [
