@@ -7,7 +7,6 @@ export const borisRoute: string[] = [
 
   // Get basic gear
   "Misc/Workshed",
-  "Misc/Goose Exp",
   "Misc/Acquire Birch Battery",
   "Keys/Deck",
 
@@ -16,11 +15,35 @@ export const borisRoute: string[] = [
   "Misc/Daycare",
   "Misc/Bastille",
   "Leveling/Mouthwash",
-  "Misc/Snojo",
+
+  // Get a shirt and retune when ready
+  "Misc/Unlock Beach",
+  "Boris/Gnome Shirt",
+  "Boris/Tune after Diet",
+
+  // Handle early free fights
+  "Boris/LOV Tunnel",
+  "Boris/Snojo",
+  "Boris/Oliver",
+  "Boris/Neverending Party",
 
   // Start quests when able
   "Knob/Start",
   "McLargeHuge/Trapper Request",
+
+  "Boris/Airship YR Anything", // use the first YR
+
+  "Macguffin/Forest", // Start before -combat buffs
+  "BorisDiet/Such Great Heights", // Finish using mayam calendar for cheese
+
+  "Manor/Kitchen",
+  "Manor/Start Floor2",
+  "Manor/Bedroom",
+
+  "Palindome/Copperhead",
+  "Palindome/Bat Snake",
+  "Bat/Use Sonar 3", // Reveal more delay
+  "Palindome/Cold Snake",
 
   // Open the War ASAP for Yellow rays
   "Misc/Unlock Island Submarine",
@@ -30,7 +53,6 @@ export const borisRoute: string[] = [
   "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
 
   // Initial tasks for delay
-  "Macguffin/Forest", // Start before -combat buffs
   "Macguffin/Milestone", // If we are using them
   "Manor/Kitchen",
   "Manor/Start Floor2",
@@ -46,9 +68,6 @@ export const borisRoute: string[] = [
   // Setup additional -combats
   "Palindome/Copperhead",
   "Manor/Bedroom",
-  "Palindome/Bat Snake",
-  "Bat/Use Sonar 3", // Reveal more delay
-  "Palindome/Cold Snake",
   "McLargeHuge/Climb",
 
   // Get and use clovers
