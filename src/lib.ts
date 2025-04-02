@@ -2,6 +2,7 @@ import { step } from "grimoire-kolmafia";
 import {
   appearanceRates,
   getFuel,
+  getWorkshed,
   Item,
   Location,
   Monster,
@@ -12,6 +13,7 @@ import {
   myPrimestat,
   Phylum,
   print,
+  totalTurnsPlayed,
   visitUrl,
 } from "kolmafia";
 import {
@@ -22,6 +24,7 @@ import {
   $stat,
   AprilingBandHelmet,
   AsdonMartin,
+  clamp,
   get,
   have,
   Snapper,
@@ -242,4 +245,26 @@ export function haveHugeLarge() {
 
 export function flyersDone(): boolean {
   return get("flyeredML") >= 10000;
+}
+
+export enum BreathitinStates {
+  IMPOSSIBLE = 0,
+  READY = 1,
+  UNDERGROUND = 2,
+  EXTEND = 3,
+  WAIT = 4,
+}
+export function breathitinProgress(): BreathitinStates {
+  if (getWorkshed() !== $item`cold medicine cabinet`) return BreathitinStates.IMPOSSIBLE;
+  if (get("_coldMedicineConsults") >= 5) return BreathitinStates.IMPOSSIBLE;
+
+  const environments = get("lastCombatEnvironments");
+  const underground = (environments.match(/u/g) || []).length;
+  const undergroundLeft = underground >= 11 ? 0 : 11 - underground;
+  const turnsLeft = clamp(get("_nextColdMedicineConsult") - totalTurnsPlayed(), 0, 20);
+
+  if (turnsLeft <= 0 && undergroundLeft <= 0) return BreathitinStates.READY;
+  if (turnsLeft <= undergroundLeft) return BreathitinStates.UNDERGROUND;
+  if (undergroundLeft <= 0) return BreathitinStates.EXTEND;
+  return BreathitinStates.WAIT;
 }
