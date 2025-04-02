@@ -33,6 +33,7 @@ import {
   directlyUse,
   get,
   have,
+  MayamCalendar,
   TrainSet,
   Witchess,
 } from "libram";
@@ -53,6 +54,7 @@ const deletedTasks = [
   "Misc/Barrel Lid",
   "Misc/Clan Photo Booth Free Kill",
   "Misc/Boombox",
+  "Misc/Mayam Calendar",
   "Manor/Wine Cellar",
   "Manor/Laundry Room",
   "Manor/Fulminate",
@@ -244,6 +246,34 @@ export const BorisQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
+    {
+      name: "Mayam Calendar 1",
+      after: [],
+      completed: () =>
+        !MayamCalendar.have() ||
+        get("lastTempleAdventures") >= myAscensions() ||
+        MayamCalendar.remainingUses() === 0,
+      do: () => {
+        cliExecute("mayam rings yam meat cheese yam"); // yam and swiss
+        cliExecute("mayam rings chair wood wall clock");
+        cliExecute("mayam rings eye meat eyepatch explosion");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Mayam Calendar 2",
+      after: ["Mayam Calendar 1", "BorisDiet/Such Great Heights"],
+      completed: () => !MayamCalendar.have() || MayamCalendar.remainingUses() === 0,
+      do: () => {
+        cliExecute;
+        cliExecute("mayam rings vessel yam cheese explosion"); // stuffed yam stinkbomb
+        cliExecute("mayam rings chair wood wall clock");
+        cliExecute("mayam rings eye meat eyepatch yam");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
 
@@ -327,6 +357,7 @@ export const BorisDietQuest: Quest = {
       do: () => useSkill($skill`Aug. 16th: Roller Coaster Day!`),
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Voraci Tea",
@@ -339,20 +370,22 @@ export const BorisDietQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Horseradish",
-      after: [],
+      after: ["Yam and Swiss"],
       ready: () =>
         (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
       completed: () => !have($item`jumping horseradish`) || myFullness() >= fullnessLimit(),
       do: () => eat($item`jumping horseradish`),
       limit: { tries: 15 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Ice Rice",
-      after: ["Boris/Snojo"],
+      after: ["Boris/Snojo", "Yam and Swiss"],
       ready: () =>
         (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
       completed: () => !have($item`ice rice`) || myFullness() >= fullnessLimit(),
@@ -363,6 +396,7 @@ export const BorisDietQuest: Quest = {
       do: () => eat($item`ice rice`),
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Timespun Ice Rice",
@@ -378,6 +412,7 @@ export const BorisDietQuest: Quest = {
       },
       limit: { tries: 3 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Cookbookbat Big",
@@ -386,13 +421,14 @@ export const BorisDietQuest: Quest = {
         itemAmount($item`Vegetable of Jarlsberg`) >= 2 &&
         itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
         itemAmount($item`Yeast of Boris`) >= 2,
-      completed: () => get("deepDishOfLegendEaten") || myFullness() >= fullnessLimit(),
+      completed: () => get("pizzaOfLegendEaten") || myFullness() >= fullnessLimit(),
       do: () => {
-        retrieveItem($item`Deep Dish of Legend`);
-        eat($item`Deep Dish of Legend`);
+        retrieveItem($item`Pizza of Legend`);
+        eat($item`Pizza of Legend`);
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Cookbookbat Small",
@@ -404,6 +440,17 @@ export const BorisDietQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
+    },
+    {
+      name: "Yam And Swiss",
+      after: ["Boris/Mayam Calendar 1"],
+      ready: () => have($item`Special Seasoning`) || myAdventures() === 0,
+      completed: () => !have($item`yam and swiss`) || myFullness() >= fullnessLimit(),
+      do: () => eat($item`yam and swiss`),
+      limit: { tries: 1 },
+      freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Borrowed Time",
@@ -415,15 +462,17 @@ export const BorisDietQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Such Great Heights",
-      after: ["Hidden City/Open City"],
+      after: ["Boris/Mayam Calendar 1", "Hidden City/Open City"],
       ready: () => have($item`stone wool`),
       completed: () => get("lastTempleAdventures") >= myAscensions(),
       do: $location`The Hidden Temple`,
       choices: { 582: 1, 579: 3 },
       limit: { tries: 1 },
+      freeaction: true,
     },
   ],
 };
