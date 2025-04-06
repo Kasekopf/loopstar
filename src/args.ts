@@ -32,6 +32,7 @@ export const args = Args.create(
           ["casual", "Casual"],
           ["gyou", "Grey You"],
           ["aftercore", "Aftercore"],
+          ["boris", "Boris"],
         ],
         setting: "",
       },

@@ -1,4 +1,5 @@
 import {
+  Familiar,
   gametimeToInt,
   getRevision,
   inCasual,
@@ -36,7 +37,23 @@ export function main(command?: string): void {
 
   // Handle informational commands
   if (args.debug.settings) {
-    debug(JSON.stringify(args));
+    // Load path-specific arguments as well for the printout
+    const path = getActivePath(args.path);
+    if (path && path.args()) {
+      Args.fill(args, path.args());
+      Args.fill(args, command);
+    }
+    debug(
+      JSON.stringify(
+        args,
+        (key, value) => {
+          if (key === "workshed" || key === "swapworkshed") return value.name;
+          if (key === "stillsuit") return `${Familiar.get(value.id)}`;
+          return value;
+        },
+        1
+      )
+    );
     return;
   }
   if (args.help) {
