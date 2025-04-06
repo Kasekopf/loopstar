@@ -696,7 +696,10 @@ export const MiscQuest: Quest = {
           have($item`junk junk`) ||
           have($item`skeletal skiff`) ||
           have($item`yellow submarine`)) &&
-          getWorkshed() === $item`TakerSpace letter of Marque`),
+          getWorkshed() === $item`TakerSpace letter of Marque`) ||
+        (step("questL08Trapper") >= 2 &&
+          step("questL09Topping") >= 1 &&
+          getWorkshed() === $item`model train set`),
       completed: () =>
         !have(args.major.swapworkshed) || get("_workshedItemUsed") || myTurncount() >= 1000,
       do: () => use(args.major.swapworkshed),
