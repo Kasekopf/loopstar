@@ -7,6 +7,8 @@ export interface PathInfo {
   active(): boolean;
   finished(): boolean;
 
+  args(): string; // extra command-line arguments to be used while in this run
+
   getTasks(tasks: Task[]): Task[]; // for loadEngine
   getEngine(tasks: Task[]): Engine; // for loadEngine
   getRoute(route: string[]): string[]; // for loadEngine

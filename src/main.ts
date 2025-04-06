@@ -100,6 +100,14 @@ export function main(command?: string): void {
     return;
   }
   if (!path) throw `You are currently in a path (${myPath()}) which is not supported.`;
+
+  const extraArgs = path.args();
+  if (extraArgs) {
+    Args.fill(args, extraArgs);
+    // reload CLI args again so they always have highest priority.
+    Args.fill(args, command);
+  }
+
   path.runIntro();
   const engine = loadEngine(path);
 

@@ -7,6 +7,7 @@ import { Requirement } from "../../sim";
 import { borisRoute } from "./route";
 import { borisDeltas, BorisDietQuest, BorisQuest, SlowManorQuest } from "./tasks";
 import { $path } from "libram";
+import { args } from "../../args";
 
 export class BorisInfo implements PathInfo {
   name(): string {
@@ -43,5 +44,9 @@ export class BorisInfo implements PathInfo {
 
   getRequirements(reqs: Requirement[]): Requirement[] {
     return reqs;
+  }
+
+  args(): string {
+    return args.boris.borisargs;
   }
 }

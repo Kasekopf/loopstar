@@ -160,6 +160,10 @@ export const args = Args.create(
         help: "Skip milk of magnesium",
         default: true,
       }),
+      smolargs: Args.string({
+        help: "Extra command-line arguments to be used only in smol runs.",
+        default: "",
+      }),
     }),
     casual: Args.group("Path: Casual", {
       steelorgan: Args.boolean({
@@ -195,11 +199,26 @@ export const args = Args.create(
         help: "Maximum price to pay for equipment or items that will not be used up.",
         default: 50000,
       }),
+      casualargs: Args.string({
+        help: "Extra command-line arguments to be used only in casual runs.",
+        default: "",
+      }),
     }),
     gyou: Args.group("Path: Grey You", {
       absorb: Args.string({
         help: "A comma-separated list of skills to get, in addition to skills that will directly help the run.",
         default: "",
+      }),
+      gyouargs: Args.string({
+        help: "Extra command-line arguments to be used only in gyou runs.",
+        default: "",
+      }),
+    }),
+    boris: Args.group("Path: Avatar of Boris", {
+      borisargs: Args.string({
+        help: "Extra command-line arguments to be used only in boris runs.",
+        default: "",
+        hidden: true,
       }),
     }),
     aftercore: Args.group("Path: Aftercore", {

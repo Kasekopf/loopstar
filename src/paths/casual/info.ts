@@ -49,4 +49,8 @@ export class CasualInfo implements PathInfo {
   getRequirements(reqs: Requirement[]): Requirement[] {
     return reqs;
   }
+
+  args(): string {
+    return args.casual.casualargs;
+  }
 }

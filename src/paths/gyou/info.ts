@@ -10,6 +10,7 @@ import { AbsorbQuest, AdvAbsorbQuest } from "./absorb";
 import { MenagerieQuest } from "../aftercore/menagerie";
 import { gyouDeltas, gyouPulls, GyouQuest } from "./tasks";
 import { gyouRoute } from "./route";
+import { args } from "../../args";
 
 export class GyouInfo implements PathInfo {
   name(): string {
@@ -95,5 +96,9 @@ export class GyouInfo implements PathInfo {
         category: RequirementCategory.Locket,
       },
     ];
+  }
+
+  args(): string {
+    return args.gyou.gyouargs;
   }
 }

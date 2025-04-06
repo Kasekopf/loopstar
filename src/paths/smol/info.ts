@@ -8,6 +8,7 @@ import { SmolPullQuest, smolPulls } from "./pulls";
 import { SmolEngine } from "./engine";
 import { getTasks, step } from "grimoire-kolmafia";
 import { buildPullRequirements, Requirement, RequirementCategory } from "../../sim";
+import { args } from "../../args";
 
 export class SmolInfo implements PathInfo {
   name(): string {
@@ -58,5 +59,9 @@ export class SmolInfo implements PathInfo {
         category: RequirementCategory.Item,
       },
     ];
+  }
+
+  args(): string {
+    return args.smol.smolargs;
   }
 }
