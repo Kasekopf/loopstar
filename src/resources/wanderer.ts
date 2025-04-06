@@ -87,14 +87,21 @@ export const wandererSources: WandererSource[] = [
       {},
     ],
     monsters: () => [get("_sourceTerminalDigitizeMonster") ?? $monster`none`],
+    prepare: () => {
+      if (SourceTerminal.getDigitizeMonsterCount() + 1 === args.minor.redigitize)
+        SourceTerminal.prepareDigitize();
+    },
     chance: () => 1,
     action: () => {
+      const result = new Macro();
+      if (SourceTerminal.getDigitizeMonsterCount() + 1 === args.minor.redigitize)
+        result.trySkill($skill`Digitize`);
       if (
         familiarWeight($familiar`Grey Goose`) <= 10 &&
         get("_sourceTerminalDigitizeMonster") === $monster`sausage goblin`
       )
-        return new Macro().trySkill($skill`Emit Matter Duplicating Drones`);
-      else return new Macro();
+        result.trySkill($skill`Emit Matter Duplicating Drones`);
+      return result;
     },
     possible: () => SourceTerminal.have() && Counter.get("Digitize Monster") <= 5,
     chainable: true, // Assuming the copy is chainable

@@ -112,6 +112,9 @@ export const args = Args.create(
         help: "With cold medicine cabinet out, reroute to gain more Breathitins",
         hidden: true,
       }),
+      redigitize: Args.number({
+        help: "Re-cast digitize after this many scheduled appearances",
+      }),
     }),
     resources: Args.group("Resource Usage", {
       fax: Args.boolean({
