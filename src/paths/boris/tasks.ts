@@ -37,7 +37,9 @@ import {
   directlyUse,
   get,
   have,
+  Macro,
   MayamCalendar,
+  SourceTerminal,
   TrainSet,
   Witchess,
 } from "libram";
@@ -49,6 +51,7 @@ import { haveOre, trainSetAvailable } from "../../tasks/misc";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { atLevel, tryPlayApriling } from "../../lib";
 import { coldPlanner } from "../../engine/outfit";
+import { getSummonTask } from "../../tasks/summons";
 
 const deletedTasks = [
   "Misc/Snojo",
@@ -374,6 +377,22 @@ export const BorisQuest: Quest = {
         },
       limit: { soft: 30 },
     },
+    getSummonTask({
+      target: $monster`sausage goblin`,
+      benefit: 23,
+      completed: () => {
+        if (!have($item`Kramco Sausage-o-Matic™`)) return true;
+        if (!SourceTerminal.have()) return true;
+        if (SourceTerminal.getDigitizeMonster() !== null) return true;
+        return false;
+      },
+      prepare: () => SourceTerminal.prepareDigitize(),
+      outfit: {
+        equip: $items`unwrapped knock-off retro superhero cape`,
+        modes: { retrocape: ["heck", "hold"] },
+      },
+      combat: new CombatStrategy().macro(Macro.trySkill($skill`Digitize`)).killHard(),
+    }),
   ],
 };
 
