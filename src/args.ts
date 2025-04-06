@@ -110,6 +110,7 @@ export const args = Args.create(
       breathitin: Args.flag({
         help: "With cold medicine cabinet out, reroute to gain more Breathitins",
         default: false,
+        hidden: true,
       }),
     }),
     resources: Args.group("Resource Usage", {
