@@ -98,7 +98,7 @@ export class GyouInfo implements PathInfo {
     ];
   }
 
-  args(): string {
+  args(): string | undefined {
     return args.gyou.gyouargs;
   }
 }

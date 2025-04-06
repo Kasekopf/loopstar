@@ -932,13 +932,15 @@ export class AbsorbState {
 
     // Do not ignore skills that were given in the args
     const forced_skills = new Set<Skill>();
-    for (const skill_name of args.gyou.absorb.split(",")) {
-      if (skill_name.length === 0) continue;
-      const skill = Skill.get(skill_name.trim());
-      if (!skill || skill === Skill.none || !usefulSkills.has(skill)) {
-        throw `Unable to determine how to get skill ${skill_name}`;
+    if (args.gyou.absorb) {
+      for (const skill_name of args.gyou.absorb.split(",")) {
+        if (skill_name.length === 0) continue;
+        const skill = Skill.get(skill_name.trim());
+        if (!skill || skill === Skill.none || !usefulSkills.has(skill)) {
+          throw `Unable to determine how to get skill ${skill_name}`;
+        }
+        forced_skills.add(skill);
       }
-      forced_skills.add(skill);
     }
 
     for (const skill of ignored_skills) {

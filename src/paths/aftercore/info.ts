@@ -83,7 +83,7 @@ export class AftercoreInfo implements PathInfo {
     return reqs;
   }
 
-  args(): string {
-    return "";
+  args(): string | undefined {
+    return undefined;
   }
 }

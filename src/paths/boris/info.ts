@@ -46,7 +46,7 @@ export class BorisInfo implements PathInfo {
     return reqs;
   }
 
-  args(): string {
+  args(): string | undefined {
     return args.boris.borisargs;
   }
 }
