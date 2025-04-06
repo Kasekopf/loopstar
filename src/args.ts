@@ -32,7 +32,7 @@ export const args = Args.create(
           ["casual", "Casual"],
           ["gyou", "Grey You"],
           ["aftercore", "Aftercore"],
-          ["boris", "Boris"],
+          ["boris", "Avatar of Boris (Work in Progress)"],
         ],
         setting: "",
       },
@@ -210,10 +210,9 @@ export const args = Args.create(
         help: "Extra command-line arguments to be used only in gyou runs.",
       }),
     }),
-    boris: Args.group("Path: Avatar of Boris", {
+    boris: Args.group("Path: Avatar of Boris (Work in Progress)", {
       borisargs: Args.string({
         help: "Extra command-line arguments to be used only in boris runs.",
-        hidden: true,
       }),
     }),
     aftercore: Args.group("Path: Aftercore", {
