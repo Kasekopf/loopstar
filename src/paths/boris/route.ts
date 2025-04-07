@@ -10,22 +10,26 @@ export const borisRoute: string[] = [
   "Misc/Acquire Birch Battery",
   "Keys/Deck",
 
+  // Get a shirt and retune when ready
+  "Misc/Unlock Beach",
+  "Boris/Gnome Shirt",
+  "Boris/Tune after Diet",
+
   // Level up
   "Leveling/Cloud Talk",
   "Misc/Daycare",
   "Misc/Bastille",
   "Leveling/Mouthwash",
 
-  // Get a shirt and retune when ready
-  "Misc/Unlock Beach",
-  "Boris/Gnome Shirt",
-  "Boris/Tune after Diet",
-
   // Handle early free fights
   "Boris/LOV Tunnel",
   "Boris/Snojo",
+  "Boris/Sausage Goblin",
   "Boris/Oliver",
   "Boris/Neverending Party",
+
+  // Summon once we reach L12
+  "Boris/Orcish Frat Boy Spy",
 
   // Start quests when able
   "Knob/Start",

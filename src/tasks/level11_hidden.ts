@@ -446,7 +446,6 @@ const Bowling: Task[] = [
     choices: { 787: 1 },
     limit: { tries: 4 },
     freecombat: true,
-    acquire: [{ item: $item`antique machete` }],
   },
   {
     name: "Bowling",
@@ -490,6 +489,7 @@ const Bowling: Task[] = [
           Macro.tryItem($item`Spooky VHS Tape`)
         ).trySkill($skill`Emit Matter Duplicating Drones`);
       }, $monster`pygmy bowler`)
+      .banish($monster`drunk pygmy`)
       .banish($monster`pygmy janitor`)
       .banish($monster`pygmy orderlies`),
     outfit: () => {

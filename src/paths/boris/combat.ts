@@ -1,5 +1,5 @@
 import { ActionDefaults } from "grimoire-kolmafia";
-import { haveEquipped, Location, Monster, myLevel } from "kolmafia";
+import { haveEquipped, Location, Monster } from "kolmafia";
 import { $effect, $item, $location, $skill, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
 
@@ -58,7 +58,7 @@ export class BorisActionDefaults implements ActionDefaults<CombatActions> {
           .trySkill($skill`Darts: Aim for the Bullseye`)
           .trySkill($skill`Darts: Aim for the Bullseye`)
           .trySkill($skill`Darts: Aim for the Bullseye`);
-      } else if (darts !== "skip" && myLevel() >= 11) {
+      } else if (darts !== "skip") {
         result.trySkill($skill`Darts: Throw at %part1`);
       }
     }
@@ -66,9 +66,9 @@ export class BorisActionDefaults implements ActionDefaults<CombatActions> {
     if (
       (target instanceof Monster && target.physicalResistance >= 70) ||
       target === $location`Shadow Rift (The Misspelled Cemetary)`
-    )
+    ) {
       return result.attack().repeat();
-
+    }
     return result.skill($skill`Mighty Axing`).repeat();
   }
 }

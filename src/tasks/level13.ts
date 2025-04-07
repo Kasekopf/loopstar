@@ -530,7 +530,6 @@ export const TowerQuest: Quest = {
     {
       name: "Mirror",
       after: ["Wall of Bones", "Wand"],
-      acquire: [{ item: $item`Wand of Nagamar` }],
       completed: () => step("questL13Final") > 9,
       do: $location`Tower Level 4`,
       choices: { 1015: 2 },

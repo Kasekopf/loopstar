@@ -141,13 +141,14 @@ export const GiantQuest: Quest = {
           return 15;
         }
       },
-      combat: new CombatStrategy().macro(
-        () =>
-          have($item`Mohawk wig`) || !have($skill`Emotionally Chipped`) || get("_feelEnvyUsed") >= 3
-            ? new Macro()
-            : Macro.skill($skill`Feel Envy`).step(killMacro()),
-        $monster`Burly Sidekick`
-      ),
+      combat: new CombatStrategy().macro(() => {
+        if (!have($item`Mohawk wig`)) {
+          if (have($skill`Emotionally Chipped`) && get("_feelEnvyUsed") < 3)
+            return Macro.skill($skill`Feel Envy`).step(killMacro());
+          if (get("shockingLickCharges") > 0) return Macro.skill($skill`Shocking Lick`);
+        }
+        return new Macro();
+      }, $monster`Burly Sidekick`),
     },
     {
       name: "Basement Search",

@@ -1,4 +1,4 @@
-import { NamedDeltaTask, Quest } from "../../engine/task";
+import { NamedDeltaTask, Priority, Quest } from "../../engine/task";
 import { args, toTempPref } from "../../args";
 import {
   cliExecute,
@@ -11,6 +11,7 @@ import {
   min,
   myAdventures,
   myAscensions,
+  myDaycount,
   myFullness,
   myInebriety,
   myLevel,
@@ -23,7 +24,6 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { set } from "libram/dist/counter";
 import {
   $effect,
   $effects,
@@ -39,6 +39,7 @@ import {
   have,
   Macro,
   MayamCalendar,
+  set,
   SourceTerminal,
   TrainSet,
   Witchess,
@@ -52,6 +53,7 @@ import { OutfitSpec, step } from "grimoire-kolmafia";
 import { atLevel, tryPlayApriling } from "../../lib";
 import { coldPlanner } from "../../engine/outfit";
 import { getSummonTask } from "../../tasks/summons";
+import { warCleared } from "../../tasks/level12";
 
 const deletedTasks = [
   "Misc/Snojo",
@@ -81,7 +83,9 @@ const deletedTasks = [
   "McLargeHuge/Extreme Snowboard",
   "Hidden City/Get Machete",
   "Hidden City/Banish Janitors",
+  "Macguffin/Scrip",
   "Macguffin/Compass",
+  "Summon/War Frat 151st Infantryman",
 ];
 
 export const borisDeltas: NamedDeltaTask[] = [
@@ -148,6 +152,12 @@ export const borisDeltas: NamedDeltaTask[] = [
       outfit: () => coldPlanner.outfitFor(5),
     },
   },
+  {
+    name: "Leveling/Mouthwash",
+    replace: {
+      priority: () => <Priority>{ score: -1, reason: "Finish other setup" },
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
@@ -162,15 +172,14 @@ export const BorisQuest: Quest = {
         get(toTempPref("borisSkillsChecked"), 0) >= min(myLevel(), 15),
       do: () => {
         const page = visitUrl("da.php?place=gate1");
-        const toLearn = Number(page.match("You can learn (\\d+) more skill")?.groups?.[1] ?? "0");
-
+        const toLearn = Number(page.match("You can learn (\\d+) more skill")?.[1] ?? "0");
         for (let i = 0; i < toLearn; i++) {
           // Finish the skill trees Feasting -> Shouting -> Fighting
           if (!have($skill`Gourmand`)) visitUrl("da.php?pwd&whichtree=3&action=borisskill");
           else if (!have($skill`Banishing Shout`))
             visitUrl("da.php?pwd&whichtree=2&action=borisskill");
           else if (!have($skill`Bifurcating Blow`))
-            visitUrl("da.php?pwd&whichtree=3&action=borisskill");
+            visitUrl("da.php?pwd&whichtree=1&action=borisskill");
           else break;
         }
         set(toTempPref("borisSkillsChecked"), myLevel());
@@ -193,7 +202,7 @@ export const BorisQuest: Quest = {
       outfit: {
         equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
       },
-      combat: new CombatStrategy().kill(),
+      combat: new CombatStrategy().killHard(),
       freecombat: true,
       limit: { tries: 5 },
     },
@@ -219,7 +228,7 @@ export const BorisQuest: Quest = {
       post: (): void => {
         if (get("_snojoFreeFights") === 10) cliExecute("hottub"); // Clean -stat effects
       },
-      combat: new CombatStrategy().kill(),
+      combat: new CombatStrategy().killHard(),
       limit: { tries: 10 },
       freecombat: true,
     },
@@ -228,7 +237,7 @@ export const BorisQuest: Quest = {
       completed: () => get("_speakeasyFreeFights") >= 0,
       ready: () => get("ownsSpeakeasy"),
       do: $location`An Unusually Quiet Barroom Brawl`,
-      combat: new CombatStrategy().kill(),
+      combat: new CombatStrategy().killHard(),
       outfit: {
         equip: $items`designer sweatpants, Everfull Dart Holster`,
       },
@@ -241,7 +250,7 @@ export const BorisQuest: Quest = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5 },
-      combat: new CombatStrategy().kill(),
+      combat: new CombatStrategy().killHard(),
       outfit: {
         equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
       },
@@ -266,18 +275,20 @@ export const BorisQuest: Quest = {
       outfit: {
         equip: $items`designer sweatpants, Everfull Dart Holster`,
       },
-      combat: new CombatStrategy().kill(),
+      combat: new CombatStrategy().killHard(),
       limit: { tries: 1 },
       freecombat: true,
     },
     {
       name: "Boombox",
       after: [],
+      ready: () =>
+        get("currentNunneryMeat") === 0 || get("sidequestNunsCompleted") !== "none" || warCleared(),
       completed: () =>
         !have($item`SongBoom™ BoomBox`) ||
-        get("boomBoxSong") === "Special Seasoning" ||
+        get("boomBoxSong") === "Food Vibrations" ||
         get("_boomBoxSongsLeft") === 0,
-      do: () => cliExecute("boombox seasoning"),
+      do: () => cliExecute("boombox food"),
       freeaction: true,
       limit: { tries: 1 },
     },
@@ -291,7 +302,7 @@ export const BorisQuest: Quest = {
       do: () => {
         cliExecute("mayam rings yam meat cheese yam"); // yam and swiss
         cliExecute("mayam rings chair wood wall clock");
-        cliExecute("mayam rings eye meat eyepatch explosion");
+        cliExecute("mayam rings eye bottle eyepatch explosion");
       },
       freeaction: true,
       limit: { tries: 1 },
@@ -339,6 +350,8 @@ export const BorisQuest: Quest = {
     {
       name: "Airship YR Anything",
       after: ["Giant/Grow Beanstalk", "Gnome Shirt"],
+      ready: () => have($item`cosmic bowling ball`) || !have($effect`Everything Looks Green`),
+      priority: () => <Priority>{ score: 5, reason: "Search with CBB" },
       completed: () => have($item`amulet of extreme plot significance`) || have($item`Mohawk wig`),
       do: $location`The Penultimate Fantasy Airship`,
       // Other options (bat wings) are sometimes chosen by choice script
@@ -375,6 +388,7 @@ export const BorisQuest: Quest = {
           modifier: "50 combat, init",
           skipDefaults: true,
         },
+      combat: new CombatStrategy().killHard($monster`ninja snowman assassin`),
       limit: { soft: 30 },
     },
     getSummonTask({
@@ -392,6 +406,27 @@ export const BorisQuest: Quest = {
         modes: { retrocape: ["heck", "hold"] },
       },
       combat: new CombatStrategy().macro(Macro.trySkill($skill`Digitize`)).killHard(),
+    }),
+    getSummonTask({
+      target: $monster`Orcish Frat Boy Spy`,
+      ready: () => atLevel(11),
+      completed: () =>
+        have($item`beer helmet`) &&
+        have($item`distressed denim pants`) &&
+        have($item`bejeweled pledge pin`),
+      after: [],
+      prepare: () => {
+        if (have($item`battery (car)`)) use($item`battery (car)`);
+      },
+      outfit: {
+        equip: $items`unwrapped knock-off retro superhero cape`,
+        modes: { retrocape: ["heck", "hold"] },
+        modifier: "item",
+        avoid: $items`carnivorous potted plant`,
+      },
+      skipprep: true,
+      combat: new CombatStrategy().killHard(),
+      benefit: 10,
     }),
   ],
 };
@@ -485,7 +520,7 @@ export const BorisDietQuest: Quest = {
       ready: () => myFullness() >= 1,
       completed: () => !have($item`cuppa Voraci tea`) && get("_pottedTeaTreeUsed"),
       do: () => {
-        if (!have($item`cuppa Voraci tea`)) retrieveItem($item`cuppa Voraci tea`);
+        if (!have($item`cuppa Voraci tea`)) cliExecute("teatree cuppa Voraci tea");
         use($item`cuppa Voraci tea`);
       },
       limit: { tries: 1 },
@@ -494,7 +529,7 @@ export const BorisDietQuest: Quest = {
     },
     {
       name: "Horseradish",
-      after: ["Yam and Swiss"],
+      after: ["Yam and Swiss", "Ice Rice"],
       ready: () =>
         (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
       completed: () => !have($item`jumping horseradish`) || myFullness() >= fullnessLimit(),
@@ -510,10 +545,6 @@ export const BorisDietQuest: Quest = {
       ready: () =>
         (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
       completed: () => !have($item`ice rice`) || myFullness() >= fullnessLimit(),
-      prepare: () => {
-        if (have($item`pocket wish`) && !have($effect`Got Milk`) && !get("_milkOfMagnesiumUsed"))
-          cliExecute("genie effect got milk");
-      },
       do: () => eat($item`ice rice`),
       effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 1 },
@@ -530,7 +561,8 @@ export const BorisDietQuest: Quest = {
       do: () => {
         directlyUse($item`Time-Spinner`);
         runChoice(2);
-        runChoice(1, `foodid=8697`);
+        // runChoice() fails with "Unrecognized choice.php redirect: inv_eat.php"
+        visitUrl("choice.php?pwd&whichchoice=1197&option=1&foodid=8697");
       },
       effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 3 },
@@ -557,7 +589,10 @@ export const BorisDietQuest: Quest = {
     {
       name: "Cookbookbat Small",
       after: ["Cookbookbat Big"],
-      completed: () => itemAmount($item`Yeast of Boris`) < 2 || myFullness() >= fullnessLimit(),
+      completed: () =>
+        itemAmount($item`Yeast of Boris`) < 2 ||
+        myFullness() >= fullnessLimit() ||
+        myDaycount() > 1,
       do: () => {
         retrieveItem($item`Boris's bread`);
         eat($item`Boris's bread`);
@@ -581,10 +616,11 @@ export const BorisDietQuest: Quest = {
     {
       name: "Such Great Heights",
       after: ["Boris/Mayam Calendar 1", "Hidden City/Open City"],
-      ready: () => have($item`stone wool`),
+      ready: () => have($item`stone wool`) || have($effect`Stone-Faced`),
       completed: () => get("lastTempleAdventures") >= myAscensions(),
       do: $location`The Hidden Temple`,
       choices: { 582: 1, 579: 3 },
+      effects: $effects`Stone-Faced`,
       limit: { tries: 1 },
       freeaction: true,
     },
@@ -597,7 +633,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Kitchen",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`loosening powder`),
+      completed: () => have($item`loosening powder`) || step("questL11Manor") >= 3,
       do: $location`The Haunted Kitchen`,
       limit: { tries: 10 },
       delay: 5,
@@ -605,7 +641,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Conservatory",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`powdered castoreum`),
+      completed: () => have($item`powdered castoreum`) || step("questL11Manor") >= 3,
       do: $location`The Haunted Conservatory`,
       limit: { tries: 10 },
       delay: 5,
@@ -613,7 +649,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Bathroom",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`drain dissolver`),
+      completed: () => have($item`drain dissolver`) || step("questL11Manor") >= 3,
       do: $location`The Haunted Bathroom`,
       limit: { tries: 10 },
       delay: 5,
@@ -621,7 +657,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Gallery",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`triple-distilled turpentine`),
+      completed: () => have($item`triple-distilled turpentine`) || step("questL11Manor") >= 3,
       do: $location`The Haunted Gallery`,
       limit: { tries: 10 },
       delay: 5,
@@ -629,7 +665,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Laboratory",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`detartrated anhydrous sublicalc`),
+      completed: () => have($item`detartrated anhydrous sublicalc`) || step("questL11Manor") >= 3,
       do: $location`The Haunted Laboratory`,
       limit: { tries: 10 },
       delay: 5,
@@ -637,7 +673,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Storage Room",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`triatomaceous dust`),
+      completed: () => have($item`triatomaceous dust`) || step("questL11Manor") >= 3,
       do: $location`The Haunted Storage Room`,
       limit: { tries: 10 },
       delay: 5,

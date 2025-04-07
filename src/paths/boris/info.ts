@@ -8,6 +8,7 @@ import { borisRoute } from "./route";
 import { borisDeltas, BorisDietQuest, BorisQuest, SlowManorQuest } from "./tasks";
 import { $path } from "libram";
 import { args } from "../../args";
+import { BorisEngine } from "./engine";
 
 export class BorisInfo implements PathInfo {
   name(): string {
@@ -35,7 +36,7 @@ export class BorisInfo implements PathInfo {
   }
 
   getEngine(tasks: Task[]): Engine {
-    return new Engine(tasks);
+    return new BorisEngine(tasks);
   }
 
   runIntro() {

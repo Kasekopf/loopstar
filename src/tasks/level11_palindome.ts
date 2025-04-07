@@ -133,7 +133,10 @@ const Copperhead: Task[] = [
         return { familiar: $familiar`Trick-or-Treating Tot` };
       return {};
     },
-    combat: new CombatStrategy().killHard([$monster`Frozen Solid Snake`]),
+    combat: new CombatStrategy().killHard([
+      $monster`Frozen Solid Snake`,
+      $monster`ninja snowman assassin`,
+    ]),
     orbtargets: () => undefined, // no assassins in orbs
     limit: { soft: 10 },
     delay: 5,

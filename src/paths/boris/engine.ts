@@ -1,7 +1,18 @@
 import { CombatActions, CombatStrategy } from "../../engine/combat";
 import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
-import { $effect, $effects, $item, $skill, $skills, get, have, undelay } from "libram";
+import {
+  $effect,
+  $effects,
+  $familiar,
+  $item,
+  $skill,
+  $skills,
+  $slot,
+  get,
+  have,
+  undelay,
+} from "libram";
 import { Task } from "../../engine/task";
 import { BorisActionDefaults } from "./combat";
 import { castWithMpSwaps, ensureWithMPSwaps } from "../../engine/moods";
@@ -21,10 +32,12 @@ export class BorisEngine extends Engine {
     super.customize(task, outfit, combat, resources);
   }
 
-  createOutfit(task: Task): Outfit {
+  override createOutfit(task: Task): Outfit {
     const spec = undelay(task.outfit);
     const outfit = new Outfit();
     outfit.equip($item`Trusty`);
+    outfit.equip($familiar`none`);
+    outfit.equip($item`none`, $slot`familiar`);
     if (spec !== undefined) outfit.equip(spec); // no error on failure
     return outfit;
   }
