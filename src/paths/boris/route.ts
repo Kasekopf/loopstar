@@ -56,6 +56,10 @@ export const borisRoute: string[] = [
   "Palindome/Zepplin",
 
   // Hidden City
+  "Hidden City/Open Office",
+  "Hidden City/Open Apartment",
+  "Hidden City/Open Hospital",
+  "Hidden City/Open Bowling",
   "Hidden City/Office Files",
   "Hidden City/Apartment",
   "Hidden City/Hospital",
