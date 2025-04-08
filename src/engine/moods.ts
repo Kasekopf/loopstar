@@ -294,7 +294,6 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     } else {
       cliExecute(effect.default);
     }
-    if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
   }
 
   // If we hotswapped equipment, restore our old equipment (in-reverse, to work well if we moved equipment around)
