@@ -326,7 +326,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
       const banishState = globalStateCache.banishes();
       const banishSources = unusedBanishes(banishState, task.availableTasks ?? [], task.name);
-      if (combat.can("banish") && !banishState.isFullyBanished(task)) {
+      if (combat.can("banish") && !banishState.isFullyBanished(task) && !task.ignorebanishes?.()) {
         resources.provide("banish", equipFirst(outfit, banishSources));
         debug(
           `Banish targets: ${combat
