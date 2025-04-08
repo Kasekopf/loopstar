@@ -220,6 +220,34 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  {
+    name: "Digital/Megalo",
+    replace: {
+      priority: () => {
+        if (
+          have($item`Everfull Dart Holster`) &&
+          !have($effect`Everything Looks Red`) &&
+          myTurncount() >= 30
+        ) {
+          return Priorities.GoodDarts;
+        }
+        if (have($effect`Super Structure`)) return Priorities.MinorEffect;
+        return Priorities.None;
+      },
+    },
+    combine: {
+      prepare: () => {
+        if (!have($effect`Super Structure`)) {
+          if (have($item`pocket wish`)) {
+            cliExecute("genie effect super structure");
+          }
+          if (have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") < 5) {
+            cliExecute("monkeypaw effect super structure");
+          }
+        }
+      },
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
