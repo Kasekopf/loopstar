@@ -422,8 +422,7 @@ export const BorisQuest: Quest = {
       outfit: () =>
         <OutfitSpec>{
           modifier: "item",
-          equip: $items`bat wings`,
-          avoid: $items`broken champagne bottle`,
+          avoid: $items`broken champagne bottle, bat wings`, // bat wings free adv might trigger on YR
         },
       combat: new CombatStrategy()
         .yellowRay($monster`Burly Sidekick`)
