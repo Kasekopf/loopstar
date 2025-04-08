@@ -260,7 +260,7 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     );
 
     if (effect === $effect`Empathy` && shieldSlot) {
-      hotswapped.push([shieldSlot, $item`April Shower Thoughts shield`])
+      hotswapped.push([shieldSlot, $item`April Shower Thoughts shield`]);
       unequip($item`April Shower Thoughts shield`);
     }
 
