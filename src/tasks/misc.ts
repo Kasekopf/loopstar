@@ -62,6 +62,7 @@ import {
   AsdonMartin,
   AugustScepter,
   AutumnAton,
+  BarrelShrine,
   BurningLeaves,
   byClass,
   byStat,
@@ -1431,6 +1432,7 @@ export const MiscQuest: Quest = {
     {
       // The ultimate location to put needed backups
       name: "Backup Monster",
+      after: [],
       completed: () => false,
       ready: () => {
         if (!have($item`backup camera`)) return false;
@@ -1444,6 +1446,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Dungeoneering Kit",
+      after: [],
       completed: () =>
         have($item`GameInformPowerDailyPro walkthru`) ||
         !have($item`GameInformPowerDailyPro magazine`),
@@ -1457,6 +1460,21 @@ export const MiscQuest: Quest = {
         avoid: $items`June cleaver`,
       },
       limit: { tries: 1, guard: NO_ADVENTURE_SPENT },
+    },
+    {
+      name: "Barrel God",
+      after: [],
+      completed: () =>
+        !args.resources.speed ||
+        get("_barrelPrayer") ||
+        get("prayedForGlamour") ||
+        !BarrelShrine.have(),
+      do: () => {
+        visitUrl("da.php?barrelshrine=1");
+        runChoice(2);  // hoop
+      },
+      freeaction: true,
+      limit: { tries: 1 },
     },
   ],
 };
