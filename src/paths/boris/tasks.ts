@@ -184,6 +184,20 @@ export const borisDeltas: NamedDeltaTask[] = [
       after: ["Boris/Ninja"],
     },
   },
+  {
+    name: "Giant/Airship YR Healer",
+    combine: {
+      after: ["Boris/Airship YR Anything"],
+    },
+    amend: {
+      combat: (strategy) => {
+        return strategy?.clone().macro(() => {
+          if (get("shockingLickCharges") > 0) return Macro.skill($skill`Shocking Lick`);
+          return new Macro();
+        }, $monster`Quiet Healer`);
+      },
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
