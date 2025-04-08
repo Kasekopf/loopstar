@@ -1,6 +1,7 @@
 import { NamedDeltaTask, Priority, Quest } from "../../engine/task";
 import { args, toTempPref } from "../../args";
 import {
+  buy,
   cliExecute,
   drink,
   eat,
@@ -26,6 +27,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $coinmaster,
   $effect,
   $effects,
   $item,
@@ -195,6 +197,25 @@ export const borisDeltas: NamedDeltaTask[] = [
           if (get("shockingLickCharges") > 0) return Macro.skill($skill`Shocking Lick`);
           return new Macro();
         }, $monster`Quiet Healer`);
+      },
+    },
+  },
+  {
+    name: "Misc/2002 Store",
+    replace: {
+      do: () => {
+        if (!get("_2002MrStoreCreditsCollected")) {
+          use($item`2002 Mr. Store Catalog`);
+        }
+        if (!haveLoathingIdolMicrophone()) {
+          buy($coinmaster`Mr. Store 2002`, 1, $item`Loathing Idol Microphone`);
+        }
+        if (!have($item`Flash Liquidizer Ultra Dousing Accessory`)) {
+          buy($coinmaster`Mr. Store 2002`, 1, $item`Flash Liquidizer Ultra Dousing Accessory`);
+        }
+        if (!have($item`pro skateboard`)) {
+          buy($coinmaster`Mr. Store 2002`, 1, $item`pro skateboard`);
+        }
       },
     },
   },
