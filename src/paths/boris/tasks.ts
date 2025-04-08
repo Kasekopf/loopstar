@@ -11,7 +11,6 @@ import {
   min,
   myAdventures,
   myAscensions,
-  myDaycount,
   myFullness,
   myInebriety,
   myLevel,
@@ -45,7 +44,7 @@ import {
   Witchess,
 } from "libram";
 import { CombatStrategy } from "../../engine/combat";
-import { fillHp } from "../../engine/moods";
+import { ensureWithMPSwaps, fillHp } from "../../engine/moods";
 import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
@@ -156,6 +155,19 @@ export const borisDeltas: NamedDeltaTask[] = [
     name: "Leveling/Mouthwash",
     replace: {
       priority: () => <Priority>{ score: -1, reason: "Finish other setup" },
+    },
+  },
+  {
+    name: "War/Nuns",
+    combine: {
+      prepare: () => {
+        if (itemAmount($item`Yeast of Boris`) >= 2 && !have($effect`Inspired Chef`)) {
+          retrieveItem($item`Boris's bread`);
+          ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
+          eat($item`Boris's bread`);
+          ensureWithMPSwaps($effects`Song of Fortune`);
+        }
+      },
     },
   },
 ];
@@ -580,22 +592,6 @@ export const BorisDietQuest: Quest = {
       do: () => {
         retrieveItem($item`Pizza of Legend`);
         eat($item`Pizza of Legend`);
-      },
-      effects: $effects`Song of the Glorious Lunch`,
-      limit: { tries: 1 },
-      freeaction: true,
-      withnoadventures: true,
-    },
-    {
-      name: "Cookbookbat Small",
-      after: ["Cookbookbat Big"],
-      completed: () =>
-        itemAmount($item`Yeast of Boris`) < 2 ||
-        myFullness() >= fullnessLimit() ||
-        myDaycount() > 1,
-      do: () => {
-        retrieveItem($item`Boris's bread`);
-        eat($item`Boris's bread`);
       },
       effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 1 },
