@@ -121,6 +121,7 @@ export const borisRoute: string[] = [
   "Orc Chasm/Start Peaks",
   "Orc Chasm/ABoo Carto",
   "War/Open Nuns",
+  "Macguffin/Upper Chamber",
 
   // Bulk +meat/+item tasks
   "War/Nuns",
