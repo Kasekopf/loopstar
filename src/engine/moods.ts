@@ -270,9 +270,7 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     }
     const shieldSkill = aprilShieldEffects.get(effect);
 
-    const skill = shieldSkill
-      ? shieldSkill
-      : toSkill(effect);
+    const skill = shieldSkill ? shieldSkill : toSkill(effect);
 
     if (skill !== $skill`none` && !have(skill)) continue; // skip
 
@@ -296,7 +294,7 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
   }
 
   if (equippedItem($slot`Offhand`) !== initialOffhand) {
-    equip(initialOffhand)
+    equip(initialOffhand);
   }
 
   // If we hotswapped equipment, restore our old equipment (in-reverse, to work well if we moved equipment around)
