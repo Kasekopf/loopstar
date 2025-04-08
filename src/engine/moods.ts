@@ -254,13 +254,13 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
 export function ensureWithMPSwaps(effects: Effect[], required = true) {
   // Apply all relevant effects
   const hotswapped: [Slot, Item][] = []; //
-  let initialOffhand = Item.none;
   for (const effect of effects) {
     const shieldSlot = Slot.all().find(
       (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`
     );
 
     if (effect === $effect`Empathy` && shieldSlot) {
+      hotswapped.push([shieldSlot, $item`April Shower Thoughts shield`])
       unequip($item`April Shower Thoughts shield`);
     }
 
@@ -275,7 +275,11 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     if (skill !== $skill`none` && !have(skill)) continue; // skip
 
     if (shieldSkill) {
-      initialOffhand = equippedItem($slot`Offhand`);
+      if (equippedItem($slot`offhand`) === Item.none) {
+        hotswapped.push([$slot`weapon`, equippedItem($slot`weapon`)]);
+      } else {
+        hotswapped.push([$slot`offhand`, equippedItem($slot`offhand`)]);
+      }
       equip($item`April Shower Thoughts shield`);
     }
 
@@ -291,10 +295,6 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
       cliExecute(effect.default);
     }
     if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
-  }
-
-  if (equippedItem($slot`Offhand`) !== initialOffhand) {
-    equip(initialOffhand);
   }
 
   // If we hotswapped equipment, restore our old equipment (in-reverse, to work well if we moved equipment around)
