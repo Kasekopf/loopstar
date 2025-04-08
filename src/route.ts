@@ -114,7 +114,6 @@ export const baseRoute: string[] = [
   "War/Open Nuns",
 
   // Bulk +meat/+item tasks
-  "Misc/Shadow Rift",
   "Misc/Shadow Lodestone",
   "War/Nuns",
   "Crypt/Nook",

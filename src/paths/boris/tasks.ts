@@ -37,6 +37,7 @@ import {
   clamp,
   ClosedCircuitPayphone,
   directlyUse,
+  ensureEffect,
   get,
   have,
   Macro,
@@ -52,7 +53,7 @@ import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
 import { OutfitSpec, step } from "grimoire-kolmafia";
-import { atLevel, tryPlayApriling } from "../../lib";
+import { atLevel, haveLoathingIdolMicrophone, tryPlayApriling } from "../../lib";
 import { coldPlanner } from "../../engine/outfit";
 import { getSummonTask } from "../../tasks/summons";
 import { warCleared } from "../../tasks/level12";
@@ -171,6 +172,9 @@ export const borisDeltas: NamedDeltaTask[] = [
           eat($item`Boris's bread`);
           ensureWithMPSwaps($effects`Song of Fortune`);
         }
+
+        if (AugustScepter.canCast(7)) useSkill($skill`Aug. 7th: Lighthouse Day!`);
+        if (haveLoathingIdolMicrophone()) ensureEffect($effect`Spitting Rhymes`);
       },
     },
   },
@@ -437,6 +441,7 @@ export const BorisQuest: Quest = {
       prepare: () => {
         fillHp();
         tryPlayApriling("+combat");
+        if (AugustScepter.canCast(6)) useSkill($skill`Aug. 6th: Fresh Breath Day!`);
       },
       ready: () => !get("noncombatForcerActive"),
       do: $location`Lair of the Ninja Snowmen`,

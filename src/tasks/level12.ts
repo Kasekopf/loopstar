@@ -496,8 +496,21 @@ const Nuns: Task[] = [
       $items`flapper fly, autumn dollar, pink candy heart`
         .filter((i) => have(i, 2) && !have(effectModifier(i, "Effect")))
         .forEach((i) => use(i));
-      if (have($item`pocket wish`) && !have($effect`Sinuses For Miles`)) {
-        cliExecute("genie effect sinuses for miles");
+      if (!have($effect`Frosty`)) {
+        if (have($item`pocket wish`)) {
+          cliExecute("genie effect frosty");
+        }
+        if (have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") < 5) {
+          cliExecute("monkeypaw effect frosty");
+        }
+      }
+      if (!have($effect`Sinuses For Miles`)) {
+        if (have($item`pocket wish`)) {
+          cliExecute("genie effect sinuses for miles");
+        }
+        if (have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") < 5) {
+          cliExecute("monkeypaw effect sinuses for miles");
+        }
       }
       if (have($item`savings bond`)) ensureEffect($effect`Earning Interest`);
       fillHp();
