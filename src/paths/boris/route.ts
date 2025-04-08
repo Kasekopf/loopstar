@@ -105,8 +105,11 @@ export const borisRoute: string[] = [
 
   // Do the crypt when we can get Breathitins
   "Crypt/Alcove",
+  "Crypt/Alcove Boss",
   "Crypt/Cranny",
+  "Crypt/Cranny Boss",
   "Crypt/Niche",
+  "Crypt/Niche Boss",
 
   // Finish remaining quests
   "Manor/Boss",
