@@ -378,6 +378,11 @@ export const DigitalQuest: Quest = {
       after: ["Open"],
       completed: () => getScore() >= 10000,
       ready: () => get("8BitColor", "black") === "red",
+      prepare: () => {
+        if (numericModifier("meat drop") < 450 && have($item`flapper fly`)) {
+          ensureEffect($effect`Flapper Dancin'`);
+        }
+      },
       do: $location`The Fungus Plains`,
       outfit: {
         modifier: "meat",
