@@ -794,6 +794,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       recoveryScript: "",
       removeMalignantEffects: false,
       choiceAdventureScript: "loopstar_choice.js",
+      lastChanceBurn: "",
       mpAutoRecoveryItems: ensureRecovery(
         "mpAutoRecoveryItems",
         ["black cherry soda", "doc galaktik's invigorating tonic"],
