@@ -1471,10 +1471,25 @@ export const MiscQuest: Quest = {
         !BarrelShrine.have(),
       do: () => {
         visitUrl("da.php?barrelshrine=1");
-        runChoice(2);  // hoop
+        runChoice(2); // hoop
       },
       freeaction: true,
       limit: { tries: 1 },
+    },
+    {
+      name: "Power Plant",
+      completed: () =>
+        !have($item`potted power plant`) || get("_pottedPowerPlant") === "0,0,0,0,0,0,0",
+      do: () => {
+        visitUrl("inv_use.php?pwd&which=3&whichitem=10738");
+        get("_pottedPowerPlant")
+          .split(",")
+          .forEach((v, i) => {
+            if (v === "1") runChoice(1, `pp=${i + 1}`);
+          });
+      },
+      limit: { tries: 1 },
+      freeaction: true,
     },
   ],
 };

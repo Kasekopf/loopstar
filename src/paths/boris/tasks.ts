@@ -455,6 +455,17 @@ export const BorisQuest: Quest = {
       limit: { tries: 1 },
       freeaction: true,
     },
+    {
+      name: "Car Battery",
+      after: ["Misc/Power Plant"],
+      completed: () => itemAmount($item`battery (AAA)`) < 7,
+      do: () => {
+        retrieveItem($item`battery (car)`);
+        use($item`battery (car)`);
+      },
+      limit: { tries: 1 },
+      freeaction: true,
+    },
   ],
 };
 
