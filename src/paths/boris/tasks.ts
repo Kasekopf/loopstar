@@ -38,6 +38,7 @@ import {
   AugustScepter,
   clamp,
   ClosedCircuitPayphone,
+  CursedMonkeyPaw,
   directlyUse,
   ensureEffect,
   get,
@@ -596,6 +597,29 @@ export const BorisQuest: Quest = {
       boss: true,
       freecombat: true,
       limit: { tries: 12 },
+    },
+    {
+      name: "Paw Killing Jar",
+      after: ["Macguffin/Diary"],
+      ready: () => get("desertExploration") > 15,
+      completed: () => have($item`killing jar`) || (get("gnasirProgress") & 4) !== 0,
+      do: () => {
+        CursedMonkeyPaw.wishFor($item`killing jar`);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Paw Drum",
+      after: ["Macguffin/Diary"],
+      // Only after we obtained the stone rose
+      ready: () => get("desertExploration") > 15 && (get("gnasirProgress") & 1) !== 0,
+      completed: () => have($item`drum machine`) || !have($item`worm-riding hooks`),
+      do: () => {
+        CursedMonkeyPaw.wishFor($item`drum machine`);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
     },
   ],
 };
