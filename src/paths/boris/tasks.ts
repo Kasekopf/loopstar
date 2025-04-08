@@ -493,7 +493,7 @@ export const BorisDietQuest: Quest = {
     },
     {
       name: "Pilsner",
-      after: ["Open Pilsner"],
+      after: ["Open Pilsner", "Palindome/Protesters"],
       ready: () => atLevel(11) && myInebriety() < 4,
       completed: () => !have($item`astral pilsner`),
       prepare: () => {
@@ -507,7 +507,7 @@ export const BorisDietQuest: Quest = {
     },
     {
       name: "Martini",
-      after: ["Open Pilsner", "Pilsner"],
+      after: ["Open Pilsner", "Pilsner", "Palindome/Protesters"],
       ready: () => myInebriety() < 4,
       completed: () => !have($item`splendid martini`),
       do: () => drink($item`splendid martini`),
