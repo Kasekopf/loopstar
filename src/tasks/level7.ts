@@ -3,6 +3,7 @@ import {
   changeMcd,
   cliExecute,
   currentMcd,
+  haveEquipped,
   Item,
   myBasestat,
   myClass,
@@ -43,6 +44,7 @@ import { tryPlayApriling } from "../lib";
 function tuneCape(): void {
   if (
     have($item`unwrapped knock-off retro superhero cape`) &&
+    haveEquipped($item`antique machete`) &&
     (get("retroCapeSuperhero") !== "vampire" || get("retroCapeWashingInstructions") !== "kill")
   ) {
     cliExecute("retrocape vampire kill");
@@ -50,7 +52,7 @@ function tuneCape(): void {
 }
 
 export function tryCape(sword: Item, ...rest: Item[]) {
-  if (have($item`unwrapped knock-off retro superhero cape`)) {
+  if (have($item`unwrapped knock-off retro superhero cape`) && have(sword)) {
     rest.unshift($item`unwrapped knock-off retro superhero cape`);
     rest.unshift(sword);
   }
