@@ -109,6 +109,10 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Misc/Shadow Rift",
     delete: true,
   },
+  {
+    name: "Misc/Dungeoneering Kit",
+    delete: true,
+  },
   // No need to setup some tasks
   {
     name: "Giant/Unlock HITS",

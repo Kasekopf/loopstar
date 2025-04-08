@@ -1,4 +1,4 @@
-import { step } from "grimoire-kolmafia";
+import { Guards, step } from "grimoire-kolmafia";
 import {
   appearanceRates,
   getFuel,
@@ -6,6 +6,7 @@ import {
   Item,
   Location,
   Monster,
+  myAdventures,
   myAscensions,
   myFamiliar,
   myLevel,
@@ -26,6 +27,7 @@ import {
   AsdonMartin,
   clamp,
   get,
+  getTodaysHolidayWanderers,
   have,
   Snapper,
 } from "libram";
@@ -268,3 +270,13 @@ export function breathitinProgress(): BreathitinStates {
   if (undergroundLeft <= 0) return BreathitinStates.EXTEND;
   return BreathitinStates.WAIT;
 }
+
+export const NO_ADVENTURE_SPENT = Guards.create(
+  () => myAdventures(),
+  (adv) => myAdventures() >= adv
+);
+
+export const NO_ADVENTURE_SPENT_OR_HOLIDAY = Guards.create(
+  () => myAdventures(),
+  (adv) => myAdventures() >= adv || getTodaysHolidayWanderers().length > 0
+);

@@ -1,5 +1,6 @@
 import { CombatStrategy, killMacro } from "../engine/combat";
 import {
+  adv1,
   buy,
   cliExecute,
   equip,
@@ -88,7 +89,13 @@ import { Guards, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { Engine } from "../engine/engine";
 import { Keys, keyStrategy } from "./keys";
-import { atLevel, haveLoathingIdolMicrophone, primestatId, underStandard } from "../lib";
+import {
+  atLevel,
+  haveLoathingIdolMicrophone,
+  NO_ADVENTURE_SPENT,
+  primestatId,
+  underStandard,
+} from "../lib";
 import { args, toTempPref } from "../args";
 import { coldPlanner, yellowSubmarinePossible } from "../engine/outfit";
 import { fillHp, swapEquipmentForMp } from "../engine/moods";
@@ -1423,7 +1430,7 @@ export const MiscQuest: Quest = {
     },
     {
       // The ultimate location to put needed backups
-      name: `Backup Monster`,
+      name: "Backup Monster",
       completed: () => false,
       ready: () => {
         if (!have($item`backup camera`)) return false;
@@ -1434,6 +1441,22 @@ export const MiscQuest: Quest = {
       do: $location`Noob Cave`,
       delay: 11,
       limit: { tries: 11 },
+    },
+    {
+      name: "Dungeoneering Kit",
+      completed: () =>
+        have($item`GameInformPowerDailyPro walkthru`) ||
+        !have($item`GameInformPowerDailyPro magazine`),
+      do: () => {
+        use($item`GameInformPowerDailyPro magazine`);
+        runChoice(1);
+        adv1($location`Video Game Level 1`);
+        use($item`dungeoneering kit`);
+      },
+      outfit: {
+        avoid: $items`June cleaver`,
+      },
+      limit: { tries: 1, guard: NO_ADVENTURE_SPENT },
     },
   ],
 };
