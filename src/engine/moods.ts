@@ -50,22 +50,35 @@ import {
   have,
   isSong,
   uneffect,
+  unequip,
 } from "libram";
 import { asdonFualable } from "../lib";
 import { underStandard } from "../lib";
 import { step } from "grimoire-kolmafia";
+
+const aprilShieldEffects = new Map([
+  [$skill`Empathy of the Newt`, $effect`Thoughtful Empathy`],
+  [$skill`Sauce Contemplation`, $effect`Lubricating Sauce`],
+  [$skill`Manicotti Meditation`, $effect`Tubes of Universal Meat`],
+  [$skill`Seal Clubbing Frenzy`, $effect`Slippery as a Seal`],
+  [$skill`Patience of the Tortoise`, $effect`Strength of the Tortoise`],
+  [$skill`Disco Aerobics`, $effect`Disco over Matter`],
+  [$skill`Moxie of the Mariachi`, $effect`Mariachi Moisture`],
+]);
 
 function getRelevantEffects(): { [modifier: string]: Effect[] } {
   const result = {
     "-combat": $effects`Smooth Movements, The Sonata of Sneakiness, Hiding From Seekers`,
     "+combat": $effects`Carlweather's Cantata of Confrontation, Musk of the Moose, Attracting Snakes`,
     "":
-      myMeat() > 0 ? $effects`Empathy, Leash of Linguini, Astral Shell, Elemental Saucesphere` : [],
+      myMeat() > 0
+        ? $effects`Empathy, Leash of Linguini, Astral Shell, Elemental Saucesphere, Thoughtful Empathy`
+        : [],
     "fam weight": $effects`Chorale of Companionship`,
     init: $effects`Walberg's Dim Bulb, Springy Fusilli, Cletus's Canticle of Celerity, Suspicious Gaze, Song of Slowness`,
     ML: $effects`Ur-Kel's Aria of Annoyance, Pride of the Puffin, Drescher's Annoying Noise`,
     item: $effects`Fat Leon's Phat Loot Lyric, Singer's Faithful Ocelot`,
-    meat: $effects`Polka of Plenty, Disco Leer`,
+    meat: $effects`Polka of Plenty, Disco Leer, Tubes of Universal Meat`,
     muscle: $effects`Go Get 'Em\, Tiger!, Big, Stevedave's Shanty of Superiority`,
     mysticality: $effects`Glittering Eyelashes, Big, Stevedave's Shanty of Superiority`,
     moxie: $effects`Butt-Rock Hair, Big, Stevedave's Shanty of Superiority`,
@@ -242,11 +255,27 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
   // Apply all relevant effects
   const hotswapped: [Slot, Item][] = []; //
   for (const effect of effects) {
+    const shieldSlot = Slot.all().find(
+      (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`
+    );
+
+    if (effect === $effect`Empathy` && shieldSlot) {
+      unequip($item`April Shower Thoughts shield`);
+    }
+
     if (have(effect, effect === $effect`Ode to Booze` ? 5 : 1)) continue;
     if (!have(effect) && effect === $effect`Mystically Oiled`) {
       retrieveItem($item`ointment of the occult`);
     }
-    const skill = toSkill(effect);
+    const shieldSkill = [...aprilShieldEffects.values()].includes(effect);
+    if (shieldSkill) {
+      equip($item`April Shower Thoughts shield`);
+    }
+
+    const skill = shieldSkill
+      ? [...aprilShieldEffects.entries()].find(([, eff]) => eff === effect)?.[0] ?? $skill`none`
+      : toSkill(effect);
+
     if (skill !== $skill`none` && !have(skill)) continue; // skip
 
     // If we don't have the MP for this effect, hotswap some equipment
