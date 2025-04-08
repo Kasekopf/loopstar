@@ -170,6 +170,12 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  {
+    name: "Misc/Horsery",
+    combine: {
+      after: ["Boris/Ninja"],
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
@@ -440,6 +446,15 @@ export const BorisQuest: Quest = {
       combat: new CombatStrategy().killHard(),
       benefit: 10,
     }),
+    {
+      name: "Pale Horsery",
+      after: [],
+      ready: () => get("horseryAvailable"),
+      completed: () => get("_horsery") === "pale horse" || myLevel() >= 9,
+      do: () => cliExecute("horsery pale"),
+      limit: { tries: 1 },
+      freeaction: true,
+    },
   ],
 };
 
