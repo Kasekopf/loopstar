@@ -663,6 +663,9 @@ export const BorisDietQuest: Quest = {
       ready: () =>
         (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
       completed: () => !have($item`jumping horseradish`) || myFullness() >= fullnessLimit(),
+      prepare: () => {
+        if (have($item`whet stone`)) use($item`whet stone`);
+      },
       do: () => eat($item`jumping horseradish`),
       effects: $effects`Song of the Glorious Lunch`,
       limit: { tries: 15 },

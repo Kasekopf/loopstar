@@ -694,11 +694,16 @@ export const WarQuest: Quest = {
       combat: new CombatStrategy()
         .killHard(warHeroes)
         .kill()
-        .macro(
-          Macro.trySkill($skill`%fn, let's pledge allegiance to a Zone`)
-            .trySkill($skill`Extract Jelly`)
-            .trySkill($skill`Assert your Authority`)
-        ),
+        .macro(() => {
+          const result = Macro.trySkill($skill`%fn, let's pledge allegiance to a Zone`).trySkill(
+            $skill`Extract Jelly`
+          );
+          if (args.resources.speed && have($item`groveling gravel`)) {
+            result.tryItem($item`groveling gravel`);
+          }
+          result.trySkill($skill`Assert your Authority`);
+          return result;
+        }),
       limit: { tries: 10 },
     },
     ...Orchard,
