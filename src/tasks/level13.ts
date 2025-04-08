@@ -19,6 +19,7 @@ import {
   $monster,
   $skill,
   $stat,
+  BeachComb,
   ensureEffect,
   get,
   have,
@@ -106,6 +107,13 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge2") === "hot",
     completed: () => get("nsContestants3") > -1,
+    prepare: () => {
+      if (
+        BeachComb.available() &&
+        numericModifier("Hot Damage") + numericModifier("Hot Spell Damage") < 100
+      )
+        BeachComb.tryHead("HOT");
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(3);
@@ -120,6 +128,13 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge2") === "cold",
     completed: () => get("nsContestants3") > -1,
+    prepare: () => {
+      if (
+        BeachComb.available() &&
+        numericModifier("Cold Damage") + numericModifier("Cold Spell Damage") < 100
+      )
+        BeachComb.tryHead("COLD");
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(3);
@@ -134,6 +149,13 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge2") === "spooky",
     completed: () => get("nsContestants3") > -1,
+    prepare: () => {
+      if (
+        BeachComb.available() &&
+        numericModifier("Spooky Damage") + numericModifier("Spooky Spell Damage") < 100
+      )
+        BeachComb.tryHead("SPOOKY");
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(3);
@@ -148,6 +170,13 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge2") === "stench",
     completed: () => get("nsContestants3") > -1,
+    prepare: () => {
+      if (
+        BeachComb.available() &&
+        numericModifier("Stench Damage") + numericModifier("Stench Spell Damage") < 100
+      )
+        BeachComb.tryHead("STENCH");
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(3);
@@ -162,6 +191,13 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge2") === "sleaze",
     completed: () => get("nsContestants3") > -1,
+    prepare: () => {
+      if (
+        BeachComb.available() &&
+        numericModifier("Sleaze Damage") + numericModifier("Sleaze Spell Damage") < 100
+      )
+        BeachComb.tryHead("SLEAZE");
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(3);

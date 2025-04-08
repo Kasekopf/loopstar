@@ -23,6 +23,7 @@ import {
   $monsters,
   $phylum,
   $skill,
+  BeachComb,
   ensureEffect,
   get,
   have,
@@ -35,6 +36,7 @@ import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
 import { tuneSnapper } from "../lib";
 import { Priorities } from "../engine/priority";
+import { args } from "../args";
 
 function shenItem(item: Item) {
   return (
@@ -248,6 +250,7 @@ const Zepplin: Task[] = [
         cliExecute("genie effect dirty pear");
       if (have($skill`Bend Hell`) && !get("_bendHellUsed"))
         ensureWithMPSwaps([$effect`Bendin' Hell`]);
+      if (args.resources.speed && BeachComb.available()) BeachComb.tryHead("SLEAZE");
     },
     completed: () => get("zeppelinProtestors") >= 80,
     priority: () => (have($effect`Dirty Pear`) ? Priorities.Effect : Priorities.None),

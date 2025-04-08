@@ -117,6 +117,10 @@ export const args = Args.create(
       }),
     }),
     resources: Args.group("Resource Usage", {
+      speed: Args.flag({
+        help: "Use other resources indiscriminately, to save turns",
+        hidden: true,
+      }),
       fax: Args.boolean({
         help: "Use a fax to summon a monster. Set to false if the faxbots are offline.",
         default: true,

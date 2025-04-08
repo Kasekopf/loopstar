@@ -7,7 +7,7 @@ import {
   runCombat,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $items, $monster, $skill, have, Macro } from "libram";
+import { $effect, $item, $items, $monster, $skill, BeachComb, get, have, Macro } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
@@ -51,6 +51,16 @@ export const TavernQuest: Quest = {
           }
           if (myMp() < 40 && myMaxmp() >= 40) customRestoreMp(40);
           if (myMp() < 20) customRestoreMp(20);
+        }
+
+        if (BeachComb.available()) {
+          const elements = ["HOT", "COLD", "STENCH", "SLEAZE", "SPOOKY"];
+          for (const element of elements) {
+            if (get("nsChallenge2") === element.toLowerCase()) continue;
+            if (numericModifier(`${element.toLowerCase()} Damage`) < 20) {
+              BeachComb.tryHead(element as keyof typeof BeachComb.head);
+            }
+          }
         }
       },
       do: (): void => {

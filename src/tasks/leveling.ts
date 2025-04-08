@@ -1,5 +1,5 @@
 import { floor, runChoice, use, visitUrl } from "kolmafia";
-import { $effect, $familiar, $item, $skill, ensureEffect, get, have, set } from "libram";
+import { $effect, $familiar, $item, $skill, BeachComb, ensureEffect, get, have, set } from "libram";
 import { args } from "../args";
 import { Priorities } from "../engine/priority";
 import { atLevel } from "../lib";
@@ -81,6 +81,9 @@ export const LevelingQuest: Quest = {
           ensureEffect($effect`Protection from Bad Stuff`);
         if (have($item`saucepan`) && have($skill`Scarysauce`)) ensureEffect($effect`Scarysauce`);
 
+        if (args.resources.speed) {
+          if (BeachComb.available() && get("nsChallenge2") !== "cold") BeachComb.tryHead("COLD");
+        }
         use($item`Mmm-brr! brand mouthwash`);
       },
       outfit: () => {
