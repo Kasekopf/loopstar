@@ -22,11 +22,12 @@ export const borisRoute: string[] = [
   "Leveling/Mouthwash",
 
   // Handle early free fights
+  "Boris/Shadow Rift",
   "Boris/LOV Tunnel",
   "Boris/Snojo",
+  "Boris/Neverending Party",
   "Boris/Sausage Goblin",
   "Boris/Oliver",
-  "Boris/Neverending Party",
 
   // Summon once we reach L12
   "Boris/Orcish Frat Boy Spy",

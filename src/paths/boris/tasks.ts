@@ -7,6 +7,8 @@ import {
   fullnessLimit,
   getWorkshed,
   gnomadsAvailable,
+  haveEquipped,
+  Item,
   itemAmount,
   min,
   myAdventures,
@@ -33,6 +35,7 @@ import {
   $skill,
   AugustScepter,
   clamp,
+  ClosedCircuitPayphone,
   directlyUse,
   get,
   have,
@@ -65,6 +68,7 @@ const deletedTasks = [
   "Misc/Boombox",
   "Misc/Goose Exp",
   "Misc/Mayam Calendar",
+  "Misc/Shadow Rift",
   "Manor/Wine Cellar",
   "Manor/Laundry Room",
   "Manor/Fulminate",
@@ -227,6 +231,12 @@ export const BorisQuest: Quest = {
     {
       name: "Snojo",
       after: [],
+      priority: () => {
+        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+          return { score: 0.2, reason: "Fish for retrocspec shadow brick" };
+        }
+        return Priorities.None;
+      },
       ready: () =>
         get("snojoAvailable") &&
         // Wait until bowling ball is thrown
@@ -240,8 +250,14 @@ export const BorisQuest: Quest = {
       },
       completed: () => get("_snojoFreeFights") >= 10,
       do: $location`The X-32-F Combat Training Snowman`,
-      outfit: {
-        equip: $items`designer sweatpants, Everfull Dart Holster`,
+      outfit: () => {
+        const result = {
+          equip: $items`designer sweatpants, Everfull Dart Holster`,
+        };
+        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+          result.equip?.push($item`Retrospecs`);
+        }
+        return result;
       },
       post: (): void => {
         if (get("_snojoFreeFights") === 10) cliExecute("hottub"); // Clean -stat effects
@@ -265,12 +281,24 @@ export const BorisQuest: Quest = {
     {
       name: "Neverending Party",
       after: [],
+      priority: () => {
+        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+          return { score: 0.2, reason: "Fish for retrocspec shadow brick" };
+        }
+        return Priorities.None;
+      },
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5 },
       combat: new CombatStrategy().killHard(),
-      outfit: {
-        equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
+      outfit: () => {
+        const result = {
+          equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
+        };
+        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+          result.equip?.push($item`Retrospecs`);
+        }
+        return result;
       },
       limit: { tries: 11 },
       freecombat: true,
@@ -278,6 +306,12 @@ export const BorisQuest: Quest = {
     {
       name: "LOV Tunnel",
       after: [],
+      priority: () => {
+        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+          return { score: 0.2, reason: "Fish for retrocspec shadow brick" };
+        }
+        return Priorities.None;
+      },
       ready: () => get("loveTunnelAvailable"),
       completed: () => get("_loveTunnelUsed"),
       do: $location`The Tunnel of L.O.V.E.`,
@@ -290,8 +324,14 @@ export const BorisQuest: Quest = {
         1227: 1,
         1228: 3, // chocolate (+adv)
       },
-      outfit: {
-        equip: $items`designer sweatpants, Everfull Dart Holster`,
+      outfit: () => {
+        const result = {
+          equip: $items`designer sweatpants, Everfull Dart Holster`,
+        };
+        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+          result.equip?.push($item`Retrospecs`);
+        }
+        return result;
       },
       combat: new CombatStrategy().killHard(),
       limit: { tries: 1 },
@@ -465,6 +505,58 @@ export const BorisQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+    },
+    {
+      name: "Shadow Rift",
+      after: [],
+      completed: () =>
+        !have($item`closed-circuit pay phone`) ||
+        (get("_shadowAffinityToday") &&
+          !have($effect`Shadow Affinity`) &&
+          get("encountersUntilSRChoice") !== 0),
+      prepare: () => {
+        if (!get("_shadowAffinityToday")) ClosedCircuitPayphone.chooseQuest(() => 2);
+        const shadowBricksIndicator =
+          itemAmount($item`shadow brick`) - get("_batWingsSwoopUsed") - get("_douseFoeUses");
+        set(toTempPref("shadowBrickIndicator"), shadowBricksIndicator);
+      },
+      do: $location`Shadow Rift (The Misspelled Cemetary)`,
+      post: (): void => {
+        if (have(ClosedCircuitPayphone.rufusTarget() as Item)) {
+          use($item`closed-circuit pay phone`);
+        }
+        const beforeIndicator = get(toTempPref("shadowBrickIndicator"), 0);
+        const shadowBricksIndicator =
+          itemAmount($item`shadow brick`) - get("_batWingsSwoopUsed") - get("_douseFoeUses");
+        if (
+          beforeIndicator === shadowBricksIndicator &&
+          get("lastEncounter") === "shadow slab" &&
+          haveEquipped($item`Retrospecs`)
+        ) {
+          set(toTempPref("retroBrickCount"), itemAmount($item`shadow brick`));
+        }
+      },
+      choices: { 1498: 1 },
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          const result = Macro.trySkill($skill`Swoop like a Bat`);
+          result.while_("hasskill 7448 && !pastround 20", Macro.skill($skill`Douse Foe`));
+          return result;
+        }, $monster`shadow slab`)
+        .killHard(),
+      outfit: () => {
+        const result: OutfitSpec = {
+          modifier: "item",
+          avoid: $items`broken champagne bottle`,
+          equip: $items`bat wings, Retrospecs`,
+        };
+        if (have($item`Flash Liquidizer Ultra Dousing Accessory`) && get("_douseFoeUses") < 3)
+          result.equip?.push($item`Flash Liquidizer Ultra Dousing Accessory`);
+        return result;
+      },
+      boss: true,
+      freecombat: true,
+      limit: { tries: 12 },
     },
   ],
 };
