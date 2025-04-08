@@ -405,6 +405,9 @@ export const DigitalQuest: Quest = {
         ) {
           return Priorities.GoodDarts;
         }
+        if (have($effect`Sinuses For Miles`) || have($effect`Frosty`)) {
+          return { score: -0.1, reason: "Focus on +item/+meat push" };
+        }
         return Priorities.None;
       },
       prepare: () => {

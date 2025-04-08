@@ -126,10 +126,12 @@ export const borisRoute: string[] = [
   "War/Nuns",
   "Orc Chasm/ABoo Clues",
   "Orc Chasm/Oil Jar",
-  "Orc Chasm/Twin Init Search",
-  "Orc Chasm/Twin Init", // Use Eagle dude banish
-  "Keys/Star Key",
+  "Digital/Hero",
+  "Digital/Fungus",
   "Crypt/Nook",
+  "Orc Chasm/Twin Init Search",
+  "Orc Chasm/Twin Init",
+  "Keys/Star Key",
   "War/Boss Hippie",
   "Orc Chasm/Finish",
 
