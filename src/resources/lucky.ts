@@ -1,5 +1,5 @@
 import { cliExecute, itemAmount, use, useSkill } from "kolmafia";
-import { $item, $skill, AugustScepter, get, have } from "libram";
+import { $item, $skill, AprilingBandHelmet, AugustScepter, get, have } from "libram";
 
 type LuckySource = {
   name: string;
@@ -8,6 +8,14 @@ type LuckySource = {
 };
 
 export const luckySources: LuckySource[] = [
+  {
+    name: "Apriling Saxophone",
+    prepare: () => AprilingBandHelmet.play($item`Apriling band saxophone`),
+    remaining: () =>
+      AprilingBandHelmet.canPlay($item`Apriling band saxophone`)
+        ? 3 - get("_aprilBandSaxophoneUses")
+        : 0,
+  },
   {
     name: "11-leaf clover",
     prepare: () => use($item`11-leaf clover`),

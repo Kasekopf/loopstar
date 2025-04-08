@@ -1373,10 +1373,23 @@ export const MiscQuest: Quest = {
       freeaction: true,
     },
     {
-      name: "Acquire Tuba",
-      ready: () => args.resources.saveapriling < 2 && AprilingBandHelmet.canJoinSection(),
+      name: "Apriling Tuba",
+      ready: () =>
+        get("_aprilBandInstruments") + args.resources.saveapriling <= 2 &&
+        AprilingBandHelmet.canJoinSection(),
       completed: () => have($item`Apriling band tuba`),
       do: () => AprilingBandHelmet.joinSection($item`Apriling band tuba`),
+      limit: { tries: 1 },
+      freeaction: true,
+    },
+    {
+      name: "Apriling Saxophone",
+      after: ["Apriling Tuba"],
+      ready: () =>
+        get("_aprilBandInstruments") + args.resources.saveapriling <= 2 &&
+        AprilingBandHelmet.canJoinSection(),
+      completed: () => have($item`Apriling band saxophone`),
+      do: () => AprilingBandHelmet.joinSection($item`Apriling band saxophone`),
       limit: { tries: 1 },
       freeaction: true,
     },
