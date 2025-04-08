@@ -253,7 +253,6 @@ export class Prioritization {
       $location`The Shore, Inc. Travel Agency`,
       $location`The Hidden Temple`,
       $location`The Oasis`,
-      $location`Lair of the Ninja Snowmen`,
       $location`A-Boo Peak`,
       $location`The eXtreme Slope`,
     ];
@@ -261,14 +260,15 @@ export class Prioritization {
       $location`The Haunted Bathroom`,
       $location`The Castle in the Clouds in the Sky (Top Floor)`,
       $location`Lair of the Ninja Snowmen`,
-      $location`The Batrat and Ratbat Burrow`,
     ];
+    const taskAllowlist = ["Palindome/Bat Snake"];
     // Don't use asdon when it would mess up tracking
     // (from non-banishable monsters)
     const asdonDenylist = ["Tavern/Basement", "Bat/Boss Bat"];
     if (!result._wanderer) {
       if (
         locationAllowlist.includes(location) ||
+        taskAllowlist.includes(task.name) ||
         (!task.freeaction &&
           !task.freecombat &&
           runawayUseful &&
