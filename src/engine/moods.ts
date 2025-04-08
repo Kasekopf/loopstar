@@ -56,14 +56,14 @@ import { asdonFualable } from "../lib";
 import { underStandard } from "../lib";
 import { step } from "grimoire-kolmafia";
 
-const aprilShieldEffects = new Map([
-  [$skill`Empathy of the Newt`, $effect`Thoughtful Empathy`],
-  [$skill`Sauce Contemplation`, $effect`Lubricating Sauce`],
-  [$skill`Manicotti Meditation`, $effect`Tubes of Universal Meat`],
-  [$skill`Seal Clubbing Frenzy`, $effect`Slippery as a Seal`],
-  [$skill`Patience of the Tortoise`, $effect`Strength of the Tortoise`],
-  [$skill`Disco Aerobics`, $effect`Disco over Matter`],
-  [$skill`Moxie of the Mariachi`, $effect`Mariachi Moisture`],
+const aprilShieldEffects = new Map<Effect, Skill>([
+  [$effect`Thoughtful Empathy`, $skill`Empathy of the Newt`],
+  [$effect`Lubricating Sauce`, $skill`Sauce Contemplation`],
+  [$effect`Tubes of Universal Meat`, $skill`Manicotti Meditation`],
+  [$effect`Slippery as a Seal`, $skill`Seal Clubbing Frenzy`],
+  [$effect`Strength of the Tortoise`, $skill`Patience of the Tortoise`],
+  [$effect`Disco over Matter`, $skill`Disco Aerobics`],
+  [$effect`Mariachi Moisture`, $skill`Moxie of the Mariachi`],
 ]);
 
 function getRelevantEffects(): { [modifier: string]: Effect[] } {
@@ -254,6 +254,7 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
 export function ensureWithMPSwaps(effects: Effect[], required = true) {
   // Apply all relevant effects
   const hotswapped: [Slot, Item][] = []; //
+  let initialOffhand = Item.none;
   for (const effect of effects) {
     const shieldSlot = Slot.all().find(
       (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`
@@ -267,16 +268,18 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     if (!have(effect) && effect === $effect`Mystically Oiled`) {
       retrieveItem($item`ointment of the occult`);
     }
-    const shieldSkill = [...aprilShieldEffects.values()].includes(effect);
-    if (shieldSkill) {
-      equip($item`April Shower Thoughts shield`);
-    }
+    const shieldSkill = aprilShieldEffects.get(effect);
 
     const skill = shieldSkill
-      ? [...aprilShieldEffects.entries()].find(([, eff]) => eff === effect)?.[0] ?? $skill`none`
+      ? shieldSkill
       : toSkill(effect);
 
     if (skill !== $skill`none` && !have(skill)) continue; // skip
+
+    if (shieldSkill) {
+      initialOffhand = equippedItem($slot`Offhand`);
+      equip($item`April Shower Thoughts shield`);
+    }
 
     // If we don't have the MP for this effect, hotswap some equipment
     const mpcost = mpCost(skill);
@@ -289,6 +292,11 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     } else {
       cliExecute(effect.default);
     }
+    if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
+  }
+
+  if (equippedItem($slot`Offhand`) !== initialOffhand) {
+    equip(initialOffhand)
   }
 
   // If we hotswapped equipment, restore our old equipment (in-reverse, to work well if we moved equipment around)
