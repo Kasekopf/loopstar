@@ -30,6 +30,7 @@ import {
   use,
   useSkill,
   visitUrl,
+  weaponHands,
 } from "kolmafia";
 import {
   $class,
@@ -275,7 +276,7 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     if (skill !== $skill`none` && !have(skill)) continue; // skip
 
     if (shieldSkill) {
-      if (equippedItem($slot`offhand`) === Item.none) {
+      if (weaponHands(equippedItem($slot`weapon`)) > 1) {
         hotswapped.push([$slot`weapon`, equippedItem($slot`weapon`)]);
       } else {
         hotswapped.push([$slot`offhand`, equippedItem($slot`offhand`)]);
