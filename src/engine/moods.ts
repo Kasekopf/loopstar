@@ -270,14 +270,16 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
       retrieveItem($item`ointment of the occult`);
     }
     const shieldSkill = aprilShieldEffects.get(effect);
-
-    const skill = shieldSkill ? shieldSkill : toSkill(effect);
+    const skill = shieldSkill ?? toSkill(effect);
 
     if (skill !== $skill`none` && !have(skill)) continue; // skip
 
-    if (shieldSkill) {
+    if (shieldSkill && !shieldSlot) {
+      if (!have($item`April Shower Thoughts shield`)) continue;
+
       if (weaponHands(equippedItem($slot`weapon`)) > 1) {
         hotswapped.push([$slot`weapon`, equippedItem($slot`weapon`)]);
+        equip($slot`weapon`, $item`none`);
       } else {
         hotswapped.push([$slot`offhand`, equippedItem($slot`offhand`)]);
       }
