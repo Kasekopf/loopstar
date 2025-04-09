@@ -249,6 +249,12 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  {
+    name: "Knob/Outskirts",
+    replace: {
+      effects: $effects`Song of Battle`,
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {

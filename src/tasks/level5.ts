@@ -37,9 +37,11 @@ export const KnobQuest: Quest = {
       completed: () => have($item`Knob Goblin Encryption Key`) || step("questL05Goblin") > 0,
       outfit: () => {
         // Maintain this buff during snojo
-        if (have($effect`Super Skill`)) return { equip: $items`Greatest American Pants` };
-        return {};
+        if (have($effect`Super Skill`))
+          return { equip: $items`Greatest American Pants`, modifier: "+combat" };
+        return { modifier: "+combat" };
       },
+      skipeffects: true,
       do: $location`The Outskirts of Cobb's Knob`,
       choices: { 111: 3, 113: 2, 118: 1 },
       limit: { tries: 12 },

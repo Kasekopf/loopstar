@@ -577,6 +577,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const otherEffects = task.otherEffects ?? [];
 
     let modifier = outfit.modifier.join(",");
+    if (task.skipeffects) modifier = "";
     // No need to buff -combat if we just force the NC
     if (task.tags?.includes("NCForce") || get("noncombatForcerActive"))
       modifier = modifier.replace("-combat", "");

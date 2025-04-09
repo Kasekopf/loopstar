@@ -125,7 +125,7 @@ export class Prioritization {
     // Ensure that the current +/- combat effects are compatible
     //  (Macguffin/Forest is tough and doesn't need much +combat; just power though)
     const modifier = getModifiersFrom(outfit);
-    if (!moodCompatible(modifier) && task.name !== "Macguffin/Forest") {
+    if (!moodCompatible(modifier) && task.name !== "Macguffin/Forest" && !task.skipeffects) {
       result.priorities.add(Priorities.BadMood);
     }
 

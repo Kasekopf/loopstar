@@ -18,6 +18,7 @@ export type Task = {
   // Flags on the task for engine behavior
   freeaction?: boolean | (() => boolean);
   skipprep?: boolean | (() => boolean);
+  skipeffects?: boolean;
   freecombat?: boolean;
   boss?: boolean;
   nofightingfamiliars?: boolean;
