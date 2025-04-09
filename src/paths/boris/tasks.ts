@@ -35,6 +35,7 @@ import {
   $items,
   $location,
   $monster,
+  $monsters,
   $skill,
   AugustScepter,
   clamp,
@@ -244,6 +245,26 @@ export const borisDeltas: NamedDeltaTask[] = [
     name: "Knob/Outskirts",
     replace: {
       effects: $effects`Song of Battle`,
+    },
+  },
+  {
+    name: "Knob/Harem",
+    replace: {
+      outfit: () => {
+        if (have($item`Lil' Doctor™ bag`) && get("_otoscopeUsed") < 3)
+          return { equip: $items`Lil' Doctor™ bag, Everfull Dart Holster`, modifier: "+item" };
+        return { equip: $items`Everfull Dart Holster`, modifier: "+item" };
+      },
+      combat: new CombatStrategy()
+        .macro(
+          Macro.trySkill($skill`Otoscope`).if_(
+            "hasskill darts: throw at butt",
+            Macro.step("skill darts: throw at butt")
+          ),
+          $monsters`Knob Goblin Harem Girl`
+        )
+        .banish($monsters`Knob Goblin Harem Guard, Knob Goblin Madam`)
+        .killItem(),
     },
   },
 ];
