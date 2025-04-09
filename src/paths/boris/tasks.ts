@@ -41,6 +41,7 @@ import {
   clamp,
   ClosedCircuitPayphone,
   CursedMonkeyPaw,
+  DaylightShavings,
   directlyUse,
   ensureEffect,
   get,
@@ -265,6 +266,26 @@ export const borisDeltas: NamedDeltaTask[] = [
         )
         .banish($monsters`Knob Goblin Harem Guard, Knob Goblin Madam`)
         .killItem(),
+    },
+  },
+  {
+    name: "Macguffin/Middle Chamber",
+    replace: {
+      outfit: () => {
+        const result: OutfitSpec = { modifier: "item", equip: [], avoid: [] };
+        // Save last otoscope for knob harem
+        if (
+          get("_otoscopeUsed") === 2 &&
+          (!have($item`Knob Goblin harem veil`) || !have($item`Knob Goblin harem pants`))
+        )
+          result.avoid?.push($item`Lil' Doctor™ bag`);
+        else if (have($item`Lil' Doctor™ bag`) && get("_otoscopeUsed") < 3)
+          result.equip?.push($item`Lil' Doctor™ bag`);
+        else result.equip?.push($item`deft pirate hook`);
+        if (DaylightShavings.nextBuff() === $effect`Spectacle Moustache`)
+          result.equip?.push($item`Daylight Shavings Helmet`);
+        return result;
+      },
     },
   },
 ];
