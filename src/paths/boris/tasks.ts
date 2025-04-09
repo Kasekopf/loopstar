@@ -20,6 +20,7 @@ import {
   myMeat,
   mySign,
   myTurncount,
+  numericModifier,
   retrieveItem,
   runChoice,
   use,
@@ -645,6 +646,78 @@ export const BorisQuest: Quest = {
       completed: () => have($item`drum machine`) || !have($item`worm-riding hooks`),
       do: () => {
         CursedMonkeyPaw.wishFor($item`drum machine`);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "KGB Martini",
+      after: [],
+      completed: () =>
+        !have($item`Kremlin's Greatest Briefcase`) ||
+        get("_kgbDispenserUses") === 3 ||
+        get("_kgbClicksUsed") >= 22,
+      do: () => {
+        cliExecute("briefcase drink");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "KGB Configure Cold",
+      after: ["Leveling/Acquire Mouthwash", "KGB Martini"],
+      completed: () =>
+        !have($item`Kremlin's Greatest Briefcase`) ||
+        numericModifier($item`Kremlin's Greatest Briefcase`, "Cold Resistance") > 0 ||
+        !have($item`Mmm-brr! brand mouthwash`) ||
+        get("_kgbClicksUsed") >= 22,
+      do: () => {
+        cliExecute("briefcase enchantment cold");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "KGB Configure DA",
+      after: [
+        "Leveling/Acquire Mouthwash",
+        "Leveling/Mouthwash",
+        "KGB Martini",
+        "KGB Configure Cold",
+      ],
+      completed: () =>
+        !have($item`Kremlin's Greatest Briefcase`) ||
+        numericModifier($item`Kremlin's Greatest Briefcase`, "Damage Absorption") > 0 ||
+        get("_kgbClicksUsed") >= 22,
+      do: () => {
+        cliExecute("briefcase enchantment absorption");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "KGB Configure Combat",
+      after: ["KGB Martini"],
+      completed: () =>
+        !have($item`Kremlin's Greatest Briefcase`) ||
+        numericModifier($item`Kremlin's Greatest Briefcase`, "Combat Rate") > 0 ||
+        step("questL08Trapper") >= 3 ||
+        get("_kgbClicksUsed") >= 22,
+      do: () => {
+        cliExecute("briefcase enchantment +combat");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "KGB Configure ML",
+      after: ["KGB Martini", "KGB Configure Combat"],
+      completed: () =>
+        !have($item`Kremlin's Greatest Briefcase`) ||
+        numericModifier($item`Kremlin's Greatest Briefcase`, "Monster Level") > 0 ||
+        get("_kgbClicksUsed") >= 22,
+      do: () => {
+        cliExecute("briefcase enchantment ml");
       },
       freeaction: true,
       limit: { tries: 1 },
