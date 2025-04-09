@@ -280,6 +280,8 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
       if (weaponHands(equippedItem($slot`weapon`)) > 1) {
         hotswapped.push([$slot`weapon`, equippedItem($slot`weapon`)]);
         equip($slot`weapon`, $item`none`);
+        // to make room for the weapon when unhotswapping
+        hotswapped.push([$slot`offhand`, $item`none`]);
       } else {
         hotswapped.push([$slot`offhand`, equippedItem($slot`offhand`)]);
       }
