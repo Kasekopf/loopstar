@@ -1,6 +1,8 @@
 import { Guards, step } from "grimoire-kolmafia";
 import {
   appearanceRates,
+  cliExecute,
+  Effect,
   getFuel,
   getWorkshed,
   Item,
@@ -280,3 +282,16 @@ export const NO_ADVENTURE_SPENT_OR_HOLIDAY = Guards.create(
   () => myAdventures(),
   (adv) => myAdventures() >= adv || getTodaysHolidayWanderers().length > 0
 );
+
+export function tryWish(effect: Effect, using: "genie" | "monkey" | "any" = "any"): boolean {
+  if (have(effect)) return true;
+  if (have($item`pocket wish`) && using !== "monkey") {
+    cliExecute(`genie effect ${effect.name}`);
+    return true;
+  }
+  if (have($item`cursed monkey's paw`) && get("_monkeyPawWishesUsed") < 5 && using !== "genie") {
+    cliExecute(`monkeypaw effect ${effect.name}`);
+    return true;
+  }
+  return false;
+}

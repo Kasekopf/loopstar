@@ -1,5 +1,4 @@
 import {
-  cliExecute,
   create,
   haveEquipped,
   Item,
@@ -34,7 +33,7 @@ import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
-import { tuneSnapper } from "../lib";
+import { tryWish, tuneSnapper } from "../lib";
 import { Priorities } from "../engine/priority";
 import { args } from "../args";
 
@@ -242,12 +241,7 @@ const Zepplin: Task[] = [
       step("questL11Shen") === 999,
     prepare: () => {
       if (have($item`lynyrd musk`)) ensureEffect($effect`Musky`);
-      if (
-        !have($item`candy cane sword cane`) &&
-        have($item`pocket wish`) &&
-        !have($effect`Dirty Pear`)
-      )
-        cliExecute("genie effect dirty pear");
+      if (!have($item`candy cane sword cane`)) tryWish($effect`Dirty Pear`);
       if (have($skill`Bend Hell`) && !get("_bendHellUsed"))
         ensureWithMPSwaps([$effect`Bendin' Hell`]);
       if (args.resources.speed && BeachComb.available()) BeachComb.tryHead("SLEAZE");

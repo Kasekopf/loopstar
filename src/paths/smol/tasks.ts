@@ -27,7 +27,7 @@ import {
   Macro,
 } from "libram";
 import { NamedDeltaTask, Quest } from "../../engine/task";
-import { atLevel } from "../../lib";
+import { atLevel, tryWish } from "../../lib";
 import { args } from "../../args";
 import { customRestoreMp } from "../../engine/moods";
 import { CombatStrategy, killMacro } from "../../engine/combat";
@@ -148,10 +148,7 @@ export const SmolQuest: Quest = {
         get("nsContestants2") > -1 ||
         have($effect`Feeling Insignificant`) ||
         (!have($item`pocket wish`) && (!CursedMonkeyPaw.have() || CursedMonkeyPaw.wishes() === 0)),
-      do: () => {
-        if (have($item`pocket wish`)) cliExecute("genie effect Feeling Insignificant");
-        else CursedMonkeyPaw.wishFor($effect`Feeling Insignificant`);
-      },
+      do: () => tryWish($effect`Feeling Insignificant`),
       limit: { tries: 1 },
       freeaction: true,
     },

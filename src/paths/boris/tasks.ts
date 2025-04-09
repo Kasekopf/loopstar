@@ -57,7 +57,7 @@ import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
 import { OutfitSpec, step } from "grimoire-kolmafia";
-import { atLevel, haveLoathingIdolMicrophone, tryPlayApriling } from "../../lib";
+import { atLevel, haveLoathingIdolMicrophone, tryPlayApriling, tryWish } from "../../lib";
 import { coldPlanner } from "../../engine/outfit";
 import { getSummonTask } from "../../tasks/summons";
 import { warCleared } from "../../tasks/level12";
@@ -237,16 +237,7 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
     combine: {
-      prepare: () => {
-        if (!have($effect`Super Structure`)) {
-          if (have($item`pocket wish`)) {
-            cliExecute("genie effect super structure");
-          }
-          if (have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") < 5) {
-            cliExecute("monkeypaw effect super structure");
-          }
-        }
-      },
+      prepare: () => tryWish($effect`Super Structure`),
     },
   },
   {
@@ -784,10 +775,7 @@ export const BorisDietQuest: Quest = {
       after: ["Open Pilsner", "Palindome/Protesters"],
       ready: () => atLevel(11) && myInebriety() < 4,
       completed: () => !have($item`astral pilsner`),
-      prepare: () => {
-        if (have($item`pocket wish`) && !have($effect`Ode to Booze`))
-          cliExecute("genie effect ode to booze");
-      },
+      prepare: () => tryWish($effect`Ode to Booze`),
       do: () => drink($item`astral pilsner`),
       limit: { tries: 6 },
       freeaction: true,

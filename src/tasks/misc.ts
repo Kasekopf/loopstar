@@ -95,6 +95,7 @@ import {
   haveLoathingIdolMicrophone,
   NO_ADVENTURE_SPENT,
   primestatId,
+  tryWish,
   underStandard,
 } from "../lib";
 import { args, toTempPref } from "../args";
@@ -1007,7 +1008,7 @@ export const MiscQuest: Quest = {
       prepare: () => {
         if (AugustScepter.canCast(7)) useSkill($skill`Aug. 7th: Lighthouse Day!`);
         if (CinchoDeMayo.currentCinch() >= 25) ensureEffect($effect`Party Soundtrack`);
-        if (have($item`pocket wish`) && !have($effect`Frosty`)) cliExecute("genie effect frosty");
+        tryWish($effect`Frosty`, "genie");
         if (haveLoathingIdolMicrophone()) ensureEffect($effect`Spitting Rhymes`);
         if (!get("_shadowAffinityToday")) ClosedCircuitPayphone.chooseQuest(() => 2);
       },

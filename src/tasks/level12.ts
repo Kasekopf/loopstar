@@ -37,7 +37,7 @@ import { Priority, Quest, Resources, Task } from "../engine/task";
 import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
-import { atLevel, debug, flyersDone } from "../lib";
+import { atLevel, debug, flyersDone, tryWish } from "../lib";
 import { tryPlayApriling } from "../lib";
 import { args, toTempPref } from "../args";
 import { customRestoreMp, fillHp } from "../engine/moods";
@@ -496,22 +496,8 @@ const Nuns: Task[] = [
       $items`flapper fly, autumn dollar, pink candy heart`
         .filter((i) => have(i, 2) && !have(effectModifier(i, "Effect")))
         .forEach((i) => use(i));
-      if (!have($effect`Frosty`)) {
-        if (have($item`pocket wish`)) {
-          cliExecute("genie effect frosty");
-        }
-        if (have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") < 5) {
-          cliExecute("monkeypaw effect frosty");
-        }
-      }
-      if (!have($effect`Sinuses For Miles`)) {
-        if (have($item`pocket wish`)) {
-          cliExecute("genie effect sinuses for miles");
-        }
-        if (have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") < 5) {
-          cliExecute("monkeypaw effect sinuses for miles");
-        }
-      }
+      tryWish($effect`Frosty`);
+      tryWish($effect`Sinuses For Miles`);
       if (have($item`savings bond`)) ensureEffect($effect`Earning Interest`);
       fillHp();
     },
