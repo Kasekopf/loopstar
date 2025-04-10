@@ -510,7 +510,7 @@ function main(choice, page) {
       (0, import_kolmafia3.runChoice)(2);
     }
   } else if (choice === 182) {
-    if (options[4] && !have($item(_templateObject || (_templateObject = _taggedTemplateLiteral2(["Mohawk wig"]))))) {
+    if (options[4] && !have($item(_templateObject || (_templateObject = _taggedTemplateLiteral2(["model airship"]))))) {
       (0, import_kolmafia3.runChoice)(4);
     } else if (options[6]) {
       (0, import_kolmafia3.runChoice)(6);
