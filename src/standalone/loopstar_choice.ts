@@ -28,7 +28,7 @@ export function main(choice: number, page: string) {
   }
   // Random Lack of an Encounter
   else if (choice === 182) {
-    if (options[4] && !have($item`Mohawk wig`)) {
+    if (options[4] && !have($item`model airship`)) {
       // Pick up a model airship
       runChoice(4);
     } else if (options[6]) {

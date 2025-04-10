@@ -152,9 +152,9 @@ const Copperhead: Task[] = [
     outfit: { equip: $items`Mohawk wig`, modifier: "-combat" },
     choices: () => {
       return {
-        675: 4,
+        675: have($item`model airship`) ? 4 : 2,
         676: 4,
-        677: step("questL10Garbage") >= 10 ? 2 : 1,
+        677: step("questL10Garbage") >= 10 ? 2 : have($item`model airship`) ? 1 : 4,
         678: step("questL10Garbage") >= 10 ? 3 : 1,
         679: 1,
         1431: haveEquipped($item`Mohawk wig`) ? 4 : 1,
