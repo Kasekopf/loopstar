@@ -126,6 +126,8 @@ export const borisRoute: string[] = [
   "Orc Chasm/ABoo Carto",
   "War/Open Nuns",
   "Macguffin/Upper Chamber",
+  "Digital/Vanya",
+  "Digital/Megalo",
 
   // Bulk +meat/+item tasks
   "Misc/Shadow Lodestone",

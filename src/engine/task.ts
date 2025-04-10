@@ -24,6 +24,7 @@ export type Task = {
   nofightingfamiliars?: boolean;
   withnoadventures?: boolean; // should the task run without any adventures?
   breathitinextender?: boolean;
+  ignoreyrdelay?: boolean;
 
   // Resources
   delay?: number | (() => number);
