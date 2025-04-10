@@ -1,5 +1,15 @@
-import { floor, max, use, useSkill } from "kolmafia";
-import { $item, $items, $skill, AprilingBandHelmet, CinchoDeMayo, get, have, Macro } from "libram";
+import { equip, equippedItem, floor, haveEquipped, max, use, useSkill } from "kolmafia";
+import {
+  $item,
+  $items,
+  $skill,
+  $slot,
+  AprilingBandHelmet,
+  CinchoDeMayo,
+  get,
+  have,
+  Macro,
+} from "libram";
 import { args } from "../args";
 import { CombatResource } from "./lib";
 
@@ -62,7 +72,18 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
   {
     name: "Cincho",
     available: () => CinchoDeMayo.currentCinch() >= 60,
-    prepare: () => useSkill($skill`Cincho: Fiesta Exit`),
+    prepare: () => {
+      if (haveEquipped($item`Cincho de Mayo`)) {
+        useSkill($skill`Cincho: Fiesta Exit`);
+      } else {
+        // Using fiesta exit directly sometimes errors:
+        //   "Cannot acquire: replica Cincho de Mayo"
+        const prev = equippedItem($slot`acc1`);
+        equip($item`Cincho de Mayo`, $slot`acc1`);
+        useSkill($skill`Cincho: Fiesta Exit`);
+        equip(prev, $slot`acc1`);
+      }
+    },
     remaining: () => {
       if (!CinchoDeMayo.have()) return 0;
       return floor(CinchoDeMayo.totalAvailableCinch() / 60);
