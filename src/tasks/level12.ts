@@ -148,6 +148,7 @@ const Lighthouse: Task[] = [
     orbtargets: () => undefined,
     expectbeatenup: () => get("lastEncounter") === "Zerg Rush",
     choices: { 1387: 2 },
+    skipeffects: () => AutumnAton.have(),
     limit: {
       soft: 40,
       guard: Guards.create(
