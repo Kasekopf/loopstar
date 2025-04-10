@@ -37393,7 +37393,7 @@ function checkRequirements(path3) {
 }
 
 // src/_git_commit.ts
-var lastCommitHash = "ca9a672";
+var lastCommitHash = "60feb75";
 
 // src/engine/allocation.ts
 var import_kolmafia118 = require("kolmafia");
@@ -44365,7 +44365,7 @@ var ABoo = [{
   expectbeatenup: true
 }, {
   name: "ABoo Peak",
-  after: ["ABoo Clues", "ABoo Horror", "ABoo Lucky"],
+  after: ["ABoo Clues", "ABoo Horror"],
   completed: function() {
     return get("booPeakLit");
   },
@@ -52690,10 +52690,11 @@ function getDesiredTrainsetConfig2() {
   }
   config.push(Station.LOGGING_MILL);
   config.push(Station.GAIN_MEAT);
-  config.push(Station.BRAWN_SILO);
-  config.push(Station.TOWER_FIZZY);
   if (!haveOre()) config.push(Station.ORE_HOPPER);
+  config.push(Station.CANDY_FACTORY);
+  config.push(Station.BRAWN_SILO);
   if (!config.includes(Station.TOWER_SEWAGE)) config.push(Station.TOWER_SEWAGE);
+  config.push(Station.TOWER_FIZZY);
   config.push(Station.BRAIN_SILO);
   return config.slice(0, 8);
 }
