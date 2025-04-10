@@ -6,6 +6,7 @@ import {
   drink,
   eat,
   fullnessLimit,
+  getClanName,
   getWorkshed,
   gnomadsAvailable,
   haveEquipped,
@@ -41,6 +42,7 @@ import {
   $skill,
   AugustScepter,
   clamp,
+  Clan,
   ClosedCircuitPayphone,
   CursedMonkeyPaw,
   DaylightShavings,
@@ -245,6 +247,12 @@ export const borisDeltas: NamedDeltaTask[] = [
     },
   },
   {
+    name: "Digital/Vanya",
+    replace: {
+      preferwanderer: () => $location`Vanya's Castle`.turnsSpent === 0,
+    },
+  },
+  {
     name: "Digital/Megalo",
     replace: {
       priority: () => {
@@ -323,6 +331,47 @@ export const borisDeltas: NamedDeltaTask[] = [
       ready: () => myDaycount() === 1, // Day 2 has +ML which hurts
     },
   },
+  ...[
+    "Hidden City/Open Office",
+    "Hidden City/Open Apartment",
+    "Hidden City/Open Hospital",
+    "Hidden City/Open Bowling",
+    "Hidden City/Boss",
+  ].map(
+    (name) =>
+      <NamedDeltaTask>{
+        name: name,
+        replace: {
+          outfit: { equip: $items`tearaway pants, Everfull Dart Holster, spring shoes` },
+          combat: new CombatStrategy()
+            .kill($monster`dense liana`)
+            .killHard()
+            .macro(Macro.trySkill($skill`Tear Away your Pants!`), $monster`dense liana`),
+        },
+      }
+  ),
+  {
+    name: "Manor/Billiars",
+    combine: {
+      prepare: () => {
+        // Spend 1 spleen to guarantee library key
+        if (get("poolSkill") === 0 && have($item`pool shark hair oil`))
+          ensureEffect($effect`Sharky`);
+      },
+    },
+  },
+  {
+    name: "Tavern/Basement",
+    replace: {
+      outfit: {
+        modifier: "ML, -combat",
+        equip: $items`old patched suit-pants, Jurassic Parka, giant bow tie`,
+        modes: {
+          parka: "pterodactyl",
+        },
+      },
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
@@ -360,12 +409,13 @@ export const BorisQuest: Quest = {
       // so that in the fight after this the food is tripled.
       priority: () => Priorities.Start,
       ready: () =>
-        Witchess.have() && TrainSet.installed() && TrainSet.next() === TrainSet.Station.COAL_HOPPER,
+        Witchess.have() &&
+        (TrainSet.next() === TrainSet.Station.COAL_HOPPER || !TrainSet.installed()),
       do: () => {
         Witchess.fightPiece($monster`Witchess Knight`);
       },
       outfit: {
-        equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster, Retrospecs`,
+        equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster, Retrospecs, spring shoes`,
       },
       combat: new CombatStrategy()
         .macro(
@@ -401,7 +451,7 @@ export const BorisQuest: Quest = {
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: () => {
         const result = {
-          equip: $items`designer sweatpants, Everfull Dart Holster`,
+          equip: $items`designer sweatpants, Everfull Dart Holster, spring shoes`,
         };
         if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
           result.equip?.push($item`Retrospecs`);
@@ -434,7 +484,7 @@ export const BorisQuest: Quest = {
         )
         .killHard(),
       outfit: {
-        equip: $items`designer sweatpants, Everfull Dart Holster`,
+        equip: $items`designer sweatpants, Everfull Dart Holster, spring shoes`,
       },
       freecombat: true,
       limit: { tries: 3 },
@@ -460,7 +510,7 @@ export const BorisQuest: Quest = {
         .killHard(),
       outfit: () => {
         const result = {
-          equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
+          equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster, spring shoes`,
         };
         if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
           result.equip?.push($item`Retrospecs`);
@@ -493,7 +543,7 @@ export const BorisQuest: Quest = {
       },
       outfit: () => {
         const result = {
-          equip: $items`designer sweatpants, Everfull Dart Holster`,
+          equip: $items`designer sweatpants, Everfull Dart Holster, spring shoes`,
         };
         if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
           result.equip?.push($item`Retrospecs`);
@@ -598,6 +648,7 @@ export const BorisQuest: Quest = {
     {
       name: "Ninja",
       after: ["McLargeHuge/Trapper Return", "Palindome/Cold Snake"],
+      priority: () => (have($effect`Crunchy Steps`) ? Priorities.MinorEffect : Priorities.None),
       completed: () =>
         (have($item`ninja rope`) && have($item`ninja carabiner`) && have($item`ninja crampons`)) ||
         step("questL08Trapper") >= 3,
@@ -729,6 +780,7 @@ export const BorisQuest: Quest = {
         };
         if (have($item`Flash Liquidizer Ultra Dousing Accessory`) && get("_douseFoeUses") < 3)
           result.equip?.push($item`Flash Liquidizer Ultra Dousing Accessory`);
+        else result.equip?.push($item`spring shoes`);
         return result;
       },
       boss: true,
@@ -852,6 +904,35 @@ export const BorisQuest: Quest = {
       orbtargets: () => undefined, // do not dodge anything with orb
       choices: { 163: 4, 888: 5, 889: 5, 894: 1 },
       limit: { soft: 20 },
+    },
+    {
+      name: "Clan Photo Booth",
+      after: [],
+      completed: () =>
+        get(toTempPref("photoBoothChecked"), false) ||
+        (have($item`fake arrow-through-the-head`) &&
+          have($item`feather boa`) &&
+          have($item`giant bow tie`)) ||
+        get("_photoBoothEquipment", 0) >= 3 ||
+        !have($item`Clan VIP Lounge key`),
+      do: (): void => {
+        set(toTempPref("photoBoothChecked"), true);
+        if (getClanName() !== "Bonus Adventures from Hell") {
+          const clanWL = Clan.getWhitelisted();
+          const bafhWL =
+            clanWL.find((c) => c.name === getClanName()) !== undefined &&
+            clanWL.find((c) => c.name === "Bonus Adventures from Hell") !== undefined;
+          if (!bafhWL) return;
+        }
+
+        Clan.with("Bonus Adventures from Hell", () => {
+          if (!have($item`fake arrow-through-the-head`)) cliExecute("photobooth item arrow");
+          if (!have($item`feather boa`)) cliExecute("photobooth item boa");
+          if (!have($item`giant bow tie`)) cliExecute("photobooth item bow");
+        });
+      },
+      freeaction: true,
+      limit: { tries: 3 },
     },
   ],
 };

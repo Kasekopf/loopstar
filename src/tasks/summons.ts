@@ -150,7 +150,9 @@ const summonTargets: SummonTarget[] = [
       .macro(() => {
         if (have($familiar`Melodramedary`) && get("camelSpit") >= 100)
           return Macro.trySkill($skill`%fn, spit on them!`);
-        return Macro.trySkill($skill`Do an epic McTwist!`).trySkill($skill`Duplicate`);
+        const result = Macro.trySkill($skill`Do an epic McTwist!`);
+        if (SourceTerminal.have()) result.trySkill($skill`Duplicate`).tryItem($item`shadow brick`);
+        return result;
       })
       .killItem(),
     benefit: 3,

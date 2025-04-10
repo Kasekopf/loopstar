@@ -91,7 +91,7 @@ export const TavernQuest: Quest = {
           equip: $items`old patched suit-pants, unbreakable umbrella, Jurassic Parka, barrel lid, carnivorous potted plant, giant bow tie`,
           modes: {
             umbrella: have($item`tangle of rat tails`) ? "cocoon" : "broken",
-            parka: "pterodactyl",
+            parka: "spikolodon",
           },
         };
       },

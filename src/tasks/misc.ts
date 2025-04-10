@@ -1421,7 +1421,8 @@ export const MiscQuest: Quest = {
         (have($item`Sheriff moustache`) &&
           have($item`Sheriff badge`) &&
           have($item`Sheriff pistol`)) ||
-        get("_photoBoothEquipment", 0) >= 3,
+        get("_photoBoothEquipment", 0) >= 3 ||
+        !have($item`Clan VIP Lounge key`),
       do: (): void => {
         set(toTempPref("photoBoothChecked"), true);
         if (getClanName() !== "Bonus Adventures from Hell") {

@@ -33,7 +33,7 @@ export type Task = {
   resources?: Delayed<ResourceRequest | undefined>;
   tags?: string[];
   ignoremonsters?: () => Monster[]; // Extra monsters to ignore on the combat strategy
-  preferwanderer?: boolean;
+  preferwanderer?: boolean | (() => boolean);
   nochain?: boolean;
 
   // The monsters to search for with orb.

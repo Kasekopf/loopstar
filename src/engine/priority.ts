@@ -225,7 +225,7 @@ export class Prioritization {
           if (chainable && wanderer.chainable && !task.nochain) {
             result.priorities.add(Priorities.ChainWanderer);
             result._chain = chainable;
-          } else if (task.preferwanderer) {
+          } else if (undelay(task.preferwanderer)) {
             result.priorities.add(Priorities.BestWanderer);
           } else {
             result.priorities.add(Priorities.Wanderer);
@@ -266,6 +266,7 @@ export class Prioritization {
     const taskAllowlist = ["Palindome/Bat Snake"];
     // Don't use asdon when it would mess up tracking
     // (from non-banishable monsters)
+    const taskDenyList = ["Hidden/Open City"];
     const asdonDenylist = ["Tavern/Basement", "Bat/Boss Bat"];
     if (!result._wanderer && !result.has(Priorities.LastCopyableMonster)) {
       if (
@@ -276,6 +277,7 @@ export class Prioritization {
           runawayUseful &&
           !runawayMayNotBeUseful &&
           !locationDenylist.includes(location) &&
+          !taskDenyList.includes(task.name) &&
           !task.tags?.includes("NCForce") &&
           !task.name.startsWith("Tower"))
       ) {

@@ -396,7 +396,7 @@ export function equipDefaults(
     ) {
       outfit.equip($item`Powerful Glove`);
     }
-
+    outfit.equip($item`spring shoes`);
     outfit.equip($item`backup camera`);
     outfit.equip($item`birch battery`);
     outfit.equip($item`combat lover's locket`);

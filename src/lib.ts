@@ -229,6 +229,7 @@ export function tryPlayApriling(modifier: string): void {
   }
 
   if (modifier.includes("-combat")) {
+    if (get("noncombatForcerActive")) return;
     AprilingBandHelmet.conduct("Apriling Band Patrol Beat");
   }
 

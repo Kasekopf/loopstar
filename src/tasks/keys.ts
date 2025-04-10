@@ -424,6 +424,13 @@ export const DigitalQuest: Quest = {
           // Use visit URL to avoid needing to equip the pants
           visitUrl("runskillz.php?action=Skillz&whichskill=7419&targetplayer=0&pwd&quantity=1");
         }
+
+        if (
+          have($item`Clan VIP Lounge key`) &&
+          get("_poolGames") < 3 &&
+          numericModifier("Initiative") < 600
+        )
+          ensureEffect($effect`Hustlin'`);
       },
       ready: () => get("8BitColor", "black") === "black" || get("8BitColor", "black") === "",
       do: $location`Vanya's Castle`,

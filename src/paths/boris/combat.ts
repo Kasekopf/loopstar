@@ -1,6 +1,6 @@
 import { ActionDefaults } from "grimoire-kolmafia";
 import { haveEquipped, Location, Monster } from "kolmafia";
-import { $effect, $item, $skill, have, Macro } from "libram";
+import { $effect, $item, $skill, get, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
 
 export class BorisActionDefaults implements ActionDefaults<CombatActions> {
@@ -58,8 +58,11 @@ export class BorisActionDefaults implements ActionDefaults<CombatActions> {
           .trySkill($skill`Darts: Aim for the Bullseye`)
           .trySkill($skill`Darts: Aim for the Bullseye`)
           .trySkill($skill`Darts: Aim for the Bullseye`);
-      } else if (darts !== "skip") {
+      } else if (darts === "train") {
         result.trySkill($skill`Darts: Throw at %part1`);
+      } else if (darts === "any") {
+        result.trySkill($skill`Darts: Throw at %part1`);
+        for (let i = 0; i < get("_dartsLeft"); i++) result.trySkill($skill`Darts: Throw at %part1`);
       }
     }
 
