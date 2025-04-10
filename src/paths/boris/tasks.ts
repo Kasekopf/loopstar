@@ -1188,10 +1188,11 @@ function getDesiredTrainsetConfig(): TrainSet.Cycle {
   }
   config.push(Station.LOGGING_MILL);
   config.push(Station.GAIN_MEAT);
-  config.push(Station.BRAWN_SILO);
-  config.push(Station.TOWER_FIZZY);
   if (!haveOre()) config.push(Station.ORE_HOPPER);
+  config.push(Station.CANDY_FACTORY);
+  config.push(Station.BRAWN_SILO);
   if (!config.includes(Station.TOWER_SEWAGE)) config.push(Station.TOWER_SEWAGE);
+  config.push(Station.TOWER_FIZZY);
   config.push(Station.BRAIN_SILO);
   return config.slice(0, 8) as TrainSet.Cycle;
 }
