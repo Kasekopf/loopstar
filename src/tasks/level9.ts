@@ -31,7 +31,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { Priority, Quest, Task } from "../engine/task";
+import { Priority, Quest, ResourceRequest, Resources, Task } from "../engine/task";
 import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
@@ -86,6 +86,18 @@ const ABoo: Task[] = [
     combat: new CombatStrategy().killItem(),
     orbtargets: () => [],
     choices: { 611: 1, 1430: 1 },
+    resources: () =>
+      <ResourceRequest>{
+        which: Resources.Lucky,
+        benefit: 2.5,
+        repeat: itemAmount($item`A-Boo clue`) * 30 + 60 >= get("booPeakProgress") ? 2 : 1,
+        delta: {
+          replace: {
+            skipprep: true,
+            breathitinextender: true,
+          },
+        },
+      },
     limit: { soft: 15 },
   },
   {
@@ -112,7 +124,7 @@ const ABoo: Task[] = [
   },
   {
     name: "ABoo Peak",
-    after: ["ABoo Clues", "ABoo Horror"],
+    after: ["ABoo Clues", "ABoo Horror", "ABoo Lucky"],
     completed: () => get("booPeakLit"),
     do: $location`A-Boo Peak`,
     limit: { tries: 1 },

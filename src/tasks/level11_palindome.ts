@@ -272,7 +272,7 @@ const Zepplin: Task[] = [
     limit: { soft: 30 },
     resources: {
       which: Resources.Lucky,
-      benefit: 2,
+      benefit: 3,
       delta: {
         replace: {
           outfit: {
