@@ -370,6 +370,7 @@ export const MiscQuest: Quest = {
       },
       ready: () => {
         if (!have($item`protonic accelerator pack`)) return false;
+        if (get("breathitinCharges") > 0) return false;
         if (get("questPAGhost") === "unstarted") return false;
         switch (get("ghostLocation")) {
           case $location`Cobb's Knob Treasury`:

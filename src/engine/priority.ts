@@ -271,7 +271,11 @@ export class Prioritization {
     // (from non-banishable monsters)
     const taskDenyList = ["Hidden/Open City"];
     const asdonDenylist = ["Tavern/Basement", "Bat/Boss Bat"];
-    if (!result._wanderer && !result.has(Priorities.LastCopyableMonster)) {
+    if (
+      !result._wanderer &&
+      !result.has(Priorities.LastCopyableMonster) &&
+      (get("breathitinCharges") === 0 || location.environment !== "outdoor")
+    ) {
       if (
         locationAllowlist.includes(location) ||
         taskAllowlist.includes(task.name) ||
