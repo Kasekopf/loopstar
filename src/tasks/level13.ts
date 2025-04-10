@@ -26,10 +26,11 @@ import {
   Macro,
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
-import { atLevel } from "../lib";
+import { atLevel, tryWish } from "../lib";
 import { Quest, Resources, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { customRestoreMp, ensureWithMPSwaps, fillHp } from "../engine/moods";
+import { args } from "../args";
 
 const Challenges: Task[] = [
   {
@@ -113,6 +114,11 @@ const Challenges: Task[] = [
         numericModifier("Hot Damage") + numericModifier("Hot Spell Damage") < 100
       )
         BeachComb.tryHead("HOT");
+      if (
+        args.resources.speed &&
+        numericModifier("Hot Damage") + numericModifier("Hot Spell Damage") < 100
+      )
+        tryWish($effect`Dragged Through the Coals`);
     },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
@@ -134,6 +140,11 @@ const Challenges: Task[] = [
         numericModifier("Cold Damage") + numericModifier("Cold Spell Damage") < 100
       )
         BeachComb.tryHead("COLD");
+      if (
+        args.resources.speed &&
+        numericModifier("Cold Damage") + numericModifier("Cold Spell Damage") < 100
+      )
+        tryWish($effect`Staying Frosty`);
     },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
@@ -155,6 +166,11 @@ const Challenges: Task[] = [
         numericModifier("Spooky Damage") + numericModifier("Spooky Spell Damage") < 100
       )
         BeachComb.tryHead("SPOOKY");
+      if (
+        args.resources.speed &&
+        numericModifier("Spooky Damage") + numericModifier("Spooky Spell Damage") < 100
+      )
+        tryWish($effect`Bored Stiff`);
     },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
@@ -176,6 +192,11 @@ const Challenges: Task[] = [
         numericModifier("Stench Damage") + numericModifier("Stench Spell Damage") < 100
       )
         BeachComb.tryHead("STENCH");
+      if (
+        args.resources.speed &&
+        numericModifier("Stench Damage") + numericModifier("Stench Spell Damage") < 100
+      )
+        tryWish($effect`Sewer-Drenched`);
     },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
@@ -197,6 +218,11 @@ const Challenges: Task[] = [
         numericModifier("Sleaze Damage") + numericModifier("Sleaze Spell Damage") < 100
       )
         BeachComb.tryHead("SLEAZE");
+      if (
+        args.resources.speed &&
+        numericModifier("Sleaze Damage") + numericModifier("Sleaze Spell Damage") < 100
+      )
+        tryWish($effect`Fifty Ways to Bereave Your Lover`);
     },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");

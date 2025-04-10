@@ -38,6 +38,7 @@ import { atLevel, debug, haveLoathingIdolMicrophone } from "../lib";
 import { councilSafe } from "./level12";
 import { customRestoreMp } from "../engine/moods";
 import { tryPlayApriling } from "../lib";
+import { args } from "../args";
 
 const Diary: Task[] = [
   {
@@ -445,7 +446,10 @@ export const MacguffinQuest: Quest = {
 };
 
 function beeOption(): number {
-  if (!have($familiar`Shorter-Order Cook`) && !have($item`beehive`)) return 3;
+  if (!args.resources.speed && !have($familiar`Shorter-Order Cook`) && !have($item`beehive`))
+    return 3; // get beehive first for low-shiny
+  if (!have($item`blackberry galoshes`) && itemAmount($item`blackberry`) < 3) return 1;
   if (!have($item`blackberry galoshes`) && itemAmount($item`blackberry`) >= 3) return 2;
+  if (!have($familiar`Shorter-Order Cook`) && !have($item`beehive`)) return 3;
   return 1;
 }

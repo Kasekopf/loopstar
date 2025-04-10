@@ -14,10 +14,12 @@ import {
   min,
   myAdventures,
   myAscensions,
+  myDaycount,
   myFullness,
   myInebriety,
   myLevel,
   myMeat,
+  myMp,
   mySign,
   myTurncount,
   numericModifier,
@@ -107,6 +109,12 @@ export const borisDeltas: NamedDeltaTask[] = [
       }
   ),
   {
+    name: "Manor/Library",
+    combine: {
+      after: ["Boris/Library YR"],
+    },
+  },
+  {
     name: "Manor/Boss",
     replace: {
       after: ["SlowManor/Blow Wall"],
@@ -152,6 +160,12 @@ export const borisDeltas: NamedDeltaTask[] = [
     name: "Palindome/Cold Snake",
     replace: {
       outfit: { modifier: "+combat" },
+    },
+    combine: {
+      prepare: () => {
+        if (AugustScepter.canCast(6)) useSkill($skill`Aug. 6th: Fresh Breath Day!`);
+        tryPlayApriling("+combat");
+      },
     },
   },
   {
@@ -220,6 +234,13 @@ export const borisDeltas: NamedDeltaTask[] = [
         if (!have($item`pro skateboard`)) {
           buy($coinmaster`Mr. Store 2002`, 1, $item`pro skateboard`);
         }
+        if (get("availableMrStore2002Credits") > 0) {
+          buy(
+            $coinmaster`Mr. Store 2002`,
+            get("availableMrStore2002Credits"),
+            $item`Spooky VHS Tape`
+          );
+        }
       },
     },
   },
@@ -239,7 +260,15 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
     combine: {
-      prepare: () => tryWish($effect`Super Structure`),
+      prepare: () => {
+        if (
+          numericModifier("Damage Absorption") < 600 &&
+          get("_canSeekBirds") &&
+          myMp() >= 5 * 2 ** get("_birdsSoughtToday")
+        )
+          ensureEffect($effect`Blessing of the Bird`);
+        if (numericModifier("Damage Absorption") < 600) tryWish($effect`Super Structure`);
+      },
     },
   },
   {
@@ -288,6 +317,12 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  {
+    name: "Misc/Voting",
+    combine: {
+      ready: () => myDaycount() === 1, // Day 2 has +ML which hurts
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
@@ -330,9 +365,15 @@ export const BorisQuest: Quest = {
         Witchess.fightPiece($monster`Witchess Knight`);
       },
       outfit: {
-        equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
+        equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster, Retrospecs`,
       },
-      combat: new CombatStrategy().killHard(),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+        )
+        .killHard(),
       freecombat: true,
       limit: { tries: 5 },
     },
@@ -340,7 +381,7 @@ export const BorisQuest: Quest = {
       name: "Snojo",
       after: [],
       priority: () => {
-        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+        if (get(toTempPref("retroBrickCount"), -1) === itemAmount($item`shadow brick`)) {
           return { score: 0.2, reason: "Fish for retrocspec shadow brick" };
         }
         return Priorities.None;
@@ -370,16 +411,28 @@ export const BorisQuest: Quest = {
       post: (): void => {
         if (get("_snojoFreeFights") === 10) cliExecute("hottub"); // Clean -stat effects
       },
-      combat: new CombatStrategy().killHard(),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+        )
+        .killHard(),
       limit: { tries: 10 },
       freecombat: true,
     },
     {
       name: "Oliver",
-      completed: () => get("_speakeasyFreeFights") >= 0,
+      completed: () => get("_speakeasyFreeFights") >= 3,
       ready: () => get("ownsSpeakeasy"),
       do: $location`An Unusually Quiet Barroom Brawl`,
-      combat: new CombatStrategy().killHard(),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+        )
+        .killHard(),
       outfit: {
         equip: $items`designer sweatpants, Everfull Dart Holster`,
       },
@@ -390,7 +443,7 @@ export const BorisQuest: Quest = {
       name: "Neverending Party",
       after: [],
       priority: () => {
-        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+        if (get(toTempPref("retroBrickCount"), -1) === itemAmount($item`shadow brick`)) {
           return { score: 0.2, reason: "Fish for retrocspec shadow brick" };
         }
         return Priorities.None;
@@ -398,7 +451,13 @@ export const BorisQuest: Quest = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5 },
-      combat: new CombatStrategy().killHard(),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+        )
+        .killHard(),
       outfit: () => {
         const result = {
           equip: $items`makeshift garbage shirt, designer sweatpants, Everfull Dart Holster`,
@@ -415,7 +474,7 @@ export const BorisQuest: Quest = {
       name: "LOV Tunnel",
       after: [],
       priority: () => {
-        if (get(toTempPref("retroBrickCount"), 0) === itemAmount($item`shadow brick`)) {
+        if (get(toTempPref("retroBrickCount"), -1) === itemAmount($item`shadow brick`)) {
           return { score: 0.2, reason: "Fish for retrocspec shadow brick" };
         }
         return Priorities.None;
@@ -551,7 +610,7 @@ export const BorisQuest: Quest = {
       do: $location`Lair of the Ninja Snowmen`,
       outfit: () =>
         <OutfitSpec>{
-          modifier: "50 combat, init",
+          modifier: "+combat",
           skipDefaults: true,
         },
       combat: new CombatStrategy().killHard($monster`ninja snowman assassin`),
@@ -570,6 +629,7 @@ export const BorisQuest: Quest = {
       outfit: {
         equip: $items`unwrapped knock-off retro superhero cape`,
         modes: { retrocape: ["heck", "hold"] },
+        avoid: $items`Retrospecs`,
       },
       combat: new CombatStrategy().macro(Macro.trySkill($skill`Digitize`)).killHard(),
     }),
@@ -649,14 +709,23 @@ export const BorisQuest: Quest = {
         .macro((): Macro => {
           const result = Macro.trySkill($skill`Swoop like a Bat`);
           result.while_("hasskill 7448 && !pastround 20", Macro.skill($skill`Douse Foe`));
+          result.trySkill($skill`Darts: Throw at %part1`);
+          result.trySkill($skill`Darts: Throw at %part1`);
+          result.trySkill($skill`Darts: Throw at %part1`);
           return result;
         }, $monster`shadow slab`)
+        .macro(
+          Macro.trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Darts: Throw at %part1`),
+          $monsters`shadow tree, shadow guy`
+        )
         .killHard(),
       outfit: () => {
         const result: OutfitSpec = {
           modifier: "item",
           avoid: $items`broken champagne bottle`,
-          equip: $items`bat wings, Retrospecs`,
+          equip: $items`bat wings, Retrospecs, Everfull Dart Holster, designer sweatpants`,
         };
         if (have($item`Flash Liquidizer Ultra Dousing Accessory`) && get("_douseFoeUses") < 3)
           result.equip?.push($item`Flash Liquidizer Ultra Dousing Accessory`);
@@ -695,7 +764,8 @@ export const BorisQuest: Quest = {
       completed: () =>
         !have($item`Kremlin's Greatest Briefcase`) ||
         get("_kgbDispenserUses") === 3 ||
-        get("_kgbClicksUsed") >= 22,
+        get("_kgbClicksUsed") >= 22 ||
+        myDaycount() > 1,
       do: () => {
         cliExecute("briefcase drink");
       },
@@ -709,7 +779,8 @@ export const BorisQuest: Quest = {
         !have($item`Kremlin's Greatest Briefcase`) ||
         numericModifier($item`Kremlin's Greatest Briefcase`, "Cold Resistance") > 0 ||
         !have($item`Mmm-brr! brand mouthwash`) ||
-        get("_kgbClicksUsed") >= 22,
+        get("_kgbClicksUsed") >= 22 ||
+        myDaycount() > 1,
       do: () => {
         cliExecute("briefcase enchantment cold");
       },
@@ -727,7 +798,8 @@ export const BorisQuest: Quest = {
       completed: () =>
         !have($item`Kremlin's Greatest Briefcase`) ||
         numericModifier($item`Kremlin's Greatest Briefcase`, "Damage Absorption") > 0 ||
-        get("_kgbClicksUsed") >= 22,
+        get("_kgbClicksUsed") >= 22 ||
+        myDaycount() > 1,
       do: () => {
         cliExecute("briefcase enchantment absorption");
       },
@@ -741,7 +813,8 @@ export const BorisQuest: Quest = {
         !have($item`Kremlin's Greatest Briefcase`) ||
         numericModifier($item`Kremlin's Greatest Briefcase`, "Combat Rate") > 0 ||
         step("questL08Trapper") >= 3 ||
-        get("_kgbClicksUsed") >= 22,
+        get("_kgbClicksUsed") >= 22 ||
+        myDaycount() > 1,
       do: () => {
         cliExecute("briefcase enchantment +combat");
       },
@@ -750,16 +823,35 @@ export const BorisQuest: Quest = {
     },
     {
       name: "KGB Configure ML",
-      after: ["KGB Martini", "KGB Configure Combat"],
+      after: ["KGB Martini", "KGB Configure Combat", "Boris/Ninja"],
       completed: () =>
         !have($item`Kremlin's Greatest Briefcase`) ||
         numericModifier($item`Kremlin's Greatest Briefcase`, "Monster Level") > 0 ||
-        get("_kgbClicksUsed") >= 22,
+        get("_kgbClicksUsed") >= 22 ||
+        myDaycount() > 1,
       do: () => {
         cliExecute("briefcase enchantment ml");
       },
       freeaction: true,
       limit: { tries: 1 },
+    },
+    {
+      name: "Library YR",
+      after: ["Manor/Billiards"],
+      completed: () =>
+        step("questM20Necklace") >= 4 ||
+        have($item`killing jar`) ||
+        (get("gnasirProgress") & 4) !== 0,
+      do: $location`The Haunted Library`,
+      combat: new CombatStrategy()
+        .macro(Macro.trySkill($skill`Spring Kick`), $monster`banshee librarian`)
+        .yellowRay($monster`banshee librarian`)
+        .banish($monster`bookbat`)
+        .killHard(),
+      outfit: { equip: $items`deft pirate hook, spring shoes` },
+      orbtargets: () => undefined, // do not dodge anything with orb
+      choices: { 163: 4, 888: 5, 889: 5, 894: 1 },
+      limit: { soft: 20 },
     },
   ],
 };
@@ -827,7 +919,7 @@ export const BorisDietQuest: Quest = {
       name: "Martini",
       after: ["Open Pilsner", "Pilsner", "Palindome/Protesters"],
       ready: () => myInebriety() < 4,
-      completed: () => !have($item`splendid martini`),
+      completed: () => !have($item`splendid martini`) || myInebriety() === 4 || myDaycount() > 1,
       do: () => drink($item`splendid martini`),
       limit: { tries: 1 },
       freeaction: true,

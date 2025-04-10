@@ -15,6 +15,9 @@ export const borisRoute: string[] = [
   "Boris/Gnome Shirt",
   "Boris/Tune after Diet",
 
+  // Kill Astrologer early
+  "Summon/Astrologer Of Shub-Jigguwatt",
+
   // Level up
   "Leveling/Cloud Talk",
   "Misc/Daycare",
@@ -39,6 +42,7 @@ export const borisRoute: string[] = [
   "Boris/Airship YR Anything", // use the first YR
 
   "Macguffin/Forest", // Start before -combat buffs
+  "Summon/Camel's Toe",
   "BorisDiet/Such Great Heights", // Finish using mayam calendar for cheese
 
   "Palindome/Copperhead",
@@ -124,6 +128,7 @@ export const borisRoute: string[] = [
   "Macguffin/Upper Chamber",
 
   // Bulk +meat/+item tasks
+  "Misc/Shadow Lodestone",
   "War/Nuns",
   "Orc Chasm/ABoo Clues",
   "Orc Chasm/Oil Jar",

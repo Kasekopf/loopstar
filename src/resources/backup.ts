@@ -1,7 +1,8 @@
 import { OutfitSpec } from "grimoire-kolmafia";
-import { itemAmount, Monster } from "kolmafia";
+import { itemAmount, Monster, myTurncount } from "kolmafia";
 import { $item, $monster, AutumnAton, get, have } from "libram";
 import { oresNeeded } from "../tasks/level8";
+import { args } from "../args";
 
 export type BackupTarget = {
   monster: Monster;
@@ -35,6 +36,11 @@ const backupTargets: BackupTarget[] = [
       (have($item`Fourth of May Cosplay Saber`) &&
         (get("_saberForceUses") < 5 || get("_saberForceMonsterCount") > 0)),
     limit_tries: 4,
+  },
+  {
+    monster: $monster`sausage goblin`,
+    completed: () => myTurncount() < 120 || !args.resources.speed,
+    limit_tries: 11,
   },
   {
     monster: $monster`Eldritch Tentacle`,

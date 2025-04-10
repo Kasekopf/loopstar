@@ -184,7 +184,7 @@ export const MiscQuest: Quest = {
         });
         return { 793: swordReady ? 5 : statChoice };
       },
-      nofight: true,
+      breathitinextender: true,
       limit: { tries: 5 },
     },
     {
@@ -1471,6 +1471,7 @@ export const MiscQuest: Quest = {
       outfit: {
         avoid: $items`June cleaver`,
       },
+      freeaction: true,
       limit: { tries: 1, guard: NO_ADVENTURE_SPENT },
     },
     {

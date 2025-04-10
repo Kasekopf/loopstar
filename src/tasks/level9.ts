@@ -75,6 +75,7 @@ const ABoo: Task[] = [
     limit: { tries: 1 },
     skipprep: true,
     expectbeatenup: true,
+    breathitinextender: true,
   },
   {
     name: "ABoo Clues",
@@ -106,6 +107,7 @@ const ABoo: Task[] = [
     choices: { 611: 1, 1430: 1 },
     limit: { tries: 5 },
     skipprep: true,
+    breathitinextender: true,
     expectbeatenup: true,
   },
   {

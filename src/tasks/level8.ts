@@ -247,6 +247,7 @@ export const McLargeHugeQuest: Quest = {
         return new Macro();
       }),
       boss: true,
+      breathitinextender: true,
       limit: { tries: 4 },
     },
     {

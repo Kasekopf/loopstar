@@ -1,5 +1,16 @@
 import { itemAmount, Monster, myMeat } from "kolmafia";
-import { $effect, $familiar, $item, $items, $monster, $skill, get, have, Macro } from "libram";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $items,
+  $monster,
+  $skill,
+  get,
+  have,
+  Macro,
+  SourceTerminal,
+} from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { Quest, Task } from "../engine/task";
 import { step } from "grimoire-kolmafia";
@@ -80,7 +91,7 @@ const summonTargets: SummonTarget[] = [
     prepare: () => {
       fillHp();
     },
-    outfit: { equip: $items`June cleaver` },
+    outfit: { equip: $items`June cleaver`, modifier: "DR, sleaze res" },
     combat: new CombatStrategy()
       .macro(Macro.trySkill($skill`Micrometeorite`).trySkill($skill`Curse of Weaksauce`))
       .kill(),
@@ -110,16 +121,38 @@ const summonTargets: SummonTarget[] = [
       (itemAmount($item`star`) >= 8 && itemAmount($item`line`) >= 7) ||
       have($item`Richard's star key`) ||
       get("nsTowerDoorKeysUsed").includes("Richard's star key"),
+    prepare: () => {
+      if (!have($familiar`Melodramedary`) || get("camelSpit") < 100) {
+        if (
+          SourceTerminal.have() &&
+          !SourceTerminal.isCurrentSkill(SourceTerminal.Skills.Duplicate)
+        ) {
+          SourceTerminal.educate(SourceTerminal.Skills.Duplicate);
+        }
+      }
+    },
     outfit: () => {
-      if (get("camelSpit") === 100)
+      if (have($familiar`Melodramedary`) && get("camelSpit") === 100)
         return {
           modifier: "item",
           familiar: $familiar`Melodramedary`,
           avoid: $items`carnivorous potted plant`,
         };
+      if (!get("_epicMcTwistUsed"))
+        return {
+          modifier: "item",
+          equip: $items`pro skateboard`,
+          avoid: $items`carnivorous potted plant`,
+        };
       return { modifier: "item" };
     },
-    combat: new CombatStrategy().macro(Macro.trySkill($skill`%fn, spit on them!`)).killItem(),
+    combat: new CombatStrategy()
+      .macro(() => {
+        if (have($familiar`Melodramedary`) && get("camelSpit") >= 100)
+          return Macro.trySkill($skill`%fn, spit on them!`);
+        return Macro.trySkill($skill`Do an epic McTwist!`).trySkill($skill`Duplicate`);
+      })
+      .killItem(),
     benefit: 3,
   },
   {

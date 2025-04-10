@@ -1,6 +1,6 @@
 import { ActionDefaults } from "grimoire-kolmafia";
 import { haveEquipped, Location, Monster } from "kolmafia";
-import { $effect, $item, $location, $skill, have, Macro } from "libram";
+import { $effect, $item, $skill, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
 
 export class BorisActionDefaults implements ActionDefaults<CombatActions> {
@@ -63,12 +63,9 @@ export class BorisActionDefaults implements ActionDefaults<CombatActions> {
       }
     }
 
-    if (
-      (target instanceof Monster && target.physicalResistance >= 70) ||
-      target === $location`Shadow Rift (The Misspelled Cemetary)`
-    ) {
-      return result.attack().repeat();
-    }
-    return result.skill($skill`Mighty Axing`).repeat();
+    return result
+      .trySkill($skill`Intimidating Bellow`)
+      .skill($skill`Mighty Axing`)
+      .repeat();
   }
 }

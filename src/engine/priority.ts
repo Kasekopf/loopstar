@@ -255,6 +255,8 @@ export class Prioritization {
       $location`The Oasis`,
       $location`A-Boo Peak`,
       $location`The eXtreme Slope`,
+      $location`Shadow Rift (The Misspelled Cemetary)`,
+      $location`Noob Cave`,
     ];
     const locationAllowlist = [
       $location`The Haunted Bathroom`,
@@ -265,7 +267,7 @@ export class Prioritization {
     // Don't use asdon when it would mess up tracking
     // (from non-banishable monsters)
     const asdonDenylist = ["Tavern/Basement", "Bat/Boss Bat"];
-    if (!result._wanderer) {
+    if (!result._wanderer && !result.has(Priorities.LastCopyableMonster)) {
       if (
         locationAllowlist.includes(location) ||
         taskAllowlist.includes(task.name) ||
@@ -297,7 +299,7 @@ export class Prioritization {
         task.do.environment === Environment.Underground
       ) {
         result.priorities.add(Priorities.GoodUnderground);
-      } else if (breathStatus === BreathitinStates.EXTEND && task.nofight) {
+      } else if (breathStatus === BreathitinStates.EXTEND && task.breathitinextender) {
         result.priorities.add(Priorities.GoodExtend);
       }
     }

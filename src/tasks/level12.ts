@@ -363,20 +363,30 @@ const Orchard: Task[] = [
         return {
           familiar: args.minor.jellies ? $familiar`Space Jellyfish` : undefined,
         };
+      else if (have($item`industrial fire extinguisher`) && get("_fireExtinguisherCharge") >= 10)
+        return {
+          equip: $items`industrial fire extinguisher`,
+        };
+      else if (have($item`bat wings`) && get("_batWingsSwoopUsed") < 11)
+        return {
+          equip: $items`bat wings`,
+        };
       else return { modifier: "item" };
     },
     combat: new CombatStrategy()
       .yellowRay($monster`larval filthworm`)
       .startingMacro(Macro.trySkill($skill`Extract Jelly`))
-      .macro(() =>
-        Macro.externalIf(
-          have($skill`Emotionally Chipped`) &&
-            get("_feelEnvyUsed") < 3 &&
-            have($effect`Everything Looks Yellow`),
-          Macro.trySkill($skill`Feel Envy`),
-          Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`)
+      .macro(() => {
+        if (!have($effect`Everything Looks Yellow`)) return new Macro(); // YR
+        if (have($skill`Emotionally Chipped`) && get("_feelEnvyUsed") < 3)
+          return Macro.trySkill($skill`Feel Envy`);
+        if (
+          haveEquipped($item`industrial fire extinguisher`) &&
+          get("_fireExtinguisherCharge") >= 10
         )
-      ),
+          return Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`);
+        return Macro.trySkill($skill`Swoop like a Bat`);
+      }),
     limit: { soft: 10 },
   },
   {
@@ -400,20 +410,26 @@ const Orchard: Task[] = [
         return {
           equip: $items`industrial fire extinguisher`,
         };
+      else if (have($item`bat wings`) && get("_batWingsSwoopUsed") < 11)
+        return {
+          equip: $items`bat wings`,
+        };
       else return { modifier: "item" };
     },
     combat: new CombatStrategy()
       .yellowRay($monster`filthworm drone`)
       .startingMacro(Macro.trySkill($skill`Extract Jelly`))
-      .macro(() =>
-        Macro.externalIf(
-          have($skill`Emotionally Chipped`) &&
-            get("_feelEnvyUsed") < 3 &&
-            have($effect`Everything Looks Yellow`),
-          Macro.trySkill($skill`Feel Envy`),
-          Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`)
+      .macro(() => {
+        if (!have($effect`Everything Looks Yellow`)) return new Macro(); // YR
+        if (have($skill`Emotionally Chipped`) && get("_feelEnvyUsed") < 3)
+          return Macro.trySkill($skill`Feel Envy`);
+        if (
+          haveEquipped($item`industrial fire extinguisher`) &&
+          get("_fireExtinguisherCharge") >= 10
         )
-      ),
+          return Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`);
+        return Macro.trySkill($skill`Swoop like a Bat`);
+      }),
     effects: $effects`Filthworm Larva Stench`,
     limit: { soft: 10 },
   },
@@ -437,20 +453,26 @@ const Orchard: Task[] = [
         return {
           equip: $items`industrial fire extinguisher`,
         };
+      else if (have($item`bat wings`) && get("_batWingsSwoopUsed") < 11)
+        return {
+          equip: $items`bat wings`,
+        };
       else return { modifier: "item" };
     },
     combat: new CombatStrategy()
       .yellowRay($monster`filthworm royal guard`)
       .startingMacro(Macro.trySkill($skill`Extract Jelly`))
-      .macro(() =>
-        Macro.externalIf(
-          have($skill`Emotionally Chipped`) &&
-            get("_feelEnvyUsed") < 3 &&
-            have($effect`Everything Looks Yellow`),
-          Macro.trySkill($skill`Feel Envy`),
-          Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`)
+      .macro(() => {
+        if (!have($effect`Everything Looks Yellow`)) return new Macro(); // YR
+        if (have($skill`Emotionally Chipped`) && get("_feelEnvyUsed") < 3)
+          return Macro.trySkill($skill`Feel Envy`);
+        if (
+          haveEquipped($item`industrial fire extinguisher`) &&
+          get("_fireExtinguisherCharge") >= 10
         )
-      ),
+          return Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`);
+        return Macro.trySkill($skill`Swoop like a Bat`);
+      }),
     limit: { soft: 10 },
   },
   {
