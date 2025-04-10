@@ -31,6 +31,7 @@ import {
   have,
   Macro,
   set,
+  SourceTerminal,
   uneffect,
 } from "libram";
 import { Priority, Quest, Resources, Task } from "../engine/task";
@@ -524,6 +525,14 @@ const Nuns: Task[] = [
       tryWish($effect`Frosty`);
       tryWish($effect`Sinuses For Miles`);
       if (have($item`savings bond`)) ensureEffect($effect`Earning Interest`);
+      if (args.resources.speed) {
+        if (!get("_clanFortuneBuffUsed") && have($item`Clan VIP Lounge key`))
+          cliExecute("fortune buff meatsmith");
+        if (SourceTerminal.have() && !have($effect`meat.enh`))
+          SourceTerminal.enhance($effect`meat.enh`);
+        if (SourceTerminal.have() && !have($effect`items.enh`))
+          SourceTerminal.enhance($effect`items.enh`); // for +item push
+      }
       fillHp();
     },
     do: $location`The Themthar Hills`,

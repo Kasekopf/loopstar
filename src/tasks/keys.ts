@@ -36,6 +36,7 @@ import {
   have,
   Macro,
   set,
+  SourceTerminal,
   uneffect,
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
@@ -431,6 +432,14 @@ export const DigitalQuest: Quest = {
           numericModifier("Initiative") < 600
         )
           ensureEffect($effect`Hustlin'`);
+
+        if (
+          args.resources.speed &&
+          SourceTerminal.have() &&
+          !have($effect`init.enh`) &&
+          numericModifier("Initiative") < 600
+        )
+          SourceTerminal.enhance($effect`init.enh`);
       },
       ready: () => get("8BitColor", "black") === "black" || get("8BitColor", "black") === "",
       do: $location`Vanya's Castle`,
