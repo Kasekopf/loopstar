@@ -294,7 +294,9 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
       hotswapped.push(...swapEquipmentForMp(mpcost));
     }
     if (myMp() < mpcost) customRestoreMp(mpcost);
-    if (required) {
+    if (shieldSkill) {
+      useSkill(shieldSkill);
+    } else if (required) {
       ensureEffect(effect);
     } else {
       cliExecute(effect.default);
