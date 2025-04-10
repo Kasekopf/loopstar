@@ -33,7 +33,7 @@ import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
-import { tryWish, tuneSnapper } from "../lib";
+import { tryPlayApriling, tryWish, tuneSnapper } from "../lib";
 import { Priorities } from "../engine/priority";
 import { args } from "../args";
 
@@ -463,8 +463,11 @@ const Dome: Task[] = [
       have($item`wet stew`) ||
       have($item`wet stunt nut stew`) ||
       step("questL11Palindome") >= 5,
+    prepare: () => {
+      tryPlayApriling("+combat");
+    },
     do: $location`Whitey's Grove`,
-    outfit: { modifier: "50 combat, item" },
+    outfit: { modifier: "200 combat, item" },
     combat: new CombatStrategy().killItem($monster`whitesnake`).killItem($monster`white lion`),
     limit: { soft: 15 },
   },
