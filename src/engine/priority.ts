@@ -296,7 +296,7 @@ export class Prioritization {
       result.priorities.delete(Priorities.GoodDarts);
     }
 
-    if (args.minor.breathitin) {
+    if (args.minor.breathitin && !result._wanderer) {
       const breathStatus = breathitinProgress();
       if (
         breathStatus === BreathitinStates.UNDERGROUND &&
