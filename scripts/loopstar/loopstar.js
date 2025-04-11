@@ -26702,7 +26702,8 @@ function moodCompatible(modifier) {
   return true;
 }
 function haveEquipmentToCast(effect2) {
-  var skill = (0, import_kolmafia99.toSkill)(effect2);
+  var _aprilShieldEffects$g;
+  var skill = (_aprilShieldEffects$g = aprilShieldEffects.get(effect2)) !== null && _aprilShieldEffects$g !== void 0 ? _aprilShieldEffects$g : (0, import_kolmafia99.toSkill)(effect2);
   if (skill === $skill(_templateObject7410 || (_templateObject7410 = _taggedTemplateLiteral86(["none"])))) return true;
   if (skill.class === $class(_templateObject7510 || (_templateObject7510 = _taggedTemplateLiteral86(["Turtle Tamer"])))) return have($item(_templateObject764 || (_templateObject764 = _taggedTemplateLiteral86(["turtle totem"]))));
   if (skill.class === $class(_templateObject774 || (_templateObject774 = _taggedTemplateLiteral86(["Sauceror"])))) return have($item(_templateObject784 || (_templateObject784 = _taggedTemplateLiteral86(["saucepan"]))));
@@ -37393,7 +37394,7 @@ function checkRequirements(path3) {
 }
 
 // src/_git_commit.ts
-var lastCommitHash = "60feb75";
+var lastCommitHash = "f7b9e04";
 
 // src/engine/allocation.ts
 var import_kolmafia118 = require("kolmafia");
