@@ -1,6 +1,7 @@
-import { haveEquipped, Location, Monster, myLevel } from "kolmafia";
-import { $effect, $item, $skill, have, Macro } from "libram";
+import { haveEquipped, Location, Monster, myLevel, myPath } from "kolmafia";
+import { $effect, $item, $path, $skill, have, Macro } from "libram";
 import { ActionDefaults, CombatStrategy as BaseCombatStrategy } from "grimoire-kolmafia";
+import { borisKillMacro } from "../paths/boris/combat";
 
 const myActions = [
   "ignore", // Task doesn't care what happens
@@ -68,6 +69,9 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
 }
 
 export function killMacro(hard?: boolean): Macro {
+  // Hack, to be cleaned up by ContextualEngine
+  if (myPath() === $path`Avatar of Boris`) return borisKillMacro(undefined, hard ? "train" : "any");
+
   const result = new Macro();
 
   if (haveEquipped($item`Everfull Dart Holster`)) {

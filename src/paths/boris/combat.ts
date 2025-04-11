@@ -13,11 +13,11 @@ export class BorisActionDefaults implements ActionDefaults<CombatActions> {
   }
 
   kill(target?: Monster | Location) {
-    return this.killBase(target, "any");
+    return borisKillMacro(target, "any");
   }
 
   killHard(target?: Monster | Location) {
-    return this.killBase(target, "train");
+    return borisKillMacro(target, "train");
   }
 
   ignoreNoBanish(target?: Monster | Location) {
@@ -47,28 +47,31 @@ export class BorisActionDefaults implements ActionDefaults<CombatActions> {
   forceItems(target?: Monster | Location) {
     return this.killItem(target);
   }
+}
 
-  private killBase(target: Monster | Location | undefined, darts: "train" | "skip" | "any"): Macro {
-    const result = new Macro();
-    if (haveEquipped($item`Everfull Dart Holster`)) {
-      if (darts === "any" && !have($effect`Everything Looks Red`)) {
-        result
-          .trySkill($skill`Darts: Aim for the Bullseye`)
-          .trySkill($skill`Darts: Aim for the Bullseye`)
-          .trySkill($skill`Darts: Aim for the Bullseye`)
-          .trySkill($skill`Darts: Aim for the Bullseye`)
-          .trySkill($skill`Darts: Aim for the Bullseye`);
-      } else if (darts === "train") {
-        result.trySkill($skill`Darts: Throw at %part1`);
-      } else if (darts === "any") {
-        result.trySkill($skill`Darts: Throw at %part1`);
-        for (let i = 0; i < get("_dartsLeft"); i++) result.trySkill($skill`Darts: Throw at %part1`);
-      }
+export function borisKillMacro(
+  target: Monster | Location | undefined,
+  darts: "train" | "skip" | "any"
+): Macro {
+  const result = new Macro();
+  if (haveEquipped($item`Everfull Dart Holster`)) {
+    if (darts === "any" && !have($effect`Everything Looks Red`)) {
+      result
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`)
+        .trySkill($skill`Darts: Aim for the Bullseye`);
+    } else if (darts === "train") {
+      result.trySkill($skill`Darts: Throw at %part1`);
+    } else if (darts === "any") {
+      result.trySkill($skill`Darts: Throw at %part1`);
+      for (let i = 0; i < get("_dartsLeft"); i++) result.trySkill($skill`Darts: Throw at %part1`);
     }
-
-    return result
-      .trySkill($skill`Intimidating Bellow`)
-      .skill($skill`Mighty Axing`)
-      .repeat();
   }
+
+  return result
+    .trySkill($skill`Intimidating Bellow`)
+    .skill($skill`Mighty Axing`)
+    .repeat();
 }
