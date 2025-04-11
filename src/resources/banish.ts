@@ -24,14 +24,14 @@ type BanishSimpleDo = CombatResource & {
   do: Item | Skill;
   free: boolean;
   blocked?: string[];
-  parallel?: number;
+  capacity?: number;
 };
 type BanishMacroDo = CombatResource & {
   do: Macro | Delayed<Macro>;
   tracker: Item | Skill;
   free: boolean;
   blocked?: string[];
-  parallel?: number;
+  capacity?: number;
 };
 export type BanishSource = BanishSimpleDo | BanishMacroDo;
 function getTracker(source: BanishSource): Item | Skill {
@@ -76,6 +76,7 @@ const banishSources: BanishSource[] = [
     free: true,
   },
   {
+    // Only in Grey You
     name: "System Sweep",
     available: () => have($skill`System Sweep`),
     do: $skill`System Sweep`,
@@ -134,6 +135,14 @@ const banishSources: BanishSource[] = [
     free: true,
   },
   {
+    // Only in Avatar of Boris
+    name: "Banishing Shout",
+    available: () => have($skill`Banishing Shout`),
+    do: $skill`Banishing Shout`,
+    free: false,
+    capacity: 3,
+  },
+  {
     name: "Monkey Paw",
     available: () => have($item`cursed monkey's paw`) && get("_monkeyPawWishesUsed", 0) === 0,
     equip: $item`cursed monkey's paw`,
@@ -158,30 +167,26 @@ const banishSources: BanishSource[] = [
   },
 ];
 
-// Return a list of all banishes not allocated to some available task
+/**
+ * Return a list of all banishes not allocated to some available task.
+ */
 export function unusedBanishes(
   banishState: BanishState,
   tasks: Task[],
   taskName: string
 ): BanishSource[] {
-  const activelyBanished = new Map<Item | Skill, Set<Monster>>();
+  const relevantMonsters = new Set<Monster>();
   for (const task of tasks) {
     if (task.combat === undefined) continue;
     if (task.ignorebanishes?.()) continue;
-    for (const monster of task.combat.where("banish")) {
-      const banishedWith = banishState.already_banished.get(monster);
-      if (banishedWith) {
-        const banishList = activelyBanished.get(banishedWith);
-        if (banishList) banishList.add(monster);
-        else activelyBanished.set(banishedWith, new Set([monster]));
-      }
-    }
+    for (const monster of task.combat.where("banish")) relevantMonsters.add(monster);
   }
 
-  return banishSources.filter(
-    (banish) =>
-      banish.available() &&
-      !banish.blocked?.includes(taskName) &&
-      (activelyBanished.get(getTracker(banish))?.size ?? 0) < (banish.parallel ?? 1)
-  );
+  return banishSources.filter((banish) => {
+    if (!banish.available()) return false;
+    if (banish.blocked?.includes(taskName)) return false;
+    const overwritten = banishState.overwrittenMonster(getTracker(banish), banish.capacity ?? 1);
+    if (!overwritten) return true;
+    else return relevantMonsters.has(overwritten);
+  });
 }

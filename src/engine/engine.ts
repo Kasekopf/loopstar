@@ -331,7 +331,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         debug(
           `Banish targets: ${combat
             .where("banish")
-            .filter((monster) => !banishState.already_banished.has(monster))
+            .filter((monster) => !banishState.banishedWith(monster))
             .join(", ")}`
         );
         debug(

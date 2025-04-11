@@ -1,5 +1,16 @@
-import { Item, Location, Monster, print, Skill, toLocation, toMonster, visitUrl } from "kolmafia";
-import { $item, get, getBanishedMonsters } from "libram";
+import {
+  Item,
+  Location,
+  Monster,
+  print,
+  Skill,
+  toItem,
+  toLocation,
+  toMonster,
+  toSkill,
+  visitUrl,
+} from "kolmafia";
+import { $item, $items, $skill, get, multiSplit } from "libram";
 import { args } from "../args";
 import { Task } from "./task";
 import { getMonsters, underStandard } from "../lib";
@@ -28,42 +39,57 @@ class GameState {
   }
 }
 
+const banishSource = (banisher: string) => {
+  if (banisher.toLowerCase() === "saber force") return $skill`Use the Force`;
+  if (banisher.toLowerCase() === "nanorhino") return $skill`Unleash Nanites`;
+
+  const item = toItem(banisher);
+  if ($items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`.includes(item)) {
+    return toSkill(banisher);
+  }
+  return item;
+};
+
+/**
+ * A version of libram getBanishedMonsters that maintains the banishing turncounts.
+ */
+function getBanishedMonsters(): Map<Item | Skill, [Monster, number][]> {
+  const entries = multiSplit("banishedMonsters", ":", ":", [toMonster, banishSource, Number]);
+  const banishUsages = new Map<Item | Skill, [Monster, number][]>();
+  for (const entry of entries) {
+    if (banishUsages.has(entry[1])) banishUsages.get(entry[1])?.push([entry[0], entry[2]]);
+    else banishUsages.set(entry[1], [[entry[0], entry[2]]]);
+  }
+  return banishUsages;
+}
+
 export class BanishState {
-  already_banished: Map<Monster, Item | Skill>;
+  // Monster => banish
+  private alreadyBanished = new Map<Monster, Item | Skill>();
+  // Banish => Number of parallel usages (normally 1)
+  private numBanished = new Map<Item | Skill, number>();
+  // Banish => Oldest banished monster
+  private oldestBanished = new Map<Item | Skill, Monster>();
 
   constructor() {
     const banished = getBanishedMonsters();
     if (underStandard()) banished.delete($item`ice house`);
-    this.already_banished = new Map(Array.from(banished, (entry) => [entry[1], entry[0]]));
-  }
-
-  // Return true if some of the monsters in the task are banished
-  isPartiallyBanished(task: Task): boolean {
-    const targets: Monster[] = [];
-    targets.push(...(task.combat?.where("banish") ?? []));
-    targets.push(...(task.combat?.where("ignoreSoftBanish") ?? []));
-    if (
-      (task.combat?.getDefaultAction() === "banish" ||
-        task.combat?.getDefaultAction() === "ignoreSoftBanish") &&
-      task.do instanceof Location
-    ) {
-      for (const monster of getMonsters(task.do)) {
-        const strat = task.combat?.currentStrategy(monster);
-        if (strat === "banish" || strat === "ignoreSoftBanish") {
-          targets.push(monster);
-        }
+    for (const entry of banished.entries()) {
+      for (const monster_turn of entry[1]) {
+        this.alreadyBanished.set(monster_turn[0], entry[0]);
       }
+      this.numBanished.set(entry[0], entry[1].length);
+      if (entry[1].length > 1) {
+        // Ensure the oldest usage appears first
+        entry[1].sort((a, b) => a[1] - b[1]);
+      }
+      this.oldestBanished.set(entry[0], entry[1][0][0]);
     }
-    return (
-      targets.find(
-        (monster) =>
-          this.already_banished.has(monster) &&
-          this.already_banished.get(monster) !== $item`ice house`
-      ) !== undefined
-    );
   }
 
-  // Return true if some of the monsters in the task are banished
+  /**
+   * Return the number of monster in the task that are banished.
+   */
   numPartiallyBanished(task: Task): number {
     const targets: Monster[] = [];
     targets.push(...(task.combat?.where("banish") ?? []));
@@ -82,17 +108,42 @@ export class BanishState {
     }
     return targets.filter(
       (monster) =>
-        this.already_banished.has(monster) &&
-        this.already_banished.get(monster) !== $item`ice house`
+        this.alreadyBanished.has(monster) && this.alreadyBanished.get(monster) !== $item`ice house`
     ).length;
   }
 
-  // Return true if all requested monsters in the task are banished
+  /**
+   * Return true if all requested monsters in the task are banished.
+   */
   isFullyBanished(task: Task): boolean {
     return (
-      task.combat?.where("banish")?.find((monster) => !this.already_banished.has(monster)) ===
+      task.combat?.where("banish")?.find((monster) => !this.alreadyBanished.has(monster)) ===
       undefined
     );
+  }
+
+  /**
+   * Return the banish used on this monster (or undefined if not banished).
+   */
+  banishedWith(monster: Monster): Item | Skill | undefined {
+    return this.alreadyBanished.get(monster);
+  }
+
+  /**
+   * Return the monster whose banish will be overwritten if this banish
+   * is used again (possibly undefined, if nothing will be overwritten).
+   *
+   * For single-use banishes, this is the currently banished monster.
+   * For multi-use banishes, this is the [capacity]-th oldest banished monster
+   * (or none if fewer than [capacity] monsters have been banished).
+   *
+   * @param banish The banish tracker to check.
+   * @param capacity The capacity of this banish.
+   */
+  overwrittenMonster(banish: Item | Skill, capacity = 1): Monster | undefined {
+    const usage = this.numBanished.get(banish);
+    if (!usage || capacity > usage) return undefined;
+    return this.oldestBanished.get(banish);
   }
 }
 
