@@ -204,7 +204,7 @@ export function moodCompatible(modifier: string | undefined): boolean {
 
 function haveEquipmentToCast(effect: Effect): boolean {
   // Check that we have the class equipment to get this skill
-  const skill = toSkill(effect);
+  const skill = aprilShieldEffects.get(effect) ?? toSkill(effect);
   if (skill === $skill`none`) return true;
   if (skill.class === $class`Turtle Tamer`) return have($item`turtle totem`);
   if (skill.class === $class`Sauceror`) return have($item`saucepan`);
