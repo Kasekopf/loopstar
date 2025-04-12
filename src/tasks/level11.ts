@@ -5,8 +5,10 @@ import {
   haveEquipped,
   itemAmount,
   myAdventures,
+  myAscensions,
   myMaxmp,
   myMeat,
+  retrieveItem,
   runChoice,
   use,
   visitUrl,
@@ -28,6 +30,7 @@ import {
   get,
   have,
   Macro,
+  set,
   uneffect,
 } from "libram";
 import { Quest, Task } from "../engine/task";
@@ -175,23 +178,6 @@ const Desert: Task[] = [
     combat: new CombatStrategy().killItem($monster`blur`),
     outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
     limit: { soft: 15 },
-    post: (): void => {
-      if (!visitUrl("place.php?whichplace=desertbeach").includes("action=db_gnasir")) return;
-      if (
-        itemAmount($item`worm-riding manual page`) >= 15 ||
-        ((get("gnasirProgress") & 1) === 0 && have($item`stone rose`)) ||
-        ((get("gnasirProgress") & 2) === 0 && have($item`can of black paint`)) ||
-        ((get("gnasirProgress") & 4) === 0 && have($item`killing jar`))
-      ) {
-        let res = visitUrl("place.php?whichplace=desertbeach&action=db_gnasir");
-        while (res.includes("value=2")) {
-          res = runChoice(2);
-        }
-        runChoice(1);
-      }
-      cliExecute("use * desert sightseeing pamphlet");
-      if (have($item`worm-riding hooks`) && have($item`drum machine`)) use($item`drum machine`);
-    },
     parachute: $monster`blur`,
   },
   {
@@ -209,8 +195,7 @@ const Desert: Task[] = [
   },
   {
     name: "Desert",
-    after: ["Diary", "Compass"],
-    acquire: [{ item: $item`can of black paint`, useful: () => (get("gnasirProgress") & 2) === 0 }],
+    after: ["Misc/Unlock Beach", "Diary", "Compass"],
     ready: () => {
       const cond =
         (have($item`can of black paint`) ||
@@ -259,26 +244,58 @@ const Desert: Task[] = [
       })
       .kill(),
     post: (): void => {
-      if (!visitUrl("place.php?whichplace=desertbeach").includes("action=db_gnasir")) return;
-      if ((get("gnasirProgress") & 16) > 0) return;
-      if (
-        itemAmount($item`worm-riding manual page`) >= 15 ||
-        ((get("gnasirProgress") & 1) === 0 && have($item`stone rose`)) ||
-        ((get("gnasirProgress") & 2) === 0 && have($item`can of black paint`)) ||
-        ((get("gnasirProgress") & 4) === 0 && have($item`killing jar`))
-      ) {
-        let res = visitUrl("place.php?whichplace=desertbeach&action=db_gnasir");
-        while (res.includes("value=2")) {
-          res = runChoice(2);
-        }
-        runChoice(1);
+      if (get("lastGnasirSeen", 0) === myAscensions()) return;
+      if (visitUrl("place.php?whichplace=desertbeach").includes("action=db_gnasir")) {
+        set("lastGnasirSeen", myAscensions());
+      } else {
+        if (get("desertExploration") > 20)
+          // extra buffer for milestones
+          throw `Expected gnasir to appear by now but he was not detected`;
       }
-      cliExecute("use * desert sightseeing pamphlet");
-      if (have($item`worm-riding hooks`) && have($item`drum machine`)) use($item`drum machine`);
     },
     nochain: true,
     limit: { soft: 30 },
     choices: { 805: 1 },
+  },
+  {
+    name: "Desert/Gnasir",
+    after: ["Misc/Unlock Beach", "Diary"],
+    ready: () =>
+      get("lastGnasirSeen", 0) === myAscensions() &&
+      (itemAmount($item`worm-riding manual page`) >= 15 ||
+        ((get("gnasirProgress") & 1) === 0 && have($item`stone rose`)) ||
+        ((get("gnasirProgress") & 2) === 0 && myMeat() >= 1000) ||
+        ((get("gnasirProgress") & 4) === 0 && have($item`killing jar`))),
+    completed: () => get("desertExploration") >= 100,
+    do: () => {
+      if ((get("gnasirProgress") & 2) === 0) retrieveItem($item`can of black paint`);
+      let res = visitUrl("place.php?whichplace=desertbeach&action=db_gnasir");
+      while (res.includes("value=2")) {
+        res = runChoice(2);
+      }
+      runChoice(1);
+    },
+    freeaction: true,
+    limit: { tries: 4, unready: true },
+  },
+  {
+    name: "Desert/Sightsee",
+    after: ["Misc/Unlock Beach", "Diary"],
+    ready: () => have($item`desert sightseeing pamphlet`),
+    completed: () => get("desertExploration") >= 100,
+    do: () =>
+      use($item`desert sightseeing pamphlet`, itemAmount($item`desert sightseeing pamphlet`)),
+    freeaction: true,
+    limit: { tries: 3, unready: true },
+  },
+  {
+    name: "Desert/Wormride",
+    after: ["Misc/Unlock Beach", "Diary"],
+    ready: () => have($item`worm-riding hooks`) && have($item`drum machine`),
+    completed: () => (get("gnasirProgress") & 16) > 0,
+    do: () => use($item`drum machine`),
+    freeaction: true,
+    limit: { tries: 1 },
   },
 ];
 
