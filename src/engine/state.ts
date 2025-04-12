@@ -14,6 +14,8 @@ import { $item, $items, $skill, get, multiSplit } from "libram";
 import { args } from "../args";
 import { Task } from "./task";
 import { getMonsters, underStandard } from "../lib";
+import { CombatActions } from "./combat";
+import { CombatStrategy } from "grimoire-kolmafia";
 
 class GameState {
   private _banishes?: BanishState;
@@ -49,6 +51,8 @@ const banishSource = (banisher: string) => {
   }
   return item;
 };
+
+const BANISH_ACTIONS = new Set<CombatActions>(["banish", "ignoreSoftBanish", "killBanish"]);
 
 /**
  * A version of libram getBanishedMonsters that maintains the banishing turncounts.
@@ -92,16 +96,16 @@ export class BanishState {
    */
   numPartiallyBanished(task: Task): number {
     const targets: Monster[] = [];
-    targets.push(...(task.combat?.where("banish") ?? []));
-    targets.push(...(task.combat?.where("ignoreSoftBanish") ?? []));
+    for (const action of BANISH_ACTIONS) {
+      targets.push(...(task.combat?.where(action) ?? []));
+    }
     if (
-      (task.combat?.getDefaultAction() === "banish" ||
-        task.combat?.getDefaultAction() === "ignoreSoftBanish") &&
+      BANISH_ACTIONS.has(task.combat?.getDefaultAction() ?? "ignore") &&
       task.do instanceof Location
     ) {
       for (const monster of getMonsters(task.do)) {
         const strat = task.combat?.currentStrategy(monster);
-        if (strat === "banish" || strat === "ignoreSoftBanish") {
+        if (BANISH_ACTIONS.has(strat ?? "ignore")) {
           targets.push(monster);
         }
       }
@@ -115,10 +119,23 @@ export class BanishState {
   /**
    * Return true if all requested monsters in the task are banished.
    */
-  isFullyBanished(task: Task): boolean {
+  isFullyBanished(combat?: CombatStrategy<CombatActions>): boolean {
+    // Do not consider ignoreSoftBanish
     return (
-      task.combat?.where("banish")?.find((monster) => !this.alreadyBanished.has(monster)) ===
-      undefined
+      this.unbanished("banish", combat).length === 0 &&
+      this.unbanished("killBanish", combat).length === 0
+    );
+  }
+
+  /**
+   * Return the unbanished monsters according to the provided combat strategy.
+   */
+  unbanished(
+    banishAction: "banish" | "killBanish",
+    combat?: CombatStrategy<CombatActions>
+  ): Monster[] {
+    return (
+      combat?.where(banishAction)?.filter((monster) => !this.alreadyBanished.has(monster)) ?? []
     );
   }
 

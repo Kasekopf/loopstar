@@ -325,20 +325,35 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       }
 
       const banishState = globalStateCache.banishes();
-      const banishSources = unusedBanishes(banishState, task.availableTasks ?? [], task.name);
-      if (combat.can("banish") && !banishState.isFullyBanished(task) && !task.ignorebanishes?.()) {
-        resources.provide("banish", equipFirst(outfit, banishSources));
-        debug(
-          `Banish targets: ${combat
-            .where("banish")
-            .filter((monster) => !banishState.banishedWith(monster))
-            .join(", ")}`
-        );
-        debug(
-          `Banishes available: ${Array.from(banishSources)
-            .map((b) => b.name)
-            .join(", ")}`
-        );
+      if (!task.ignorebanishes?.()) {
+        const unbanished = banishState.unbanished("banish", combat);
+        if (unbanished.length > 0) {
+          const banishSources = unusedBanishes(
+            banishState,
+            task.availableTasks ?? [],
+            task.name,
+            false
+          );
+          const found = equipFirst(outfit, banishSources);
+          if (found) {
+            debug(`Banish targets: ${unbanished.join(", ")}`);
+            debug(`Banish assigned: ${found.name}`);
+            resources.provide("banish", found);
+          } else replaceActions(combat, "banish", "killBanish"); // also consider killBanishes for these
+        }
+        const unkillbanished = banishState.unbanished("killBanish", combat);
+        if (unkillbanished.length > 0) {
+          const banishSources = unusedBanishes(
+            banishState,
+            task.availableTasks ?? [],
+            task.name,
+            true
+          );
+          const found = equipFirst(outfit, banishSources);
+          if (found) resources.provide("killBanish", found);
+          debug(`Banish targets: ${unkillbanished.join(", ")}`);
+          debug(`Banish assigned: ${found?.name ?? "NONE"}`);
+        }
       }
 
       // Don't equip the orb if we have a bad target
@@ -351,10 +366,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
       // Equip an orb if we have a good target.
       // (If we have banished all the bad targets, there is no need to force an orb)
-      if (
-        task.activePriority?.has(Priorities.GoodOrb) &&
-        (!combat.can("banish") || !banishState.isFullyBanished(task))
-      ) {
+      if (task.activePriority?.has(Priorities.GoodOrb) && !banishState.isFullyBanished(combat)) {
         outfit.equip($item`miniature crystal ball`);
       }
 
@@ -375,6 +387,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
                 (t) => !t.completed() && t.combat?.can("banish") && !t.ignorebanishes?.()
               )
             ) {
+              const banishSources = unusedBanishes(
+                banishState,
+                task.availableTasks ?? [],
+                task.name,
+                false
+              );
               const runawayBanish = equipFirst(
                 outfit,
                 banishSources.filter((b) => b.free)
@@ -722,7 +740,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
             // (Repeating if we hit a cleaver NC, etc.)
             set("lastEncounter", "");
             visitUrl(toUrl(result));
-            runChoice(1, `heyscriptswhatsupwinkwink=${monster_to_map.id}`);
+            runChoice(1, `heyscriptswhatsupwinkwink = ${monster_to_map.id}`);
             if (!get("mappingMonsters")) break;
             if (myAdventures() < start_advs) break;
             if (!lastEncounterWasWanderingNC()) break;
@@ -754,11 +772,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
           myAdventures() < start_advs)
       ) {
         print(
-          `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
+          `Fight was lost(debug info: ${beaten_turns} => ${haveEffect(
             $effect`Beaten Up`
           )}, (${start_advs} => ${myAdventures()}); stop.`
         );
-        throw `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
+        throw `Fight was lost(debug info: ${beaten_turns} => ${haveEffect(
           $effect`Beaten Up`
         )}, (${start_advs} => ${myAdventures()}); stop.`;
       }
@@ -964,7 +982,7 @@ function logModifiers(outfit: Outfit) {
     if (maximizer.includes(modifier)) {
       const name = modifierNames[modifier];
       const value = numericModifier(modifierNames[modifier]);
-      logprint(`= ${name}: ${value}`);
+      logprint(`= ${name}: ${value} `);
     }
   }
 }

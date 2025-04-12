@@ -44,6 +44,10 @@ export class GyouActionDefaults implements ActionDefaults<CombatActions> {
     return this.kill(target);
   }
 
+  killBanish(target: Monster | Location | undefined) {
+    return this.kill(target);
+  }
+
   abort() {
     return new Macro().abort();
   }

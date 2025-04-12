@@ -143,6 +143,17 @@ const banishSources: BanishSource[] = [
     capacity: 3,
   },
   {
+    name: "Batter Up",
+    available: () =>
+      have($skill`Batter Up!`) && myClass() === $class`Seal Clubber` && myFury() >= 5,
+    do: $skill`Batter Up!`,
+    equip: { weapon: $item`seal-clubbing club` },
+    free: false,
+  },
+];
+
+const killBanishSources: BanishSource[] = [
+  {
     name: "Monkey Paw",
     available: () => have($item`cursed monkey's paw`) && get("_monkeyPawWishesUsed", 0) === 0,
     equip: $item`cursed monkey's paw`,
@@ -157,14 +168,6 @@ const banishSources: BanishSource[] = [
     tracker: $skill`Spring Kick`,
     free: false,
   },
-  {
-    name: "Batter Up",
-    available: () =>
-      have($skill`Batter Up!`) && myClass() === $class`Seal Clubber` && myFury() >= 5,
-    do: $skill`Batter Up!`,
-    equip: { weapon: $item`seal-clubbing club` },
-    free: false,
-  },
 ];
 
 /**
@@ -173,7 +176,8 @@ const banishSources: BanishSource[] = [
 export function unusedBanishes(
   banishState: BanishState,
   tasks: Task[],
-  taskName: string
+  taskName: string,
+  kills: boolean
 ): BanishSource[] {
   const relevantMonsters = new Set<Monster>();
   for (const task of tasks) {
@@ -182,7 +186,8 @@ export function unusedBanishes(
     for (const monster of task.combat.where("banish")) relevantMonsters.add(monster);
   }
 
-  return banishSources.filter((banish) => {
+  const sources = kills ? killBanishSources : banishSources;
+  return sources.filter((banish) => {
     if (!banish.available()) return false;
     if (banish.blocked?.includes(taskName)) return false;
     const overwritten = banishState.overwrittenMonster(getTracker(banish), banish.capacity ?? 1);
