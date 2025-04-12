@@ -1,5 +1,5 @@
-import { cliExecute, itemAmount, use, useSkill } from "kolmafia";
-import { $item, $skill, AprilingBandHelmet, AugustScepter, get, have } from "libram";
+import { itemAmount, use, useSkill } from "kolmafia";
+import { $item, $skill, AprilingBandHelmet, AugustScepter, get } from "libram";
 
 type LuckySource = {
   name: string;
@@ -25,11 +25,5 @@ export const luckySources: LuckySource[] = [
     name: "August Scepter",
     prepare: () => useSkill($skill`Aug. 2nd: Find an Eleven-Leaf Clover Day`),
     remaining: () => (AugustScepter.canCast(2) ? 1 : 0),
-  },
-  {
-    name: "Pillkeeper",
-    prepare: () => cliExecute("pillkeeper lucky"),
-    remaining: () =>
-      have($item`Eight Days a Week Pill Keeper`) && !get("_freePillKeeperUsed") ? 1 : 0,
   },
 ];

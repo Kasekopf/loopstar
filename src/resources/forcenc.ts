@@ -1,7 +1,19 @@
-import { equip, equippedItem, floor, haveEquipped, max, use, useSkill } from "kolmafia";
+import {
+  cliExecute,
+  equip,
+  equippedItem,
+  floor,
+  haveEquipped,
+  max,
+  myPath,
+  mySpleenUse,
+  use,
+  useSkill,
+} from "kolmafia";
 import {
   $item,
   $items,
+  $path,
   $skill,
   $slot,
   AprilingBandHelmet,
@@ -97,5 +109,25 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
       if (!have($item`Clara's bell`) || !get("_claraBellUsed")) return 0;
       return 1;
     },
+  },
+  {
+    name: "Pillkeeper",
+    available: () =>
+      have($item`Eight Days a Week Pill Keeper`) &&
+      !get("_freePillKeeperUsed") &&
+      !!args.resources.speed,
+    prepare: () => cliExecute("pillkeeper sneak"),
+    remaining: () => (get("_freePillKeeperUsed") ? 1 : 0),
+  },
+  // Hack until a proper spleen manager is used
+  {
+    name: "Pillkeeper Boris",
+    available: () =>
+      myPath() === $path`Avatar of Boris` &&
+      have($item`Eight Days a Week Pill Keeper`) &&
+      mySpleenUse() < 4 &&
+      !!args.resources.speed,
+    prepare: () => cliExecute("pillkeeper sneak"),
+    remaining: () => (mySpleenUse() < 4 ? 1 : 0),
   },
 ];
