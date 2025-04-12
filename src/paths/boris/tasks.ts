@@ -1,4 +1,4 @@
-import { NamedDeltaTask, Priority, Quest } from "../../engine/task";
+import { NamedDeltaTask, Priority, Quest, Resources } from "../../engine/task";
 import { args, toTempPref } from "../../args";
 import {
   buy,
@@ -373,6 +373,17 @@ export const borisDeltas: NamedDeltaTask[] = [
         modes: {
           parka: "pterodactyl",
         },
+      },
+    },
+  },
+  {
+    name: "War/Enrage",
+    replace: {
+      resources: {
+        which: Resources.NCForce,
+        benefit: 1 / 0.5,
+        repeat: 3, // expected
+        uncertain: true,
       },
     },
   },

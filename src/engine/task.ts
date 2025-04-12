@@ -89,6 +89,11 @@ export function getTaggedName(task: Task): string {
  *    The task will be made undready if the resource is not allocated.
  * @member repeat: The number of copies of this resource to request.
  *    It is possible that only some of the requests are granted.
+ * @member uncertain: True if this resource request has a chance to fail
+ *    without making progress, while still consuming the resource.
+ *    (for example, forcing a noncombat that has a chance to be useless).
+ *    Note this is currently ignored in the allocator, but may be considered
+ *    in the future.
  * @member delta: A delta to apply to this task if the request is granted.
  */
 export type ResourceRequest = {
@@ -96,6 +101,7 @@ export type ResourceRequest = {
   benefit: number;
   required?: boolean;
   repeat?: number;
+  uncertain?: boolean;
   delta?: DeltaTask;
 };
 
