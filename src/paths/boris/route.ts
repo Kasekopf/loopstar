@@ -15,7 +15,7 @@ export const borisRoute: string[] = [
   "Boris/Gnome Shirt",
   "Boris/Tune after Diet",
 
-  // Kill Astrologer early
+  // Kill Astrologer early, before mouthwash
   "Summon/Astrologer Of Shub-Jigguwatt",
 
   // Level up

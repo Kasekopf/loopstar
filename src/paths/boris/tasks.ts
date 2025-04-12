@@ -401,6 +401,13 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  {
+    name: "Summon/Astrologer Of Shub-Jigguwatt",
+    replace: {
+      priority: () => <Priority>{ score: Priorities.Free.score - 1, reason: "Finish other setup" },
+      combat: new CombatStrategy().killHard(),
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
