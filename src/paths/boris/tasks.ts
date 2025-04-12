@@ -2,6 +2,7 @@ import { NamedDeltaTask, Priority, Quest } from "../../engine/task";
 import { args, toTempPref } from "../../args";
 import {
   buy,
+  chew,
   cliExecute,
   drink,
   eat,
@@ -22,10 +23,12 @@ import {
   myMeat,
   myMp,
   mySign,
+  mySpleenUse,
   myTurncount,
   numericModifier,
   retrieveItem,
   runChoice,
+  spleenLimit,
   use,
   useSkill,
   visitUrl,
@@ -52,6 +55,7 @@ import {
   have,
   Macro,
   MayamCalendar,
+  Pantogram,
   set,
   SourceTerminal,
   TrainSet,
@@ -369,6 +373,20 @@ export const borisDeltas: NamedDeltaTask[] = [
         modes: {
           parka: "pterodactyl",
         },
+      },
+    },
+  },
+  {
+    name: "War/Clear",
+    combine: {
+      prepare: () => {
+        if (
+          have($item`Breathitin™`) &&
+          args.resources.speed &&
+          get("breathitinCharges") === 0 &&
+          mySpleenUse() + 2 <= spleenLimit()
+        )
+          chew($item`Breathitin™`);
       },
     },
   },
@@ -933,6 +951,22 @@ export const BorisQuest: Quest = {
       },
       freeaction: true,
       limit: { tries: 3 },
+    },
+    {
+      name: "Pantogramming",
+      after: ["Toot/Finish"],
+      ready: () => !Pantogram.have(),
+      completed: () => Pantogram.havePants(),
+      do: () => {
+        Pantogram.makePants(
+          "Muscle",
+          "Cold Resistance: 2",
+          "Maximum HP: 40",
+          "Combat Rate: 5",
+          have($item`porquoise`) ? "Meat Drop: 60" : "Weapon Damage: 20"
+        );
+      },
+      limit: { tries: 1 },
     },
   ],
 };

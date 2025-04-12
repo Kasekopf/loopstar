@@ -420,7 +420,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         !task.boss &&
         this.tasks.every((t) => t.completed() || !t.combat?.can("killFree")) &&
         (get("sidequestNunsCompleted") !== "none" || warCleared()) &&
-        !task.activePriority?.has(Priorities.GoodDarts)
+        !task.activePriority?.has(Priorities.GoodDarts) &&
+        get("breathitinCharges") === 0
       ) {
         // Kills will be upgraded to free kills at the end of this function
         resources.provide("killFree", equipFirst(outfit, freekillSources));
