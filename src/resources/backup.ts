@@ -9,7 +9,10 @@ export type BackupTarget = {
   completed: () => boolean;
   outfit?: OutfitSpec | (() => OutfitSpec);
   limit_tries: number;
+  last?: boolean; // only when the other targets are all completed
+  twiddle?: boolean; // requires a mafia twiddle after backing up to for a KoL bug
 };
+
 const backupTargets: BackupTarget[] = [
   {
     monster: $monster`Camel's Toe`,
@@ -38,19 +41,46 @@ const backupTargets: BackupTarget[] = [
     limit_tries: 4,
   },
   {
+    monster: $monster`swarm of ghuol whelps`,
+    completed: () => get("cyrptCrannyEvilness") <= 13 || !args.resources.speed,
+    outfit: {
+      modifier: "ML",
+      skipDefaults: true,
+    },
+    limit_tries: 3,
+    twiddle: true,
+  },
+  {
+    monster: $monster`giant swarm of ghuol whelps`,
+    completed: () => get("cyrptCrannyEvilness") <= 13 || !args.resources.speed,
+    outfit: {
+      modifier: "ML",
+      skipDefaults: true,
+    },
+    limit_tries: 3,
+    twiddle: true,
+  },
+  {
     monster: $monster`sausage goblin`,
-    completed: () => myTurncount() < 120 || !args.resources.speed,
+    completed: () =>
+      myTurncount() < 120 || get("cyrptCrannyEvilness") > 13 || !args.resources.speed,
     limit_tries: 11,
+    last: true,
   },
   {
     monster: $monster`Eldritch Tentacle`,
     completed: () => false,
     limit_tries: 11,
+    last: true,
   },
 ];
 
 export function getActiveBackupTarget() {
-  return backupTargets.find(
+  const target = backupTargets.find(
     (target) => !target.completed() && target.monster === get("lastCopyableMonster")
   );
+  if (target?.last && backupTargets.find((target) => !target.completed() && !target.last)) {
+    return undefined;
+  }
+  return target;
 }

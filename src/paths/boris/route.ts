@@ -89,6 +89,7 @@ export const borisRoute: string[] = [
   "Giant/Finish",
   "War/Flyers Start", // Start the war and get flyers
   "War/Flyers End", // End the flyers quest ASAP in case of tracking errors
+  "Boris/Giant Swarm Of Ghuol Whelps", // While tavern ML buffs are still running
 
   "Palindome/Copperhead",
   "Palindome/Talisman",
@@ -98,9 +99,6 @@ export const borisRoute: string[] = [
   "McLargeHuge/Climb",
   "McLargeHuge/Finish",
   "Palindome/Boss",
-
-  // Initial tasks for delay
-  // "Casual/Giant Swarm Of Ghuol Whelps",
 
   // Do the desert
   "Macguffin/Milestone",

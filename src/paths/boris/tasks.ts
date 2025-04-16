@@ -2,8 +2,10 @@ import { NamedDeltaTask, Priority, Quest, Resources } from "../../engine/task";
 import { args, toTempPref } from "../../args";
 import {
   buy,
+  changeMcd,
   chew,
   cliExecute,
+  currentMcd,
   drink,
   eat,
   fullnessLimit,
@@ -1052,6 +1054,27 @@ export const BorisQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
+
+    getSummonTask({
+      target: $monster`giant swarm of ghuol whelps`,
+      after: ["Crypt/Start"],
+      completed: () => get("cyrptCrannyEvilness") <= 45, // Only do once
+      prepare: () => {
+        changeMcd(10);
+        fillHp();
+      },
+      post: () => {
+        if (currentMcd() > 0) changeMcd(0);
+      },
+      outfit: () =>
+        <OutfitSpec>{
+          equip: $items`gravy boat`,
+          modifier: "ML",
+          skipDefaults: true,
+        },
+      combat: new CombatStrategy().killHard(),
+      benefit: 2,
+    }),
   ],
 };
 

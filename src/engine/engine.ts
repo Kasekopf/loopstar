@@ -257,8 +257,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       if (backup.outfit && !outfit.equip(undelay(backup.outfit)))
         throw `Cannot match equip for backup ${backup.monster} on ${task.name}`;
       outfit.equip({ avoid: $items`carnivorous potted plant` });
+      const twiddleHack = Macro.externalIf(!!backup.twiddle, `"\ntwiddle\n"`); // Inject a twiddle to the CCS
       combat.startingMacro(
-        Macro.if_("!monsterid 49", Macro.trySkill($skill`Back-Up to your Last Enemy`))
+        Macro.if_("!monsterid 49", Macro.trySkill($skill`Back-Up to your Last Enemy`)).step(
+          twiddleHack
+        )
       );
       combat.action("killHard");
     }
