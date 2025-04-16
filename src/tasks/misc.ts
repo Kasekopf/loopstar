@@ -1352,6 +1352,8 @@ export const MiscQuest: Quest = {
           !have($item`Frobozz Real-Estate Company Instant House (TM)`)
         )
           return false;
+        if (have($item`forest canopy bed`) || BurningLeaves.numberOfLeaves() < 74) return false;
+        if (args.resources.speed) return true;
         // Only when the extra free rests push over the next cincho threshold
         if (
           totalFreeRests() < 8 ||
@@ -1359,7 +1361,7 @@ export const MiscQuest: Quest = {
           (totalFreeRests() >= 24 && totalFreeRests() < 29) ||
           (totalFreeRests() >= 36 && totalFreeRests() < 41)
         ) {
-          return have($item`forest canopy bed`) || BurningLeaves.numberOfLeaves() >= 74;
+          return true;
         }
         return false;
       },

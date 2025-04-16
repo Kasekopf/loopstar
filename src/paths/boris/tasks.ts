@@ -355,7 +355,7 @@ export const borisDeltas: NamedDeltaTask[] = [
       }
   ),
   {
-    name: "Manor/Billiars",
+    name: "Manor/Billiards",
     combine: {
       prepare: () => {
         // Spend 1 spleen to guarantee library key
@@ -406,6 +406,71 @@ export const borisDeltas: NamedDeltaTask[] = [
     replace: {
       priority: () => <Priority>{ score: Priorities.Free.score - 1, reason: "Finish other setup" },
       combat: new CombatStrategy().killHard(),
+    },
+  },
+  // Add extra banishes where better
+  {
+    name: "Macguffin/Forest",
+    replace: {
+      combat: new CombatStrategy()
+        .ignore($monster`blackberry bush`)
+        .killItem($monsters`black adder, black panther`)
+        .killBanish($monsters`black friar, black magic woman, black widow`)
+        .kill(),
+    },
+  },
+  {
+    name: "Palindome/Zepplin",
+    replace: {
+      outfit: () => {
+        const equip = $items`bat wings`;
+        if (have($item`glark cable`)) equip.push($item`spring shoes`);
+        return {
+          equip: equip,
+          modifier: "item",
+          avoid: $items`broken champagne bottle`,
+        };
+      },
+      combat: new CombatStrategy()
+        .killHard($monster`Ron "The Weasel" Copperhead`)
+        .macro((): Macro => {
+          const result = new Macro();
+          // save 1 bat wing swoop for filthworms
+          result.externalIf(
+            get("_batWingsSwoopUsed") < 10,
+            Macro.trySkill($skill`Swoop like a Bat`)
+          );
+          result.externalIf(get("_glarkCableUses") < 5, Macro.tryItem($item`glark cable`));
+          return result;
+        }, $monsters`red butler`)
+        .macro(() => {
+          if (
+            haveEquipped($item`spring shoes`) &&
+            get("_glarkCableUses") < 5 &&
+            have($item`glark cable`)
+          ) {
+            return Macro.trySkill($skill`Spring Kick`).tryItem($item`glark cable`);
+          }
+          return new Macro();
+        }, $monsters`man with the red buttons, red skeleton`)
+        .killBanish($monsters`man with the red buttons, red skeleton`)
+        .banish($monsters`Red Herring, Red Snapper`)
+        .kill(),
+    },
+  },
+  {
+    name: "Macguffin/Desert",
+    replace: {
+      outfit: {
+        equip: $items`tearaway pants`,
+        avoid: $items`backup camera`,
+      },
+      combat: new CombatStrategy()
+        .macro(Macro.trySkill($skill`Tear Away your Pants!`), $monster`cactuary`)
+        .killBanish(
+          $monsters`giant giant giant centipede, plaque of locusts, rock scorpion, swarm of fire ants`
+        )
+        .kill(),
     },
   },
 ];
@@ -973,7 +1038,7 @@ export const BorisQuest: Quest = {
     {
       name: "Pantogramming",
       after: ["Toot/Finish"],
-      ready: () => !Pantogram.have(),
+      ready: () => Pantogram.have(),
       completed: () => Pantogram.havePants(),
       do: () => {
         Pantogram.makePants(
@@ -984,6 +1049,7 @@ export const BorisQuest: Quest = {
           have($item`porquoise`) ? "Meat Drop: 60" : "Weapon Damage: 20"
         );
       },
+      freeaction: true,
       limit: { tries: 1 },
     },
   ],

@@ -184,6 +184,8 @@ export function unusedBanishes(
     if (task.combat === undefined) continue;
     if (task.ignorebanishes?.()) continue;
     for (const monster of task.combat.where("banish")) relevantMonsters.add(monster);
+    for (const monster of task.combat.where("killBanish")) relevantMonsters.add(monster);
+    for (const monster of task.combat.where("ignoreSoftBanish")) relevantMonsters.add(monster);
   }
 
   const sources = kills ? killBanishSources : banishSources;
@@ -192,6 +194,6 @@ export function unusedBanishes(
     if (banish.blocked?.includes(taskName)) return false;
     const overwritten = banishState.overwrittenMonster(getTracker(banish), banish.capacity ?? 1);
     if (!overwritten) return true;
-    else return relevantMonsters.has(overwritten);
+    return !relevantMonsters.has(overwritten);
   });
 }

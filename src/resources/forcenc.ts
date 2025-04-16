@@ -117,7 +117,7 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
       !get("_freePillKeeperUsed") &&
       !!args.resources.speed,
     prepare: () => cliExecute("pillkeeper sneak"),
-    remaining: () => (get("_freePillKeeperUsed") ? 1 : 0),
+    remaining: () => (get("_freePillKeeperUsed") ? 0 : 1),
   },
   // Hack until a proper spleen manager is used
   {

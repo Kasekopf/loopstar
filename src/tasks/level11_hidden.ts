@@ -389,8 +389,7 @@ const Hospital: Task[] = [
       .banish($monsters`pygmy orderlies, pygmy witch nurse`),
     outfit: () => {
       const result = <OutfitSpec>{
-        shirt: have($skill`Torso Awareness`) ? $item`surgical apron` : undefined,
-        equip: $items`half-size scalpel, head mirror, surgical mask, bloodied surgical dungarees`,
+        equip: $items`half-size scalpel, head mirror, surgical mask, bloodied surgical dungarees, surgical apron`,
       };
       if (!have($effect`Citizen of a Zone`) && have($familiar`Patriotic Eagle`)) {
         result.familiar = $familiar`Patriotic Eagle`;

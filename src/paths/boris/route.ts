@@ -139,6 +139,7 @@ export const borisRoute: string[] = [
   "Crypt/Nook",
   "Orc Chasm/Twin Init Search",
   "Orc Chasm/Twin Init",
+  "Macguffin/Middle Chamber",
   "Keys/Star Key",
   "War/Boss Hippie",
   "Orc Chasm/Finish",
