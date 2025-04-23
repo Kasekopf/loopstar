@@ -115,7 +115,7 @@ export const GiantQuest: Quest = {
     },
     {
       name: "Airship",
-      after: ["Airship YR Healer"],
+      after: ["Grow Beanstalk", "Airship YR Healer"],
       completed: () => have($item`S.O.C.K.`),
       do: $location`The Penultimate Fantasy Airship`,
       // Other options (bat wings) are sometimes chosen by choice script
