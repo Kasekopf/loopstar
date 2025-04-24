@@ -116,7 +116,7 @@ export const pulls: PullSpec[] = [
     pull: $item`1,970 carat gold`,
     useful: () => {
       if (underStandard()) return false;
-      if (myMeat() < 200 && step("questM05Toot") > 0 && !have($item`letter from King Ralph XI`))
+      if (myMeat() < 500 && step("questM05Toot") > 0 && !have($item`letter from King Ralph XI`))
         return true;
       if (
         myMeat() < 4000 &&
