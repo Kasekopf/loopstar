@@ -37652,7 +37652,7 @@ function checkRequirements(path3) {
 }
 
 // src/_git_commit.ts
-var lastCommitHash = "a6bbadc";
+var lastCommitHash = "eec6a42";
 
 // src/engine/allocation.ts
 var import_kolmafia119 = require("kolmafia");
@@ -42371,15 +42371,6 @@ var casualDeltas = [
     name: "Misc/Dungeoneering Kit",
     delete: true
   },
-  // No need to setup some tasks
-  {
-    name: "Giant/Unlock HITS",
-    replace: {
-      ready: function() {
-        return false;
-      }
-    }
-  },
   // Prefer to dump wanderers in digital realm
   {
     name: "Digital/Vanya",
@@ -45541,7 +45532,7 @@ var GiantQuest = {
     name: "Unlock HITS",
     after: ["Top Floor"],
     completed: function() {
-      return have($item(_templateObject6720 || (_templateObject6720 = _taggedTemplateLiteral131(["steam-powered model rocketship"])))) || have($item(_templateObject6819 || (_templateObject6819 = _taggedTemplateLiteral131(["star chart"])))) && (0, import_kolmafia144.itemAmount)($item(_templateObject6917 || (_templateObject6917 = _taggedTemplateLiteral131(["star"])))) >= 8 && (0, import_kolmafia144.itemAmount)($item(_templateObject7017 || (_templateObject7017 = _taggedTemplateLiteral131(["line"])))) >= 7 || have($item(_templateObject7138 || (_templateObject7138 = _taggedTemplateLiteral131(["Richard's star key"])))) || get("nsTowerDoorKeysUsed").includes("Richard's star key");
+      return have($item(_templateObject6720 || (_templateObject6720 = _taggedTemplateLiteral131(["steam-powered model rocketship"])))) || ((0, import_kolmafia144.myDaycount)() === 1 || step("questL11Shen") === 999) && (have($item(_templateObject6819 || (_templateObject6819 = _taggedTemplateLiteral131(["star chart"])))) && (0, import_kolmafia144.itemAmount)($item(_templateObject6917 || (_templateObject6917 = _taggedTemplateLiteral131(["star"])))) >= 8 && (0, import_kolmafia144.itemAmount)($item(_templateObject7017 || (_templateObject7017 = _taggedTemplateLiteral131(["line"])))) >= 7 || have($item(_templateObject7138 || (_templateObject7138 = _taggedTemplateLiteral131(["Richard's star key"])))) || get("nsTowerDoorKeysUsed").includes("Richard's star key"));
     },
     do: $location(_templateObject7223 || (_templateObject7223 = _taggedTemplateLiteral131(["The Castle in the Clouds in the Sky (Top Floor)"]))),
     outfit: {
