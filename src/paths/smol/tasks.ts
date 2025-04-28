@@ -69,7 +69,8 @@ export const SmolQuest: Quest = {
     },
     {
       name: "Drink",
-      ready: () => atLevel(11) && (have($item`Frosty's frosty mug`) || args.smol.skipmug),
+      ready: () =>
+        atLevel(11) && (have($item`Frosty's frosty mug`) || args.smol.skipmug) && myMeat() >= 1000,
       completed: () =>
         myInebriety() === 1 || (!have($item`astral pilsner`) && !have($item`astral six-pack`)),
       do: () => {
