@@ -775,11 +775,11 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
           myAdventures() < start_advs)
       ) {
         print(
-          `Fight was lost(debug info: ${beaten_turns} => ${haveEffect(
+          `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
             $effect`Beaten Up`
           )}, (${start_advs} => ${myAdventures()}); stop.`
         );
-        throw `Fight was lost(debug info: ${beaten_turns} => ${haveEffect(
+        throw `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
           $effect`Beaten Up`
         )}, (${start_advs} => ${myAdventures()}); stop.`;
       }
@@ -985,7 +985,7 @@ function logModifiers(outfit: Outfit) {
     if (maximizer.includes(modifier)) {
       const name = modifierNames[modifier];
       const value = numericModifier(modifierNames[modifier]);
-      logprint(`= ${name}: ${value} `);
+      logprint(`= ${name}: ${value}`);
     }
   }
 }
