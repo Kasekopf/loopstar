@@ -1480,7 +1480,7 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Barrel God",
-      after: [],
+      after: ["Barrel Lid"],
       completed: () =>
         !args.resources.speed ||
         get("_barrelPrayer") ||
