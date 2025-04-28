@@ -1,4 +1,12 @@
-import { cliExecute, containsText, haveEquipped, itemAmount, use, visitUrl } from "kolmafia";
+import {
+  cliExecute,
+  containsText,
+  haveEquipped,
+  itemAmount,
+  myDaycount,
+  use,
+  visitUrl,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -257,9 +265,12 @@ export const GiantQuest: Quest = {
       after: ["Top Floor"],
       completed: () =>
         have($item`steam-powered model rocketship`) ||
-        (have($item`star chart`) && itemAmount($item`star`) >= 8 && itemAmount($item`line`) >= 7) ||
-        have($item`Richard's star key`) ||
-        get("nsTowerDoorKeysUsed").includes("Richard's star key"),
+        ((myDaycount() === 1 || step("questL11Shen") === 999) &&
+          ((have($item`star chart`) &&
+            itemAmount($item`star`) >= 8 &&
+            itemAmount($item`line`) >= 7) ||
+            have($item`Richard's star key`) ||
+            get("nsTowerDoorKeysUsed").includes("Richard's star key"))),
       do: $location`The Castle in the Clouds in the Sky (Top Floor)`,
       outfit: { modifier: "-combat" },
       combat: new CombatStrategy().killHard($monster`Burning Snake of Fire`),

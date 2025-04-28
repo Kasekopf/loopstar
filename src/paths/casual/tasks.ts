@@ -113,13 +113,6 @@ export const casualDeltas: NamedDeltaTask[] = [
     name: "Misc/Dungeoneering Kit",
     delete: true,
   },
-  // No need to setup some tasks
-  {
-    name: "Giant/Unlock HITS",
-    replace: {
-      ready: () => false,
-    },
-  },
   // Prefer to dump wanderers in digital realm
   {
     name: "Digital/Vanya",
