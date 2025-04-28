@@ -743,7 +743,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
             // (Repeating if we hit a cleaver NC, etc.)
             set("lastEncounter", "");
             visitUrl(toUrl(result));
-            runChoice(1, `heyscriptswhatsupwinkwink = ${monster_to_map.id}`);
+            runChoice(1, `heyscriptswhatsupwinkwink=${monster_to_map.id}`);
             if (!get("mappingMonsters")) break;
             if (myAdventures() < start_advs) break;
             if (!lastEncounterWasWanderingNC()) break;
