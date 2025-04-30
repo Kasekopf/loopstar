@@ -213,7 +213,11 @@ function dailyDungeonTask(): Omit<Task, "completed" | "name" | "after"> {
       return {
         689: 1,
         690: have($item`ring of Detect Boring Doors`) ? 2 : 3,
-        691: 3, // Do not skip the second chest; there is a chance we skip all the monsters
+        691:
+          haveEquipped($item`candy cane sword cane`) &&
+            !get("candyCaneSwordDailyDungeon")
+            ? 4
+            : 3, // Do not skip the second chest; there is a chance we skip all the monsters
         692: getDoorSolution(),
         693: have($item`eleven-foot pole`) ? 2 : 1,
       };
