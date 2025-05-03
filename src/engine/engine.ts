@@ -313,6 +313,9 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       );
     }
 
+    // Temporarily avoid this before implementation
+    outfit.equip({ avoid: $items`Peridot of Peril` });
+
     if (wanderers.length === 0) {
       // Set up a banish if needed
 
