@@ -1,9 +1,7 @@
 import {
-  adv1,
   autosell,
   availableAmount,
   canAdventure,
-  choiceFollowsFight,
   descToItem,
   Effect,
   equip,
@@ -13,7 +11,6 @@ import {
   haveEffect,
   haveEquipped,
   inCasual,
-  inMultiFight,
   Location,
   logprint,
   myAdventures,
@@ -29,7 +26,6 @@ import {
   print,
   printHtml,
   restoreHp,
-  runCombat,
   Slot,
   totalTurnsPlayed,
   toUrl,
@@ -63,7 +59,6 @@ import {
   CombatResources,
   CombatStrategy,
   EngineOptions,
-  lastEncounterWasWanderingNC,
   Outfit,
 } from "grimoire-kolmafia";
 import { CombatActions, MyActionDefaults, replaceActions } from "./combat";
@@ -231,6 +226,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   ): void {
     if (undelay(task.freeaction) || undelay(task.skipprep)) {
       // Prepare only as requested by the task
+      outfit.equip({ avoid: $items`Peridot of Peril` }); // peridot can still cause problems
       return;
     }
 
@@ -718,49 +714,27 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const beaten_turns = haveEffect($effect`Beaten Up`);
     const start_advs = myAdventures();
 
-    // Consider crepe paper parachute cape if available
-    const parachuteTarget = undelay(task.parachute);
-    if (parachuteTarget && !task.activePriority?.has(Priorities.GoodOrb)) {
-      const baseDo = task.do;
-      task.do = () => {
-        if (CrepeParachute.fight(parachuteTarget)) return;
-        if (baseDo instanceof Location) return baseDo;
-        return baseDo();
-      };
-    }
-
-    // Copy grimoire Engine.do in order to add Map the Monsters
-    const result = typeof task.do === "function" ? task.do() : task.do;
-    if (result instanceof Location) {
-      const monster_to_map = undelay(task.map_the_monster) ?? $monster`none`;
-      if (
-        task.map_the_monster &&
-        monster_to_map !== $monster`none` &&
-        get("_monstersMapped") < 3 &&
-        have($skill`Map the Monsters`)
-      ) {
-        useSkill($skill`Map the Monsters`);
-        if (get("mappingMonsters")) {
-          for (let i = 0; i < 4; i++) {
-            // Try to actually trigger the monster
-            // (Repeating if we hit a cleaver NC, etc.)
-            set("lastEncounter", "");
-            visitUrl(toUrl(result));
-            runChoice(1, `heyscriptswhatsupwinkwink=${monster_to_map.id}`);
-            if (!get("mappingMonsters")) break;
-            if (myAdventures() < start_advs) break;
-            if (!lastEncounterWasWanderingNC()) break;
-          }
-        } else {
-          adv1(result, -1, "");
+    const propertyManager = this.propertyManager;
+    super.do({
+      ...task,
+      do: () => {
+        // Consider crepe paper parachute cape if available
+        const parachuteTarget = undelay(task.parachute);
+        if (parachuteTarget && !task.activePriority?.has(Priorities.GoodOrb)) {
+          if (CrepeParachute.fight(parachuteTarget)) return;
         }
-      } else {
-        adv1(result, -1, "");
-      }
-    }
-    runCombat();
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) runChoice(-1);
+
+        // Consider map the monsters if available
+        const mapTarget = undelay(task.map_the_monster);
+        if (mapTarget && get("_monstersMapped") < 3 && have($skill`Map the Monsters`)) {
+          propertyManager.setChoice(1435, `1&heyscriptswhatsupwinkwink=${mapTarget.id}`);
+          if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
+        }
+
+        if (task.do instanceof Location) return task.do;
+        return task.do();
+      },
+    });
 
     if (myAdventures() !== start_advs) getCMCPills();
 
