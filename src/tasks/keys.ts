@@ -30,6 +30,7 @@ import {
   $monsters,
   $skill,
   $slots,
+  BeachComb,
   ensureEffect,
   FloristFriar,
   get,
@@ -442,6 +443,9 @@ export const DigitalQuest: Quest = {
           numericModifier("Initiative") < 600
         )
           ensureEffect($effect`Hustlin'`);
+
+        if (args.resources.speed && numericModifier("Initiative") < 600)
+          BeachComb.tryHead($effect`Resting Beach Face`);
 
         if (
           args.resources.speed &&

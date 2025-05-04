@@ -25,6 +25,7 @@ import {
   $skill,
   $stat,
   AutumnAton,
+  BeachComb,
   DaylightShavings,
   ensureEffect,
   FloristFriar,
@@ -40,6 +41,7 @@ import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { tryPlayApriling } from "../lib";
+import { args } from "../args";
 
 function tuneCape(): void {
   if (
@@ -88,6 +90,9 @@ const Alcove: Task[] = [
         ensureEffect($effect`Sugar Rush`);
       if (numericModifier("Initiative") < 850 && haveLoathingIdolMicrophone())
         ensureEffect($effect`Poppy Performance`);
+
+      if (args.resources.speed && numericModifier("Initiative") < 850)
+        BeachComb.tryHead($effect`Resting Beach Face`);
 
       if (numericModifier("Initiative") < 850) tryPlayApriling("-combat");
     },
