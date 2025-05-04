@@ -412,6 +412,13 @@ export const borisDeltas: NamedDeltaTask[] = [
         benefit: 1 / 0.5,
         repeat: 3, // expected
         uncertain: true,
+        delta: {
+          replace: {
+            // avoid combat options
+            choices: { 139: 1, 140: 1, 141: 3, 142: 3 },
+            breathitinextender: true,
+          },
+        },
       },
     },
   },
