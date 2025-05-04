@@ -90,7 +90,7 @@ const ABoo: Task[] = [
       <ResourceRequest>{
         which: Resources.Lucky,
         benefit: 2.5,
-        repeat: itemAmount($item`A-Boo clue`) * 30 + 60 >= get("booPeakProgress") ? 2 : 1,
+        repeat: 30 * (itemAmount($item`A-Boo clue`) + 2) <= get("booPeakProgress") ? 2 : 1,
         delta: {
           replace: {
             skipprep: true,
