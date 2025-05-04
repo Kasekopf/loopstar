@@ -13,6 +13,7 @@ import {
   getClanName,
   getWorkshed,
   gnomadsAvailable,
+  haveEffect,
   haveEquipped,
   Item,
   itemAmount,
@@ -997,6 +998,10 @@ export const BorisQuest: Quest = {
           result.equip?.push($item`Flash Liquidizer Ultra Dousing Accessory`);
         else result.equip?.push($item`spring shoes`);
         return result;
+      },
+      peridot: () => {
+        if (haveEffect($effect`Shadow Affinity`) === 1) return $monster`shadow slab`;
+        return undefined;
       },
       boss: true,
       freecombat: true,
