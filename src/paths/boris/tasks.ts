@@ -423,7 +423,8 @@ export const borisDeltas: NamedDeltaTask[] = [
           have($item`Breathitin™`) &&
           args.resources.speed &&
           get("breathitinCharges") === 0 &&
-          mySpleenUse() + 2 <= spleenLimit()
+          mySpleenUse() + 2 <= spleenLimit() &&
+          have($effect`Everything Looks Red`) // Otherwise, we are just here for bullseye
         )
           chew($item`Breathitin™`);
       },
