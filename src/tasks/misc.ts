@@ -1284,7 +1284,8 @@ export const MiscQuest: Quest = {
     {
       name: "Barrel Lid",
       after: [],
-      completed: () => get("_barrelPrayer") || !get("barrelShrineUnlocked"),
+      completed: () =>
+        get("_barrelPrayer") || !get("barrelShrineUnlocked") || get("prayedForProtection"),
       do: () => {
         visitUrl("da.php?barrelshrine=1");
         runChoice(-1);
