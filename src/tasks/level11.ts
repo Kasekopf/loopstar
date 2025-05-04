@@ -8,6 +8,7 @@ import {
   myAscensions,
   myMaxmp,
   myMeat,
+  myPath,
   retrieveItem,
   runChoice,
   use,
@@ -22,6 +23,7 @@ import {
   $location,
   $monster,
   $monsters,
+  $path,
   $skill,
   byStat,
   clamp,
@@ -181,6 +183,18 @@ const Desert: Task[] = [
     parachute: $monster`blur`,
   },
   {
+    name: "Oasis Rose",
+    after: ["Oasis Drum", "Desert Wormride"],
+    priority: () => (have($effect`Ultrahydrated`) ? Priorities.MinorEffect : Priorities.None),
+    ready: () => !haveDesertSpeeder(),
+    completed: () =>
+      get("desertExploration") >= 100 ||
+      have($item`stone rose`) ||
+      (get("gnasirProgress") & 1) !== 0,
+    do: $location`The Oasis`,
+    limit: { soft: 15 },
+  },
+  {
     name: "Milestone",
     after: ["Misc/Unlock Beach", "Diary"],
     ready: () => have($item`milestone`),
@@ -258,7 +272,7 @@ const Desert: Task[] = [
     choices: { 805: 1 },
   },
   {
-    name: "Desert/Gnasir",
+    name: "Desert Gnasir",
     after: ["Misc/Unlock Beach", "Diary"],
     ready: () =>
       get("lastGnasirSeen", 0) === myAscensions() &&
@@ -279,7 +293,7 @@ const Desert: Task[] = [
     limit: { tries: 4, unready: true },
   },
   {
-    name: "Desert/Sightsee",
+    name: "Desert Sightsee",
     after: ["Misc/Unlock Beach", "Diary"],
     ready: () => have($item`desert sightseeing pamphlet`),
     completed: () => get("desertExploration") >= 100,
@@ -289,7 +303,7 @@ const Desert: Task[] = [
     limit: { tries: 3, unready: true },
   },
   {
-    name: "Desert/Wormride",
+    name: "Desert Wormride",
     after: ["Misc/Unlock Beach", "Diary"],
     ready: () => have($item`worm-riding hooks`) && have($item`drum machine`),
     completed: () => (get("gnasirProgress") & 16) > 0,
@@ -469,4 +483,15 @@ function beeOption(): number {
   if (!have($item`blackberry galoshes`) && itemAmount($item`blackberry`) >= 3) return 2;
   if (!have($familiar`Shorter-Order Cook`) && !have($item`beehive`)) return 3;
   return 1;
+}
+
+/**
+ * @returns true if we have some way to speed up the desert.
+ */
+function haveDesertSpeeder(): boolean {
+  if (myPath() !== $path`Avatar of Boris`) return false;
+  if (have($familiar`Melodramedary`)) return true;
+  if (have($item`survival knife`)) return true;
+  if (have($item`UV-resistant compass`)) return true;
+  return false;
 }

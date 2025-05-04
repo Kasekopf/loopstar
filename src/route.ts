@@ -82,6 +82,7 @@ export const baseRoute: string[] = [
   // The following 3 tasks should always stay in this order
   "Macguffin/Oasis", // Get ultrahydrated as soon as needed
   "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
+  "Macguffin/Oasis Rose", // Also get the rose if we have no speeders
   "Macguffin/Desert", // charge camel for protestors
 
   // Finish remaining quests

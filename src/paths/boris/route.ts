@@ -104,6 +104,7 @@ export const borisRoute: string[] = [
   "Macguffin/Milestone",
   "Macguffin/Oasis", // Get ultrahydrated as soon as needed
   "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
+  "Macguffin/Oasis Rose", // Also get the rose
   "Macguffin/Desert", // charge camel for protestors
 
   // Do the crypt when we can get Breathitins
