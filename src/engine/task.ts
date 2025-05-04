@@ -213,8 +213,9 @@ export function merge(task: Task, delta: DeltaTask): Task {
       const bArr = Array.isArray(b) ? b : [b];
       return [...aArr, ...bArr];
     });
+    const oldOutfit = result.outfit;
     result.outfit = compose<OutfitSpec | Outfit>(
-      () => undelay(result.outfit) ?? {},
+      () => undelay(oldOutfit) ?? {},
       () => undelay(delta.combine?.outfit) ?? {},
       (a, b) => {
         let aOutfit = undefined;
