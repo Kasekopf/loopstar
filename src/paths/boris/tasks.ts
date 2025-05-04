@@ -1328,8 +1328,32 @@ export const BorisDietQuest: Quest = {
       limit: { tries: 1 },
       freeaction: true,
     },
+    {
+      name: "Chocolate",
+      ready: () => CHOCOLATES.find((c) => have(c)) !== undefined,
+      completed: () => get("_chocolatesUsed") >= 2,
+      do: () => {
+        for (const chocolate of CHOCOLATES) {
+          if (have(chocolate)) {
+            use(chocolate);
+            break;
+          }
+        }
+      },
+      freeaction: true,
+      limit: { tries: 2 },
+    },
   ],
 };
+
+const CHOCOLATES = [
+  $item`chocolate seal-clubbing club`,
+  $item`chocolate turtle totem`,
+  $item`chocolate pasta spoon`,
+  $item`chocolate saucepan`,
+  $item`chocolate disco ball`,
+  $item`chocolate stolen accordion`,
+];
 
 export const SlowManorQuest: Quest = {
   name: "SlowManor",

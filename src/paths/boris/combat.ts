@@ -1,7 +1,8 @@
 import { ActionDefaults } from "grimoire-kolmafia";
 import { haveEquipped, Location, Monster } from "kolmafia";
-import { $effect, $item, $skill, get, have, Macro } from "libram";
+import { $effect, $item, $skill, CinchoDeMayo, get, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
+import { args } from "../../args";
 
 export class BorisActionDefaults implements ActionDefaults<CombatActions> {
   ignore(target?: Monster | Location) {
@@ -72,6 +73,16 @@ export function borisKillMacro(
       result.trySkill($skill`Darts: Throw at %part1`);
       for (let i = 0; i < get("_dartsLeft"); i++) result.trySkill($skill`Darts: Throw at %part1`);
     }
+  }
+
+  // If we are out of NC forces, use remaining cincho for candy
+  if (
+    args.resources.speed &&
+    haveEquipped($item`Cincho de Mayo`) &&
+    CinchoDeMayo.currentCinch() >= 5 &&
+    CinchoDeMayo.totalAvailableCinch() < 60
+  ) {
+    result.trySkill($skill`Cincho: Projectile Piñata`);
   }
 
   return result

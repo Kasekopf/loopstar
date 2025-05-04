@@ -9,6 +9,7 @@ import {
   $skill,
   $skills,
   $slot,
+  CinchoDeMayo,
   get,
   have,
   undelay,
@@ -16,6 +17,8 @@ import {
 import { Task } from "../../engine/task";
 import { BorisActionDefaults } from "./combat";
 import { castWithMpSwaps, ensureWithMPSwaps } from "../../engine/moods";
+import { getModifiersFrom } from "../../engine/outfit";
+import { args } from "../../args";
 
 export class BorisEngine extends Engine {
   constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
@@ -30,6 +33,18 @@ export class BorisEngine extends Engine {
     resources: CombatResources<CombatActions>
   ): void {
     super.customize(task, outfit, combat, resources);
+
+    // If we are out of NC forces, use remaining cincho for candy
+    if (
+      args.resources.speed &&
+      have($item`Cincho de Mayo`) &&
+      CinchoDeMayo.currentCinch() >= 5 &&
+      CinchoDeMayo.totalAvailableCinch() < 60 &&
+      combat.can("kill") &&
+      getModifiersFrom(outfit) === ""
+    ) {
+      outfit.equip($item`Cincho de Mayo`);
+    }
   }
 
   override createOutfit(task: Task): Outfit {
