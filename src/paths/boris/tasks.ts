@@ -179,8 +179,12 @@ export const borisDeltas: NamedDeltaTask[] = [
     },
     combine: {
       prepare: () => {
-        if (AugustScepter.canCast(6)) useSkill($skill`Aug. 6th: Fresh Breath Day!`);
         tryPlayApriling("+combat");
+        if (AugustScepter.canCast(6)) useSkill($skill`Aug. 6th: Fresh Breath Day!`);
+        if (AugustScepter.canCast(1)) useSkill($skill`Aug. 1st: Mountain Climbing Day!`);
+        if (have($item`Clan VIP Lounge key`) && get("_photoBoothEffects", 0) < 3)
+          ensureEffect($effect`Towering Muscles`);
+        if (haveLoathingIdolMicrophone()) ensureEffect($effect`Romantically Roused`);
       },
     },
   },
@@ -816,7 +820,7 @@ export const BorisQuest: Quest = {
         fillHp();
         tryPlayApriling("+combat");
         if (AugustScepter.canCast(6)) useSkill($skill`Aug. 6th: Fresh Breath Day!`);
-
+        if (AugustScepter.canCast(1)) useSkill($skill`Aug. 1st: Mountain Climbing Day!`);
         if (have($item`Clan VIP Lounge key`) && get("_photoBoothEffects", 0) < 3)
           ensureEffect($effect`Towering Muscles`);
         if (haveLoathingIdolMicrophone()) ensureEffect($effect`Romantically Roused`);
