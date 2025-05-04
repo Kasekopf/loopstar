@@ -522,6 +522,16 @@ export const borisDeltas: NamedDeltaTask[] = [
         .kill(),
     },
   },
+  {
+    name: "Crypt/Nook",
+    combine: {
+      ready: () => {
+        if ($location`The Defiled Nook`.turnsSpent > 0 && get("sidequestNunsCompleted") === "none")
+          return false; // avoid jumping into the zone for breathitins
+        return true;
+      },
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
