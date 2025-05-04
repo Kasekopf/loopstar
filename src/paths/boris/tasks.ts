@@ -73,6 +73,7 @@ import { atLevel, haveLoathingIdolMicrophone, tryPlayApriling, tryWish } from ".
 import { coldPlanner } from "../../engine/outfit";
 import { getSummonTask } from "../../tasks/summons";
 import { warCleared } from "../../tasks/level12";
+import { make } from "libram/dist/resources/2024/TakerSpace";
 
 const deletedTasks = [
   "Misc/Snojo",
@@ -375,6 +376,24 @@ export const borisDeltas: NamedDeltaTask[] = [
         modes: {
           parka: "pterodactyl",
         },
+      },
+    },
+    combine: {
+      prepare: () => {
+        if (!have($effect`Angering Pizza Purists`)) {
+          if (
+            !have($item`plain calzone`) &&
+            itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
+            itemAmount($item`Yeast of Boris`) > 2
+          ) {
+            make($item`plain calzone`);
+          }
+          if (have($item`plain calzone`)) {
+            ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
+            eat($item`plain calzone`);
+            ensureWithMPSwaps($effects`Song of Cockiness`);
+          }
+        }
       },
     },
   },
@@ -1059,6 +1078,13 @@ export const BorisQuest: Quest = {
       target: $monster`giant swarm of ghuol whelps`,
       after: ["Crypt/Start"],
       completed: () => get("cyrptCrannyEvilness") <= 45, // Only do once
+      priority: () => {
+        if (have($effect`Angering Pizza Purists`)) {
+          return Priorities.MinorEffect;
+        } else {
+          return Priorities.None;
+        }
+      },
       prepare: () => {
         changeMcd(10);
         fillHp();
@@ -1175,7 +1201,8 @@ export const BorisDietQuest: Quest = {
       name: "Horseradish",
       after: ["Yam and Swiss", "Ice Rice"],
       ready: () =>
-        (have($item`Special Seasoning`) || myAdventures() === 0) && have($skill`Gourmand`),
+        (itemAmount($item`Special Seasoning`) >= 2 || myAdventures() === 0) &&
+        have($skill`Gourmand`),
       completed: () => !have($item`jumping horseradish`) || myFullness() >= fullnessLimit(),
       prepare: () => {
         if (have($item`whet stone`)) use($item`whet stone`);
