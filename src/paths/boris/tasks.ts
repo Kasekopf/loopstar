@@ -553,6 +553,26 @@ export const borisDeltas: NamedDeltaTask[] = [
       },
     },
   },
+  ...[
+    "Orc Chasm/Twin Stench Search",
+    "Orc Chasm/Twin Item Search",
+    "Orc Chasm/Twin Oil Search",
+    "Orc Chasm/Twin Init Search",
+  ].map(
+    (name) =>
+      <NamedDeltaTask>{
+        name: name,
+        replace: {
+          combat: new CombatStrategy()
+            .killItem(
+              $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
+            )
+            .banish(
+              $monsters`Big Wheelin' Twins, Bubblemint Twins, Creepy Ginger Twin, Mismatched Twins, Troll Twins`
+            ),
+        },
+      }
+  ),
 ];
 
 export const BorisQuest: Quest = {
