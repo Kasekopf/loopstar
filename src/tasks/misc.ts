@@ -1518,6 +1518,14 @@ export const MiscQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
+    {
+      name: "Waffles",
+      after: [],
+      completed: () => !AugustScepter.have() || !AugustScepter.canCast(24) || !args.resources.speed,
+      do: () => useSkill($skill`Aug. 24th: Waffle Day!`),
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
 
