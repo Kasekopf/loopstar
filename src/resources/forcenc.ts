@@ -73,6 +73,26 @@ const tuba = $item`Apriling band tuba`;
 
 export const noncombatForceNCSources: NoncombatForceNCSource[] = [
   {
+    name: "Pillkeeper",
+    available: () =>
+      have($item`Eight Days a Week Pill Keeper`) &&
+      !get("_freePillKeeperUsed") &&
+      !!args.resources.speed,
+    prepare: () => cliExecute("pillkeeper sneak"),
+    remaining: () => (get("_freePillKeeperUsed") ? 0 : 1),
+  },
+  // Hack until a proper spleen manager is used
+  {
+    name: "Pillkeeper Boris",
+    available: () =>
+      myPath() === $path`Avatar of Boris` &&
+      have($item`Eight Days a Week Pill Keeper`) &&
+      mySpleenUse() < 4 &&
+      !!args.resources.speed,
+    prepare: () => cliExecute("pillkeeper sneak"),
+    remaining: () => (mySpleenUse() < 4 ? 1 : 0),
+  },
+  {
     name: "Apriling band tuba",
     available: () => have(tuba) && tuba.dailyusesleft > 0,
     prepare: () => AprilingBandHelmet.play(tuba, true),
@@ -109,25 +129,5 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
       if (!have($item`Clara's bell`) || !get("_claraBellUsed")) return 0;
       return 1;
     },
-  },
-  {
-    name: "Pillkeeper",
-    available: () =>
-      have($item`Eight Days a Week Pill Keeper`) &&
-      !get("_freePillKeeperUsed") &&
-      !!args.resources.speed,
-    prepare: () => cliExecute("pillkeeper sneak"),
-    remaining: () => (get("_freePillKeeperUsed") ? 0 : 1),
-  },
-  // Hack until a proper spleen manager is used
-  {
-    name: "Pillkeeper Boris",
-    available: () =>
-      myPath() === $path`Avatar of Boris` &&
-      have($item`Eight Days a Week Pill Keeper`) &&
-      mySpleenUse() < 4 &&
-      !!args.resources.speed,
-    prepare: () => cliExecute("pillkeeper sneak"),
-    remaining: () => (mySpleenUse() < 4 ? 1 : 0),
   },
 ];
