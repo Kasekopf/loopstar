@@ -52,6 +52,8 @@ export const GiantQuest: Quest = {
         equip: $items`miniature crystal ball`,
         avoid: $items`broken champagne bottle`,
       },
+      peridot: $monster`beanbat`,
+      parachute: $monster`beanbat`,
       mapmonster: $monster`beanbat`,
       combat: new CombatStrategy()
         .banish($monsters`magical fruit bat, musical fruit bat`)

@@ -853,6 +853,7 @@ export const BorisQuest: Quest = {
       },
       limit: { soft: 50 },
       delay: 15,
+      peridot: $monster`Quiet Healer`,
       outfit: () =>
         <OutfitSpec>{
           modifier: "item",

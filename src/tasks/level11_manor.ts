@@ -223,7 +223,7 @@ const Manor2: Task[] = [
     },
     combat: new CombatStrategy()
       .killHard($monster`animated ornate nightstand`)
-      .kill($monster`elegant animated nightstand`) // kill ornate nightstand if banish fails
+      .kill($monster`elegant animated nightstand`)
       .banish(
         $monsters`animated mahogany nightstand, animated rustic nightstand, Wardröb nightstand`
       )
@@ -237,6 +237,11 @@ const Manor2: Task[] = [
       )
         return 0;
       return 5;
+    },
+    peridot: () => {
+      if ($location`The Haunted Bedroom`.turnsSpent >= 5)
+        return $monster`elegant animated nightstand`;
+      return undefined;
     },
     limit: { soft: 20 },
   },
@@ -262,6 +267,7 @@ const Manor2: Task[] = [
         $monsters`animated mahogany nightstand, animated rustic nightstand, Wardröb nightstand, elegant animated nightstand`
       )
       .ignore($monster`tumbleweed`),
+    peridot: $monster`animated ornate nightstand`,
     parachute: $monster`animated ornate nightstand`,
     limit: { soft: 10 },
   },
@@ -334,6 +340,7 @@ const ManorBasement: Task[] = [
       .macro(Macro.trySkill($skill`Otoscope`), $monster`possessed wine rack`)
       .killItem($monster`possessed wine rack`)
       .banish($monsters`mad wino, skeletal sommelier`),
+    peridot: $monster`possessed wine rack`,
     limit: { soft: 15 },
   },
   {
@@ -358,6 +365,7 @@ const ManorBasement: Task[] = [
       .macro(Macro.trySkill($skill`Otoscope`), $monster`cabinet of Dr. Limpieza`)
       .killItem($monster`cabinet of Dr. Limpieza`)
       .banish($monsters`plaid ghost, possessed laundry press`),
+    peridot: $monster`cabinet of Dr. Limpieza`,
     limit: { soft: 15 },
   },
   {
@@ -430,6 +438,7 @@ const ManorBasement: Task[] = [
       .kill($monster`monstrous boiler`)
       .banish($monsters`coaltergeist, steam elemental`),
     parachute: $monster`monstrous boiler`,
+    peridot: $monster`monstrous boiler`,
     limit: { soft: 10 },
   },
   {

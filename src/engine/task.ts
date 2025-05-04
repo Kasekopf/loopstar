@@ -31,6 +31,7 @@ export type Task = {
   ignorebanishes?: () => boolean;
   mapmonster?: Monster | (() => Monster | undefined); // Try and map to the given monster, if possible
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
+  peridot?: Monster | (() => Monster | undefined); // Try and peridot to the given monster, if possible
   resources?: Delayed<ResourceRequest | undefined>;
   tags?: string[];
   ignoremonsters?: () => Monster[]; // Extra monsters to ignore on the combat strategy

@@ -264,6 +264,7 @@ const Niche: Task[] = [
         return $monster`dirty old lihc`;
       return undefined;
     },
+    peridot: $monster`dirty old lihc`,
     limit: { turns: 37 },
   },
   {
@@ -342,6 +343,7 @@ const Nook: Task[] = [
         $monster`party skelteon`
       )
       .banish($monster`party skelteon`),
+    peridot: $monster`spiny skelelton`,
     // Don't persist banishes when just here for autumnaton
     ignorebanishes: () => AutumnAton.have() && myTurncount() < 100,
     limit: {

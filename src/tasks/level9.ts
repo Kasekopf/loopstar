@@ -224,6 +224,7 @@ const Twin: Task[] = [
     combat: new CombatStrategy().killItem(
       $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
     ),
+    peridot: $monster`bearpig topiary animal`,
     limit: { soft: 10 },
   },
   {
@@ -254,6 +255,7 @@ const Twin: Task[] = [
     combat: new CombatStrategy().killItem(
       $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
     ),
+    peridot: $monster`bearpig topiary animal`,
     limit: { soft: 10 },
   },
   {
@@ -279,6 +281,7 @@ const Twin: Task[] = [
     combat: new CombatStrategy().killItem(
       $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
     ),
+    peridot: $monster`bearpig topiary animal`,
     acquire: [{ item: $item`jar of oil` }],
     limit: { soft: 10 },
   },
@@ -312,6 +315,7 @@ const Twin: Task[] = [
     combat: new CombatStrategy().killItem(
       $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
     ),
+    peridot: $monster`bearpig topiary animal`,
     limit: { soft: 10 },
   },
   {

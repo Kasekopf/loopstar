@@ -129,6 +129,7 @@ export const McLargeHugeQuest: Quest = {
         .killItem($monster`dairy goat`)
         .banish($monsters`drunk goat, sabre-toothed goat`),
       parachute: $monster`dairy goat`,
+      peridot: $monster`dairy goat`,
       limit: { soft: 15 },
     },
     {

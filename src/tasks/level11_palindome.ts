@@ -316,6 +316,7 @@ const Zepplin: Task[] = [
       }, $monsters`man with the red buttons, red skeleton, red butler`)
       .banish($monsters`Red Herring, Red Snapper`)
       .kill(),
+    peridot: $monster`red butler`,
     orbtargets: () => $monsters`man with the red buttons, red skeleton, red butler`,
     outfit: {
       modifier: "item",
@@ -363,6 +364,7 @@ const Dome: Task[] = [
         familiar: familiar,
       };
     },
+    peridot: $monster`Bob Racecar`,
     combat: new CombatStrategy()
       .banish($monsters`Evil Olive, Flock of Stab-bats, Taco Cat, Tan Gnat`)
       .macro(
@@ -391,6 +393,7 @@ const Dome: Task[] = [
         familiar: familiar,
       };
     },
+    peridot: $monster`Bob Racecar`,
     combat: new CombatStrategy()
       .banish($monsters`Evil Olive, Flock of Stab-bats, Taco Cat, Tan Gnat`)
       .killItem($monsters`Bob Racecar, Racecar Bob`)
@@ -415,6 +418,7 @@ const Dome: Task[] = [
         avoid: $items`broken champagne bottle`,
       };
     },
+    peridot: $monster`Bob Racecar`,
     combat: new CombatStrategy().killItem($monsters`Bob Racecar, Racecar Bob`),
     limit: { soft: 20 },
   },
@@ -429,6 +433,7 @@ const Dome: Task[] = [
       modifier: "item",
       avoid: $items`broken champagne bottle`,
     },
+    peridot: $monster`Bob Racecar`,
     combat: new CombatStrategy().killItem($monsters`Bob Racecar, Racecar Bob`),
     limit: { soft: 20 },
   },
@@ -469,6 +474,11 @@ const Dome: Task[] = [
     do: $location`Whitey's Grove`,
     outfit: { modifier: "200 combat, item" },
     combat: new CombatStrategy().killItem($monster`whitesnake`).killItem($monster`white lion`),
+    peridot: () => {
+      if (have($item`bird rib`)) return $monster`white lion`;
+      if (have($item`lion oil`)) return $monster`whitesnake`;
+      return undefined;
+    },
     limit: { soft: 15 },
   },
   {

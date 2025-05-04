@@ -79,6 +79,13 @@ const Diary: Task[] = [
         avoid: $items`broken champagne bottle`,
       };
     },
+    peridot: () => {
+      // Get the second blackbird part
+      if (have($item`reassembled blackbird`)) return undefined;
+      if (have($item`sunken eyes`)) return $monster`black panther`;
+      if (have($item`broken wings`)) return $monster`black adder`;
+      return undefined;
+    },
     choices: () => {
       return {
         923: 1,
@@ -178,6 +185,7 @@ const Desert: Task[] = [
       (get("gnasirProgress") & 16) !== 0,
     do: $location`The Oasis`,
     combat: new CombatStrategy().killItem($monster`blur`),
+    peridot: $monster`blur`,
     outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
     limit: { soft: 15 },
     parachute: $monster`blur`,

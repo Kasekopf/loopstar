@@ -147,6 +147,8 @@ const Temple: Task[] = [
       .macro(new Macro().trySkill($skill`Emit Matter Duplicating Drones`), $monster`Baa'baa'bu'ran`)
       .killItem([$monster`baa-relief sheep`, $monster`Baa'baa'bu'ran`]),
     choices: { 579: 2, 580: 1, 581: 3, 582: 1 },
+    peridot: $monster`baa-relief sheep`,
+    parachute: $monster`baa-relief sheep`,
     limit: { soft: 20 },
     resources: () => {
       if (have($item`industrial fire extinguisher`)) return undefined;
@@ -224,6 +226,7 @@ const Apartment: Task[] = [
       else return [$monster`pygmy shaman`, $monster`pygmy witch accountant`];
     },
     post: makeCompleteFile,
+    peridot: $monster`pygmy witch accountant`,
     outfit: { equip: $items`miniature crystal ball, deft pirate hook` },
     limit: { soft: 9 },
     choices: { 780: 1 },
@@ -253,6 +256,7 @@ const Apartment: Task[] = [
         return { equip: $items`candy cane sword cane, miniature crystal ball, deft pirate hook` };
       return { equip: $items`miniature crystal ball, deft pirate hook` };
     },
+    peridot: $monster`pygmy shaman`,
     choices: { 780: 1 },
     limit: { soft: 9 },
   },
@@ -396,6 +400,7 @@ const Hospital: Task[] = [
       }
       return result;
     },
+    peridot: $monster`pygmy witch surgeon`,
     choices: { 784: 1 },
     limit: { soft: 20 },
   },
@@ -518,6 +523,7 @@ const Bowling: Task[] = [
       }
       return $monster`pygmy bowler`;
     },
+    peridot: $monster`pygmy bowler`,
     limit: { soft: 25 },
   },
   {
