@@ -5,6 +5,7 @@ import {
   changeMcd,
   chew,
   cliExecute,
+  closetAmount,
   currentMcd,
   drink,
   eat,
@@ -28,9 +29,11 @@ import {
   mySpleenUse,
   myTurncount,
   numericModifier,
+  putCloset,
   retrieveItem,
   runChoice,
   spleenLimit,
+  takeCloset,
   use,
   useSkill,
   visitUrl,
@@ -1222,6 +1225,32 @@ export const BorisQuest: Quest = {
       combat: new CombatStrategy().killHard(),
       benefit: 2,
     }),
+    {
+      name: "Closet Unusables",
+      priority: () => Priorities.Always,
+      completed: () =>
+        step("questL13Final") > 5 || ITEMS_TO_CLOSET.find((i) => have(i)) === undefined,
+      do: () => {
+        for (const item of ITEMS_TO_CLOSET) {
+          if (have(item)) putCloset(item);
+        }
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Uncloset Unusables",
+      after: ["Tower/Door"],
+      completed: () => get(toTempPref("uncloseted"), false),
+      do: () => {
+        for (const item of ITEMS_TO_CLOSET) {
+          if (closetAmount(item) > 0) takeCloset(item);
+        }
+        set(toTempPref("uncloseted"), true);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
 
@@ -1515,3 +1544,16 @@ function getDesiredTrainsetConfig(): TrainSet.Cycle {
   config.push(Station.BRAIN_SILO);
   return config.slice(0, 8) as TrainSet.Cycle;
 }
+
+const ITEMS_TO_CLOSET = [
+  $item`candy cane sword cane`,
+  $item`Fourth of May Cosplay Saber`,
+  $item`industrial fire extinguisher`,
+  $item`June cleaver`,
+  $item`cursed magnifying glass`,
+  $item`familiar scrapbook`,
+  $item`cursed magnifying glass`,
+  $item`unbreakable umbrella`,
+  $item`latte lovers member's mug`,
+  $item`Roman Candelabra`,
+];
