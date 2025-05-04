@@ -533,6 +533,7 @@ const Nuns: Task[] = [
           SourceTerminal.enhance($effect`meat.enh`);
         if (SourceTerminal.have() && !have($effect`items.enh`))
           SourceTerminal.enhance($effect`items.enh`); // for +item push
+        if (have($item`Polka Pop`)) ensureEffect($effect`Polka Face`);
       }
       fillHp();
     },
