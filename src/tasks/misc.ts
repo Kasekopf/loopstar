@@ -1468,6 +1468,7 @@ export const MiscQuest: Quest = {
         !have($item`GameInformPowerDailyPro magazine`),
       do: () => {
         use($item`GameInformPowerDailyPro magazine`);
+        visitUrl("inv_use.php?pwd&confirm=Yep.&whichitem=6174");
         runChoice(1);
         adv1($location`Video Game Level 1`);
         use($item`dungeoneering kit`);
