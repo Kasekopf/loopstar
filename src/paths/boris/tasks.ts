@@ -564,12 +564,28 @@ export const borisDeltas: NamedDeltaTask[] = [
         name: name,
         replace: {
           combat: new CombatStrategy()
+            .macro(
+              Macro.trySkill($skill`Monkey Point`),
+              $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
+            )
             .killItem(
               $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
             )
             .banish(
               $monsters`Big Wheelin' Twins, Bubblemint Twins, Creepy Ginger Twin, Mismatched Twins, Troll Twins`
             ),
+        },
+        combine: {
+          outfit: () => {
+            if (!CursedMonkeyPaw.have() || CursedMonkeyPaw.wishes() !== 1) return {};
+            if (
+              $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`.includes(
+                get("monkeyPointMonster") ?? $monster`none`
+              )
+            )
+              return {};
+            return { equip: $items`cursed monkey's paw` };
+          },
         },
       }
   ),
@@ -1004,17 +1020,6 @@ export const BorisQuest: Quest = {
       limit: { tries: 1 },
     },
     {
-      name: "Paw Killing Jar",
-      after: ["Macguffin/Diary"],
-      ready: () => get("desertExploration") > 15,
-      completed: () => have($item`killing jar`) || (get("gnasirProgress") & 4) !== 0,
-      do: () => {
-        CursedMonkeyPaw.wishFor($item`killing jar`);
-      },
-      freeaction: true,
-      limit: { tries: 1 },
-    },
-    {
       name: "Paw Drum",
       after: ["Macguffin/Diary"],
       // Only after we obtained the stone rose
@@ -1025,6 +1030,19 @@ export const BorisQuest: Quest = {
       },
       freeaction: true,
       limit: { tries: 1 },
+    },
+    {
+      name: "Paw Hedge Trimmers",
+      after: ["Macguffin/Diary", "War/Nuns"],
+      ready: () => !have($item`rusty hedge trimmers`),
+      // Save one wish for L13
+      completed: () =>
+        !!(get("twinPeakProgress") & 8) || !CursedMonkeyPaw.have() || CursedMonkeyPaw.wishes() <= 1,
+      do: () => {
+        CursedMonkeyPaw.wishFor($item`killing jar`);
+      },
+      freeaction: true,
+      limit: { tries: 4 },
     },
     {
       name: "KGB Martini",

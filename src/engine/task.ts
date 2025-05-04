@@ -1,5 +1,5 @@
 import { Location, Monster } from "kolmafia";
-import { Quest as BaseQuest, Task as BaseTask, Limit } from "grimoire-kolmafia";
+import { Quest as BaseQuest, Task as BaseTask, Limit, Outfit, OutfitSpec } from "grimoire-kolmafia";
 import { CombatActions, CombatStrategy } from "./combat";
 import { CombatStrategy as BaseCombatStrategy } from "grimoire-kolmafia";
 import { clamp, Delayed, undelay } from "libram";
@@ -151,7 +151,7 @@ export type DeltaTask = {
   tag?: string;
   replace?: Partial<Task>;
   amend?: Partial<Amend<Task>>;
-  combine?: Partial<Pick<Task, "prepare" | "ready" | "priority" | "after">>;
+  combine?: Partial<Pick<Task, "prepare" | "ready" | "priority" | "after" | "outfit">>;
 };
 
 /**
@@ -211,6 +211,22 @@ export function merge(task: Task, delta: DeltaTask): Task {
       const bArr = Array.isArray(b) ? b : [b];
       return [...aArr, ...bArr];
     });
+    result.outfit = compose<OutfitSpec | Outfit>(
+      () => undelay(result.outfit) ?? {},
+      () => undelay(delta.combine?.outfit) ?? {},
+      (a, b) => {
+        let aOutfit = undefined;
+        if (a instanceof Outfit) {
+          aOutfit = a;
+        } else {
+          aOutfit = new Outfit();
+          aOutfit.equip(a);
+        }
+        const bSpec = b instanceof Outfit ? b.spec() : b;
+        aOutfit.equip(bSpec);
+        return aOutfit;
+      }
+    );
     result.after = [...(result.after ?? []), ...(delta.combine.after ?? [])];
   }
   return result;
