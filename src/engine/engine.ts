@@ -310,8 +310,16 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       );
     }
 
-    // Temporarily avoid this before implementation
-    outfit.equip({ avoid: $items`Peridot of Peril` });
+    const peridotTarget = undelay(task.peridot);
+    if (
+      peridotTarget &&
+      task.do instanceof Location &&
+      !get("_perilLocations").split(",").includes(`${task.do.id}`)
+    ) {
+      outfit.equip($item`Peridot of Peril`);
+    } else {
+      outfit.equip({ avoid: $items`Peridot of Peril` });
+    }
 
     if (wanderers.length === 0) {
       // Set up a banish if needed
@@ -763,17 +771,23 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     super.do({
       ...task,
       do: () => {
-        // Consider crepe paper parachute cape if available
-        const parachuteTarget = undelay(task.parachute);
-        if (parachuteTarget && !task.activePriority?.has(Priorities.GoodOrb)) {
-          if (CrepeParachute.fight(parachuteTarget)) return;
-        }
+        // Consider peridot of peril
+        const peridotTarget = undelay(task.peridot);
+        if (peridotTarget && haveEquipped($item`Peridot of Peril`)) {
+          propertyManager.setChoice(1557, `1&bandersnatch=${peridotTarget.id}`);
+        } else {
+          // Consider crepe paper parachute cape
+          const parachuteTarget = undelay(task.parachute);
+          if (parachuteTarget && !task.activePriority?.has(Priorities.GoodOrb)) {
+            if (CrepeParachute.fight(parachuteTarget)) return;
+          }
 
-        // Consider map the monsters if available
-        const mapTarget = undelay(task.mapmonster);
-        if (mapTarget && get("_monstersMapped") < 3 && have($skill`Map the Monsters`)) {
-          propertyManager.setChoice(1435, `1&heyscriptswhatsupwinkwink=${mapTarget.id}`);
-          if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
+          // Consider map the monsters
+          const mapTarget = undelay(task.mapmonster);
+          if (mapTarget && get("_monstersMapped") < 3 && have($skill`Map the Monsters`)) {
+            propertyManager.setChoice(1435, `1&heyscriptswhatsupwinkwink=${mapTarget.id}`);
+            if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
+          }
         }
 
         if (task.do instanceof Location) return task.do;
