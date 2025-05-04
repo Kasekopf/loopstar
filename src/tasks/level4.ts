@@ -189,6 +189,7 @@ export const BatQuest: Quest = {
       completed: () => step("questL04Bat") >= 4,
       do: $location`The Boss Bat's Lair`,
       combat: new CombatStrategy().killHard($monster`Boss Bat`).ignore(),
+      ignoreforbreathitin: true,
       limit: { soft: 10 },
       delay: 6,
     },

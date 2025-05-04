@@ -346,6 +346,7 @@ const Nook: Task[] = [
     peridot: $monster`spiny skelelton`,
     // Don't persist banishes when just here for autumnaton
     ignorebanishes: () => AutumnAton.have() && myTurncount() < 100,
+    ignoreforbreathitin: true,
     limit: {
       soft: 37,
     },
