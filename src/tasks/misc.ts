@@ -1508,6 +1508,14 @@ export const MiscQuest: Quest = {
       limit: { tries: 1 },
       freeaction: true,
     },
+    {
+      name: "Bird Calendar",
+      after: [],
+      completed: () => get("_canSeekBirds") || !have($item`Bird-a-Day calendar`),
+      do: () => use($item`Bird-a-Day calendar`),
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
 
