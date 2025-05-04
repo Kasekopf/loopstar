@@ -1025,9 +1025,27 @@ export const BorisQuest: Quest = {
       after: ["Macguffin/Diary"],
       // Only after we obtained the stone rose
       ready: () => get("desertExploration") > 15 && (get("gnasirProgress") & 1) !== 0,
-      completed: () => have($item`drum machine`) || !have($item`worm-riding hooks`),
+      completed: () =>
+        have($item`drum machine`) ||
+        !have($item`worm-riding hooks`) ||
+        (get("gnasirProgress") & 16) > 0,
       do: () => {
         CursedMonkeyPaw.wishFor($item`drum machine`);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Paw Bird Rib",
+      after: ["Palindome/Alarm Gem"],
+      completed: () =>
+        !have($item`Peridot of Peril`) ||
+        have($item`bird rib`) ||
+        have($item`wet stew`) ||
+        have($item`wet stunt nut stew`) ||
+        step("questL11Palindome") >= 5,
+      do: () => {
+        CursedMonkeyPaw.wishFor($item`bird rib`);
       },
       freeaction: true,
       limit: { tries: 1 },
