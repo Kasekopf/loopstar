@@ -372,9 +372,26 @@ export const borisDeltas: NamedDeltaTask[] = [
     name: "Manor/Billiards",
     combine: {
       prepare: () => {
-        // Spend 1 spleen to guarantee library key
+        // Spend wish or 1 spleen to guarantee library key
+        tryWish($effect`Sharky`);
         if (get("poolSkill") === 0 && have($item`pool shark hair oil`))
           ensureEffect($effect`Sharky`);
+      },
+    },
+    replace: {
+      resources: () => {
+        if (
+          !have($item`pool shark hair oil`) &&
+          !have($effect`Sharky`) &&
+          !have($item`pocket wish`) &&
+          (!have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") === 5)
+        )
+          return undefined;
+        return {
+          which: Resources.NCForce,
+          benefit: 1 / 0.55,
+          repeat: have($item`pool cue`) ? 1 : 2,
+        };
       },
     },
   },
@@ -954,6 +971,17 @@ export const BorisQuest: Quest = {
       boss: true,
       freecombat: true,
       limit: { tries: 12 },
+    },
+    {
+      name: "Paw Killing Jar",
+      after: ["Macguffin/Diary"],
+      ready: () => get("desertExploration") > 15,
+      completed: () => have($item`killing jar`) || (get("gnasirProgress") & 4) !== 0,
+      do: () => {
+        CursedMonkeyPaw.wishFor($item`killing jar`);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
     },
     {
       name: "Paw Killing Jar",
