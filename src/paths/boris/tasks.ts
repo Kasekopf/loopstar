@@ -778,6 +778,10 @@ export const BorisQuest: Quest = {
         fillHp();
         tryPlayApriling("+combat");
         if (AugustScepter.canCast(6)) useSkill($skill`Aug. 6th: Fresh Breath Day!`);
+
+        if (have($item`Clan VIP Lounge key`) && get("_photoBoothEffects", 0) < 3)
+          ensureEffect($effect`Towering Muscles`);
+        if (haveLoathingIdolMicrophone()) ensureEffect($effect`Romantically Roused`);
       },
       ready: () => !get("noncombatForcerActive"),
       do: $location`Lair of the Ninja Snowmen`,
