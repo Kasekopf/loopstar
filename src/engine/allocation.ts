@@ -59,6 +59,9 @@ function getAllocators(): Allocator[] {
           amount: () => s.remaining(),
           delta: {
             tag: "NCForce",
+            replace: {
+              breathitinextender: true,
+            },
             combine: {
               priority: () => {
                 if (get("noncombatForcerActive")) return Priorities.None;
