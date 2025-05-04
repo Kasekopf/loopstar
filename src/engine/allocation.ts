@@ -161,6 +161,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
   for (const task of tasksByResource) {
     const request = undelay(task.resources);
     if (!request) continue;
+    if (inHardcore() && request.which === Resources.Pull) continue;
     if (verbose) {
       const name = getTaggedName(task);
       const requestStr = getResourceFriendlyName(request.which);
