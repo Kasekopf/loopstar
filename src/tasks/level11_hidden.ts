@@ -457,24 +457,18 @@ const Bowling: Task[] = [
       myMeat() >= 500 &&
       (!bowlingBallsGathered() || get("spookyVHSTapeMonster") !== $monster`pygmy bowler`),
     acquire: [{ item: $item`Bowl of Scorpions`, optional: true }],
-    completed: () => get("hiddenBowlingAlleyProgress") >= 7,
+    completed: () => bowlingBallsGathered(),
     prepare: () => {
-      // Backload the bowling balls due to banish timers
-      if (!bowlingBallsGathered()) {
-        // Open the hidden tavern if it is available.
-        if (get("hiddenTavernUnlock") < myAscensions() && have($item`book of matches`)) {
-          use($item`book of matches`);
-          buy($item`Bowl of Scorpions`);
-        }
-
-        if (have($item`bowling ball`))
-          putCloset($item`bowling ball`, itemAmount($item`bowling ball`));
-
-        if (myFamiliar() === $familiar`Melodramedary` && get("camelSpit") === 100) fillHp();
-      } else {
-        if (closetAmount($item`bowling ball`) > 0)
-          takeCloset($item`bowling ball`, closetAmount($item`bowling ball`));
+      // Open the hidden tavern if it is available.
+      if (get("hiddenTavernUnlock") < myAscensions() && have($item`book of matches`)) {
+        use($item`book of matches`);
+        buy($item`Bowl of Scorpions`);
       }
+
+      if (have($item`bowling ball`))
+        putCloset($item`bowling ball`, itemAmount($item`bowling ball`));
+
+      if (myFamiliar() === $familiar`Melodramedary` && get("camelSpit") === 100) fillHp();
     },
     do: $location`The Hidden Bowling Alley`,
     combat: new CombatStrategy()
@@ -492,7 +486,6 @@ const Bowling: Task[] = [
       .banish($monster`pygmy janitor`)
       .banish($monster`pygmy orderlies`),
     outfit: () => {
-      if (bowlingBallsGathered()) return {};
       const result: OutfitSpec = {
         modifier: "item",
         avoid: $items`broken champagne bottle`,
@@ -502,13 +495,8 @@ const Bowling: Task[] = [
       } else if (have($familiar`Grey Goose`) && familiarWeight($familiar`Grey Goose`) >= 6) {
         result.familiar = $familiar`Grey Goose`;
       }
-
-      if (bowlingBallsGathered() && !get("candyCaneSwordBowlingAlley", false)) {
-        result.equip?.push($item`candy cane sword cane`);
-      }
       return result;
     },
-    ignorebanishes: () => bowlingBallsGathered(),
     mapmonster: () => {
       if (
         itemAmount($item`bowling ball`) === 0 &&
@@ -533,8 +521,32 @@ const Bowling: Task[] = [
     limit: { soft: 25 },
   },
   {
+    name: "Bowling Boss",
+    after: ["Open Bowling", "Banish Janitors", "Bowling"],
+    completed: () => get("hiddenBowlingAlleyProgress") >= 7,
+    prepare: () => {
+      if (closetAmount($item`bowling ball`) > 0)
+        takeCloset($item`bowling ball`, closetAmount($item`bowling ball`));
+    },
+    do: $location`The Hidden Bowling Alley`,
+    combat: new CombatStrategy().killHard(
+      $monster`ancient protector spirit (The Hidden Bowling Alley)`
+    ),
+    outfit: () => {
+      if (!get("candyCaneSwordBowlingAlley")) {
+        return { equip: $items`candy cane sword cane` };
+      }
+      return {};
+    },
+    breathitinextender: () => {
+      return get("hiddenBowlingAlleyProgress") < 5;
+    },
+    choices: { 788: 1 },
+    limit: { tries: 5 },
+  },
+  {
     name: "Finish Bowling",
-    after: ["Bowling"],
+    after: ["Bowling Boss"],
     completed: () => get("hiddenBowlingAlleyProgress") >= 8,
     do: $location`An Overgrown Shrine (Southeast)`,
     choices: { 787: 2 },
@@ -548,7 +560,7 @@ export function bowlingBallsGathered(): boolean {
   balls += itemAmount($item`bowling ball`);
   balls += closetAmount($item`bowling ball`);
   if (get("spookyVHSTapeMonster") === $monster`pygmy bowler`) balls += 1;
-  if (have($item`candy cane sword cane`) && !get("candyCaneSwordBowlingAlley", false)) balls += 1;
+  if (have($item`candy cane sword cane`) && !get("candyCaneSwordBowlingAlley")) balls += 1;
 
   const timesBowled = get("hiddenBowlingAlleyProgress") - 1;
   return timesBowled + balls >= 5;

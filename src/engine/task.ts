@@ -23,7 +23,7 @@ export type Task = {
   boss?: boolean;
   nofightingfamiliars?: boolean;
   withnoadventures?: boolean; // should the task run without any adventures?
-  breathitinextender?: boolean;
+  breathitinextender?: boolean | (() => boolean);
   ignoreyrdelay?: boolean;
 
   // Resources

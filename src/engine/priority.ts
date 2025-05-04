@@ -308,7 +308,7 @@ export class Prioritization {
         task.do.environment === Environment.Underground
       ) {
         result.priorities.add(Priorities.GoodUnderground);
-      } else if (breathStatus === BreathitinStates.EXTEND && task.breathitinextender) {
+      } else if (breathStatus === BreathitinStates.EXTEND && undelay(task.breathitinextender)) {
         result.priorities.add(Priorities.GoodExtend);
       }
     }
