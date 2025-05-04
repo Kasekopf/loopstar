@@ -29,7 +29,7 @@ export type Task = {
   // Resources
   delay?: number | (() => number);
   ignorebanishes?: () => boolean;
-  map_the_monster?: Monster | (() => Monster | undefined); // Try and map to the given monster, if possible
+  mapmonster?: Monster | (() => Monster | undefined); // Try and map to the given monster, if possible
   parachute?: Monster | (() => Monster | undefined); // Try and crepe parachute to the given monster, if possible
   resources?: Delayed<ResourceRequest | undefined>;
   tags?: string[];

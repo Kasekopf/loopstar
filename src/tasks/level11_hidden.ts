@@ -509,7 +509,7 @@ const Bowling: Task[] = [
       return result;
     },
     ignorebanishes: () => bowlingBallsGathered(),
-    map_the_monster: () => {
+    mapmonster: () => {
       if (
         itemAmount($item`bowling ball`) === 0 &&
         have($familiar`Melodramedary`) &&
@@ -517,7 +517,7 @@ const Bowling: Task[] = [
         cosmicBowlingBallReady()
       )
         return $monster`pygmy bowler`;
-      return $monster`none`;
+      return undefined;
     },
     choices: { 788: 1 },
     parachute: () => {

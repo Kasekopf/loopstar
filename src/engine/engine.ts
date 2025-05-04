@@ -725,7 +725,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
         }
 
         // Consider map the monsters if available
-        const mapTarget = undelay(task.map_the_monster);
+        const mapTarget = undelay(task.mapmonster);
         if (mapTarget && get("_monstersMapped") < 3 && have($skill`Map the Monsters`)) {
           propertyManager.setChoice(1435, `1&heyscriptswhatsupwinkwink=${mapTarget.id}`);
           if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);

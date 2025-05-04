@@ -52,7 +52,7 @@ export const GiantQuest: Quest = {
         equip: $items`miniature crystal ball`,
         avoid: $items`broken champagne bottle`,
       },
-      map_the_monster: $monster`beanbat`,
+      mapmonster: $monster`beanbat`,
       combat: new CombatStrategy()
         .banish($monsters`magical fruit bat, musical fruit bat`)
         .killItem($monster`beanbat`),
