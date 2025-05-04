@@ -132,6 +132,16 @@ const heroKeys: KeyTask[] = [
     possible: () => (get("frAlways") || get("_frToday")) && !underStandard(),
     after: ["Misc/Open Fantasy"],
     completed: () => $location`The Bandit Crossroads`.turnsSpent >= 5,
+    priority: () => {
+      if (
+        have($item`Everfull Dart Holster`) &&
+        !have($effect`Everything Looks Red`) &&
+        myTurncount() >= 30
+      ) {
+        return Priorities.GoodDarts;
+      }
+      return Priorities.None;
+    },
     do: $location`The Bandit Crossroads`,
     outfit: {
       familiar: $familiar`none`,
