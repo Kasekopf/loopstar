@@ -78,4 +78,9 @@ export function main(choice: number, page: string) {
 
     runChoice(choiceToRun);
   }
+  // Tavern NCs
+  else if ((choice === 496 || choice === 513 || choice === 514 || choice === 515) && options[2]) {
+    // Manually select this option if avilable, in case we increased elemental dmg in prepare
+    runChoice(2);
+  }
 }

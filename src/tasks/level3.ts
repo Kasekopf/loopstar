@@ -7,7 +7,17 @@ import {
   runCombat,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $items, $monster, $skill, BeachComb, get, have, Macro } from "libram";
+import {
+  $effect,
+  $item,
+  $items,
+  $monster,
+  $skill,
+  BeachComb,
+  have,
+  Macro,
+  SourceTerminal,
+} from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
@@ -15,6 +25,7 @@ import { councilSafe } from "./level12";
 import { Quest } from "../engine/task";
 import { step } from "grimoire-kolmafia";
 import { customRestoreMp, ensureWithMPSwaps } from "../engine/moods";
+import { args } from "../args";
 
 export const TavernQuest: Quest = {
   name: "Tavern",
@@ -53,12 +64,23 @@ export const TavernQuest: Quest = {
           if (myMp() < 20) customRestoreMp(20);
         }
 
+        const elements = ["HOT", "COLD", "STENCH", "SPOOKY"];
         if (BeachComb.available()) {
-          const elements = ["HOT", "COLD", "STENCH", "SLEAZE", "SPOOKY"];
           for (const element of elements) {
-            if (get("nsChallenge2") === element.toLowerCase()) continue;
             if (numericModifier(`${element.toLowerCase()} Damage`) < 20) {
               BeachComb.tryHead(element as keyof typeof BeachComb.head);
+            }
+          }
+        }
+        // Get the source terminal buff if it would make a difference
+        if (SourceTerminal.have() && !have($effect`damage.enh`) && args.resources.speed) {
+          for (const element of elements) {
+            if (
+              numericModifier(`${element.toLowerCase()} Damage`) < 20 &&
+              numericModifier(`${element.toLowerCase()} Damage`) >= 15
+            ) {
+              SourceTerminal.enhance($effect`damage.enh`);
+              break;
             }
           }
         }
@@ -108,6 +130,7 @@ export const TavernQuest: Quest = {
           509: 1,
           510: 1,
           511: 2,
+          // Possibly overridden in choice script
           514: numericModifier("Stench Damage") >= 20 ? 2 : 1,
           515: numericModifier("Spooky Damage") >= 20 ? 2 : 1,
           496: numericModifier("Hot Damage") >= 20 ? 2 : 1,
