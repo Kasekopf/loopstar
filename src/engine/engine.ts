@@ -336,9 +336,14 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       }
 
       const banishState = globalStateCache.banishes();
-      if (!task.ignorebanishes?.()) {
-        const unbanished = banishState.unbanished("banish", combat);
-        const unkillbanished = banishState.unbanished("killBanish", combat);
+      const unbanished = banishState.unbanished("banish", combat);
+      const unkillbanished = banishState.unbanished("killBanish", combat);
+      if (
+        !task.ignorebanishes?.() &&
+        (!outfit.haveEquipped($item`Peridot of Peril`) ||
+          unbanished.includes(peridotTarget ?? $monster`none`) ||
+          unkillbanished.includes(peridotTarget ?? $monster`none`))
+      ) {
         if (unbanished.length > 0) {
           const banishSources = unusedBanishes(
             banishState,
