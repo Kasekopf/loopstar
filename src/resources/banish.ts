@@ -128,6 +128,12 @@ const banishSources: BanishSource[] = [
     free: true,
   },
   {
+    name: "Tennis Ball",
+    available: () => !!args.resources.speed && have($item`tennis ball`),
+    do: $item`tennis ball`,
+    free: true,
+  },
+  {
     name: "Middle Finger",
     available: () => !get("_mafiaMiddleFingerRingUsed") && have($item`mafia middle finger ring`),
     do: $skill`Show them your ring`,
