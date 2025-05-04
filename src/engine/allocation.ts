@@ -56,7 +56,7 @@ function getAllocators(): Allocator[] {
         <Allocator>{
           name: s.name,
           appliesTo: (which) => which === Resources.NCForce,
-          amount: () => s.remaining(),
+          amount: () => (s.available() ? s.remaining() : 0),
           delta: {
             tag: "NCForce",
             replace: {

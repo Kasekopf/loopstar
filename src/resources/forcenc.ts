@@ -78,7 +78,7 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
       have($item`Eight Days a Week Pill Keeper`) &&
       !get("_freePillKeeperUsed") &&
       !!args.resources.speed,
-    prepare: () => cliExecute("pillkeeper sneak"),
+    prepare: () => cliExecute("pillkeeper noncombat"),
     remaining: () => (get("_freePillKeeperUsed") ? 0 : 1),
   },
   // Hack until a proper spleen manager is used
@@ -87,10 +87,10 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
     available: () =>
       myPath() === $path`Avatar of Boris` &&
       have($item`Eight Days a Week Pill Keeper`) &&
-      mySpleenUse() < 4 &&
+      mySpleenUse() < 2 &&
       !!args.resources.speed,
-    prepare: () => cliExecute("pillkeeper sneak"),
-    remaining: () => (mySpleenUse() < 4 ? 1 : 0),
+    prepare: () => cliExecute("pillkeeper noncombat"),
+    remaining: () => (mySpleenUse() < 2 ? 1 : 0),
   },
   {
     name: "Apriling band tuba",
