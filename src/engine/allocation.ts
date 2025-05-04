@@ -164,8 +164,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
   for (const task of tasksByResource) {
     const request = undelay(task.resources);
     if (!request) continue;
-    if (inHardcore() && request.which === Resources.Pull) continue;
-    if (verbose) {
+    if (verbose && (!inHardcore() || request.which !== Resources.Pull)) {
       const name = getTaggedName(task);
       const requestStr = getResourceFriendlyName(request.which);
       const valueStr = request.benefit.toFixed(2);
@@ -202,7 +201,7 @@ export function allocateResources(tasks: Task[], verbose = false): Map<string, D
         // Block the task from running
         fulfillments.set(task.name, UNALLOCATED);
       }
-      if (verbose) {
+      if (verbose && (!inHardcore() || request.which !== Resources.Pull)) {
         debug(` # Unallocated x${repeat}`);
       }
     }
