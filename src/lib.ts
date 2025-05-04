@@ -1,4 +1,4 @@
-import { Guards, step } from "grimoire-kolmafia";
+import { DelayedMacro, Guards, step } from "grimoire-kolmafia";
 import {
   appearanceRates,
   cliExecute,
@@ -16,6 +16,7 @@ import {
   myPrimestat,
   Phylum,
   print,
+  Skill,
   totalTurnsPlayed,
   visitUrl,
 } from "kolmafia";
@@ -31,7 +32,9 @@ import {
   get,
   getTodaysHolidayWanderers,
   have,
+  Macro,
   Snapper,
+  undelay,
 } from "libram";
 import { makeValue, ValueFunctions } from "garbo-lib";
 
@@ -295,4 +298,14 @@ export function tryWish(effect: Effect, using: "genie" | "monkey" | "any" = "any
     return true;
   }
   return false;
+}
+
+/**
+ * Get the macro provided by the resource for this action, or undefined if
+ * no resource was provided.
+ */
+export function getMacro(resourceDo: DelayedMacro | Item | Skill): Macro {
+  if (resourceDo instanceof Item) return new Macro().item(resourceDo);
+  if (resourceDo instanceof Skill) return new Macro().skill(resourceDo);
+  return undelay(resourceDo);
 }

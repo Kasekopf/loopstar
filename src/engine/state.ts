@@ -135,7 +135,12 @@ export class BanishState {
     combat?: CombatStrategy<CombatActions>
   ): Monster[] {
     return (
-      combat?.where(banishAction)?.filter((monster) => !this.alreadyBanished.has(monster)) ?? []
+      combat
+        ?.where(banishAction)
+        ?.filter(
+          (monster) =>
+            !this.alreadyBanished.has(monster) && monster.phylum.toString() !== get("banishedPhyla")
+        ) ?? []
     );
   }
 

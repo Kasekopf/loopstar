@@ -73,7 +73,7 @@ import {
   getModifiersFrom,
 } from "./outfit";
 import { cliExecute, equippedAmount, itemAmount, runChoice } from "kolmafia";
-import { debug, stableSort } from "../lib";
+import { debug, getMacro, stableSort } from "../lib";
 import { refillLatte } from "../resources/runaway";
 import { shouldFinishLatte } from "../resources/runaway";
 import { Priorities, Prioritization } from "./priority";
@@ -99,6 +99,7 @@ import { forceNCPossible, forceNCSources } from "../resources/forcenc";
 import { getActiveBackupTarget } from "../resources/backup";
 import { allocateResources, UNALLOCATED } from "./allocation";
 import { warCleared } from "../tasks/level12";
+import { swapperSources } from "../resources/swappers";
 
 export type ActiveTask = Task & {
   activePriority?: Prioritization;
@@ -329,27 +330,71 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       const banishState = globalStateCache.banishes();
       if (!task.ignorebanishes?.()) {
         const unbanished = banishState.unbanished("banish", combat);
+        const unkillbanished = banishState.unbanished("killBanish", combat);
         if (unbanished.length > 0) {
           const banishSources = unusedBanishes(
             banishState,
             task.availableTasks ?? [],
             task.name,
-            false
+            "ends"
           );
-          const found = equipFirst(outfit, banishSources);
-          if (found) {
-            debug(`Banish targets: ${unbanished.join(", ")}`);
-            debug(`Banish assigned: ${found.name}`);
-            resources.provide("banish", found);
-          } else replaceActions(combat, "banish", "killBanish"); // also consider killBanishes for these
+
+          let usingSwapper = false;
+          if (args.resources.speed) {
+            // Consider using a swapper after a partial banish
+            const trialOutfit = outfit.clone();
+            const nokillSources = unusedBanishes(
+              banishState,
+              task.availableTasks ?? [],
+              task.name,
+              "nokill"
+            );
+            const nokill = equipFirst(trialOutfit, nokillSources);
+            const swapper = equipFirst(trialOutfit, swapperSources);
+            if (nokill && swapper) {
+              const swapMacro = Macro.if_(
+                unbanished.map((mon) => `monsterid ${mon.id}`).join(" || "),
+                Macro.step(nokill.nokill ?? new Macro()).step(getMacro(swapper.do))
+              );
+              if (unbanished.length > 1) {
+                const found = equipFirst(
+                  trialOutfit,
+                  banishSources.filter((source) => source !== nokill)
+                );
+                if (found) {
+                  debug(`Banish targets: ${unbanished.join(", ")}`);
+                  debug(`Banish assigned: ${found.name}`);
+                  resources.provide("banish", found);
+                  combat.startingMacro(swapMacro);
+                  debug(`Swapper assigned: ${nokill.name} + ${swapper.name}`);
+                  outfit = trialOutfit;
+                  usingSwapper = true;
+                }
+              } else {
+                debug(`Banish targets: ${unbanished.join(", ")}`);
+                debug(`Swapper assigned: ${nokill.name} + ${swapper.name}`);
+                combat.startingMacro(swapMacro);
+                outfit = trialOutfit;
+                usingSwapper = true;
+              }
+            }
+          }
+
+          if (!usingSwapper) {
+            const found = equipFirst(outfit, banishSources);
+            if (found) {
+              debug(`Banish targets: ${unbanished.join(", ")}`);
+              debug(`Banish assigned: ${found.name}`);
+              resources.provide("banish", found);
+            } else replaceActions(combat, "banish", "killBanish"); // also consider killBanishes for these
+          }
         }
-        const unkillbanished = banishState.unbanished("killBanish", combat);
         if (unkillbanished.length > 0) {
           const banishSources = unusedBanishes(
             banishState,
             task.availableTasks ?? [],
             task.name,
-            true
+            "kills"
           );
           const found = equipFirst(outfit, banishSources);
           if (found) resources.provide("killBanish", found);
@@ -393,7 +438,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
                 banishState,
                 task.availableTasks ?? [],
                 task.name,
-                false
+                "ends"
               );
               const runawayBanish = equipFirst(
                 outfit,

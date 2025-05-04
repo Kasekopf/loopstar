@@ -25,6 +25,7 @@ type BanishSimpleDo = CombatResource & {
   free: boolean;
   blocked?: string[];
   capacity?: number;
+  nokill?: Macro;
 };
 type BanishMacroDo = CombatResource & {
   do: Macro | Delayed<Macro>;
@@ -32,6 +33,7 @@ type BanishMacroDo = CombatResource & {
   free: boolean;
   blocked?: string[];
   capacity?: number;
+  nokill?: Macro;
 };
 export type BanishSource = BanishSimpleDo | BanishMacroDo;
 function getTracker(source: BanishSource): Item | Skill {
@@ -172,6 +174,7 @@ const killBanishSources: BanishSource[] = [
     equip: $item`spring shoes`,
     do: () => Macro.skill($skill`Spring Kick`).step(killMacro()),
     tracker: $skill`Spring Kick`,
+    nokill: Macro.trySkill($skill`Spring Kick`),
     free: false,
   },
 ];
@@ -183,7 +186,7 @@ export function unusedBanishes(
   banishState: BanishState,
   tasks: Task[],
   taskName: string,
-  kills: boolean
+  style: "ends" | "kills" | "nokill"
 ): BanishSource[] {
   const relevantMonsters = new Set<Monster>();
   for (const task of tasks) {
@@ -194,7 +197,11 @@ export function unusedBanishes(
     for (const monster of task.combat.where("ignoreSoftBanish")) relevantMonsters.add(monster);
   }
 
-  const sources = kills ? killBanishSources : banishSources;
+  const sources = {
+    ends: banishSources,
+    kills: killBanishSources,
+    nokill: killBanishSources.filter((source) => source.nokill),
+  }[style];
   return sources.filter((banish) => {
     if (!banish.available()) return false;
     if (banish.blocked?.includes(taskName)) return false;

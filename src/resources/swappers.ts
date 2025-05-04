@@ -18,5 +18,5 @@ export const swapperSources: CombatResource[] = [
     do: $skill`CHEAT CODE: Replace Enemy`,
     equip: $item`Powerful Glove`,
     available: () => have($item`Powerful Glove`) && get("_powerfulGloveBatteryPowerUsed") <= 90,
-  }
+  },
 ];
