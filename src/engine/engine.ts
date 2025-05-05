@@ -317,7 +317,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     if (
       peridotTarget &&
       task.do instanceof Location &&
-      !get("_perilLocations").split(",").includes(`${task.do.id}`)
+      !get("_perilLocations").split(",").includes(`${task.do.id}`) &&
+      wanderers.length === 0
     ) {
       outfit.equip($item`Peridot of Peril`);
     } else {
