@@ -391,6 +391,7 @@ const Orchard: Task[] = [
         return Macro.trySkill($skill`Swoop like a Bat`);
       }),
     ignoreyrdelay: true,
+    ignoreforbreathitin: true,
     limit: { soft: 10 },
   },
   {
@@ -436,6 +437,7 @@ const Orchard: Task[] = [
       }),
     effects: $effects`Filthworm Larva Stench`,
     ignoreyrdelay: true,
+    ignoreforbreathitin: true,
     limit: { soft: 10 },
   },
   {
@@ -479,6 +481,7 @@ const Orchard: Task[] = [
         return Macro.trySkill($skill`Swoop like a Bat`);
       }),
     ignoreyrdelay: true,
+    ignoreforbreathitin: true,
     limit: { soft: 10 },
   },
   {
