@@ -75,7 +75,8 @@ const Alcove: Task[] = [
       }
       if (
         have($item`designer sweatpants`) &&
-        get("sweat", 0) >= 90 &&
+        get("sweat", 0) >= 15 &&
+        !have($effect`Slippery and Speedy`) &&
         numericModifier("Initiative") < 850
       ) {
         // Use visit URL to avoid needing to equip the pants
