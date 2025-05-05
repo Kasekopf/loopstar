@@ -1,6 +1,6 @@
 import { OutfitSpec } from "grimoire-kolmafia";
 import { itemAmount, Monster, myTurncount } from "kolmafia";
-import { $item, $monster, AutumnAton, get, have } from "libram";
+import { $effect, $item, $monster, AutumnAton, get, have } from "libram";
 import { oresNeeded } from "../tasks/level8";
 import { args } from "../args";
 
@@ -66,7 +66,9 @@ const backupTargets: BackupTarget[] = [
       myTurncount() < 120 ||
       get("cyrptCrannyEvilness") > 13 ||
       !args.resources.speed ||
-      get("spookyravenRecipeUsed") !== "with_glasses",
+      get("spookyravenRecipeUsed") !== "with_glasses" ||
+      have($effect`Angering Pizza Purists`) ||
+      have($effect`Too Noir For Snoir`),
     limit_tries: 11,
     last: true,
   },
