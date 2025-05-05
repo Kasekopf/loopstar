@@ -84,7 +84,6 @@ import {
 import { coldPlanner } from "../../engine/outfit";
 import { getSummonTask } from "../../tasks/summons";
 import { warCleared } from "../../tasks/level12";
-import { make } from "libram/dist/resources/2024/TakerSpace";
 
 const deletedTasks = [
   "Misc/Snojo",
@@ -415,9 +414,9 @@ export const borisDeltas: NamedDeltaTask[] = [
           if (
             !have($item`plain calzone`) &&
             itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
-            itemAmount($item`Yeast of Boris`) > 2
+            itemAmount($item`Yeast of Boris`) >= 2
           ) {
-            make($item`plain calzone`);
+            retrieveItem($item`plain calzone`);
           }
           if (have($item`plain calzone`)) {
             ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
@@ -515,8 +514,8 @@ export const borisDeltas: NamedDeltaTask[] = [
           // save 1 bat wing swoop for filthworms
           result.externalIf(
             get("_batWingsSwoopUsed") < 10 &&
-              (get("_glarkCableUses") + itemAmount($item`glark cable`) < 4 ||
-                (!have($item`glark cable`) && get("_glarkCableUses") < 5)),
+            (get("_glarkCableUses") + itemAmount($item`glark cable`) < 4 ||
+              (!have($item`glark cable`) && get("_glarkCableUses") < 5)),
             Macro.trySkill($skill`Swoop like a Bat`)
           );
           result.externalIf(get("_glarkCableUses") < 5, Macro.tryItem($item`glark cable`));
@@ -609,9 +608,9 @@ export const borisDeltas: NamedDeltaTask[] = [
           if (
             !have($item`plain calzone`) &&
             itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
-            itemAmount($item`Yeast of Boris`) > 2
+            itemAmount($item`Yeast of Boris`) >= 2
           ) {
-            make($item`plain calzone`);
+            retrieveItem($item`plain calzone`);
           }
           if (have($item`plain calzone`)) {
             ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
@@ -1265,9 +1264,9 @@ export const BorisQuest: Quest = {
           if (
             !have($item`plain calzone`) &&
             itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
-            itemAmount($item`Yeast of Boris`) > 2
+            itemAmount($item`Yeast of Boris`) >= 2
           ) {
-            make($item`plain calzone`);
+            retrieveItem($item`plain calzone`);
           }
           if (have($item`plain calzone`)) {
             ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
