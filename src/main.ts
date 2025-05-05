@@ -71,6 +71,12 @@ export function main(command?: string): void {
   if (args.debug.list) {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To list tasks of a specific path, set the "path" arg.`;
+    const extraArgs = path.args();
+    if (extraArgs) {
+      Args.fill(args, extraArgs);
+      // reload CLI args again so they always have highest priority.
+      Args.fill(args, command);
+    }
     const engine = loadEngine(path);
     engine.updatePlan();
     listTasks(engine);
