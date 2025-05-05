@@ -501,7 +501,9 @@ export const borisDeltas: NamedDeltaTask[] = [
           const result = new Macro();
           // save 1 bat wing swoop for filthworms
           result.externalIf(
-            get("_batWingsSwoopUsed") < 10,
+            get("_batWingsSwoopUsed") < 10 &&
+              (get("_glarkCableUses") + itemAmount($item`glark cable`) < 4 ||
+                (!have($item`glark cable`) && get("_glarkCableUses") < 5)),
             Macro.trySkill($skill`Swoop like a Bat`)
           );
           result.externalIf(get("_glarkCableUses") < 5, Macro.tryItem($item`glark cable`));
