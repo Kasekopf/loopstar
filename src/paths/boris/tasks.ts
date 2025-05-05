@@ -48,6 +48,7 @@ import {
   $monster,
   $monsters,
   $skill,
+  $skills,
   AugustScepter,
   clamp,
   Clan,
@@ -68,7 +69,7 @@ import {
   Witchess,
 } from "libram";
 import { CombatStrategy } from "../../engine/combat";
-import { ensureWithMPSwaps, fillHp } from "../../engine/moods";
+import { castWithMpSwaps, ensureWithMPSwaps, fillHp } from "../../engine/moods";
 import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
@@ -463,7 +464,20 @@ export const borisDeltas: NamedDeltaTask[] = [
     name: "Summon/Astrologer Of Shub-Jigguwatt",
     replace: {
       priority: () => <Priority>{ score: Priorities.Free.score - 1, reason: "Finish other setup" },
-      combat: new CombatStrategy().killHard(),
+      ready: () =>
+        myLevel() < 6 && have($skill`Intimidating Bellow`) && have($item`"I Voted!" sticker`),
+      prepare: () => castWithMpSwaps($skills`Song of Battle`),
+      outfit: {
+        modifier: "DR, sleaze res",
+        equip: $items`McHugeLarge right ski`,
+      },
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`McHugeLarge Ski Plow`)
+          .tryItem($item`Time-Spinner`)
+          .trySkill($skill`Intimidating Bellow`)
+          .attack()
+          .repeat()
+      ),
     },
   },
   // Add extra banishes where better
@@ -620,8 +634,10 @@ export const BorisQuest: Quest = {
         const page = visitUrl("da.php?place=gate1");
         const toLearn = Number(page.match("You can learn (\\d+) more skill")?.[1] ?? "0");
         for (let i = 0; i < toLearn; i++) {
+          if (!have($skill`Intimidating Bellow`))
+            visitUrl("da.php?pwd&whichtree=2&action=borisskill"); // get this first for astrologer
           // Finish the skill trees Feasting -> Shouting -> Fighting
-          if (!have($skill`Gourmand`)) visitUrl("da.php?pwd&whichtree=3&action=borisskill");
+          else if (!have($skill`Gourmand`)) visitUrl("da.php?pwd&whichtree=3&action=borisskill");
           else if (!have($skill`Banishing Shout`))
             visitUrl("da.php?pwd&whichtree=2&action=borisskill");
           else if (!have($skill`Bifurcating Blow`))
