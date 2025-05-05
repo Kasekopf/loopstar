@@ -583,6 +583,27 @@ export const borisDeltas: NamedDeltaTask[] = [
         },
       }
   ),
+  {
+    name: "Crypt/Cranny",
+    combine: {
+      prepare: () => {
+        if (!have($effect`Angering Pizza Purists`)) {
+          if (
+            !have($item`plain calzone`) &&
+            itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
+            itemAmount($item`Yeast of Boris`) > 2
+          ) {
+            make($item`plain calzone`);
+          }
+          if (have($item`plain calzone`)) {
+            ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
+            eat($item`plain calzone`);
+            ensureWithMPSwaps($effects`Song of Cockiness`);
+          }
+        }
+      }
+    }
+  }
 ];
 
 export const BorisQuest: Quest = {
@@ -1202,7 +1223,6 @@ export const BorisQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
-
     getSummonTask({
       target: $monster`giant swarm of ghuol whelps`,
       after: ["Crypt/Start"],
@@ -1217,6 +1237,21 @@ export const BorisQuest: Quest = {
       prepare: () => {
         changeMcd(10);
         fillHp();
+
+        if (!have($effect`Angering Pizza Purists`)) {
+          if (
+            !have($item`plain calzone`) &&
+            itemAmount($item`St. Sneaky Pete's Whey`) >= 2 &&
+            itemAmount($item`Yeast of Boris`) > 2
+          ) {
+            make($item`plain calzone`);
+          }
+          if (have($item`plain calzone`)) {
+            ensureWithMPSwaps($effects`Song of the Glorious Lunch`);
+            eat($item`plain calzone`);
+            ensureWithMPSwaps($effects`Song of Cockiness`);
+          }
+        }
       },
       post: () => {
         if (currentMcd() > 0) changeMcd(0);

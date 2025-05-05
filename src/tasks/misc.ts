@@ -1458,6 +1458,7 @@ export const MiscQuest: Quest = {
         return target !== undefined && target.monster !== $monster`Eldritch Tentacle`;
       },
       do: $location`Noob Cave`,
+      ignoreforbreathitin: true,
       delay: 11,
       limit: { tries: 11 },
     },
