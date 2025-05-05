@@ -1329,6 +1329,18 @@ export const BorisQuest: Quest = {
       combat: new CombatStrategy().kill(),
       limit: { tries: 5 },
     },
+    {
+      name: "Spend Shower",
+      after: ["Misc/Shower Thoughts"],
+      completed: () =>
+        !have($item`April Shower Thoughts shield`) || itemAmount($item`glob of wet paper`) < 2,
+      do: () => {
+        retrieveItem($item`wet paper weights`);
+        use($item`wet paper weights`);
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
 

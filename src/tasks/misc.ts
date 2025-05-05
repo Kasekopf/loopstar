@@ -1527,6 +1527,15 @@ export const MiscQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
+    {
+      name: "Shower Thoughts",
+      after: [],
+      completed: () =>
+        !have($item`April Shower Thoughts shield`) || get("_aprilShowerGlobsCollected"),
+      do: () => visitUrl("inventory.php?action=shower&pwd"),
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
 
