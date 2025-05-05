@@ -462,6 +462,9 @@ export const borisDeltas: NamedDeltaTask[] = [
   },
   {
     name: "Summon/Astrologer Of Shub-Jigguwatt",
+    combine: {
+      after: ["Misc/Open McHugeLarge Bag"],
+    },
     replace: {
       priority: () => <Priority>{ score: Priorities.Free.score - 1, reason: "Finish other setup" },
       ready: () =>

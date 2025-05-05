@@ -269,7 +269,7 @@ export class Prioritization {
     const taskAllowlist = ["Palindome/Bat Snake"];
     // Don't use asdon when it would mess up tracking
     // (from non-banishable monsters)
-    const taskDenyList = ["Hidden/Open City"];
+    const taskDenyList = ["Hidden/Open City", "Summon/Astrologer Of Shub-Jigguwatt"];
     const asdonDenylist = ["Tavern/Basement", "Bat/Boss Bat"];
     if (
       !result._wanderer &&
