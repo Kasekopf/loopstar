@@ -61,10 +61,10 @@ export const borisRoute: string[] = [
   "Palindome/Zepplin",
 
   // Hidden City
+  "Hidden City/Open Bowling", // keep bowling open for when CBB returns
   "Hidden City/Open Office",
   "Hidden City/Open Apartment",
   "Hidden City/Open Hospital",
-  "Hidden City/Open Bowling",
   "Hidden City/Apartment",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
@@ -77,11 +77,11 @@ export const borisRoute: string[] = [
   // -combat tasks
   "Giant/Basement Finish",
   "War/Enrage",
+  "Mosquito/Finish",
   "Manor/Gallery",
   "Manor/Bedroom",
   "Tavern/Finish",
   "Manor/Finish Floor2",
-  "Mosquito/Finish",
   "Manor/Ballroom",
   "Manor/Learn Recipe",
   "Friar/Finish",

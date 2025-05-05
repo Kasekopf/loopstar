@@ -1246,7 +1246,9 @@ export const BorisQuest: Quest = {
       after: ["Crypt/Start"],
       completed: () => get("cyrptCrannyEvilness") <= 45, // Only do once
       priority: () => {
-        if (have($effect`Angering Pizza Purists`)) {
+        if (getWorkshed() === $item`cold medicine cabinet` && args.minor.breathitin) {
+          return { score: 0.2, reason: "Prepare for breathitin" };
+        } else if (have($effect`Angering Pizza Purists`)) {
           return Priorities.MinorEffect;
         } else {
           return Priorities.None;
