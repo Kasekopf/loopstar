@@ -1299,7 +1299,9 @@ export const BorisQuest: Quest = {
       name: "Fantasy",
       after: ["Misc/Open Fantasy"],
       completed: () =>
-        $location`The Bandit Crossroads`.turnsSpent >= 5 || !(get("frAlways") || get("_frToday")),
+        $location`The Bandit Crossroads`.turnsSpent >= 5 ||
+        !(get("frAlways") || get("_frToday")) ||
+        step("questL13Final") > 5,
       priority: () => {
         if (
           have($item`Everfull Dart Holster`) &&
