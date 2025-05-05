@@ -214,6 +214,7 @@ const Apartment: Task[] = [
     // The last curse is obtained from the next task, when the shaman is banished
     completed: () =>
       get("hiddenApartmentProgress") >= 7 ||
+      have($effect`Thrice-Cursed`) ||
       have($effect`Twice-Cursed`) ||
       (have($effect`Once-Cursed`) && have($item`candy cane sword cane`)),
     do: $location`The Hidden Apartment Building`,
@@ -221,7 +222,7 @@ const Apartment: Task[] = [
       .killHard($monster`ancient protector spirit (The Hidden Apartment Building)`)
       .banish($monsters`pygmy janitor, pygmy witch lawyer`)
       .startingMacro(() => {
-        // TODO: this only works if janitors are banished externally (by the NC, or ice sculpture)
+        // TODO: this only works if janitors are banished externally (by the NC, or ice house)
         // otherwise, we need to swap twice
         if (args.resources.speed && !have($effect`Once-Cursed`)) {
           if (have($item`waffle`)) return Macro.if_("monsterid 1428", Macro.tryItem($item`waffle`));
@@ -252,7 +253,6 @@ const Apartment: Task[] = [
         return { equip: $items`Powerful Glove` };
       return {};
     },
-    peridot: $monster`pygmy shaman`,
     skipswap: true,
     choices: { 780: 1 },
     limit: { soft: 9 },
@@ -504,7 +504,9 @@ const Bowling: Task[] = [
     priority: () =>
       cosmicBowlingBallReady() &&
       ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
-        (!have($familiar`Melodramedary`) && have($item`Peridot of Peril`)))
+        (!have($familiar`Melodramedary`) &&
+          have($item`Peridot of Peril`) &&
+          get("hiddenBowlingAlleyProgress") === 1))
         ? Priorities.BestCosmicBowlingBall
         : Priorities.None,
     ready: () =>
