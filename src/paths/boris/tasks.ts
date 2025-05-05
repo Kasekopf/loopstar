@@ -271,7 +271,8 @@ export const borisDeltas: NamedDeltaTask[] = [
   {
     name: "Digital/Vanya",
     replace: {
-      preferwanderer: () => $location`Vanya's Castle`.turnsSpent === 0,
+      // While we still have good +init starting buffs
+      preferwanderer: () => myTurncount() < 30,
     },
   },
   {
