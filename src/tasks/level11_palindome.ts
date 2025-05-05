@@ -472,7 +472,17 @@ const Dome: Task[] = [
       tryPlayApriling("+combat");
     },
     do: $location`Whitey's Grove`,
-    outfit: { modifier: "200 combat, item" },
+    outfit: () => {
+      if (
+        have($item`Peridot of Peril`) &&
+        (have($item`bird rib`) || have($item`lion oil`)) &&
+        !get("_perilLocations").split(",").includes("100")
+      ) {
+        // We will use peridot to avoid the NCs
+        return { modifier: "item, food drop" };
+      }
+      return { modifier: "200 combat, item, food drop" };
+    },
     combat: new CombatStrategy().killItem($monster`whitesnake`).killItem($monster`white lion`),
     peridot: () => {
       if (have($item`bird rib`)) return $monster`white lion`;
