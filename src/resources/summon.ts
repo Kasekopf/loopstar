@@ -10,7 +10,16 @@ import {
   visitUrl,
   wait,
 } from "kolmafia";
-import { $item, $monster, $path, $skill, CombatLoversLocket, get, have } from "libram";
+import {
+  $item,
+  $monster,
+  $path,
+  $skill,
+  ChateauMantegna,
+  CombatLoversLocket,
+  get,
+  have,
+} from "libram";
 import { args } from "../args";
 import { underStandard } from "../lib";
 
@@ -22,6 +31,16 @@ type SummonSource = {
   summon: (mon: Monster) => void;
 };
 export const summonSources: SummonSource[] = [
+  {
+    name: "Chateau",
+    remaining: () => {
+      if (!ChateauMantegna.have()) return 0;
+      if (ChateauMantegna.paintingFought()) return 0;
+      return 1;
+    },
+    canFight: (mon: Monster) => mon === ChateauMantegna.paintingMonster(),
+    summon: () => ChateauMantegna.fightPainting(),
+  },
   {
     name: "Numberology",
     remaining: () => {
