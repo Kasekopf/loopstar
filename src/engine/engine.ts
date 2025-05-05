@@ -362,6 +362,8 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
               task.name,
               "nokill"
             );
+            // TODO: run .prepare() for nokill and swapper,
+            // although for now none of them have prepares anyway.
             const nokill = equipFirst(trialOutfit, nokillSources);
             const swapper = equipFirst(trialOutfit, swapperSources);
             if (nokill && swapper) {
@@ -380,14 +382,17 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
                   resources.provide("banish", found);
                   combat.startingMacro(swapMacro);
                   debug(`Swapper assigned: ${nokill.name} + ${swapper.name}`);
-                  outfit = trialOutfit;
+                  equipFirst(outfit, [nokill]);
+                  equipFirst(outfit, [swapper]);
+                  equipFirst(outfit, [found]);
                   usingSwapper = true;
                 }
               } else {
                 debug(`Banish targets: ${unbanished.join(", ")}`);
                 debug(`Swapper assigned: ${nokill.name} + ${swapper.name}`);
                 combat.startingMacro(swapMacro);
-                outfit = trialOutfit;
+                equipFirst(outfit, [nokill]);
+                equipFirst(outfit, [swapper]);
                 usingSwapper = true;
               }
             }
@@ -507,7 +512,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
 
       // Use an NC forcer if one is available and another task needs it.
       const nc_blacklist = new Set<Location>(
-        $locations`The Enormous Greater-Than Sign, The Copperhead Club, The Black Forest`
+        $locations`The Enormous Greater-Than Sign, The Copperhead Club, The Black Forest, The Outskirts of Cobb's Knob`
       );
       const nc_task_blacklist = new Set<string>([
         "Misc/Protonic Ghost",
