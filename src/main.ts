@@ -85,6 +85,12 @@ export function main(command?: string): void {
   if (args.debug.allocate) {
     const path = getActivePath(args.path);
     if (!path) throw `Unknown path. To allocate tasks of a specific path, set the "path" arg.`;
+    const extraArgs = path.args();
+    if (extraArgs) {
+      Args.fill(args, extraArgs);
+      // reload CLI args again so they always have highest priority.
+      Args.fill(args, command);
+    }
     const engine = loadEngine(path);
     engine.updatePlan();
     allocateResources(engine.tasks, true);
