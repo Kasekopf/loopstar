@@ -235,6 +235,7 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
 
   const useful_effects = [...other_effects];
   for (const key in relevantEffects) {
+    if (key === "ML" && modifier.includes("-ML")) continue;
     if (modifier.includes(key)) {
       useful_effects.push(...relevantEffects[key].filter((e) => haveEquipmentToCast(e)));
     }

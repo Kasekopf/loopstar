@@ -290,7 +290,7 @@ export const gyouDeltas: NamedDeltaTask[] = [
               return {
                 equip: [...equip, $item`miniature crystal ball`],
                 familiar: $familiar`Grey Goose`,
-                modifier: "50 combat 5max, -1ML",
+                modifier: "50 combat 5max, -ML",
               };
             }
           }
@@ -641,7 +641,7 @@ export const gyouSummons: SummonTarget[] = [
           modes: { retrocape: ["heck", "hold"] },
           familiar: $familiar`Vampire Vintner`,
         };
-      else return { modifier: "init, -1ML" }; // Just use yellow rocket
+      else return { modifier: "init, -ML" }; // Just use yellow rocket
     },
     benefit: 100,
   },

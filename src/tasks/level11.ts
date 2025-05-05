@@ -68,14 +68,14 @@ const Diary: Task[] = [
       if (have($item`reassembled blackbird`)) {
         return {
           equip: equip,
-          modifier: "50 combat 5max, -1ML",
+          modifier: "50 combat 5max, -ML",
         };
       }
 
       return {
         equip: equip,
         familiar: $familiar`Reassembled Blackbird`,
-        modifier: "50 combat 5max, item, -1ML",
+        modifier: "50 combat 5max, item, -ML",
         avoid: $items`broken champagne bottle`,
       };
     },
