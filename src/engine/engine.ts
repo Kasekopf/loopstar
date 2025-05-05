@@ -440,61 +440,61 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
       }
 
       // Set up a runaway if there are combats we do not care about
-      if (!outfit.skipDefaults) {
-        const runawaySources = getRunawaySources().filter((s) => !s.blocked?.includes(task.name));
-        let runaway: (CombatResource & { banishes?: boolean }) | undefined = undefined;
-        if (combat.can("ignore") || combat.can("ignoreSoftBanish")) {
-          // First, try guaranteed runaways
-          runaway = equipFirst(
-            outfit,
-            runawaySources.filter((r) => r.chance() === 1)
-          );
-          // Second, if we are done with banishes, use one as a runaway
-          if (!runaway) {
-            if (
-              !this.tasks.find(
-                (t) => !t.completed() && t.combat?.can("banish") && !t.ignorebanishes?.()
-              )
-            ) {
-              const banishSources = unusedBanishes(
-                banishState,
-                task.availableTasks ?? [],
-                task.name,
-                "ends"
-              );
-              const runawayBanish = equipFirst(
-                outfit,
-                banishSources.filter((b) => b.free)
-              );
-              if (runawayBanish) {
-                runaway = { ...runawayBanish, banishes: true };
-                logprint(`Repurposing ${runaway.name} as freerun`);
-              }
+      const runawaySources = getRunawaySources().filter(
+        (s) => !s.blocked?.includes(task.name) && (!outfit.skipDefaults || s.equip === undefined)
+      );
+      let runaway: (CombatResource & { banishes?: boolean }) | undefined = undefined;
+      if (combat.can("ignore") || combat.can("ignoreSoftBanish")) {
+        // First, try guaranteed runaways
+        runaway = equipFirst(
+          outfit,
+          runawaySources.filter((r) => r.chance() === 1)
+        );
+        // Second, if we are done with banishes, use one as a runaway
+        if (!runaway) {
+          if (
+            !this.tasks.find(
+              (t) => !t.completed() && t.combat?.can("banish") && !t.ignorebanishes?.()
+            )
+          ) {
+            const banishSources = unusedBanishes(
+              banishState,
+              task.availableTasks ?? [],
+              task.name,
+              "ends"
+            );
+            const runawayBanish = equipFirst(
+              outfit,
+              banishSources.filter((b) => b.free)
+            );
+            if (runawayBanish) {
+              runaway = { ...runawayBanish, banishes: true };
+              logprint(`Repurposing ${runaway.name} as freerun`);
             }
           }
-          // Last, fill with probabilistic runaways
-          if (!runaway) {
-            runaway = equipFirst(
-              outfit,
-              runawaySources.filter((r) => r.chance() !== 1)
-            );
-          }
-
-          if (runaway?.effect) task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
-          resources.provide("ignore", runaway);
-          resources.provide("ignoreSoftBanish", runaway);
         }
-        if (combat.can("ignoreNoBanish") && myLevel() >= 11) {
-          if (runaway !== undefined && !runaway.banishes)
-            resources.provide("ignoreNoBanish", runaway);
-          else {
-            runaway = equipFirst(
-              outfit,
-              runawaySources.filter((source) => !source.banishes)
-            );
-            resources.provide("ignoreNoBanish", runaway);
-            if (runaway?.effect) task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
-          }
+        // Last, fill with probabilistic runaways
+        if (!runaway) {
+          runaway = equipFirst(
+            outfit,
+            runawaySources.filter((r) => r.chance() !== 1)
+          );
+        }
+
+        if (runaway?.effect) task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
+        resources.provide("ignore", runaway);
+        resources.provide("ignoreSoftBanish", runaway);
+      }
+      if (combat.can("ignoreNoBanish") && myLevel() >= 11) {
+        if (runaway !== undefined && !runaway.banishes)
+          resources.provide("ignoreNoBanish", runaway);
+        else {
+          runaway = equipFirst(
+            outfit,
+            runawaySources.filter((source) => !source.banishes)
+          );
+          resources.provide("ignoreNoBanish", runaway);
+          if (runaway?.effect) task.otherEffects = [...(task.otherEffects ?? []), runaway.effect];
         }
       }
 
