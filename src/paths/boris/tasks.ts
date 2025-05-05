@@ -43,6 +43,7 @@ import {
   $coinmaster,
   $effect,
   $effects,
+  $familiar,
   $item,
   $items,
   $location,
@@ -345,6 +346,7 @@ export const borisDeltas: NamedDeltaTask[] = [
           result.equip?.push($item`Daylight Shavings Helmet`);
         return result;
       },
+      delay: undefined,
     },
   },
   {
@@ -601,9 +603,9 @@ export const borisDeltas: NamedDeltaTask[] = [
             ensureWithMPSwaps($effects`Song of Cockiness`);
           }
         }
-      }
-    }
-  }
+      },
+    },
+  },
 ];
 
 export const BorisQuest: Quest = {
@@ -1056,7 +1058,8 @@ export const BorisQuest: Quest = {
     },
     {
       name: "Paw Bird Rib",
-      after: ["Palindome/Alarm Gem"],
+      // Do after using monkey paw banish in desert
+      after: ["Palindome/Alarm Gem", "Macguffin/Desert"],
       completed: () =>
         !have($item`Peridot of Peril`) ||
         have($item`bird rib`) ||
@@ -1077,7 +1080,7 @@ export const BorisQuest: Quest = {
       completed: () =>
         !!(get("twinPeakProgress") & 8) || !CursedMonkeyPaw.have() || CursedMonkeyPaw.wishes() <= 1,
       do: () => {
-        CursedMonkeyPaw.wishFor($item`killing jar`);
+        CursedMonkeyPaw.wishFor($item`rusty hedge trimmers`);
       },
       freeaction: true,
       limit: { tries: 4 },
@@ -1290,6 +1293,30 @@ export const BorisQuest: Quest = {
       },
       freeaction: true,
       limit: { tries: 1 },
+    },
+    {
+      name: "Fantasy",
+      after: ["Misc/Open Fantasy"],
+      completed: () =>
+        $location`The Bandit Crossroads`.turnsSpent >= 5 || !(get("frAlways") || get("_frToday")),
+      priority: () => {
+        if (
+          have($item`Everfull Dart Holster`) &&
+          !have($effect`Everything Looks Red`) &&
+          myTurncount() >= 30
+        ) {
+          return Priorities.GoodDarts;
+        }
+        return Priorities.None;
+      },
+      do: $location`The Bandit Crossroads`,
+      outfit: {
+        familiar: $familiar`none`,
+        equip: $items`FantasyRealm G. E. M.`,
+        modifier: "moxie",
+      },
+      combat: new CombatStrategy().kill(),
+      limit: { tries: 5 },
     },
   ],
 };

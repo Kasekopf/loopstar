@@ -774,6 +774,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
   }
 
   override do(task: ActiveTask): void {
+    if (args.debug.pause) throw `Pause requested`;
     const beaten_turns = haveEffect($effect`Beaten Up`);
     const start_advs = myAdventures();
 

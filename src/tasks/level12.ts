@@ -535,6 +535,8 @@ const Nuns: Task[] = [
         if (SourceTerminal.have() && !have($effect`items.enh`))
           SourceTerminal.enhance($effect`items.enh`); // for +item push
         if (have($item`Polka Pop`)) ensureEffect($effect`Polka Face`);
+        if (have($item`peppermint twist`)) ensureEffect($effect`Peppermint Twisted`);
+        if (have($item`pink candy heart`)) ensureEffect($effect`Heart of Pink`);
       }
       fillHp();
     },

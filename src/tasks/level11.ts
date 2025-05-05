@@ -226,7 +226,11 @@ const Desert: Task[] = [
         itemAmount($item`worm-riding manual page`) < 15 &&
         !have($item`worm-riding hooks`) &&
         ((!get("oasisAvailable", false) && !have($effect`A Girl Named Sue`)) ||
-          have($effect`Ultrahydrated`));
+          have($effect`Ultrahydrated`)) &&
+        (haveDesertSpeeder() ||
+          (get("gnasirProgress") & 16) === 0 ||
+          have($item`stone rose`) ||
+          (get("gnasirProgress") & 1) !== 0);
       return cond;
     },
     priority: () => (have($effect`Ultrahydrated`) ? Priorities.MinorEffect : Priorities.None),
@@ -392,6 +396,7 @@ const Pyramid: Task[] = [
         result.equip?.push($item`Daylight Shavings Helmet`);
       return result;
     },
+    ignoreforbreathitin: true,
     delay: 9,
   },
   {
@@ -497,7 +502,7 @@ function beeOption(): number {
  * @returns true if we have some way to speed up the desert.
  */
 function haveDesertSpeeder(): boolean {
-  if (myPath() !== $path`Avatar of Boris`) return false;
+  if (myPath() === $path`Avatar of Boris`) return false;
   if (have($familiar`Melodramedary`)) return true;
   if (have($item`survival knife`)) return true;
   if (have($item`UV-resistant compass`)) return true;

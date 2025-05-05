@@ -93,12 +93,7 @@ export const borisRoute: string[] = [
 
   "Palindome/Copperhead",
   "Palindome/Talisman",
-  "Palindome/Palindome Dudes",
-
-  "War/Junkyard End",
-  "McLargeHuge/Climb",
-  "McLargeHuge/Finish",
-  "Palindome/Boss",
+  "Palindome/Palindome Photos",
 
   // Do the desert
   "Macguffin/Milestone",
@@ -106,6 +101,11 @@ export const borisRoute: string[] = [
   "Macguffin/Oasis Drum", // Get drum as soon as pages are gathered
   "Macguffin/Oasis Rose", // Also get the rose
   "Macguffin/Desert", // charge camel for protestors
+
+  "War/Junkyard End",
+  "McLargeHuge/Climb",
+  "McLargeHuge/Finish",
+  "Palindome/Boss",
 
   // Do the crypt when we can get Breathitins
   "Crypt/Alcove",
@@ -151,7 +151,10 @@ export const borisRoute: string[] = [
   "Knob/King",
   "Crypt/Finish",
 
+  "Tower/Maze",
+
   // Finish last keys
+  "Boris/Fantasy",
   "Keys/All Heroes",
 
   "Tower/Shadow",

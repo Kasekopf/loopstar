@@ -61,7 +61,7 @@ export class Priorities {
   static GoodBanish3: Priority = { score: 0.7, reason: "3+ banishes committed" };
   static GoodBanish2: Priority = { score: 0.6, reason: "2 banishes committed" };
   static GoodBanish: Priority = { score: 0.5, reason: "1 banish committed" };
-  static GoodExtend: Priority = { score: 0.11, reason: "No-fight for Breathitin" };
+  static GoodExtend: Priority = { score: 0.11, reason: "Extend for Breathitin" };
   static GoodUnderground: Priority = { score: 0.1, reason: "Underground for Breathitin" };
   static SeekJellyfish: Priority = { score: 0.1, reason: "Get Spectral Jellyfish" };
   static None: Priority = { score: 0 };

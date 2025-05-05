@@ -278,6 +278,11 @@ export const args = Args.create(
         hidden: true,
         setting: "",
       }),
+      pause: Args.flag({
+        help: "Pause before running .do() on the next task",
+        hidden: true,
+        setting: "",
+      }),
     }),
   },
   {

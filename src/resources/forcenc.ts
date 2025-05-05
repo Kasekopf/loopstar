@@ -53,7 +53,7 @@ export const forceNCSources: CombatForceNCSource[] = [
       .skill($skill`McHugeLarge Avalanche`),
     remaining: () => {
       if (!have($item`McHugeLarge left ski`)) return 0;
-      return get("_mcHugeLargeAvalancheUses");
+      return 3 - get("_mcHugeLargeAvalancheUses");
     },
   },
 ];

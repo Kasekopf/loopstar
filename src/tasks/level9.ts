@@ -50,6 +50,7 @@ const ABoo: Task[] = [
       $location`A-Boo Peak`.noncombatQueue.includes("Faction Traction = Inaction") ||
       get("booPeakProgress") < 100,
     do: $location`A-Boo Peak`,
+    breathitinextender: true,
     limit: { tries: 1 },
   },
   {

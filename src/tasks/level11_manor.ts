@@ -238,11 +238,6 @@ const Manor2: Task[] = [
         return 0;
       return 5;
     },
-    peridot: () => {
-      if ($location`The Haunted Bedroom`.turnsSpent >= 5)
-        return $monster`elegant animated nightstand`;
-      return undefined;
-    },
     limit: { soft: 20 },
   },
   {

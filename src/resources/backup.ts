@@ -63,7 +63,10 @@ const backupTargets: BackupTarget[] = [
   {
     monster: $monster`sausage goblin`,
     completed: () =>
-      myTurncount() < 120 || get("cyrptCrannyEvilness") > 13 || !args.resources.speed,
+      myTurncount() < 120 ||
+      get("cyrptCrannyEvilness") > 13 ||
+      !args.resources.speed ||
+      get("spookyravenRecipeUsed") !== "with_glasses",
     limit_tries: 11,
     last: true,
   },

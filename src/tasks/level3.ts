@@ -137,6 +137,7 @@ export const TavernQuest: Quest = {
           513: numericModifier("Cold Damage") >= 20 ? 2 : 1,
         };
       },
+      breathitinextender: true,
       limit: { tries: 10 },
     },
     {
