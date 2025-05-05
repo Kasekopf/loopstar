@@ -378,17 +378,14 @@ export const borisDeltas: NamedDeltaTask[] = [
     name: "Manor/Billiards",
     combine: {
       prepare: () => {
-        // Spend wish or 1 spleen to guarantee library key
-        tryWish($effect`Sharky`);
-        if (get("poolSkill") === 0 && have($item`pool shark hair oil`))
-          ensureEffect($effect`Sharky`);
+        // Spend wish to guarantee library key
+        tryWish($effect`Influence of Sphere`);
       },
     },
     replace: {
       resources: () => {
         if (
-          !have($item`pool shark hair oil`) &&
-          !have($effect`Sharky`) &&
+          !have($effect`Influence of Sphere`) &&
           !have($item`pocket wish`) &&
           (!have($item`cursed monkey's paw`) || get("_monkeyPawWishesUsed") === 5)
         )
