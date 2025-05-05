@@ -1,12 +1,4 @@
-import {
-  changeMcd,
-  cliExecute,
-  currentMcd,
-  itemAmount,
-  mallPrice,
-  myBasestat,
-  myTurncount,
-} from "kolmafia";
+import { cliExecute, itemAmount, mallPrice, myBasestat, myTurncount } from "kolmafia";
 import { args } from "../../args";
 import { NamedDeltaTask, Quest } from "../../engine/task";
 import { $effect, $item, $items, $monster, $skill, $stat, get, have, Macro, undelay } from "libram";
@@ -178,11 +170,7 @@ export const CasualQuest: Quest = {
       ready: () => myBasestat($stat`Muscle`) >= 62,
       completed: () => get("cyrptCrannyEvilness") <= 45, // Only do once
       prepare: () => {
-        changeMcd(10);
         fillHp();
-      },
-      post: () => {
-        if (currentMcd() > 0) changeMcd(0);
       },
       outfit: () =>
         <OutfitSpec>{

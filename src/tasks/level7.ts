@@ -1,8 +1,6 @@
 import {
   adv1,
-  changeMcd,
   cliExecute,
-  currentMcd,
   haveEquipped,
   Item,
   myBasestat,
@@ -150,12 +148,10 @@ const Cranny: Task[] = [
     completed: () => get("cyrptCrannyEvilness") <= 13,
     prepare: () => {
       tuneCape();
-      changeMcd(10);
       fillHp();
       tryPlayApriling("-combat");
     },
     post: () => {
-      if (currentMcd() > 0) changeMcd(0);
       if (haveFlorest() && FloristFriar.BlusteryPuffball.available()) {
         FloristFriar.BlusteryPuffball.plant();
       }

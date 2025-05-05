@@ -1,7 +1,10 @@
 import {
   autosell,
   availableAmount,
+  canadiaAvailable,
   canAdventure,
+  changeMcd,
+  currentMcd,
   descToItem,
   Effect,
   equip,
@@ -718,6 +721,13 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
           familiarEquippedEquipment(args.minor.stillsuit) !== $item`tiny stillsuit`))
     ) {
       equip(args.minor.stillsuit, $item`tiny stillsuit`);
+    }
+
+    if (modifier.includes("ML") && !modifier.includes("-ML")) {
+      if (canadiaAvailable()) changeMcd(11);
+      else changeMcd(10);
+    } else if (currentMcd() > 0) {
+      changeMcd(0);
     }
   }
 

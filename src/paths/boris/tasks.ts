@@ -2,11 +2,9 @@ import { NamedDeltaTask, Priority, Quest, Resources } from "../../engine/task";
 import { args, toTempPref } from "../../args";
 import {
   buy,
-  changeMcd,
   chew,
   cliExecute,
   closetAmount,
-  currentMcd,
   drink,
   eat,
   fullnessLimit,
@@ -1238,7 +1236,6 @@ export const BorisQuest: Quest = {
         }
       },
       prepare: () => {
-        changeMcd(10);
         fillHp();
 
         if (!have($effect`Angering Pizza Purists`)) {
@@ -1255,9 +1252,6 @@ export const BorisQuest: Quest = {
             ensureWithMPSwaps($effects`Song of Cockiness`);
           }
         }
-      },
-      post: () => {
-        if (currentMcd() > 0) changeMcd(0);
       },
       outfit: () =>
         <OutfitSpec>{

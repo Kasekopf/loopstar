@@ -144,10 +144,7 @@ const Oil: Task[] = [
     prepare: () => {
       if (myMp() < 80 && myMaxmp() >= 80) customRestoreMp(80 - myMp());
       if (myHp() < 100 && myMaxhp() >= 100) customRestoreMp(100 - myMp());
-      if (numericModifier("Monster Level") < 100) changeMcd(10);
-    },
-    post: () => {
-      if (currentMcd() > 0) changeMcd(0);
+      if (numericModifier("Monster Level") - currentMcd() >= 100) changeMcd(0); // no need to overshoot
     },
     do: $location`Oil Peak`,
     outfit: () => {

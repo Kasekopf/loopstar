@@ -377,12 +377,9 @@ const ManorBasement: Task[] = [
     after: ["Fulminate"],
     completed: () => have($item`wine bomb`) || step("questL11Manor") >= 3,
     prepare: () => {
-      if (numericModifier("Monster Level") < 81) changeMcd(10);
+      if (numericModifier("Monster Level") - currentMcd() >= 81) changeMcd(0); // no need to overshoot
       tuneSnapper($phylum`constructs`);
       restoreMp(200);
-    },
-    post: () => {
-      if (currentMcd() > 0) changeMcd(0);
     },
     do: $location`The Haunted Boiler Room`,
     outfit: (): OutfitSpec => {
