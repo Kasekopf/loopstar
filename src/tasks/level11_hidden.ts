@@ -455,7 +455,9 @@ const Bowling: Task[] = [
     name: "Bowling",
     after: ["Open Bowling", "Banish Janitors"],
     priority: () =>
-      get("camelSpit") === 100 && cosmicBowlingBallReady() && have($skill`Map the Monsters`)
+      cosmicBowlingBallReady() &&
+      ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
+        (!have($familiar`Melodramedary`) && have($item`Peridot of Peril`)))
         ? Priorities.BestCosmicBowlingBall
         : Priorities.None,
     ready: () =>
@@ -479,6 +481,11 @@ const Bowling: Task[] = [
     combat: new CombatStrategy()
       .killHard($monster`ancient protector spirit (The Hidden Bowling Alley)`)
       .killItem($monster`pygmy bowler`)
+      .macro(() => {
+        if (get("hiddenBowlingAlleyProgress") === 1)
+          return Macro.tryItem($item`cosmic bowling ball`);
+        return new Macro();
+      })
       .macro(() => {
         if (myFamiliar() === $familiar`Melodramedary` && get("camelSpit") === 100)
           return Macro.trySkill($skill`%fn, spit on them!`).tryItem($item`cosmic bowling ball`);
