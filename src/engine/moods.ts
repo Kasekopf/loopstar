@@ -117,6 +117,24 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
     result["init"].push($effect`Whispering Strands`);
   }
 
+  if (have($skill`Seek out a Bird`)) {
+    if (get("_birdOfTheDayMods").includes("Monster Level")) {
+      result["ML"].push($effect`Blessing of the Bird`);
+    }
+    if (get("_birdOfTheDayMods").includes("Muscle")) {
+      result["muscle"].push($effect`Blessing of the Bird`);
+    }
+    if (get("_birdOfTheDayMods").includes("Myst")) {
+      result["mysticality"].push($effect`Blessing of the Bird`);
+    }
+    if (get("_birdOfTheDayMods").includes("Moxie")) {
+      result["moxie"].push($effect`Blessing of the Bird`);
+    }
+    if (get("_birdOfTheDayMods").includes("Initiative")) {
+      result["init"].push($effect`Blessing of the Bird`);
+    }
+  }
+
   // If we are not in Smol,
   // or if we have an effect to override the 1 attribute cap,
   // +%stat effects may be worthwhile.
