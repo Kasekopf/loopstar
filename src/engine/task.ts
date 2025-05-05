@@ -26,6 +26,7 @@ export type Task = {
   breathitinextender?: boolean | (() => boolean);
   ignoreforbreathitin?: boolean;
   ignoreyrdelay?: boolean;
+  skipswap?: boolean;
 
   // Resources
   delay?: number | (() => number);

@@ -1191,6 +1191,7 @@ export const BorisQuest: Quest = {
         .killHard(),
       outfit: { equip: $items`deft pirate hook, spring shoes` },
       orbtargets: () => undefined, // do not dodge anything with orb
+      skipswap: true,
       choices: { 163: 4, 888: 5, 889: 5, 894: 1 },
       limit: { soft: 20 },
     },

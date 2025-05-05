@@ -357,7 +357,7 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
           );
 
           let usingSwapper = false;
-          if (args.resources.speed && unkillbanished.length === 0) {
+          if (args.resources.speed && unkillbanished.length === 0 && !task.skipswap) {
             // Consider using a swapper after a partial banish
             const trialOutfit = outfit.clone();
             const nokillSources = unusedBanishes(
