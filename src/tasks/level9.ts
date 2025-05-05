@@ -31,7 +31,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { Priority, Quest, ResourceRequest, Resources, Task } from "../engine/task";
+import { Priority, Quest, Resources, Task } from "../engine/task";
 import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
@@ -41,6 +41,7 @@ import { customRestoreMp, fillHp } from "../engine/moods";
 import { stenchPlanner } from "../engine/outfit";
 import { tryPlayApriling } from "../lib";
 import { trainSetAvailable } from "./misc";
+import { args } from "../args";
 
 const ABoo: Task[] = [
   {
@@ -87,18 +88,21 @@ const ABoo: Task[] = [
     combat: new CombatStrategy().killItem(),
     orbtargets: () => [],
     choices: { 611: 1, 1430: 1 },
-    resources: () =>
-      <ResourceRequest>{
-        which: Resources.Lucky,
-        benefit: 2.5,
-        repeat: 30 * (itemAmount($item`A-Boo clue`) + 2) <= get("booPeakProgress") ? 2 : 1,
-        delta: {
-          replace: {
-            skipprep: true,
-            breathitinextender: true,
+    resources: () => {
+      if (args.resources.speed)
+        return {
+          which: Resources.Lucky,
+          benefit: 2.5,
+          repeat: 30 * (itemAmount($item`A-Boo clue`) + 2) <= get("booPeakProgress") ? 2 : 1,
+          delta: {
+            replace: {
+              skipprep: true,
+              breathitinextender: true,
+            },
           },
-        },
-      },
+        };
+      return undefined;
+    },
     limit: { soft: 15 },
   },
   {
