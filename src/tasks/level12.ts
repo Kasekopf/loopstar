@@ -146,7 +146,10 @@ const Lighthouse: Task[] = [
       })
       .kill($monster`lobsterfrogman`),
     orbtargets: () => undefined,
-    peridot: $monster`lobsterfrogman`,
+    peridot: () => {
+      if (AutumnAton.have()) return undefined;
+      return $monster`lobsterfrogman`;
+    },
     expectbeatenup: () => get("lastEncounter") === "Zerg Rush",
     choices: { 1387: 2 },
     skipeffects: () => AutumnAton.have(),

@@ -282,7 +282,12 @@ const Nook: Task[] = [
     prepare: tuneCape,
     priority: (): Priority => {
       if (AutumnAton.have()) {
-        if ($location`The Defiled Nook`.turnsSpent === 0 && myTurncount() >= 40)
+        if (
+          $location`The Defiled Nook`.turnsSpent === 0 &&
+          myTurncount() >= 40 &&
+          // TODO: Remove when mafia tracks peridot location correctly
+          !get("_perilLocations").split(",").includes("264")
+        )
           return Priorities.GoodAutumnaton;
       }
       return Priorities.None;
