@@ -66,6 +66,33 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge1") === $stat`Moxie`,
     completed: () => get("nsContestants2") > -1,
+    prepare: () => {
+      if (myBuffedstat($stat`Moxie`) < 600 && BeachComb.have())
+        BeachComb.tryHead($effect`Pomp & Circumsands`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`gummi canary`))
+        ensureEffect($effect`Gummiskin`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`gaffer's tape`))
+        ensureEffect($effect`Gaffe Free`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`runproof mascara`))
+        ensureEffect($effect`Unrunnable Face`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`Black No. 2`))
+        ensureEffect($effect`Locks Like the Raven`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`old bronzer`))
+        ensureEffect($effect`Sepia Tan`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`sugar-coated pine cone`))
+        ensureEffect($effect`Antsy in your Pantsy`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`white candy heart`))
+        ensureEffect($effect`Heart of White`);
+      if (myBuffedstat($stat`Moxie`) < 600 && have($item`yellow candy heart`))
+        ensureEffect($effect`Heart of Yellow`);
+
+      if (
+        myBuffedstat($stat`Moxie`) < 600 &&
+        have($item`Powerful Glove`) &&
+        get("_powerfulGloveBatteryPowerUsed") <= 95
+      )
+        ensureEffect($effect`Triple-Sized`);
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(2);
@@ -80,6 +107,16 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge1") === $stat`Muscle`,
     completed: () => get("nsContestants2") > -1,
+    prepare: () => {
+      if (myBuffedstat($stat`Muscle`) < 600 && BeachComb.have())
+        BeachComb.tryHead(BeachComb.head.MUSCLE);
+      if (
+        myBuffedstat($stat`Muscle`) < 600 &&
+        have($item`Powerful Glove`) &&
+        get("_powerfulGloveBatteryPowerUsed") <= 95
+      )
+        ensureEffect($effect`Triple-Sized`);
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(2);
@@ -94,6 +131,16 @@ const Challenges: Task[] = [
     after: ["Start"],
     ready: () => get("nsChallenge1") === $stat`Mysticality`,
     completed: () => get("nsContestants2") > -1,
+    prepare: () => {
+      if (myBuffedstat($stat`Mysticality`) < 600 && BeachComb.have())
+        BeachComb.tryHead(BeachComb.head.MYSTICALITY);
+      if (
+        myBuffedstat($stat`Mysticality`) < 600 &&
+        have($item`Powerful Glove`) &&
+        get("_powerfulGloveBatteryPowerUsed") <= 95
+      )
+        ensureEffect($effect`Triple-Sized`);
+    },
     do: (): void => {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
       runChoice(2);

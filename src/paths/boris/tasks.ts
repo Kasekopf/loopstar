@@ -1314,7 +1314,6 @@ export const BorisQuest: Quest = {
       outfit: {
         familiar: $familiar`none`,
         equip: $items`FantasyRealm G. E. M.`,
-        modifier: "moxie",
       },
       combat: new CombatStrategy().kill(),
       limit: { tries: 5 },
