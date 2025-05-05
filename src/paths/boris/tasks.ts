@@ -480,6 +480,7 @@ export const borisDeltas: NamedDeltaTask[] = [
         .killItem($monsters`black adder, black panther`)
         .killBanish($monsters`black friar, black magic woman, black widow`)
         .kill(),
+      ignorebanishes: () => have($item`reassembled blackbird`),
     },
   },
   {
