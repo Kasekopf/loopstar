@@ -428,32 +428,33 @@ export const DigitalQuest: Quest = {
           else ensureWithMPSwaps($effects`Nearly Silent Hunting`);
         }
 
-        if (
-          have($item`designer sweatpants`) &&
-          get("sweat", 0) >= 15 &&
-          numericModifier("Initiative") < 600
-        ) {
-          // Use visit URL to avoid needing to equip the pants
-          visitUrl("runskillz.php?action=Skillz&whichskill=7419&targetplayer=0&pwd&quantity=1");
+        const initOptions: [boolean, () => void][] = [
+          [
+            have($item`designer sweatpants`) && get("sweat", 0) >= 15,
+            () =>
+              visitUrl("runskillz.php?action=Skillz&whichskill=7419&targetplayer=0&pwd&quantity=1"),
+          ],
+          [
+            have($item`Clan VIP Lounge key`) && get("_poolGames") < 3,
+            () => ensureEffect($effect`Hustlin'`),
+          ],
+        ];
+
+        const speedInitOptions: [boolean, () => void][] = [
+          [BeachComb.have(), () => BeachComb.tryHead($effect`Resting Beach Face`)],
+          [have($item`ant agonist`), () => ensureEffect($effect`All Fired Up`)],
+          [have($item`yellow candy heart`), () => ensureEffect($effect`Heart of Yellow`)],
+          [have($item`peppermint twist`), () => ensureEffect($effect`Peppermint Twisted`)],
+          [
+            SourceTerminal.have() && !have($effect`init.enh`),
+            () => SourceTerminal.enhance($effect`init.enh`),
+          ],
+        ];
+
+        if (args.resources.speed) initOptions.push(...speedInitOptions);
+        for (const option of initOptions) {
+          if (numericModifier("Initiative") < 600 && option[0]) option[1]();
         }
-
-        if (
-          have($item`Clan VIP Lounge key`) &&
-          get("_poolGames") < 3 &&
-          numericModifier("Initiative") < 600
-        )
-          ensureEffect($effect`Hustlin'`);
-
-        if (args.resources.speed && numericModifier("Initiative") < 600)
-          BeachComb.tryHead($effect`Resting Beach Face`);
-
-        if (
-          args.resources.speed &&
-          SourceTerminal.have() &&
-          !have($effect`init.enh`) &&
-          numericModifier("Initiative") < 600
-        )
-          SourceTerminal.enhance($effect`init.enh`);
       },
       ready: () => get("8BitColor", "black") === "black" || get("8BitColor", "black") === "",
       do: $location`Vanya's Castle`,
