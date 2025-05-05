@@ -1460,7 +1460,7 @@ export const MiscQuest: Quest = {
       do: $location`Noob Cave`,
       ignoreforbreathitin: true,
       delay: 11,
-      limit: { tries: 11 },
+      limit: { tries: 12 }, // 11, +1 since we never finish
     },
     {
       name: "Dungeoneering Kit",
