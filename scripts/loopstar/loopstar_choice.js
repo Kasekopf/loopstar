@@ -551,6 +551,8 @@ function main(choice, page) {
       choiceToRun = parseInt(option);
     }
     (0, import_kolmafia3.runChoice)(choiceToRun);
+  } else if ((choice === 496 || choice === 513 || choice === 514 || choice === 515) && options[2]) {
+    (0, import_kolmafia3.runChoice)(2);
   }
 }
 // Annotate the CommonJS export names for ESM import in node:

@@ -6650,6 +6650,11 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
       help: "Check the current task resource allocation",
       hidden: true,
       setting: ""
+    }),
+    pause: Args.flag({
+      help: "Pause before running .do() on the next task",
+      hidden: true,
+      setting: ""
     })
   })
 }, {
