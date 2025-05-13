@@ -503,10 +503,10 @@ const Bowling: Task[] = [
     after: ["Open Bowling", "Banish Janitors"],
     priority: () =>
       cosmicBowlingBallReady() &&
-        ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
-          (!have($familiar`Melodramedary`) &&
-            have($item`Peridot of Peril`) &&
-            get("hiddenBowlingAlleyProgress") === 1))
+      ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
+        (!have($familiar`Melodramedary`) &&
+          have($item`Peridot of Peril`) &&
+          get("hiddenBowlingAlleyProgress") === 1))
         ? Priorities.BestCosmicBowlingBall
         : Priorities.None,
     ready: () =>
