@@ -50,12 +50,14 @@ import {
   getSongLimit,
   have,
   isSong,
+  set,
   uneffect,
   unequip,
 } from "libram";
 import { asdonFualable } from "../lib";
 import { underStandard } from "../lib";
 import { step } from "grimoire-kolmafia";
+import { toTempPref } from "../args";
 
 const aprilShieldEffects = new Map<Effect, Skill>([
   [$effect`Thoughtful Empathy`, $skill`Empathy of the Newt`],
@@ -117,7 +119,11 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
     result["init"].push($effect`Whispering Strands`);
   }
 
-  if (have($skill`Seek out a Bird`)) {
+  if (
+    have($skill`Seek out a Bird`) &&
+    get("_birdsSoughtToday") < 6 &&
+    !get(toTempPref("birdExpensive"), false)
+  ) {
     if (get("_birdOfTheDayMods").includes("Monster Level")) {
       result["ML"].push($effect`Blessing of the Bird`);
     }
@@ -311,6 +317,12 @@ export function ensureWithMPSwaps(effects: Effect[], required = true) {
     const mpcost = mpCost(skill);
     if (mpcost > myMaxmp()) {
       hotswapped.push(...swapEquipmentForMp(mpcost));
+    }
+    if (effect === $effect`Blessing of the Bird` && mpcost > myMaxmp()) {
+      // Seek out a Bird has become too expensive to cast,
+      // so we may as well stop planning for it.
+      set(toTempPref("birdExpensive"), true);
+      continue;
     }
     if (myMp() < mpcost) customRestoreMp(mpcost);
     if (shieldSkill) {
