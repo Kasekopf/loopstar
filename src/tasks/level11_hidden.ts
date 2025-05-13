@@ -211,12 +211,13 @@ const Apartment: Task[] = [
       have($effect`Once-Cursed`) || have($effect`Twice-Cursed`) || have($effect`Thrice-Cursed`)
         ? Priorities.MinorEffect
         : Priorities.None,
-    // The last curse is obtained from the next task, when the shaman is banished
+    // (When speed) the last curse is obtained from the next task, when the shaman is banished
     completed: () =>
       get("hiddenApartmentProgress") >= 7 ||
-      have($effect`Thrice-Cursed`) ||
-      have($effect`Twice-Cursed`) ||
-      (have($effect`Once-Cursed`) && have($item`candy cane sword cane`)),
+      (!!args.resources.speed &&
+        (have($effect`Thrice-Cursed`) ||
+          have($effect`Twice-Cursed`) ||
+          (have($effect`Once-Cursed`) && have($item`candy cane sword cane`)))),
     do: $location`The Hidden Apartment Building`,
     combat: new CombatStrategy()
       .killHard($monster`ancient protector spirit (The Hidden Apartment Building)`)
@@ -277,7 +278,6 @@ const Apartment: Task[] = [
         return { equip: $items`candy cane sword cane, miniature crystal ball, deft pirate hook` };
       return { equip: $items`miniature crystal ball, deft pirate hook` };
     },
-    peridot: $monster`pygmy witch accountant`,
     skipswap: true,
     choices: { 780: 1 },
     limit: { soft: 9 },
@@ -503,10 +503,10 @@ const Bowling: Task[] = [
     after: ["Open Bowling", "Banish Janitors"],
     priority: () =>
       cosmicBowlingBallReady() &&
-      ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
-        (!have($familiar`Melodramedary`) &&
-          have($item`Peridot of Peril`) &&
-          get("hiddenBowlingAlleyProgress") === 1))
+        ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
+          (!have($familiar`Melodramedary`) &&
+            have($item`Peridot of Peril`) &&
+            get("hiddenBowlingAlleyProgress") === 1))
         ? Priorities.BestCosmicBowlingBall
         : Priorities.None,
     ready: () =>
