@@ -237,10 +237,7 @@ const Apartment: Task[] = [
       .kill($monster`pygmy witch accountant`)
       .ignoreNoBanish($monster`pygmy shaman`)
       .ignore(),
-    orbtargets: () => {
-      if (have($effect`Thrice-Cursed`)) return [];
-      else return [$monster`pygmy shaman`];
-    },
+    orbtargets: () => [],
     post: makeCompleteFile,
     outfit: () => {
       if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent === 8)
@@ -273,10 +270,7 @@ const Apartment: Task[] = [
       .kill($monster`pygmy witch accountant`)
       .ignore(),
     post: makeCompleteFile,
-    orbtargets: () => {
-      if (have($effect`Thrice-Cursed`)) return [];
-      else return [$monster`pygmy shaman`];
-    },
+    orbtargets: () => [],
     outfit: () => {
       if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent === 8)
         return { equip: $items`candy cane sword cane, miniature crystal ball, deft pirate hook` };
@@ -507,10 +501,10 @@ const Bowling: Task[] = [
     after: ["Open Bowling", "Banish Janitors"],
     priority: () =>
       cosmicBowlingBallReady() &&
-        ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
-          (!have($familiar`Melodramedary`) &&
-            have($item`Peridot of Peril`) &&
-            get("hiddenBowlingAlleyProgress") === 1))
+      ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
+        (!have($familiar`Melodramedary`) &&
+          have($item`Peridot of Peril`) &&
+          get("hiddenBowlingAlleyProgress") === 1))
         ? Priorities.BestCosmicBowlingBall
         : Priorities.None,
     ready: () =>
