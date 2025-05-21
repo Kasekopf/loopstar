@@ -37898,7 +37898,7 @@ function checkRequirements(path3) {
 }
 
 // src/_git_commit.ts
-var lastCommitHash = "f65d6d4";
+var lastCommitHash = "94af613";
 
 // src/engine/allocation.ts
 var import_kolmafia119 = require("kolmafia");
@@ -54745,7 +54745,7 @@ function loadEngine(path3) {
   var completedTasks = (_args$debug$completed = (_args$debug$completed2 = args.debug.completedtasks) === null || _args$debug$completed2 === void 0 ? void 0 : _args$debug$completed2.split(",")) !== null && _args$debug$completed !== void 0 ? _args$debug$completed : [];
   var deltas = [].concat(_toConsumableArray53(ignoreTasks.map(function(name) {
     return {
-      name: name,
+      name: name.trim().replace('"', ""),
       replace: {
         ready: function() {
           return false;
@@ -54755,7 +54755,7 @@ function loadEngine(path3) {
     };
   })), _toConsumableArray53(completedTasks.map(function(name) {
     return {
-      name: name,
+      name: name.trim().replace('"', ""),
       replace: {
         completed: function() {
           return true;
