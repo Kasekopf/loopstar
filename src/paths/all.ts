@@ -47,7 +47,7 @@ export function loadEngine(path: PathInfo): Engine {
     ...ignoreTasks.map(
       (name) =>
         <NamedDeltaTask>{
-          name: name,
+          name: name.trim().replace('"', ""),
           replace: {
             ready: () => false,
           },
@@ -57,7 +57,7 @@ export function loadEngine(path: PathInfo): Engine {
     ...completedTasks.map(
       (name) =>
         <NamedDeltaTask>{
-          name: name,
+          name: name.trim().replace('"', ""),
           replace: {
             completed: () => true,
           },
