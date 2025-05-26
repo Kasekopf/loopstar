@@ -225,6 +225,7 @@ const Junkyard: Task[] = [
       .banish($monsters`batwinged gremlin, vegetable gremlin`),
     nofightingfamiliars: true,
     limit: { soft: 15 },
+    peridot: $monster`batwinged gremlin (tool)`,
   },
   {
     name: "Junkyard Wrench",
@@ -261,6 +262,7 @@ const Junkyard: Task[] = [
       .banish($monsters`erudite gremlin, spider gremlin`),
     nofightingfamiliars: true,
     limit: { soft: 15 },
+    peridot: $monster`erudite gremlin (tool)`,
   },
   {
     name: "Junkyard Pliers",
@@ -297,6 +299,7 @@ const Junkyard: Task[] = [
       .banish($monsters`batwinged gremlin, spider gremlin`),
     nofightingfamiliars: true,
     limit: { soft: 15 },
+    peridot: $monster`spider gremlin (tool)`,
   },
   {
     name: "Junkyard Screwdriver",
@@ -333,6 +336,7 @@ const Junkyard: Task[] = [
       .banish($monsters`erudite gremlin, vegetable gremlin`),
     nofightingfamiliars: true,
     limit: { soft: 15 },
+    peridot: $monster`vegetable gremlin (tool)`,
   },
   {
     name: "Junkyard End",
