@@ -92,6 +92,7 @@ export const baseRoute: string[] = [
   // Hidden City
   "Hidden City/Office Files", // Banish janitors under delay
   "Hidden City/Apartment",
+  "Hidden City/Apartment Files",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
 

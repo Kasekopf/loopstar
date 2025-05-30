@@ -375,7 +375,7 @@ const absorbTasks: AbsorbTask[] = [
   },
   {
     do: $location`The Hidden Apartment Building`,
-    after: ["Hidden City/Apartment"],
+    after: ["Hidden City/Apartment", "Hidden City/Apartment Files"],
     choices: { 780: 4 },
   },
   {
