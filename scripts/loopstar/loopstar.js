@@ -35088,7 +35088,7 @@ var absorbTasks = [
   },
   {
     do: $location(_templateObject8610 || (_templateObject8610 = _taggedTemplateLiteral98(["The Hidden Apartment Building"]))),
-    after: ["Hidden City/Apartment"],
+    after: ["Hidden City/Apartment", "Hidden City/Apartment Files"],
     choices: {
       780: 4
     }
@@ -37906,7 +37906,7 @@ function checkRequirements(path3) {
 }
 
 // src/_git_commit.ts
-var lastCommitHash = "0f945c8";
+var lastCommitHash = "43ffb24";
 
 // src/engine/allocation.ts
 var import_kolmafia119 = require("kolmafia");
@@ -38623,6 +38623,7 @@ var baseRoute = [
   "Hidden City/Office Files",
   // Banish janitors under delay
   "Hidden City/Apartment",
+  "Hidden City/Apartment Files",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
   "Manor/Boss",
@@ -43435,6 +43436,7 @@ var casualRoute = [
   "Hidden City/Banish Janitors",
   "Hidden City/Office Files",
   "Hidden City/Apartment",
+  "Hidden City/Apartment Files",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
   "Hidden City/Office Boss",
@@ -46448,7 +46450,7 @@ var Apartment = [{
   },
   freecombat: true
 }, {
-  name: "Apartment Inital Curse",
+  name: "Apartment",
   after: ["Open Apartment"],
   priority: function() {
     return have($effect(_templateObject3639 || (_templateObject3639 = _taggedTemplateLiteral133(["Once-Cursed"])))) || have($effect(_templateObject3739 || (_templateObject3739 = _taggedTemplateLiteral133(["Twice-Cursed"])))) || have($effect(_templateObject3836 || (_templateObject3836 = _taggedTemplateLiteral133(["Thrice-Cursed"])))) ? Priorities.MinorEffect : Priorities.None;
@@ -46487,8 +46489,8 @@ var Apartment = [{
     soft: 9
   }
 }, {
-  name: "Apartment",
-  after: ["Open Apartment", "Apartment Inital Curse"],
+  name: "Apartment Files",
+  after: ["Open Apartment", "Apartment"],
   priority: function() {
     return have($effect(_templateObject6226 || (_templateObject6226 = _taggedTemplateLiteral133(["Once-Cursed"])))) || have($effect(_templateObject6326 || (_templateObject6326 = _taggedTemplateLiteral133(["Twice-Cursed"])))) || have($effect(_templateObject6425 || (_templateObject6425 = _taggedTemplateLiteral133(["Thrice-Cursed"])))) ? Priorities.MinorEffect : Priorities.None;
   },
@@ -46518,7 +46520,7 @@ var Apartment = [{
   }
 }, {
   name: "Finish Apartment",
-  after: ["Apartment"],
+  after: ["Apartment", "Apartment Files"],
   completed: function() {
     return get("hiddenApartmentProgress") >= 8;
   },
@@ -52094,6 +52096,7 @@ var borisRoute = [
   "Hidden City/Open Apartment",
   "Hidden City/Open Hospital",
   "Hidden City/Apartment",
+  "Hidden City/Apartment Files",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
   "Hidden City/Office Boss",
