@@ -229,6 +229,7 @@ function dailyDungeonTask(): Omit<Task, "completed" | "name" | "after"> {
         693: have($item`eleven-foot pole`) ? 2 : 1,
       };
     },
+    expectbeatenup: () => get("lastEncounter") === "I Wanna Be a Door",
     limit: { tries: 15 },
   };
 }
@@ -600,7 +601,10 @@ function getDoorSolution(): number {
   const skeletonKeys =
     itemAmount($item`skeleton key`) +
     min(itemAmount($item`skeleton bone`), itemAmount($item`loose teeth`));
-  if (skeletonKeys > 1) return 2;
-  if (have($item`skeleton key`) && get("nsTowerDoorKeysUsed").includes("skeleton key")) return 2;
+  if (
+    skeletonKeys > 1 ||
+    (skeletonKeys === 1 && get("nsTowerDoorKeysUsed").includes("skeleton key"))
+  )
+    return 2;
   return 4;
 }
