@@ -17,6 +17,7 @@ export const MenagerieQuest: Quest = {
       outfit: {
         modifier: "item",
       },
+      peridot: $monster`Knob Goblin Very Mad Scientist`,
       parachute: $monster`Knob Goblin Very Mad Scientist`,
       limit: { tries: 10 },
     },
