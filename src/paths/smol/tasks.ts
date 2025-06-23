@@ -2,6 +2,8 @@ import {
   cliExecute,
   drink,
   eat,
+  equip,
+  familiarEquippedEquipment,
   myAdventures,
   myFullness,
   myInebriety,
@@ -10,17 +12,20 @@ import {
   mySign,
   reverseNumberology,
   use,
+  useFamiliar,
   useSkill,
   visitUrl,
 } from "kolmafia";
 import {
   $effect,
   $effects,
+  $familiar,
   $item,
   $items,
   $monster,
   $monsters,
   $skill,
+  $slot,
   CursedMonkeyPaw,
   get,
   have,
@@ -141,6 +146,27 @@ export const SmolQuest: Quest = {
       },
       limit: { tries: 1 },
       freeaction: true,
+    },
+    {
+      name: "Sausage",
+      after: ["Eat", "Macguffin/Diary", "Misc/Unlock Island"], // early meat-heavy tasks
+      completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
+      ready: () =>
+        have($item`magical sausage casing`) && myMeat() >= 1000 + (1 + get("_sausagesEaten")) * 111,
+      do: (): void => {
+        // Pump-and-grind cannot be used from Left-Hand Man
+        if (
+          have($familiar`Left-Hand Man`) &&
+          familiarEquippedEquipment($familiar`Left-Hand Man`) === $item`Kramco Sausage-o-Matic™`
+        ) {
+          useFamiliar($familiar`Left-Hand Man`);
+          equip($slot`familiar`, $item`none`);
+        }
+        eat(1, $item`magical sausage`);
+      },
+      limit: { tries: 23 },
+      freeaction: true,
+      withnoadventures: true,
     },
     {
       name: "Limit Stats",

@@ -83,4 +83,8 @@ export function main(choice: number, page: string) {
     // Manually select this option if avilable, in case we increased elemental dmg in prepare
     runChoice(2);
   }
+  // Lil Doctor bag NC
+  else if (choice === 1340) {
+    runChoice(3);
+  }
 }

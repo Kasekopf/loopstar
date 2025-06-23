@@ -474,6 +474,10 @@ export const gyouDeltas: NamedDeltaTask[] = [
     name: "Leveling/Mouthwash",
     delete: true,
   },
+  {
+    name: "Leveling/Bonerdagon Chest",
+    delete: true,
+  },
   // Avoid star key skip unless we have +HP
   {
     name: "Summon/Astrologer Of Shub-Jigguwatt",

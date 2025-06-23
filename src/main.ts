@@ -4,6 +4,7 @@ import {
   getRevision,
   inCasual,
   inHardcore,
+  isDarkMode,
   Location,
   myAdventures,
   myPath,
@@ -205,7 +206,7 @@ function listTasks(engine: Engine, show_phyla = false): void {
   const chainSources = getChainSources();
   for (const task of engine.tasks) {
     if (task.completed()) {
-      debug(`${getTaggedName(task)}: Done`, "blue");
+      debug(`${getTaggedName(task)}: Done`, isDarkMode() ? "yellow" : "blue");
     } else {
       const allocation = resourceAllocations.get(task.name);
       const allocatedTask = allocation ? merge(task, allocation) : task;

@@ -14,6 +14,7 @@ import {
   haveEffect,
   haveEquipped,
   inCasual,
+  isDarkMode,
   Location,
   logprint,
   myAdventures,
@@ -203,21 +204,24 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     const name = getTaggedName(task);
     const reason = task.activePriority?.explain() ?? "";
     const why = reason === "" ? "Route" : reason;
-    debug(`Executing ${name} [${why}]`, "blue");
+    debug(`Executing ${name} [${why}]`, isDarkMode() ? "yellow" : "blue");
     this.checkLimits({ ...task, limit: { ...task.limit, unready: false } }, () => true); // ignore unready for this initial check
     if (myAdventures() < args.debug.halt) throw `Running out of adventures!`;
     super.execute(task);
 
     if (task.completed()) {
-      debug(`${task.name} completed!`, "blue");
+      debug(`${task.name} completed!`, isDarkMode() ? "yellow" : "blue");
     } else if (!(task.ready?.() ?? true)) {
-      debug(`${task.name} not completed! [Again? Not ready]`, "blue");
+      debug(`${task.name} not completed! [Again? Not ready]`, isDarkMode() ? "yellow" : "blue");
     } else {
       const priority_explain = this.prioritize(task, getChainSources()).explain();
       if (priority_explain !== "") {
-        debug(`${task.name} not completed! [Again? ${priority_explain}]`, "blue");
+        debug(
+          `${task.name} not completed! [Again? ${priority_explain}]`,
+          isDarkMode() ? "yellow" : "blue"
+        );
       } else {
-        debug(`${task.name} not completed!`, "blue");
+        debug(`${task.name} not completed!`, isDarkMode() ? "yellow" : "blue");
       }
     }
   }

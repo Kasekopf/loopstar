@@ -60,6 +60,7 @@ export const casualRoute: string[] = [
   "Hidden City/Banish Janitors",
   "Hidden City/Office Files",
   "Hidden City/Apartment",
+  "Hidden City/Apartment Files",
   "Hidden City/Hospital",
   "Hidden City/Bowling",
   "Hidden City/Office Boss",
