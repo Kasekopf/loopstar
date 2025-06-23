@@ -1,6 +1,7 @@
 import {
   Familiar,
   getWorkshed,
+  isDarkMode,
   Item,
   mallPrice,
   Monster,
@@ -614,7 +615,7 @@ export function checkRequirements(path: PathInfo): void {
       const requiredTitle = required ? " (Required)" : "";
       const name = `${category}${requiredTitle}`;
       const requirementsInfo: [boolean, string, Requirement][] = filteredRequirements.map(check);
-      print(name, "blue");
+      print(name, isDarkMode() ? "yellow" : "blue");
       for (const [have_it, name, req] of requirementsInfo.sort((a, b) =>
         a[1].localeCompare(b[1])
       )) {

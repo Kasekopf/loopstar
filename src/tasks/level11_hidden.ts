@@ -205,7 +205,7 @@ const Apartment: Task[] = [
     freecombat: true,
   },
   {
-    name: "Apartment Inital Curse",
+    name: "Apartment",
     after: ["Open Apartment"],
     priority: () =>
       have($effect`Once-Cursed`) || have($effect`Twice-Cursed`) || have($effect`Thrice-Cursed`)
@@ -256,8 +256,8 @@ const Apartment: Task[] = [
     limit: { soft: 9 },
   },
   {
-    name: "Apartment",
-    after: ["Open Apartment", "Apartment Inital Curse"],
+    name: "Apartment Files",
+    after: ["Open Apartment", "Apartment"],
     priority: () =>
       have($effect`Once-Cursed`) || have($effect`Twice-Cursed`) || have($effect`Thrice-Cursed`)
         ? Priorities.MinorEffect
@@ -282,7 +282,7 @@ const Apartment: Task[] = [
   },
   {
     name: "Finish Apartment",
-    after: ["Apartment"],
+    after: ["Apartment", "Apartment Files"],
     completed: () => get("hiddenApartmentProgress") >= 8,
     do: $location`An Overgrown Shrine (Northwest)`,
     choices: { 781: 2 },

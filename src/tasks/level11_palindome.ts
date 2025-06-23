@@ -468,6 +468,11 @@ const Dome: Task[] = [
       have($item`wet stew`) ||
       have($item`wet stunt nut stew`) ||
       step("questL11Palindome") >= 5,
+    ready: () =>
+      !get("banishedPhyla").includes("beast") ||
+      (have($item`Peridot of Peril`) &&
+        (have($item`bird rib`) || have($item`lion oil`)) &&
+        !get("_perilLocations").split(",").includes("100")),
     prepare: () => {
       tryPlayApriling("+combat");
     },
