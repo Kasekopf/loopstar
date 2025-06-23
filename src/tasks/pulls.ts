@@ -10,7 +10,7 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
-import { $familiar, $item, $items, $skill, get, have, set } from "libram";
+import { $familiar, $item, $items, $skill, AprilingBandHelmet, get, have, set } from "libram";
 import { args, toTempPref } from "../args";
 import { Priorities } from "../engine/priority";
 import { Quest, Resources, Task } from "../engine/task";
@@ -223,7 +223,14 @@ export const pulls: PullSpec[] = [
   {
     pull: $item`11-leaf clover`,
     duplicate: true,
-    useful: () => get("zeppelinProtestors") < 80,
+    useful: () =>
+      get("zeppelinProtestors") < 80 &&
+      !have($item`Apriling band saxophone`) &&
+      !(
+        AprilingBandHelmet.canJoinSection() &&
+        get("_aprilBandInstruments") + args.resources.saveapriling <=
+          1 + itemAmount($item`Apriling band tuba`)
+      ),
     benefit: 5,
   },
   {
