@@ -9,7 +9,6 @@ import { IH8UDietQuest } from "./diet";
 import { Engine } from "../../engine/engine";
 import { IH8UPullQuest } from "./pulls";
 
-
 export class IH8UInfo implements PathInfo {
   name(): string {
     return "11 Things I Hate About U";

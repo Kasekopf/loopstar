@@ -33,7 +33,7 @@ export const args = Args.create(
           ["gyou", "Grey You"],
           ["aftercore", "Aftercore"],
           ["boris", "Avatar of Boris (Work in Progress)"],
-          ["ih8u", "11 Things I Hate About U (Work in Progress)"]
+          ["ih8u", "11 Things I Hate About U (Work in Progress)"],
         ],
         setting: "",
       },

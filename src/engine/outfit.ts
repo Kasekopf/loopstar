@@ -369,7 +369,7 @@ export function equipDefaults(
     outfit.equip($item`sea salt scrubs`);
     if (myPath() === $path`11 Things I Hate About U` && outfit.familiar !== $familiar`Mini Kiwi`) {
       CrownOfThrones.pickRider("Mini Kiwi");
-      outfit.equip($item`Crown of Thrones`)
+      outfit.equip($item`Crown of Thrones`);
     }
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
