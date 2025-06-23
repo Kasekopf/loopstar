@@ -10,6 +10,7 @@ import { SmolInfo } from "./smol/info";
 import { getAllTasks } from "../tasks/all";
 import { GyouInfo } from "./gyou/info";
 import { BorisInfo } from "./boris/info";
+import { IH8UInfo } from "./ih8u/info";
 
 const pathInfos = {
   smol: new SmolInfo(),
@@ -17,6 +18,7 @@ const pathInfos = {
   aftercore: new AftercoreInfo(),
   gyou: new GyouInfo(),
   boris: new BorisInfo(),
+  ih8u: new IH8UInfo(),
 } as const;
 
 export function getActivePath(overridePath: string | undefined = undefined): PathInfo | undefined {

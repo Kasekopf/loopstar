@@ -33,6 +33,7 @@ export const args = Args.create(
           ["gyou", "Grey You"],
           ["aftercore", "Aftercore"],
           ["boris", "Avatar of Boris (Work in Progress)"],
+          ["ih8u", "11 Things I Hate About U (Work in Progress)"]
         ],
         setting: "",
       },
@@ -220,6 +221,11 @@ export const args = Args.create(
     boris: Args.group("Path: Avatar of Boris (Work in Progress)", {
       borisargs: Args.string({
         help: "Extra command-line arguments to be used only in boris runs.",
+      }),
+    }),
+    ih8u: Args.group("11 Things I Hate About U (Work in Progress)", {
+      borisargs: Args.string({
+        help: "Extra command-line arguments to be used only in ih8u runs.",
       }),
     }),
     aftercore: Args.group("Path: Aftercore", {

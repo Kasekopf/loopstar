@@ -36,6 +36,7 @@ import {
   $slots,
   $stat,
   clamp,
+  CrownOfThrones,
   DaylightShavings,
   get,
   have,
@@ -288,6 +289,9 @@ export function equipDefaults(
   noFightingFamiliars: boolean,
   freecombat: boolean
 ): void {
+  if (myPath() === $path`11 Things I Hate About U`) {
+    outfit.equip($familiar`Mini Kiwi`);
+  }
   if (have($familiar`Temporal Riftlet`)) {
     outfit.equip($familiar`Temporal Riftlet`);
   }
@@ -322,7 +326,7 @@ export function equipDefaults(
   } // low priority
 
   if (!noFightingFamiliars) {
-    if (args.minor.profitfamiliar) {
+    if (args.minor.profitfamiliar && !(myPath() === $path`11 Things I Hate About U`)) {
       outfit.equip(profitFamiliar());
       if (profitFamiliar() === $familiar`Chest Mimic` && have($item`tiny stillsuit`))
         outfit.equip($item`tiny stillsuit`);
@@ -363,6 +367,10 @@ export function equipDefaults(
   if (modifier.length === 0) {
     // Default outfit
     outfit.equip($item`sea salt scrubs`);
+    if (myPath() === $path`11 Things I Hate About U` && outfit.familiar !== $familiar`Mini Kiwi`) {
+      CrownOfThrones.pickRider("Mini Kiwi");
+      outfit.equip($item`Crown of Thrones`)
+    }
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
     if (weaponType(outfit.equips.get($slot`weapon`) ?? $item`none`) !== $stat`Moxie`) {
