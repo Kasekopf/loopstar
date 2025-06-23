@@ -100,5 +100,13 @@ export const LevelingQuest: Quest = {
       limit: { tries: 4 },
       freeaction: true,
     },
+    {
+      name: "Bonerdagon Chest",
+      after: ["Crypt/Bonerdagon"],
+      completed: () => !have($item`chest of the Bonerdagon`) || (atLevel(13) && args.minor.delevel),
+      do: () => use($item`chest of the Bonerdagon`),
+      freeaction: true,
+      limit: { tries: 1 },
+    },
   ],
 };
