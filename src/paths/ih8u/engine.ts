@@ -3,7 +3,6 @@ import { ActiveTask, Engine } from "../../engine/engine";
 import { CombatActions, CombatStrategy } from "../../engine/combat";
 import { $familiar, $item, $monsters, $slot, PropertiesManager } from "libram";
 
-
 export class IH8UEngine extends Engine {
   override customize(
     task: ActiveTask,
@@ -34,7 +33,7 @@ export class IH8UEngine extends Engine {
   override setChoices(task: ActiveTask, manager: PropertiesManager): void {
     super.setChoices(task, manager);
     this.propertyManager.setChoices({
-      1528: 1
+      1528: 1,
     });
   }
 }

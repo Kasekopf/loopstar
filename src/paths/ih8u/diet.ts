@@ -26,7 +26,8 @@ export const IH8UDietQuest: Quest = {
       name: "Consume Booze (Good)",
       after: [],
       ready: () =>
-        ((myLevel() >= 11 && have($item`astral six-pack`) || have($item`astral pilsner`)) ||
+        ((myLevel() >= 11 && have($item`astral six-pack`)) ||
+          have($item`astral pilsner`) ||
           (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
           have($item`mini kiwi intoxicating spirits`)) &&
         myInebriety() < inebrietyLimit(),
@@ -48,7 +49,10 @@ export const IH8UDietQuest: Quest = {
           }
         }
 
-        if ((!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) || have($item`mini kiwi intoxicating spirits`)) {
+        if (
+          (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
+          have($item`mini kiwi intoxicating spirits`)
+        ) {
           retrieveItem($item`mini kiwi intoxicating spirits`);
           if (!have($effect`Ode to Booze`) && have($skill`The Ode to Booze`)) {
             useSkill($skill`The Ode to Booze`);
@@ -64,7 +68,8 @@ export const IH8UDietQuest: Quest = {
       name: "Consume Food (Good)",
       after: [],
       ready: () =>
-        (myFullness() < fullnessLimit() && (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`))),
+        myFullness() < fullnessLimit() &&
+        (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`)),
       completed: () => myDaycount() > 1,
       do: (): void => {
         const canEat = () => myFullness() < fullnessLimit();
@@ -85,9 +90,11 @@ export const IH8UDietQuest: Quest = {
       name: "Consume Booze (Bad)",
       after: [],
       ready: () =>
-        myInebriety() < inebrietyLimit() && myAdventures() <= 7 &&
-        ((have($item`mini kiwi`, 1) && (have($item`bottle of gin`) || have($item`bottle of vodka`)) ||
-          have($item`mini kiwitini`))),
+        myInebriety() < inebrietyLimit() &&
+        myAdventures() <= 7 &&
+        ((have($item`mini kiwi`, 1) &&
+          (have($item`bottle of gin`) || have($item`bottle of vodka`))) ||
+          have($item`mini kiwitini`)),
       completed: () => myDaycount() > 1,
       do: (): void => {
         const canDrink = () => myInebriety() < inebrietyLimit() && myAdventures() <= 7;
