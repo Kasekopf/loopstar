@@ -224,7 +224,7 @@ export const args = Args.create(
       }),
     }),
     ih8u: Args.group("11 Things I Hate About U (Work in Progress)", {
-      borisargs: Args.string({
+      ih8uargs: Args.string({
         help: "Extra command-line arguments to be used only in ih8u runs.",
       }),
     }),

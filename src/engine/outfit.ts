@@ -36,7 +36,6 @@ import {
   $slots,
   $stat,
   clamp,
-  CrownOfThrones,
   DaylightShavings,
   get,
   have,
@@ -368,8 +367,7 @@ export function equipDefaults(
     // Default outfit
     outfit.equip($item`sea salt scrubs`);
     if (myPath() === $path`11 Things I Hate About U` && outfit.familiar !== $familiar`Mini Kiwi`) {
-      CrownOfThrones.pickRider("Mini Kiwi");
-      outfit.equip($item`Crown of Thrones`);
+      outfit.enthrone($familiar`Mini Kiwi`)
     }
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
@@ -385,6 +383,9 @@ export function equipDefaults(
     if (have($item`bat wings`) && get("_batWingsFreeFights") < 5 && !freecombat) {
       outfit.equip($item`bat wings`);
     } else {
+      if (myPath() === $path`11 Things I Hate About U` && outfit.familiar !== $familiar`Mini Kiwi`) {
+        outfit.bjornify($familiar`Mini Kiwi`)
+      }
       outfit.equip($item`protonic accelerator pack`);
       if (!freecombat || get("_batWingsFreeFights") === 5) outfit.equip($item`bat wings`);
     }

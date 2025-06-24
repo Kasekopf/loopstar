@@ -7,12 +7,24 @@ export const ih8uPulls: PullSpec[] = [
   // Food
   {
     pull: $item`Crown of Thrones`,
+    optional: true,
+    benefit: 100,
+    description: "Adv; generate mini kiwis",
+  },
+  {
+    pull: $item`Buddy Bjorn`,
+    optional: true,
+    benefit: 100,
+    description: "Adv; generate mini kiwis",
+  },
+  {
+    pull: $item`tuxedo shirt`,
     useful: () => {
-      return storageAmount($item`Crown of Thrones`) >= 1;
+      return storageAmount($item`tuxedo shirt`) >= 1;
     },
     price: 1,
     benefit: 100,
-    description: "Adv; generate mini kiwis",
+    description: "Adv; improve kiwitinis",
   },
 ];
 

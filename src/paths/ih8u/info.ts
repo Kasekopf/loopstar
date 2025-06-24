@@ -1,6 +1,6 @@
 import { getTasks, step } from "grimoire-kolmafia";
-import { myPath, runChoice, visitUrl } from "kolmafia";
-import { $familiar, $path, set } from "libram";
+import { myPath } from "kolmafia";
+import { $familiar, $path } from "libram";
 import { args } from "../../args";
 import { findAndMerge, Task } from "../../engine/task";
 import { Requirement, RequirementCategory } from "../../sim";
@@ -8,6 +8,7 @@ import { PathInfo } from "../pathinfo";
 import { IH8UDietQuest } from "./diet";
 import { Engine } from "../../engine/engine";
 import { IH8UPullQuest } from "./pulls";
+import { IH8UEngine } from "./engine";
 
 export class IH8UInfo implements PathInfo {
   name(): string {
@@ -33,14 +34,11 @@ export class IH8UInfo implements PathInfo {
   }
 
   getEngine(tasks: Task[]): Engine {
-    return new Engine(tasks);
+    return new IH8UEngine(tasks);
   }
 
   runIntro() {
-    // Clear intro adventure
-    set("choiceAdventure1464", 1);
-    if (visitUrl("main.php").includes("somewhat-human-shaped mass of grey goo nanites"))
-      runChoice(-1);
+    return null; // ih8u doesn't have an intro NC apparently!
   }
 
   getRequirements(reqs: Requirement[]): Requirement[] {
@@ -56,6 +54,6 @@ export class IH8UInfo implements PathInfo {
   }
 
   args(): string | undefined {
-    return args.gyou.gyouargs;
+    return args.ih8u.ih8uargs;
   }
 }
