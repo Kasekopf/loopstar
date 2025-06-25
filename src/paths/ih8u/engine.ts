@@ -1,7 +1,8 @@
 import { CombatResources, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 import { CombatActions, CombatStrategy } from "../../engine/combat";
-import { $familiar, $item, $monsters, $slot, PropertiesManager } from "libram";
+import { $familiar, $familiars, $monsters, PropertiesManager, undelay } from "libram";
+import { Task } from "../../engine/task";
 
 export class IH8UEngine extends Engine {
   override customize(
@@ -13,21 +14,22 @@ export class IH8UEngine extends Engine {
     // Ensure that if we encounter an Ewe, we always killHard
     combat.action("killHard", $monsters`ewe`);
 
-    const hat = outfit.equips.get($slot`hat`);
-    const pants = outfit.equips.get($slot`pants`);
-    const familiar = outfit.familiar;
+    super.customize(task, outfit, combat, resources);
+  }
 
-    if (
-      familiar !== $familiar`Mini Kiwi` &&
-      hat === $item`beer helmet` &&
-      pants !== $item`distressed denim pants`
-    ) {
-      outfit.enthrone($familiar`Mini Kiwi`);
-    } else {
-      outfit.bjornify($familiar`Mini Kiwi`);
+  override createOutfit(task: Task): Outfit {
+    const spec = undelay(task.outfit);
+    const outfit = new Outfit();
+    const replaceFamiliars = $familiars`Blood-Faced Volleyball`;
+    if (!outfit.modifier.includes("Item Drop")) {
+      replaceFamiliars.push($familiar`Jill-of-All-Trades`);
+    }
+    if (outfit.familiar && replaceFamiliars.includes(outfit.familiar)) {
+      outfit.equip($familiar`Mini Kiwi`);
     }
 
-    super.customize(task, outfit, combat, resources);
+    if (spec !== undefined) outfit.equip(spec); // no error on failure
+    return outfit;
   }
 
   override setChoices(task: ActiveTask, manager: PropertiesManager): void {

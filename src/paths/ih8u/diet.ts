@@ -3,8 +3,10 @@ import {
   drink,
   eat,
   equip,
+  familiarEquippedEquipment,
   fullnessLimit,
   inebrietyLimit,
+  itemAmount,
   myAdventures,
   myDaycount,
   myFullness,
@@ -14,9 +16,10 @@ import {
   retrieveItem,
   reverseNumberology,
   use,
+  useFamiliar,
   useSkill,
 } from "kolmafia";
-import { $effect, $item, $skill, get, have } from "libram";
+import { $effect, $familiar, $item, $skill, $slot, clamp, get, have } from "libram";
 import { Quest } from "../../engine/task";
 
 export const IH8UDietQuest: Quest = {
@@ -116,6 +119,41 @@ export const IH8UDietQuest: Quest = {
         }
       },
       limit: { tries: 25 },
+      freeaction: true,
+      withnoadventures: true,
+    },
+    {
+      name: "Sausage",
+      completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
+      ready: () => have($item`magical sausage casing`),
+      do: (): void => {
+        // Pump-and-grind cannot be used from Left-Hand Man
+        if (
+          have($familiar`Left-Hand Man`) &&
+          familiarEquippedEquipment($familiar`Left-Hand Man`) === $item`Kramco Sausage-o-Matic™`
+        ) {
+          useFamiliar($familiar`Left-Hand Man`);
+          equip($slot`familiar`, $item`none`);
+        }
+        const toEat = clamp(
+          itemAmount($item`magical sausage casing`),
+          0,
+          23 - get("_sausagesEaten")
+        );
+        eat(toEat, $item`magical sausage`);
+      },
+      limit: { tries: 23 },
+      freeaction: true,
+      withnoadventures: true,
+    },
+    {
+      name: "Hourglass",
+      after: [],
+      completed: () => !have($item`etched hourglass`) || get("_etchedHourglassUsed"),
+      do: (): void => {
+        use($item`etched hourglass`);
+      },
+      limit: { tries: 1 },
       freeaction: true,
       withnoadventures: true,
     },

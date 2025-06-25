@@ -213,6 +213,9 @@ export function equipInitial(outfit: Outfit): void {
   if (modifier.includes("meat")) {
     if (get("_roboDrinks").toLowerCase().includes("drive-by shooting"))
       outfit.equip($familiar`Robortender`);
+    if (myPath() === $path`11 Things I Hate About U`) {
+      outfit.equip($familiar`Mini Kiwi`);
+    }
     outfit.equip($familiar`Jill-of-All-Trades`);
     outfit.equip($familiar`Hobo Monkey`);
     outfit.equip($familiar`Leprechaun`); // backup
@@ -366,10 +369,10 @@ export function equipDefaults(
   if (modifier.length === 0) {
     // Default outfit
     outfit.equip($item`sea salt scrubs`);
-    if (myPath() === $path`11 Things I Hate About U` && outfit.familiar !== $familiar`Mini Kiwi`) {
+    /* if (myPath() === $path`11 Things I Hate About U` && outfit.familiar !== $familiar`Mini Kiwi`) {
       outfit.enthrone($familiar`Mini Kiwi`);
       outfit.equip($item`Crown of Thrones`);
-    }
+    } */
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
     if (weaponType(outfit.equips.get($slot`weapon`) ?? $item`none`) !== $stat`Moxie`) {

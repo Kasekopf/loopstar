@@ -5,8 +5,14 @@ import { Quest } from "../../engine/task";
 
 export const ih8uPulls: PullSpec[] = [
   // Food
-  {
+  /*{
     pull: $item`Crown of Thrones`,
+    optional: true,
+    benefit: 100,
+    description: "Adv; generate mini kiwis",
+  },*/
+  {
+    pull: $item`Buddy Bjorn`,
     optional: true,
     benefit: 100,
     description: "Adv; generate mini kiwis",
@@ -14,6 +20,20 @@ export const ih8uPulls: PullSpec[] = [
   {
     pull: $item`Buddy Bjorn`,
     optional: true,
+    benefit: 100,
+    description: "Adv; generate mini kiwis",
+  },
+  {
+    pull: $item`mini kiwi digitized cookies`,
+    optional: true,
+    price: 10_000,
+    benefit: 100,
+    description: "Adv; generate mini kiwis",
+  },
+  {
+    pull: $item`mini kiwi intoxicating spirits`,
+    optional: true,
+    price: 10_000,
     benefit: 100,
     description: "Adv; generate mini kiwis",
   },
