@@ -18,24 +18,25 @@ export const ih8uPulls: PullSpec[] = [
     description: "Adv; generate mini kiwis",
   },
   {
-    pull: $item`Buddy Bjorn`,
-    optional: true,
-    benefit: 100,
-    description: "Adv; generate mini kiwis",
-  },
-  {
     pull: $item`mini kiwi digitized cookies`,
     optional: true,
     price: 10_000,
     benefit: 100,
-    description: "Adv; generate mini kiwis",
+    description: "Adv",
+  },
+  {
+    pull: $item`incredible mini-pizza`,
+    optional: true,
+    price: 10_000,
+    benefit: 100,
+    description: "Adv",
   },
   {
     pull: $item`mini kiwi intoxicating spirits`,
     optional: true,
     price: 10_000,
     benefit: 100,
-    description: "Adv; generate mini kiwis",
+    description: "Adv",
   },
   {
     pull: $item`tuxedo shirt`,

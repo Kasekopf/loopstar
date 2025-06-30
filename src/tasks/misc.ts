@@ -1759,7 +1759,7 @@ function chooseBestLeprecondo(): number[] {
   const f1 = furnitureFound.has(21) ? 21 : 0; // Whiskeybed First to prevent overriding anything important
   const f2 = furnitureFound.has(8) ? 8 : 0; // Karaoke -> overwritten with treadmill for familiar weight
   const f3 = furnitureFound.has(9) ? 9 : 0; // Treadmill -> exercise, don't care about the food
-  const f4 = furnitureFound.has(13) ? 13 : 0; // Sous vide -> meat% and random food
+  const f4 = furnitureFound.has(25) ? 25 : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }

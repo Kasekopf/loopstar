@@ -72,17 +72,18 @@ export const IH8UDietQuest: Quest = {
       after: [],
       ready: () =>
         myFullness() < fullnessLimit() &&
-        (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`)),
+        (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`) || have($item`incredible mini-pizza`)),
       completed: () => myDaycount() > 1,
       do: (): void => {
         const canEat = () => myFullness() < fullnessLimit();
 
         while (
           canEat() &&
-          (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`))
+          (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`) || have($item`incredible mini-pizza`))
         ) {
           retrieveItem($item`mini kiwi digitized cookies`);
           eat($item`mini kiwi digitized cookies`);
+          eat($item`incredible mini-pizza`);
         }
       },
       limit: { tries: 25 },
