@@ -72,14 +72,18 @@ export const IH8UDietQuest: Quest = {
       after: [],
       ready: () =>
         myFullness() < fullnessLimit() &&
-        (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`) || have($item`incredible mini-pizza`)),
+        (have($item`mini kiwi`, 3) ||
+          have($item`mini kiwi digitized cookies`) ||
+          have($item`incredible mini-pizza`)),
       completed: () => myDaycount() > 1,
       do: (): void => {
         const canEat = () => myFullness() < fullnessLimit();
 
         while (
           canEat() &&
-          (have($item`mini kiwi`, 3) || have($item`mini kiwi digitized cookies`) || have($item`incredible mini-pizza`))
+          (have($item`mini kiwi`, 3) ||
+            have($item`mini kiwi digitized cookies`) ||
+            have($item`incredible mini-pizza`))
         ) {
           retrieveItem($item`mini kiwi digitized cookies`);
           eat($item`mini kiwi digitized cookies`);
@@ -161,7 +165,8 @@ export const IH8UDietQuest: Quest = {
     {
       name: "Numberology",
       after: [],
-      completed: () => get("_universeCalculated") >= get("skillLevel144"),
+      completed: () =>
+        get("_universeCalculated") >= get("skillLevel144") || get("_universeCalculated") >= 2,
       ready: () => myAdventures() > 0 && Object.keys(reverseNumberology()).includes("69"),
       do: (): void => {
         restoreMp(1);
