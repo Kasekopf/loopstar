@@ -1403,6 +1403,7 @@ export const MiscQuest: Quest = {
       after: [],
       completed: () => !have($item`McHugeLarge duffel bag`) || have($item`McHugeLarge right pole`),
       do: () => visitUrl("inventory.php?action=skiduffel&pwd"),
+      outfit: { avoid: $items`McHugeLarge duffel bag` },
       freeaction: true,
       limit: { tries: 1 },
     },
