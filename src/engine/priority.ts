@@ -45,7 +45,7 @@ export class Priorities {
   static GoodOrb: Priority = { score: 15, reason: "Target orb monster" };
   static BestCosmicBowlingBall: Priority = {
     score: 14,
-    reason: "Use cosmic bowling ball + Melodramedary",
+    reason: "Use cosmic bowling ball for bowling",
   };
   static CosmicBowlingBall: Priority = { score: 11, reason: "Use cosmic bowling ball" };
   static SpringShoes: Priority = { score: 11, reason: "Use spring shoes" };
