@@ -2001,9 +2001,9 @@ graphemer@^1.4.0:
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
 grimoire-kolmafia@^0.3.31:
-  version "0.3.31"
-  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.31.tgz#7d7b0f0434170dee2185c3e7ee0ed03dc6c3ae3c"
-  integrity sha512-OlGxBl023WSFBMzm7bYjqt5vbPimJynZNyNhbGT4wLVhFB95EPtoEa/aUg1CGhGD7+4y8Yi0bklonkGOeSTMaw==
+  version "0.3.32"
+  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.32.tgz#603ccfffbef2b64e932efbfec6555ee52df45c48"
+  integrity sha512-PSRjzZHiRuupGOWwQ8qgf1GdP82O8qwDh4mYIYPg8o62vuJnmVOQpM8R09ihTUEqYc8d+8w41bR3lNQ3VyV0Bg==
   dependencies:
     core-js "^3.16.4"
 
