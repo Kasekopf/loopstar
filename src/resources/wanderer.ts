@@ -142,7 +142,9 @@ export const wandererSources: WandererSource[] = [
   },
   {
     name: "Goth",
-    available: () => have($familiar`Artistic Goth Kid`) && get("_hipsterAdv") < (myPath() === $path`11 Things I Hate About U` ? 4 : 7),
+    available: () =>
+      have($familiar`Artistic Goth Kid`) &&
+      get("_hipsterAdv") < (myPath() === $path`11 Things I Hate About U` ? 4 : 7),
     equip: $familiar`Artistic Goth Kid`,
     monsters: [
       $monster`Black Crayon Beast`,

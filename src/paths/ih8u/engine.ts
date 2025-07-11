@@ -24,7 +24,11 @@ export class IH8UEngine extends Engine {
     if (!outfit.modifier.includes("Item Drop")) {
       replaceFamiliars.push($familiar`Jill-of-All-Trades`);
     }
-    if (outfit.familiar && replaceFamiliars.includes(outfit.familiar) && have($familiar`Mini Kiwi`)) {
+    if (
+      outfit.familiar &&
+      replaceFamiliars.includes(outfit.familiar) &&
+      have($familiar`Mini Kiwi`)
+    ) {
       outfit.equip($familiar`Mini Kiwi`);
     }
 
