@@ -4,13 +4,6 @@ import { getPullTask, PullSpec } from "../../tasks/pulls";
 import { Quest } from "../../engine/task";
 
 export const ih8uPulls: PullSpec[] = [
-  // Food
-  /*{
-    pull: $item`Crown of Thrones`,
-    optional: true,
-    benefit: 100,
-    description: "Adv; generate mini kiwis",
-  },*/
   {
     pull: $item`Buddy Bjorn`,
     optional: true,

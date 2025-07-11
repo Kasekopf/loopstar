@@ -90,7 +90,9 @@ const summonTargets: SummonTarget[] = [
       (get("_cargoPocketEmptied") && !have($item`greasy desk bell`)),
     prepare: () => {
       fillHp();
-      useSkill($skill`Spirit of Peppermint`);
+      if (have($skill`Spirit of Peppermint`)) {
+        useSkill($skill`Spirit of Peppermint`);
+      }
     },
     outfit: { equip: $items`June cleaver`, modifier: "DR, sleaze res" },
     combat: new CombatStrategy()
@@ -98,6 +100,9 @@ const summonTargets: SummonTarget[] = [
         Macro.trySkill($skill`Micrometeorite`)
           .trySkill($skill`Curse of Weaksauce`)
           .trySkill($skill`Stuffed Mortar Shell`)
+          .trySkill($skill`Saucecicle`)
+          .trySkill($skill`Saucecicle`)
+          .trySkill($skill`Saucecicle`)
       )
       .kill(),
     benefit: 3,

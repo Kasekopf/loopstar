@@ -1,7 +1,7 @@
 import { CombatResources, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 import { CombatActions, CombatStrategy } from "../../engine/combat";
-import { $familiar, $familiars, $monsters, PropertiesManager, undelay } from "libram";
+import { $familiar, $familiars, $monsters, have, PropertiesManager, undelay } from "libram";
 import { Task } from "../../engine/task";
 
 export class IH8UEngine extends Engine {
@@ -24,7 +24,7 @@ export class IH8UEngine extends Engine {
     if (!outfit.modifier.includes("Item Drop")) {
       replaceFamiliars.push($familiar`Jill-of-All-Trades`);
     }
-    if (outfit.familiar && replaceFamiliars.includes(outfit.familiar)) {
+    if (outfit.familiar && replaceFamiliars.includes(outfit.familiar) && have($familiar`Mini Kiwi`)) {
       outfit.equip($familiar`Mini Kiwi`);
     }
 

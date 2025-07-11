@@ -73,8 +73,7 @@ export const IH8UDietQuest: Quest = {
       ready: () =>
         myFullness() < fullnessLimit() &&
         (have($item`mini kiwi`, 3) ||
-          have($item`mini kiwi digitized cookies`) ||
-          have($item`incredible mini-pizza`)),
+          have($item`mini kiwi digitized cookies`)),
       completed: () => myDaycount() > 1,
       do: (): void => {
         const canEat = () => myFullness() < fullnessLimit();
@@ -82,11 +81,31 @@ export const IH8UDietQuest: Quest = {
         while (
           canEat() &&
           (have($item`mini kiwi`, 3) ||
-            have($item`mini kiwi digitized cookies`) ||
-            have($item`incredible mini-pizza`))
+            have($item`mini kiwi digitized cookies`))
         ) {
           retrieveItem($item`mini kiwi digitized cookies`);
           eat($item`mini kiwi digitized cookies`);
+        }
+      },
+      limit: { tries: 25 },
+      freeaction: true,
+      withnoadventures: true,
+    },
+    {
+      name: "Consume Food (Bad)",
+      after: [],
+      ready: () =>
+        myFullness() < fullnessLimit() &&
+        have($item`incredible mini-pizza`) && myAdventures() < 7,
+      completed: () => myDaycount() > 1,
+      do: (): void => {
+        const canEat = () => myFullness() < fullnessLimit();
+
+        while (
+          canEat() &&
+          myAdventures() < 7 &&
+          have($item`incredible mini-pizza`)
+        ) {
           eat($item`incredible mini-pizza`);
         }
       },
