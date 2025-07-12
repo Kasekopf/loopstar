@@ -386,7 +386,12 @@ const Pyramid: Task[] = [
         return result;
       }, $monster`tomb rat`)
       .killItem([$monster`tomb rat`, $monster`tomb rat king`])
-      .banish([$monster`tomb asp`, $monster`tomb servant`]),
+      .banish([$monster`tomb asp`, $monster`tomb servant`])
+      .macro(() => {
+        if (get("banishedPhyla").includes("beast"))
+          return Macro.trySkill($skill`%fn, Release the Patriotic Screech!`);
+        return new Macro();
+      }, $monster`tomb servant`),
     outfit: () => {
       const result: OutfitSpec = { modifier: "item", equip: [] };
       if (have($item`Lil' Doctor™ bag`) && get("_otoscopeUsed") < 3)
@@ -394,6 +399,7 @@ const Pyramid: Task[] = [
       else result.equip?.push($item`deft pirate hook`);
       if (DaylightShavings.nextBuff() === $effect`Spectacle Moustache`)
         result.equip?.push($item`Daylight Shavings Helmet`);
+      if (get("banishedPhyla").includes("beast")) result.familiar = $familiar`Patriotic Eagle`; // last-ditch effort to remove banish
       return result;
     },
     ignoreforbreathitin: true,

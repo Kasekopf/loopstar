@@ -499,14 +499,24 @@ const Bowling: Task[] = [
   {
     name: "Bowling",
     after: ["Open Bowling", "Banish Janitors"],
-    priority: () =>
-      cosmicBowlingBallReady() &&
-      ((get("camelSpit") === 100 && have($skill`Map the Monsters`)) ||
-        (!have($familiar`Melodramedary`) &&
-          have($item`Peridot of Peril`) &&
-          get("hiddenBowlingAlleyProgress") === 1))
-        ? Priorities.BestCosmicBowlingBall
-        : Priorities.None,
+    priority: () => {
+      if (!cosmicBowlingBallReady()) return Priorities.None;
+      const peridotReady =
+        have($item`Peridot of Peril`) && !get("_perilLocations").split(",").includes("344");
+      const mapReady =
+        have($skill`Map the Monsters`) &&
+        get("_monstersMapped") < 3 &&
+        itemAmount($item`bowling ball`) === 0;
+      const camelReady = have($familiar`Melodramedary`) && get("camelSpit") === 100;
+      if (camelReady && (mapReady || peridotReady)) return Priorities.BestCosmicBowlingBall;
+      if (
+        !have($familiar`Melodramedary`) &&
+        peridotReady &&
+        get("hiddenBowlingAlleyProgress") === 1
+      )
+        return Priorities.BestCosmicBowlingBall;
+      return Priorities.None;
+    },
     ready: () =>
       myMeat() >= 500 &&
       (!bowlingBallsGathered() || get("spookyVHSTapeMonster") !== $monster`pygmy bowler`),
@@ -532,7 +542,7 @@ const Bowling: Task[] = [
         if (get("hiddenBowlingAlleyProgress") === 1)
           return Macro.tryItem($item`cosmic bowling ball`);
         return new Macro();
-      })
+      }, $monster`pygmy bowler`)
       .macro(() => {
         if (myFamiliar() === $familiar`Melodramedary` && get("camelSpit") === 100)
           return Macro.trySkill($skill`%fn, spit on them!`).tryItem($item`cosmic bowling ball`);
