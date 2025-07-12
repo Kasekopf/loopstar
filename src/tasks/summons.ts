@@ -1,4 +1,4 @@
-import { itemAmount, Monster, myMeat } from "kolmafia";
+import { itemAmount, Monster, myMeat, useSkill } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -90,10 +90,20 @@ const summonTargets: SummonTarget[] = [
       (get("_cargoPocketEmptied") && !have($item`greasy desk bell`)),
     prepare: () => {
       fillHp();
+      if (have($skill`Spirit of Peppermint`)) {
+        useSkill($skill`Spirit of Peppermint`);
+      }
     },
     outfit: { equip: $items`June cleaver`, modifier: "DR, sleaze res" },
     combat: new CombatStrategy()
-      .macro(Macro.trySkill($skill`Micrometeorite`).trySkill($skill`Curse of Weaksauce`))
+      .macro(
+        Macro.trySkill($skill`Micrometeorite`)
+          .trySkill($skill`Curse of Weaksauce`)
+          .trySkill($skill`Stuffed Mortar Shell`)
+          .trySkill($skill`Saucecicle`)
+          .trySkill($skill`Saucecicle`)
+          .trySkill($skill`Saucecicle`)
+      )
       .kill(),
     benefit: 3,
   },
