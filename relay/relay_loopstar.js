@@ -4792,6 +4792,11 @@ var _templateObject74;
 var _templateObject75;
 var _templateObject76;
 var _templateObject77;
+var _templateObject78;
+var _templateObject79;
+var _templateObject80;
+var _templateObject81;
+var _templateObject822;
 function ownKeys4(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -5078,6 +5083,10 @@ var Outfit = /* @__PURE__ */ function() {
           return $familiar(_templateObject213 || (_templateObject213 = _taggedTemplateLiteral3(["Disembodied Hand"])));
         case $slot(_templateObject223 || (_templateObject223 = _taggedTemplateLiteral3(["off-hand"]))):
           return $familiar(_templateObject233 || (_templateObject233 = _taggedTemplateLiteral3(["Left-Hand Man"])));
+        case $slot(_templateObject243 || (_templateObject243 = _taggedTemplateLiteral3(["pants"]))):
+          return $familiar(_templateObject253 || (_templateObject253 = _taggedTemplateLiteral3(["Fancypants Scarecrow"])));
+        case $slot(_templateObject263 || (_templateObject263 = _taggedTemplateLiteral3(["hat"]))):
+          return $familiar(_templateObject273 || (_templateObject273 = _taggedTemplateLiteral3(["Mad Hatrack"])));
         default:
           return void 0;
       }
@@ -5183,12 +5192,15 @@ var Outfit = /* @__PURE__ */ function() {
   }, {
     key: "equipUsingFamiliar",
     value: function equipUsingFamiliar(item, slot) {
-      if (![void 0, $slot(_templateObject243 || (_templateObject243 = _taggedTemplateLiteral3(["familiar"])))].includes(slot)) return false;
-      if (this.equips.has($slot(_templateObject253 || (_templateObject253 = _taggedTemplateLiteral3(["familiar"]))))) return false;
+      if (![void 0, $slot(_templateObject283 || (_templateObject283 = _taggedTemplateLiteral3(["familiar"])))].includes(slot)) return false;
+      if (this.equips.has($slot(_templateObject293 || (_templateObject293 = _taggedTemplateLiteral3(["familiar"]))))) return false;
       if ((0, import_kolmafia9.booleanModifier)(item, "Single Equip")) return false;
       var familiar = this.getHoldingFamiliar(item);
-      if (familiar === void 0 || !this.equip(familiar)) return false;
-      this.equips.set($slot(_templateObject263 || (_templateObject263 = _taggedTemplateLiteral3(["familiar"]))), item);
+      if (familiar === void 0 || $familiars(_templateObject303 || (_templateObject303 = _taggedTemplateLiteral3(["Fancypants Scarecrow, Mad Hatrack"]))).includes(familiar) && slot === void 0) {
+        return false;
+      }
+      if (!this.equip(familiar)) return false;
+      this.equips.set($slot(_templateObject313 || (_templateObject313 = _taggedTemplateLiteral3(["familiar"]))), item);
       return true;
     }
   }, {
@@ -5205,7 +5217,7 @@ var Outfit = /* @__PURE__ */ function() {
         if (!have(familiar)) return false;
         if (Array.from(this.riders.values()).includes(familiar)) return false;
       }
-      var item = this.equips.get($slot(_templateObject273 || (_templateObject273 = _taggedTemplateLiteral3(["familiar"]))));
+      var item = this.equips.get($slot(_templateObject323 || (_templateObject323 = _taggedTemplateLiteral3(["familiar"]))));
       if (item !== void 0 && item !== $item.none && !(0, import_kolmafia9.canEquip)(familiar, item)) return false;
       this.familiar = familiar;
       return true;
@@ -5218,7 +5230,7 @@ var Outfit = /* @__PURE__ */ function() {
       var succeeded = true;
       for (var _i = 0, _outfitSlots2 = outfitSlots; _i < _outfitSlots2.length; _i++) {
         var slotName = _outfitSlots2[_i];
-        var slot = (_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject283 || (_templateObject283 = _taggedTemplateLiteral3(["familiar"])))], ["offhand", $slot(_templateObject293 || (_templateObject293 = _taggedTemplateLiteral3(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia9.toSlot)(slotName);
+        var slot = (_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject333 || (_templateObject333 = _taggedTemplateLiteral3(["familiar"])))], ["offhand", $slot(_templateObject343 || (_templateObject343 = _taggedTemplateLiteral3(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia9.toSlot)(slotName);
         var itemOrItems = spec[slotName];
         if (itemOrItems !== void 0 && !this.equip(itemOrItems, slot)) succeeded = false;
       }
@@ -5357,7 +5369,7 @@ var Outfit = /* @__PURE__ */ function() {
   }, {
     key: "bjornify",
     value: function bjornify(target) {
-      return this.equipRider(target, $slot(_templateObject303 || (_templateObject303 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
+      return this.equipRider(target, $slot(_templateObject353 || (_templateObject353 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
     }
     /**
      * Add anenthroned familiar to the outfit.
@@ -5371,7 +5383,7 @@ var Outfit = /* @__PURE__ */ function() {
   }, {
     key: "enthrone",
     value: function enthrone(target) {
-      return this.equipRider(target, $slot(_templateObject313 || (_templateObject313 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
+      return this.equipRider(target, $slot(_templateObject363 || (_templateObject363 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
     }
     /**
      * Set the provided modes for items that may be equipped in the outfit.
@@ -5464,19 +5476,19 @@ var Outfit = /* @__PURE__ */ function() {
       if (this.familiar) (0, import_kolmafia9.useFamiliar)(this.familiar);
       var targetEquipment = Array.from(this.equips.values());
       var usedSlots = /* @__PURE__ */ new Set();
-      var nonaccessorySlots = $slots(_templateObject323 || (_templateObject323 = _taggedTemplateLiteral3(["weapon, off-hand, hat, back, shirt, pants, familiar"])));
-      var bjorn = this.riders.get($slot(_templateObject333 || (_templateObject333 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
-      if (bjorn && (this.equips.get($slot(_templateObject343 || (_templateObject343 = _taggedTemplateLiteral3(["back"])))) === $item(_templateObject353 || (_templateObject353 = _taggedTemplateLiteral3(["Buddy Bjorn"]))) || this.getBonus($item(_templateObject363 || (_templateObject363 = _taggedTemplateLiteral3(["Buddy Bjorn"])))))) {
-        usedSlots.add($slot(_templateObject372 || (_templateObject372 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
-        usedSlots.add($slot(_templateObject382 || (_templateObject382 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
+      var nonaccessorySlots = $slots(_templateObject372 || (_templateObject372 = _taggedTemplateLiteral3(["weapon, off-hand, hat, back, shirt, pants, familiar"])));
+      var bjorn = this.riders.get($slot(_templateObject382 || (_templateObject382 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
+      if (bjorn && (this.equips.get($slot(_templateObject392 || (_templateObject392 = _taggedTemplateLiteral3(["back"])))) === $item(_templateObject402 || (_templateObject402 = _taggedTemplateLiteral3(["Buddy Bjorn"]))) || this.getBonus($item(_templateObject412 || (_templateObject412 = _taggedTemplateLiteral3(["Buddy Bjorn"])))))) {
+        usedSlots.add($slot(_templateObject422 || (_templateObject422 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
+        usedSlots.add($slot(_templateObject432 || (_templateObject432 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
       }
-      var crown = this.riders.get($slot(_templateObject392 || (_templateObject392 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
-      if (crown && (this.equips.get($slot(_templateObject402 || (_templateObject402 = _taggedTemplateLiteral3(["hat"])))) === $item(_templateObject412 || (_templateObject412 = _taggedTemplateLiteral3(["Crown of Thrones"]))) || this.getBonus($item(_templateObject422 || (_templateObject422 = _taggedTemplateLiteral3(["Crown of Thrones"])))))) {
-        usedSlots.add($slot(_templateObject432 || (_templateObject432 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
-        usedSlots.add($slot(_templateObject442 || (_templateObject442 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
+      var crown = this.riders.get($slot(_templateObject442 || (_templateObject442 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
+      if (crown && (this.equips.get($slot(_templateObject452 || (_templateObject452 = _taggedTemplateLiteral3(["hat"])))) === $item(_templateObject462 || (_templateObject462 = _taggedTemplateLiteral3(["Crown of Thrones"]))) || this.getBonus($item(_templateObject472 || (_templateObject472 = _taggedTemplateLiteral3(["Crown of Thrones"])))))) {
+        usedSlots.add($slot(_templateObject482 || (_templateObject482 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
+        usedSlots.add($slot(_templateObject493 || (_templateObject493 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
       }
-      if (weaponHands((0, import_kolmafia9.equippedItem)($slot(_templateObject452 || (_templateObject452 = _taggedTemplateLiteral3(["weapon"]))))) !== 1 && this.equips.has($slot(_templateObject462 || (_templateObject462 = _taggedTemplateLiteral3(["offhand"])))) && !this.equips.has($slot(_templateObject472 || (_templateObject472 = _taggedTemplateLiteral3(["weapon"]))))) (0, import_kolmafia9.equip)($slot(_templateObject482 || (_templateObject482 = _taggedTemplateLiteral3(["weapon"]))), $item.none);
-      if (!weaponsCompatible(this.equips.get($slot(_templateObject493 || (_templateObject493 = _taggedTemplateLiteral3(["weapon"])))), (0, import_kolmafia9.equippedItem)($slot(_templateObject503 || (_templateObject503 = _taggedTemplateLiteral3(["off-hand"])))))) (0, import_kolmafia9.equip)($slot(_templateObject512 || (_templateObject512 = _taggedTemplateLiteral3(["off-hand"]))), $item.none);
+      if (weaponHands((0, import_kolmafia9.equippedItem)($slot(_templateObject503 || (_templateObject503 = _taggedTemplateLiteral3(["weapon"]))))) !== 1 && this.equips.has($slot(_templateObject512 || (_templateObject512 = _taggedTemplateLiteral3(["offhand"])))) && !this.equips.has($slot(_templateObject522 || (_templateObject522 = _taggedTemplateLiteral3(["weapon"]))))) (0, import_kolmafia9.equip)($slot(_templateObject532 || (_templateObject532 = _taggedTemplateLiteral3(["weapon"]))), $item.none);
+      if (!weaponsCompatible(this.equips.get($slot(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral3(["weapon"])))), (0, import_kolmafia9.equippedItem)($slot(_templateObject552 || (_templateObject552 = _taggedTemplateLiteral3(["off-hand"])))))) (0, import_kolmafia9.equip)($slot(_templateObject562 || (_templateObject562 = _taggedTemplateLiteral3(["off-hand"]))), $item.none);
       var _iterator3 = _createForOfIteratorHelper8(nonaccessorySlots), _step3;
       try {
         for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
@@ -5503,7 +5515,7 @@ var Outfit = /* @__PURE__ */ function() {
       } finally {
         _iterator4.f();
       }
-      var accessorySlots = $slots(_templateObject522 || (_templateObject522 = _taggedTemplateLiteral3(["acc1, acc2, acc3"])));
+      var accessorySlots = $slots(_templateObject57 || (_templateObject57 = _taggedTemplateLiteral3(["acc1, acc2, acc3"])));
       var accessoryEquips = accessorySlots.map(function(slot2) {
         return _this.equips.get(slot2);
       }).filter(function(item) {
@@ -5564,11 +5576,11 @@ var Outfit = /* @__PURE__ */ function() {
         (0, import_kolmafia9.logprint)("Maximize: ".concat(this.modifier));
       }
       applyModes(modes);
-      if (bjorn && (0, import_kolmafia9.haveEquipped)($item(_templateObject532 || (_templateObject532 = _taggedTemplateLiteral3(["Buddy Bjorn"]))))) {
+      if (bjorn && (0, import_kolmafia9.haveEquipped)($item(_templateObject58 || (_templateObject58 = _taggedTemplateLiteral3(["Buddy Bjorn"]))))) {
         if ((0, import_kolmafia9.myEnthronedFamiliar)() === bjorn) (0, import_kolmafia9.enthroneFamiliar)($familiar.none);
         if ((0, import_kolmafia9.myBjornedFamiliar)() !== bjorn) (0, import_kolmafia9.bjornifyFamiliar)(bjorn);
       }
-      if (crown && (0, import_kolmafia9.haveEquipped)($item(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral3(["Crown of Thrones"]))))) {
+      if (crown && (0, import_kolmafia9.haveEquipped)($item(_templateObject59 || (_templateObject59 = _taggedTemplateLiteral3(["Crown of Thrones"]))))) {
         if ((0, import_kolmafia9.myBjornedFamiliar)() === crown) (0, import_kolmafia9.bjornifyFamiliar)($familiar.none);
         if ((0, import_kolmafia9.myEnthronedFamiliar)() !== crown) (0, import_kolmafia9.enthroneFamiliar)(crown);
       }
@@ -5604,7 +5616,7 @@ var Outfit = /* @__PURE__ */ function() {
       } finally {
         _iterator7.f();
       }
-      for (var _i4 = 0, _arr = [[$slot(_templateObject552 || (_templateObject552 = _taggedTemplateLiteral3(["buddy-bjorn"]))), $item(_templateObject562 || (_templateObject562 = _taggedTemplateLiteral3(["Buddy Bjorn"]))), import_kolmafia9.myBjornedFamiliar], [$slot(_templateObject57 || (_templateObject57 = _taggedTemplateLiteral3(["crown-of-thrones"]))), $item(_templateObject58 || (_templateObject58 = _taggedTemplateLiteral3(["Crown of Thrones"]))), import_kolmafia9.myEnthronedFamiliar]]; _i4 < _arr.length; _i4++) {
+      for (var _i4 = 0, _arr = [[$slot(_templateObject60 || (_templateObject60 = _taggedTemplateLiteral3(["buddy-bjorn"]))), $item(_templateObject61 || (_templateObject61 = _taggedTemplateLiteral3(["Buddy Bjorn"]))), import_kolmafia9.myBjornedFamiliar], [$slot(_templateObject622 || (_templateObject622 = _taggedTemplateLiteral3(["crown-of-thrones"]))), $item(_templateObject63 || (_templateObject63 = _taggedTemplateLiteral3(["Crown of Thrones"]))), import_kolmafia9.myEnthronedFamiliar]]; _i4 < _arr.length; _i4++) {
         var _arr$_i = _slicedToArray5(_arr[_i4], 3), rider = _arr$_i[0], throne = _arr$_i[1], checkingFunction = _arr$_i[2];
         var wanted = this.riders.get(rider);
         if (_toConsumableArray7(this.equips.values()).includes(throne) && wanted && checkingFunction() !== wanted) {
@@ -5675,13 +5687,13 @@ var Outfit = /* @__PURE__ */ function() {
       if (this.familiar) result.familiar = this.familiar;
       for (var _i5 = 0, _outfitSlots2 = outfitSlots; _i5 < _outfitSlots2.length; _i5++) {
         var slotName = _outfitSlots2[_i5];
-        var entry = this.equips.get((_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject59 || (_templateObject59 = _taggedTemplateLiteral3(["familiar"])))], ["offhand", $slot(_templateObject60 || (_templateObject60 = _taggedTemplateLiteral3(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia9.toSlot)(slotName));
+        var entry = this.equips.get((_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject64 || (_templateObject64 = _taggedTemplateLiteral3(["familiar"])))], ["offhand", $slot(_templateObject65 || (_templateObject65 = _taggedTemplateLiteral3(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia9.toSlot)(slotName));
         if (entry) result[slotName] = entry;
       }
       var riders = {};
-      var buddyRider = this.riders.get($slot(_templateObject61 || (_templateObject61 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
+      var buddyRider = this.riders.get($slot(_templateObject66 || (_templateObject66 = _taggedTemplateLiteral3(["buddy-bjorn"]))));
       if (buddyRider !== void 0) riders["buddy-bjorn"] = buddyRider;
-      var throneRider = this.riders.get($slot(_templateObject622 || (_templateObject622 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
+      var throneRider = this.riders.get($slot(_templateObject67 || (_templateObject67 = _taggedTemplateLiteral3(["crown-of-thrones"]))));
       if (throneRider !== void 0) riders["crown-of-thrones"] = throneRider;
       if (buddyRider !== void 0 || throneRider !== void 0) result.riders = riders;
       if (this.preActions.length) result.beforeDress = this.preActions;
@@ -5699,14 +5711,14 @@ var Outfit = /* @__PURE__ */ function() {
       }
       for (var _i6 = 0, _outfitSlots3 = outfitSlots; _i6 < _outfitSlots3.length; _i6++) {
         var slotName = _outfitSlots3[_i6];
-        var slot = (_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject63 || (_templateObject63 = _taggedTemplateLiteral3(["familiar"])))], ["offhand", $slot(_templateObject64 || (_templateObject64 = _taggedTemplateLiteral3(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia9.toSlot)(slotName);
+        var slot = (_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject68 || (_templateObject68 = _taggedTemplateLiteral3(["familiar"])))], ["offhand", $slot(_templateObject69 || (_templateObject69 = _taggedTemplateLiteral3(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia9.toSlot)(slotName);
         var item = (0, import_kolmafia9.equippedItem)(slot);
         if (!outfit2.equip(item, slot)) {
           throw "Failed to create outfit from current state (expected: ".concat(slot, " ").concat(item, ")");
         }
       }
-      if ((0, import_kolmafia9.haveEquipped)($item(_templateObject65 || (_templateObject65 = _taggedTemplateLiteral3(["Crown of Thrones"]))))) outfit2.riders.set($slot(_templateObject66 || (_templateObject66 = _taggedTemplateLiteral3(["crown-of-thrones"]))), (0, import_kolmafia9.myEnthronedFamiliar)());
-      if ((0, import_kolmafia9.haveEquipped)($item(_templateObject67 || (_templateObject67 = _taggedTemplateLiteral3(["Buddy Bjorn"]))))) outfit2.riders.set($slot(_templateObject68 || (_templateObject68 = _taggedTemplateLiteral3(["buddy-bjorn"]))), (0, import_kolmafia9.myBjornedFamiliar)());
+      if ((0, import_kolmafia9.haveEquipped)($item(_templateObject70 || (_templateObject70 = _taggedTemplateLiteral3(["Crown of Thrones"]))))) outfit2.riders.set($slot(_templateObject71 || (_templateObject71 = _taggedTemplateLiteral3(["crown-of-thrones"]))), (0, import_kolmafia9.myEnthronedFamiliar)());
+      if ((0, import_kolmafia9.haveEquipped)($item(_templateObject722 || (_templateObject722 = _taggedTemplateLiteral3(["Buddy Bjorn"]))))) outfit2.riders.set($slot(_templateObject73 || (_templateObject73 = _taggedTemplateLiteral3(["buddy-bjorn"]))), (0, import_kolmafia9.myBjornedFamiliar)());
       outfit2.setModes(getCurrentModes2());
       return outfit2;
     }
@@ -5777,18 +5789,18 @@ function getMode(property, options) {
   });
 }
 function weaponsCompatible(weapon, offhand) {
-  if (!weapon || weapon === $item(_templateObject69 || (_templateObject69 = _taggedTemplateLiteral3(["none"])))) return true;
-  if (!offhand || offhand === $item(_templateObject70 || (_templateObject70 = _taggedTemplateLiteral3(["none"])))) return true;
-  if ((0, import_kolmafia9.toSlot)(offhand) !== $slot(_templateObject71 || (_templateObject71 = _taggedTemplateLiteral3(["weapon"])))) return true;
+  if (!weapon || weapon === $item(_templateObject74 || (_templateObject74 = _taggedTemplateLiteral3(["none"])))) return true;
+  if (!offhand || offhand === $item(_templateObject75 || (_templateObject75 = _taggedTemplateLiteral3(["none"])))) return true;
+  if ((0, import_kolmafia9.toSlot)(offhand) !== $slot(_templateObject76 || (_templateObject76 = _taggedTemplateLiteral3(["weapon"])))) return true;
   var weaponStat = (0, import_kolmafia9.weaponType)(weapon);
   var offhandStat = (0, import_kolmafia9.weaponType)(offhand);
-  if (weaponStat === $stat(_templateObject722 || (_templateObject722 = _taggedTemplateLiteral3(["Moxie"]))) && (offhandStat === $stat(_templateObject73 || (_templateObject73 = _taggedTemplateLiteral3(["Mysticality"]))) || offhandStat === $stat(_templateObject74 || (_templateObject74 = _taggedTemplateLiteral3(["Muscle"]))))) return false;
-  if (offhandStat === $stat(_templateObject75 || (_templateObject75 = _taggedTemplateLiteral3(["Moxie"]))) && (weaponStat === $stat(_templateObject76 || (_templateObject76 = _taggedTemplateLiteral3(["Mysticality"]))) || weaponStat === $stat(_templateObject77 || (_templateObject77 = _taggedTemplateLiteral3(["Muscle"]))))) return false;
+  if (weaponStat === $stat(_templateObject77 || (_templateObject77 = _taggedTemplateLiteral3(["Moxie"]))) && (offhandStat === $stat(_templateObject78 || (_templateObject78 = _taggedTemplateLiteral3(["Mysticality"]))) || offhandStat === $stat(_templateObject79 || (_templateObject79 = _taggedTemplateLiteral3(["Muscle"]))))) return false;
+  if (offhandStat === $stat(_templateObject80 || (_templateObject80 = _taggedTemplateLiteral3(["Moxie"]))) && (weaponStat === $stat(_templateObject81 || (_templateObject81 = _taggedTemplateLiteral3(["Mysticality"]))) || weaponStat === $stat(_templateObject822 || (_templateObject822 = _taggedTemplateLiteral3(["Muscle"]))))) return false;
   return true;
 }
 
 // node_modules/grimoire-kolmafia/dist/engine.js
-var _templateObject78;
+var _templateObject83;
 function _taggedTemplateLiteral4(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -6389,7 +6401,7 @@ ContextualEngine.defaultSettings = {
   libramSkillsSoftcore: "none"
 };
 function maxSongs() {
-  return have($skill(_templateObject78 || (_templateObject78 = _taggedTemplateLiteral4(["Mariachi Memory"])))) ? 4 : 3;
+  return have($skill(_templateObject83 || (_templateObject83 = _taggedTemplateLiteral4(["Mariachi Memory"])))) ? 4 : 3;
 }
 var wanderingNCs = /* @__PURE__ */ new Set([
   // Halloweener dog noncombats
@@ -6434,21 +6446,21 @@ var import_mafia_shared_relay = __toESM(require_dist());
 
 // src/args.ts
 var import_kolmafia11 = require("kolmafia");
-var _templateObject79;
+var _templateObject84;
 var _templateObject214;
 var _templateObject311;
 var _templateObject411;
 var _templateObject510;
 var _templateObject610;
 var _templateObject710;
-var _templateObject83;
+var _templateObject85;
 function _taggedTemplateLiteral5(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
   }
   return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var supportedWorksheds = [$item(_templateObject79 || (_templateObject79 = _taggedTemplateLiteral5(["none"]))), $item(_templateObject214 || (_templateObject214 = _taggedTemplateLiteral5(["model train set"]))), $item(_templateObject311 || (_templateObject311 = _taggedTemplateLiteral5(["cold medicine cabinet"]))), $item(_templateObject411 || (_templateObject411 = _taggedTemplateLiteral5(["Asdon Martin keyfob (on ring)"]))), $item(_templateObject510 || (_templateObject510 = _taggedTemplateLiteral5(["TakerSpace letter of Marque"])))];
+var supportedWorksheds = [$item(_templateObject84 || (_templateObject84 = _taggedTemplateLiteral5(["none"]))), $item(_templateObject214 || (_templateObject214 = _taggedTemplateLiteral5(["model train set"]))), $item(_templateObject311 || (_templateObject311 = _taggedTemplateLiteral5(["cold medicine cabinet"]))), $item(_templateObject411 || (_templateObject411 = _taggedTemplateLiteral5(["Asdon Martin keyfob (on ring)"]))), $item(_templateObject510 || (_templateObject510 = _taggedTemplateLiteral5(["TakerSpace letter of Marque"])))];
 function workshedParser(value) {
   var item = import_kolmafia11.Item.get(value);
   if (!supportedWorksheds.includes(item)) return new ParseError("received ".concat(value, " which was not a supported workshed"));
@@ -6518,7 +6530,7 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
     stillsuit: Args.familiar({
       help: "Equip the stillsuit to this familiar during the run",
       setting: "stillsuitFamiliar",
-      default: $familiar(_templateObject83 || (_templateObject83 = _taggedTemplateLiteral5(["Gelatinous Cubeling"])))
+      default: $familiar(_templateObject85 || (_templateObject85 = _taggedTemplateLiteral5(["Gelatinous Cubeling"])))
     }),
     delevel: Args.flag({
       help: "Delevel to level 13 with hot dogs before fighting the NS",
@@ -6709,7 +6721,7 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
 var scriptName = Args.getMetadata(args).scriptName;
 
 // src/relay.ts
-var _templateObject80;
+var _templateObject86;
 function _slicedToArray7(arr, i2) {
   return _arrayWithHoles7(arr) || _iterableToArrayLimit7(arr, i2) || _unsupportedIterableToArray11(arr, i2) || _nonIterableRest7();
 }
@@ -6782,7 +6794,7 @@ function convertArgsToHtml() {
     } else if (name === "workshed" || name === "swapworkshed") {
       component2.type = "dropdown";
       component2.dropdown = supportedWorksheds.map(function(i2) {
-        var name2 = i2 === $item(_templateObject80 || (_templateObject80 = _taggedTemplateLiteral6(["none"]))) ? "none" : i2.name;
+        var name2 = i2 === $item(_templateObject86 || (_templateObject86 = _taggedTemplateLiteral6(["none"]))) ? "none" : i2.name;
         return {
           display: name2,
           value: name2
