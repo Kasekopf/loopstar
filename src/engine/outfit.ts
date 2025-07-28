@@ -293,7 +293,7 @@ export function equipDefaults(
 ): void {
   if (myPath() === $path`11 Things I Hate About U`) {
     outfit.equip($familiar`Mini Kiwi`);
-    outfit.equip($item`mini kiwi invisible dirigible`);
+    // outfit.equip($item`mini kiwi invisible dirigible`);
   }
   if (have($familiar`Temporal Riftlet`)) {
     outfit.equip($familiar`Temporal Riftlet`);

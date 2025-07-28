@@ -2,6 +2,7 @@ import {
   cliExecute,
   drink,
   eat,
+  eatsilent,
   equip,
   familiarEquippedEquipment,
   fullnessLimit,
@@ -21,6 +22,7 @@ import {
 } from "kolmafia";
 import { $effect, $familiar, $item, $skill, $slot, clamp, get, have } from "libram";
 import { Quest } from "../../engine/task";
+import { args } from "../../args";
 
 export const IH8UDietQuest: Quest = {
   name: "IH8UDiet",
@@ -29,8 +31,8 @@ export const IH8UDietQuest: Quest = {
       name: "Consume Booze (Good)",
       after: [],
       ready: () =>
-        ((myLevel() >= 11 && have($item`astral six-pack`)) ||
-          have($item`astral pilsner`) ||
+        ((myLevel() >= 11 && (have($item`astral six-pack`) ||
+          have($item`astral pilsner`))) ||
           (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
           have($item`mini kiwi intoxicating spirits`)) &&
         myInebriety() < inebrietyLimit(),
@@ -103,6 +105,19 @@ export const IH8UDietQuest: Quest = {
         }
       },
       limit: { tries: 25 },
+      freeaction: true,
+      withnoadventures: true,
+    },
+    {
+      name: "Consume Food (Speed)",
+      after: [],
+      ready: () =>
+        myFullness() < fullnessLimit() && args.resources.speed === true && have($item`Boris's key lime pie`),
+      completed: () => have($item`Boris's key`),
+      do: (): void => {
+        eatsilent($item`Boris's key lime pie`)
+      },
+      limit: { tries: 1 },
       freeaction: true,
       withnoadventures: true,
     },

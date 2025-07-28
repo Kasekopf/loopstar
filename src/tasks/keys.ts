@@ -86,7 +86,7 @@ const heroKeys: KeyTask[] = [
     do: () => castWithMpSwaps([$skill`Lock Picking`]),
     choices: () => {
       return {
-        1414: have($item`Boris's key`) ? (have($item`Jarlsberg's key`) ? 3 : 2) : 1,
+        1414: !(have($item`Jarlsberg's key`)) ? 2 : !(have($item`Sneaky Pete's key`)) ? 3 : 1,
       };
     },
     limit: { tries: 1 },

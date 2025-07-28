@@ -240,7 +240,7 @@ const Apartment: Task[] = [
     orbtargets: () => [],
     post: makeCompleteFile,
     outfit: () => {
-      if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent === 8)
+      if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent / 8 === 1)
         return { equip: $items`candy cane sword cane` };
       if (
         args.resources.speed &&
@@ -252,6 +252,7 @@ const Apartment: Task[] = [
       return {};
     },
     skipswap: true,
+    peridot: $monster`pygmy shaman`,
     choices: { 780: 1 },
     limit: { soft: 9 },
   },
@@ -272,7 +273,7 @@ const Apartment: Task[] = [
     post: makeCompleteFile,
     orbtargets: () => [],
     outfit: () => {
-      if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent === 8)
+      if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent / 8 === 1)
         return { equip: $items`candy cane sword cane, miniature crystal ball, deft pirate hook` };
       return { equip: $items`miniature crystal ball, deft pirate hook` };
     },
@@ -323,6 +324,7 @@ const Office: Task[] = [
       .banish($monster`pygmy janitor`)
       .banish($monsters`pygmy headhunter, pygmy witch lawyer`),
     choices: { 786: 2 },
+    peridot: $monster`pygmy witch accountant`,
     limit: { soft: 10 },
   },
   {

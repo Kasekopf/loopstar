@@ -803,7 +803,7 @@ export const WarQuest: Quest = {
         .kill()
         .killHard(warHeroes)
         .macro(Macro.trySkill($skill`Extract Jelly`)),
-      limit: { tries: 30 },
+      limit: { tries: args.ih8u ? 40 : 30 },
     },
     {
       name: "Boss Hippie",

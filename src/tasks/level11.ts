@@ -403,6 +403,7 @@ const Pyramid: Task[] = [
       return result;
     },
     ignoreforbreathitin: true,
+    peridot: $monster`tomb rat`,
     delay: 9,
   },
   {

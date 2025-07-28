@@ -1,5 +1,5 @@
 import { OutfitSpec } from "grimoire-kolmafia";
-import { itemAmount, Monster, myTurncount } from "kolmafia";
+import { itemAmount, Monster } from "kolmafia";
 import { $effect, $item, $monster, AutumnAton, get, have } from "libram";
 import { oresNeeded } from "../tasks/level8";
 import { args } from "../args";
@@ -63,7 +63,6 @@ const backupTargets: BackupTarget[] = [
   {
     monster: $monster`sausage goblin`,
     completed: () =>
-      myTurncount() < 120 ||
       get("cyrptCrannyEvilness") > 13 ||
       !args.resources.speed ||
       get("spookyravenRecipeUsed") !== "with_glasses" ||
