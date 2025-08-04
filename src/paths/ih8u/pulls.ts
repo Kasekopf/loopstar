@@ -11,12 +11,12 @@ export const ih8uPulls: PullSpec[] = [
     benefit: 100,
     description: "Adv; generate mini kiwis",
   },
-  /*{
+  {
     pull: $item`mini kiwi invisible dirigible`,
     optional: true,
     benefit: 100,
     description: "Free runs, generate kiwis and more",
-  },*/
+  },
   {
     pull: $item`mini kiwi digitized cookies`,
     optional: true,
