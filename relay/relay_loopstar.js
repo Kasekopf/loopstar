@@ -6475,7 +6475,7 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
     // Fake the default value display;
     // we don't actually want to set a default value for non-sim debug commands like list.
     help: "Path to provide information for in sim. <font color='#888888'>[default: casual]</font>",
-    options: [["smol", "A Shrunken Adventurer am I"], ["casual", "Casual"], ["gyou", "Grey You"], ["aftercore", "Aftercore"], ["boris", "Avatar of Boris (Work in Progress)"]],
+    options: [["smol", "A Shrunken Adventurer am I"], ["casual", "Casual"], ["gyou", "Grey You"], ["aftercore", "Aftercore"], ["boris", "Avatar of Boris (Work in Progress)"], ["ih8u", "11 Things I Hate About U (Work in Progress)"]],
     setting: ""
   }, function(value) {
     return value.toLowerCase();
@@ -6655,6 +6655,11 @@ var args = Args.create("loopstar", 'This is a script to complete runs in a singl
   boris: Args.group("Path: Avatar of Boris (Work in Progress)", {
     borisargs: Args.string({
       help: "Extra command-line arguments to be used only in boris runs."
+    })
+  }),
+  ih8u: Args.group("11 Things I Hate About U (Work in Progress)", {
+    ih8uargs: Args.string({
+      help: "Extra command-line arguments to be used only in ih8u runs."
     })
   }),
   aftercore: Args.group("Path: Aftercore", {
