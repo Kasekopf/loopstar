@@ -213,6 +213,9 @@ export function equipInitial(outfit: Outfit): void {
   if (modifier.includes("meat")) {
     if (get("_roboDrinks").toLowerCase().includes("drive-by shooting"))
       outfit.equip($familiar`Robortender`);
+    if (myPath() === $path`11 Things I Hate About U`) {
+      outfit.equip($familiar`Mini Kiwi`);
+    }
     outfit.equip($familiar`Jill-of-All-Trades`);
     outfit.equip($familiar`Hobo Monkey`);
     outfit.equip($familiar`Leprechaun`); // backup
@@ -288,6 +291,10 @@ export function equipDefaults(
   noFightingFamiliars: boolean,
   freecombat: boolean
 ): void {
+  if (myPath() === $path`11 Things I Hate About U`) {
+    outfit.equip($familiar`Mini Kiwi`);
+    outfit.equip($item`mini kiwi invisible dirigible`);
+  }
   if (have($familiar`Temporal Riftlet`)) {
     outfit.equip($familiar`Temporal Riftlet`);
   }
@@ -322,7 +329,7 @@ export function equipDefaults(
   } // low priority
 
   if (!noFightingFamiliars) {
-    if (args.minor.profitfamiliar) {
+    if (args.minor.profitfamiliar && !(myPath() === $path`11 Things I Hate About U`)) {
       outfit.equip(profitFamiliar());
       if (profitFamiliar() === $familiar`Chest Mimic` && have($item`tiny stillsuit`))
         outfit.equip($item`tiny stillsuit`);
@@ -377,6 +384,13 @@ export function equipDefaults(
     if (have($item`bat wings`) && get("_batWingsFreeFights") < 5 && !freecombat) {
       outfit.equip($item`bat wings`);
     } else {
+      if (
+        myPath() === $path`11 Things I Hate About U` &&
+        outfit.familiar !== $familiar`Mini Kiwi`
+      ) {
+        outfit.bjornify($familiar`Mini Kiwi`);
+        outfit.equip($item`Buddy Bjorn`);
+      }
       outfit.equip($item`protonic accelerator pack`);
       if (!freecombat || get("_batWingsFreeFights") === 5) outfit.equip($item`bat wings`);
     }
