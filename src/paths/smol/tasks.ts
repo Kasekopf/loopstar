@@ -60,7 +60,7 @@ function saltyMouthBusk() {
     const busk2WithHammertimeEffects = Object.keys(beretBuskingEffects(busk2PowerWithHammertime, get("_beretBuskingUses") + 1));
     if (busk2WithHammertimeEffects.includes("Salty Mouth")) {
       PrismaticBeret.buskAt(hammertimeBusk1Power);
-      PrismaticBeret.buskAt(busk2PowerWithHammertime);
+      PrismaticBeret.buskAt(busk2PowerWithHammertime, { hammerTime: true });
     }
   }
 }
