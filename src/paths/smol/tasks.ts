@@ -51,6 +51,7 @@ function saltyMouthBusk() {
   const busk2Power = PrismaticBeret.findOptimalOutfitPower($effects`Salty Mouth`, {}, get("_beretBuskingUses") + 1);
   const busk2Effects = Object.keys(beretBuskingEffects(busk2Power, get("_beretBuskingUses") + 1))
   if (busk2Effects.includes("Salty Mouth")) {
+    PrismaticBeret.buskFor({ "Familiar Weight": 2, "Meat Drop": 1 }, {});
     if (PrismaticBeret.buskAt(busk2Power)) return;
   }
   const hammertimeBusk1Power = PrismaticBeret.findOptimalOutfitPower($effects`Hammertime`);
