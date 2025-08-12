@@ -93,6 +93,19 @@ const heroKeys: KeyTask[] = [
     freeaction: true,
   },
   {
+    which: Keys.Malware,
+    possible: () =>
+      !underStandard() &&
+      !get("dailyDungeonDone") &&
+      !get("_dailyDungeonMalwareUsed") &&
+      ((!inHardcore() && (pullsRemaining() > 0 || myTurncount() >= 1000)) ||
+        have($item`daily dungeon malware`)) &&
+      (!have($item`Deck of Every Card`) || !have($skill`Lock Picking`)),
+    completed: () => get("dailyDungeonDone") || get("_dailyDungeonMalwareUsed"),
+    after: [],
+    ...dailyDungeonTask(),
+  },
+  {
     which: Keys.CandyCane,
     possible: () =>
       !get("dailyDungeonDone") &&
@@ -113,19 +126,6 @@ const heroKeys: KeyTask[] = [
     possible: () => !get("dailyDungeonDone"),
     completed: () => get("dailyDungeonDone"),
     after: ["Daily Dungeon Malware", "Daily Dungeon Candy Cane"],
-    ...dailyDungeonTask(),
-  },
-  {
-    which: Keys.Malware,
-    possible: () =>
-      !underStandard() &&
-      !get("dailyDungeonDone") &&
-      !get("_dailyDungeonMalwareUsed") &&
-      ((!inHardcore() && (pullsRemaining() > 0 || myTurncount() >= 1000)) ||
-        have($item`daily dungeon malware`)) &&
-      (!have($item`Deck of Every Card`) || !have($skill`Lock Picking`)),
-    completed: () => get("dailyDungeonDone") || get("_dailyDungeonMalwareUsed"),
-    after: [],
     ...dailyDungeonTask(),
   },
   {
@@ -404,6 +404,7 @@ export const DigitalQuest: Quest = {
       },
       combat: new CombatStrategy().kill(),
       limit: { soft: 16 },
+      delay: 16,
       nochain: true,
     },
     {
@@ -541,6 +542,7 @@ export const DigitalQuest: Quest = {
       },
       combat: new CombatStrategy().killItem(),
       limit: { soft: 16 },
+      delay: 16,
       nochain: true,
     },
     {

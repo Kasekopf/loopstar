@@ -29,7 +29,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { Quest, Resources, Task } from "../engine/task";
+import { Quest, ResourceRequest, Resources, Task } from "../engine/task";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
@@ -203,6 +203,47 @@ const Apartment: Task[] = [
     choices: { 781: 1 },
     limit: { tries: 4 },
     freecombat: true,
+  },
+  {
+    name: "Apartment (Fast)",
+    after: ["Open Apartment"],
+    priority: () =>
+      have($familiar`Patriotic Eagle`) && !have($effect`Everything Looks Red, White and Blue`)
+        ? Priorities.GoodForceNC
+        : Priorities.None,
+    // (When speed) the last curse is obtained from the next task, when the shaman is banished
+    completed: () =>
+      !args.resources.speed ||
+      !have($familiar`Patriotic Eagle`) ||
+      get("hiddenApartmentProgress") >= 7 ||
+      (!!args.resources.speed &&
+        (have($effect`Thrice-Cursed`) ||
+          have($effect`Twice-Cursed`) ||
+          (have($effect`Once-Cursed`) && have($item`candy cane sword cane`)))),
+    do: $location`The Hidden Apartment Building`,
+    combat: new CombatStrategy()
+      .macro(Macro.if_($monster`pygmy shaman`, Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)))
+      .killHard($monster`ancient protector spirit (The Hidden Apartment Building)`)
+      .banish($monsters`pygmy janitor, pygmy witch lawyer`)
+      .kill($monster`pygmy witch accountant`)
+      .ignoreNoBanish($monster`pygmy shaman`)
+      .ignore(),
+    orbtargets: () => [],
+    post: makeCompleteFile,
+    outfit: () => {
+      return { equip: $items`candy cane sword cane`, familiar: $familiar`Patriotic Eagle` };
+    },
+    resources: () =>
+      <ResourceRequest>{
+        which: Resources.NCForce,
+        benefit: have($effect`Thrice-Cursed`)
+          ? ((8 - ($location`The Hidden Apartment Building`.turnsSpent % 8)) || 8)
+          : 0
+      },
+    skipswap: true,
+    peridot: $monster`pygmy shaman`,
+    choices: { 780: 1 },
+    limit: { soft: 3 },
   },
   {
     name: "Apartment",

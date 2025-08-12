@@ -372,6 +372,10 @@ export function equipDefaults(
     outfit.equip($item`sea salt scrubs`);
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
+    if (get("_timeCopsFoughtToday", 0) < 11) {
+      // eslint-disable-next-line libram/verify-constants
+      outfit.equip($item`Möbius ring`);
+    }
     if (weaponType(outfit.equips.get($slot`weapon`) ?? $item`none`) !== $stat`Moxie`) {
       outfit.equip($item`June cleaver`);
       outfit.equip($item`industrial fire extinguisher`);

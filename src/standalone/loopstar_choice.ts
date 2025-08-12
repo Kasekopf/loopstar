@@ -1,9 +1,14 @@
 import { availableChoiceOptions, getProperty, print, runChoice } from "kolmafia";
 import { $item, have } from "libram";
+import { mobiusChoice } from "../mobiusRing";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(choice: number, page: string) {
   const options: { [key: number]: string } = availableChoiceOptions();
+
+  if (choice === 1562) {
+    runChoice(mobiusChoice(options));
+  }
 
   if (choice === 923 && options[5]) {
     runChoice(5); // All Over the Map (The Black Forest)

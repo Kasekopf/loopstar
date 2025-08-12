@@ -6,6 +6,7 @@ import {
   Monster,
   myAdventures,
   myFamiliar,
+  myParadoxicity,
   myPath,
   totalTurnsPlayed,
 } from "kolmafia";
@@ -219,6 +220,21 @@ export const wandererSources: WandererSource[] = [
       return result;
     },
     possible: () => haveEquipped($item`Kramco Sausage-o-Matic™`),
+    chainable: true,
+  },
+  {
+    name: "Time Cop",
+    // eslint-disable-next-line libram/verify-constants
+    available: () => have($item`Möbius ring`) && get("_timeCopsFoughtToday", 0) < 11,
+    // eslint-disable-next-line libram/verify-constants
+    equip: $item`Möbius ring`,
+    monsters: [
+      // eslint-disable-next-line libram/verify-constants
+      $monster`time cop`,
+    ],
+    chance: () => 0.4 / (1 + Math.exp(-0.3 * (myParadoxicity() - 16))),
+    // eslint-disable-next-line libram/verify-constants
+    possible: () => haveEquipped($item`Möbius ring`),
     chainable: true,
   },
 ];

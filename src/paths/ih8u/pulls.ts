@@ -2,7 +2,6 @@ import { storageAmount } from "kolmafia";
 import { $item } from "libram";
 import { getPullTask, PullSpec } from "../../tasks/pulls";
 import { Quest } from "../../engine/task";
-import { args } from "../../args";
 
 export const ih8uPulls: PullSpec[] = [
   {
@@ -27,14 +26,6 @@ export const ih8uPulls: PullSpec[] = [
   {
     pull: $item`incredible mini-pizza`,
     optional: true,
-    price: 10_000,
-    benefit: 100,
-    description: "Adv",
-  },
-  {
-    pull: $item`Boris's key lime pie`,
-    optional: true,
-    useful: () => args.resources.speed === true,
     price: 10_000,
     benefit: 100,
     description: "Adv",
