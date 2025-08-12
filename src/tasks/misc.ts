@@ -1475,6 +1475,7 @@ export const MiscQuest: Quest = {
         use($item`GameInformPowerDailyPro magazine`);
         visitUrl("inv_use.php?pwd&confirm=Yep.&whichitem=6174");
         runChoice(1);
+        // eslint-disable-next-line libram/verify-constants
         adv1($location`Video Game Level 1`);
         use($item`dungeoneering kit`);
       },
@@ -1766,8 +1767,8 @@ function chooseBestLeprecondo(): number[] {
     myPath() === $path`11 Things I Hate About U` && furnitureFound.has(25)
       ? 25
       : furnitureFound.has(13)
-      ? 13
-      : 0; // Sous vide -> meat% and random food
+        ? 13
+        : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }

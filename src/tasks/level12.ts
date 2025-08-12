@@ -616,7 +616,7 @@ export const WarQuest: Quest = {
         (have($item`beer helmet`) &&
           have($item`distressed denim pants`) &&
           have($item`bejeweled pledge pin`)),
-      do: $location`Hippy Camp`,
+      do: $location`The Hippy Camp`,
       limit: { soft: 10 },
       choices: () => {
         return {
@@ -645,7 +645,7 @@ export const WarQuest: Quest = {
         have($item`beer helmet`) &&
         have($item`distressed denim pants`) &&
         have($item`bejeweled pledge pin`),
-      do: $location`Frat House`,
+      do: $location`The Orcish Frat House`,
       limit: { soft: 10 },
       choices: { 142: 3, 143: 3, 144: 3, 145: 1, 146: 3, 1433: 3 },
       outfit: () => {
