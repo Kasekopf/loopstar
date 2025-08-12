@@ -29,8 +29,6 @@ export const IH8UDietQuest: Quest = {
       name: "Consume Booze (Good)",
       after: [],
       ready: () =>
-        ((myLevel() >= 11 && (have($item`astral six-pack`) ||
-          have($item`astral pilsner`))) ||
           (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
           have($item`mini kiwi intoxicating spirits`)) &&
         myInebriety() < inebrietyLimit(),
