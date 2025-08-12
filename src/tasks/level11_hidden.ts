@@ -222,7 +222,12 @@ const Apartment: Task[] = [
           (have($effect`Once-Cursed`) && have($item`candy cane sword cane`)))),
     do: $location`The Hidden Apartment Building`,
     combat: new CombatStrategy()
-      .macro(Macro.if_($monster`pygmy shaman`, Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)))
+      .macro(
+        Macro.if_(
+          $monster`pygmy shaman`,
+          Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)
+        )
+      )
       .killHard($monster`ancient protector spirit (The Hidden Apartment Building)`)
       .banish($monsters`pygmy janitor, pygmy witch lawyer`)
       .kill($monster`pygmy witch accountant`)
@@ -237,8 +242,8 @@ const Apartment: Task[] = [
       <ResourceRequest>{
         which: Resources.NCForce,
         benefit: have($effect`Thrice-Cursed`)
-          ? ((8 - ($location`The Hidden Apartment Building`.turnsSpent % 8)) || 8)
-          : 0
+          ? 8 - ($location`The Hidden Apartment Building`.turnsSpent % 8) || 8
+          : 0,
       },
     skipswap: true,
     peridot: $monster`pygmy shaman`,
@@ -281,7 +286,10 @@ const Apartment: Task[] = [
     orbtargets: () => [],
     post: makeCompleteFile,
     outfit: () => {
-      if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent / 8 === 1)
+      if (
+        have($effect`Twice-Cursed`) &&
+        $location`The Hidden Apartment Building`.turnsSpent / 8 === 1
+      )
         return { equip: $items`candy cane sword cane` };
       if (
         args.resources.speed &&
@@ -314,7 +322,10 @@ const Apartment: Task[] = [
     post: makeCompleteFile,
     orbtargets: () => [],
     outfit: () => {
-      if (have($effect`Twice-Cursed`) && $location`The Hidden Apartment Building`.turnsSpent / 8 === 1)
+      if (
+        have($effect`Twice-Cursed`) &&
+        $location`The Hidden Apartment Building`.turnsSpent / 8 === 1
+      )
         return { equip: $items`candy cane sword cane, miniature crystal ball, deft pirate hook` };
       return { equip: $items`miniature crystal ball, deft pirate hook` };
     },

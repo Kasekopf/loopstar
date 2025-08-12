@@ -30,8 +30,7 @@ export const IH8UDietQuest: Quest = {
       after: [],
       ready: () =>
         (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
-        have($item`mini kiwi intoxicating spirits`) &&
-        myInebriety() < inebrietyLimit(),
+        (have($item`mini kiwi intoxicating spirits`) && myInebriety() < inebrietyLimit()),
       completed: () => myDaycount() > 1,
       do: (): void => {
         const canDrink = () => myInebriety() < inebrietyLimit();

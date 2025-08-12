@@ -1767,8 +1767,8 @@ function chooseBestLeprecondo(): number[] {
     myPath() === $path`11 Things I Hate About U` && furnitureFound.has(25)
       ? 25
       : furnitureFound.has(13)
-        ? 13
-        : 0; // Sous vide -> meat% and random food
+      ? 13
+      : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }

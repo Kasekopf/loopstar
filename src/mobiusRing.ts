@@ -181,12 +181,13 @@ const mobiusChoices: MobiusChoice[] = [
 
 export function mobiusChoice(options: { [key: number]: string }): number {
   // Build sets for faster lookups
-  const choice1Set = new Set(MOBIUS_PAIRS.map(p => p.choice1));
-  const choice2Set = new Set(MOBIUS_PAIRS.map(p => p.choice2));
+  const choice1Set = new Set(MOBIUS_PAIRS.map((p) => p.choice1));
+  const choice2Set = new Set(MOBIUS_PAIRS.map((p) => p.choice2));
 
   // Filter for choices that are in choice1 but not in choice2
-  const validChoices = Object.entries(options)
-    .filter(([, name]) => choice1Set.has(name) && !choice2Set.has(name));
+  const validChoices = Object.entries(options).filter(
+    ([, name]) => choice1Set.has(name) && !choice2Set.has(name)
+  );
 
   if (validChoices.length === 0) {
     return -1; // no valid choices
