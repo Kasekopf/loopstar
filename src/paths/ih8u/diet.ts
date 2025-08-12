@@ -29,8 +29,8 @@ export const IH8UDietQuest: Quest = {
       name: "Consume Booze (Good)",
       after: [],
       ready: () =>
-          (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
-          have($item`mini kiwi intoxicating spirits`)) &&
+        (!get("_miniKiwiIntoxicatingSpiritsBought") && have($item`mini kiwi`, 3)) ||
+        have($item`mini kiwi intoxicating spirits`) &&
         myInebriety() < inebrietyLimit(),
       completed: () => myDaycount() > 1,
       do: (): void => {
