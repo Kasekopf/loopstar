@@ -1,6 +1,7 @@
-import { $effect, $item, $items, $location, $monster, $path, $stat, get, have } from "libram";
+import { $effect, $item, $items, $location, $monster, $path, $skill, $stat, get, have, Macro } from "libram";
 import { Quest, ResourceRequest, Resources } from "../../engine/task";
-import { monkeyPaw, myPath, myPrimestat, retrieveItem, use, visitUrl } from "kolmafia";
+import { canAdventure, haveEquipped, monkeyPaw, myMp, myPath, myPrimestat, restoreMp, retrieveItem, use, visitUrl } from "kolmafia";
+import { CombatStrategy } from "../../engine/combat";
 
 
 export const SeaQuest: Quest = {
@@ -43,14 +44,25 @@ export const SeaQuest: Quest = {
       prepare: () => {
         if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
         // eslint-disable-next-line libram/verify-constants
-        retrieveItem($item`reall, really nice swimming trunks`, 1);
+        retrieveItem($item`really, really nice swimming trunks`, 1);
       }, // ensure fishy
       completed: () => have($item`wriggling flytrap pellet`),
       do: $location`An Octopus's Garden`,
       limit: { tries: 10 },
       peridot: $monster`Neptune flytrap`,
+      combat: new CombatStrategy().macro(Macro.externalIf(
+        have($skill`Transcendent Olfaction`) &&
+        (get("olfactedMonster") !== $monster`Neptune flytrap` ||
+          !have($effect`On the Trail`)) &&
+        get("_olfactionsUsed") < 3,
+        Macro.if_(
+          $monster`Neptune flytrap`,
+          Macro.trySkill($skill`Transcendent Olfaction`),
+        ),
+      )),
       //Macro to olfact + RWB + pledge
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "item" }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -66,7 +78,8 @@ export const SeaQuest: Quest = {
         visitUrl("monkeycastle.php?who=1");
       },
       limit: { tries: 1 },
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -80,7 +93,8 @@ export const SeaQuest: Quest = {
       do: $location`The Wreck of the Edgar Fitzsimmons`,
       choices: { 299: 1 },
       limit: { tries: 10 },
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "-com" }, // Ensure we can breath water
       resources: () =>
         <ResourceRequest>{
           which: Resources.NCForce,
@@ -103,7 +117,8 @@ export const SeaQuest: Quest = {
         // do skate park unlock
       },
       limit: { tries: 10 },
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -116,7 +131,8 @@ export const SeaQuest: Quest = {
       completed: () => get("questS02Monkees") === "step5",
       do: myPrimestat === $stat`Muscle` ? $location`Anemone Mine` : myPrimestat === $stat`Mysticality` ? $location`The Marinara Trench` : $location`The Dive Bar`,
       limit: { tries: 10 },
-      outfit: { modifier: "-combat" }, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "-combat" }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -126,13 +142,14 @@ export const SeaQuest: Quest = {
       prepare: () => {
         if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
       }, // ensure fishy
-      completed: () => have($item`fishy pipe`),
+      completed: () => canAdventure($location`The Mer-Kin Outpost`),
       do: () => {
         visitUrl("monkeycastle.php?action=grandpastory&topic=mom");
         visitUrl("monkeycastle.php?action=grandpastory&topic=Grandma");
       },
-      limit: { tries: 10 },
-      outfit: {}, // Ensure we can breath water
+      limit: { tries: 1 },
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -146,7 +163,8 @@ export const SeaQuest: Quest = {
       choices: { 695: 1, },
       do: $location`The Mer-Kin Outpost`,
       limit: { tries: 10 },
-      outfit: { modifier: "-combat" }, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "-combat" }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -212,11 +230,13 @@ export const SeaQuest: Quest = {
       after: ["The Sea/Mom Unlock"],
       prepare: () => {
         if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
+        if (have($item`comb jelly`)) use($item`comb jelly`);
       }, // ensure fishy
       completed: () => get("questS02Monkees") === "finished",
       do: $location`The Caliginous Abyss`,
       limit: { tries: 28 },
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks`, shirt: $item`shark jumper`, equip: $items`black glass` }, // Ensure we can breath water
       freeaction: false,
       delay: 28
     },
@@ -231,7 +251,8 @@ export const SeaQuest: Quest = {
       do: $location`The Mer-Kin Outpost`,
       limit: { tries: 10 },
       delay: 26,
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -250,7 +271,8 @@ export const SeaQuest: Quest = {
         visitUrl("monkeycastle.php?action=grandpastory&topic=currents");
       },
       limit: { tries: 10 },
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -265,8 +287,15 @@ export const SeaQuest: Quest = {
       do: $location`The Coral Corral`,
       limit: { tries: 10 },
       peridot: $monster`sea cow`,
+      combat: new CombatStrategy().macro(Macro.externalIf(
+        !have($item`sea cowbell`, 3),
+        Macro.if_(
+          $monster`sea cow`,
+          Macro.trySkill($skill`Swoop like a Bat`),
+        ),
+      ).externalIf(get("lassoTrainingCount", 0) < 11 && have($item`sea lasso`), Macro.tryItem($item`sea lasso`))),
       //combat - swoop sea cow
-      outfit: { equip: $items`sea cowboy hat, sea chaps` }, // Ensure we can breath water
+      outfit: { equip: $items`sea cowboy hat, sea chaps, bat wings` }, // Ensure we can breath water
       freeaction: false,
       post: () => {
         visitUrl("seafloor.php?action=currents");
@@ -293,10 +322,26 @@ export const SeaQuest: Quest = {
       prepare: () => {
         if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
       }, // ensure fishy
-      completed: () => get("seahorseName") !== "",
+      completed: () => have($item`Mer-kin dreadscroll`),
       do: $location`Mer-kin Library`,
       limit: { tries: 10 },
-      outfit: { equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece` }, // Ensure we can breath water
+      outfit: { equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece`, modifier: "-com" }, // Ensure we can breath water
+      freeaction: false,
+    },
+    {
+      name: "Dreadscroll",
+      // eslint-disable-next-line libram/verify-constants
+      after: ["The Sea/Prepare Scholar"],
+      prepare: () => {
+        if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
+      }, // ensure fishy
+      completed: () => get("seahorseName") !== "",
+      do: () => {
+        use($item`Mer-kin dreadscroll`);
+        visitUrl("choice.php?pro1=1&pro2=4&pro3=3&pro4=2&pro5=1&pro6=1&pro7=1&pro8=1&whichchoice=703&pwd&option=1"); // fix this
+      },
+      limit: { tries: 10 },
+      outfit: { equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece`, modifier: "-com" }, // Ensure we can breath water
       freeaction: false,
     },
     {
@@ -318,16 +363,17 @@ export const SeaQuest: Quest = {
       after: ["The Sea/Prepare Gladiators"],
       prepare: () => {
         if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
+        if (myMp() < 500) restoreMp(500);
       }, // ensure fishy
       completed: () => get("lastColosseumRoundWon") === 15,
       do: $location`Mer-kin Colosseum`,
       limit: { tries: 15 },
-      outfit: { equip: $items`big hot pepper, Mer-kin gladiator mask, Mer-kin gladiator tailpiece` }, // Ensure we can breath water
-      //combat here
+      outfit: { equip: $items`big hot pepper, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`, modifier: "Spell Dmg" }, // Ensure we can breath water
+      combat: new CombatStrategy().macro(Macro.trySkill($skill`Stuffed Mortar Shell`).trySkill($skill`Raise Backup Dancer`).trySkill($skill`Raise Backup Dancer`)),
       freeaction: false,
     },
     {
-      name: "Kill the Boss",
+      name: "Kill Yog-urt",
       // eslint-disable-next-line libram/verify-constants
       after: ["The Sea/Do Scholar"],
       prepare: () => {
@@ -335,10 +381,55 @@ export const SeaQuest: Quest = {
       }, // ensure fishy
       completed: () => get("seahorseName") !== "",
       do: $location`Mer-kin Library`,
-      limit: { tries: 3 },
-      outfit: {}, // Ensure we can breath water
+      // eslint-disable-next-line libram/verify-constants
+      limit: { tries: myPath() === $path`11037 Leagues under the Sea` ? 3 : 1 },
+      choices: { 710: 1, 711: 1, 712: 1, 713: 1 },
+      combat: new CombatStrategy().macro(
+        Macro.if_($monster`Yog-Urt, Elder Goddess of Hatred`, Macro.tryItem($item`crayon shavings`, $item`Mer-kin healscroll`).tryItem($item`crayon shavings`, $item`waterlogged scroll of healing`).tryItem($item`crayon shavings`, $item`sea gel`).trySkill($skill`Raise Backup Dancer`).trySkill($skill`Raise Backup Dancer`))
+      ),
+      outfit: { equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Mer-kin prayerbeads, Mer-kin prayerbeads, Mer-kin prayerbeads`, modifier: "-hp, spell dmg" }, // Ensure we can breath water
       // new combat for all three bosses - probably need prefs
       freeaction: false,
+      boss: true,
+    },
+    {
+      name: "Kill Shub-Jigg",
+      // eslint-disable-next-line libram/verify-constants
+      after: ["The Sea/Do Gladiators"],
+      prepare: () => {
+        if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
+      }, // ensure fishy
+      completed: () => get("seahorseName") !== "",
+      do: $location`Mer-kin Library`,
+      // eslint-disable-next-line libram/verify-constants
+      limit: { tries: myPath() === $path`11037 Leagues under the Sea` ? 3 : 1 },
+      choices: { 708: 1, 709: 1 },
+      combat: new CombatStrategy().macro(
+        Macro.if_($monster`Shub-Jigguwatt, Elder God of Violence`, Macro.tryItem($item`crayon shavings`, $item`crayon shavings`).tryItem($item`crayon shavings`, $item`crayon shavings`).tryItem($item`crayon shavings`, $item`crayon shavings`).attack().attack().attack())
+      ),
+      outfit: { equip: $items`Mer-kin gladiator mask, Mer-kin gladiator tailpiece`, modifier: "+hp, weapon dmg" }, // Ensure we can breath water
+      // new combat for all three bosses - probably need prefs
+      freeaction: false,
+      boss: true,
+    },
+    {
+      name: "Kill Seaceress",
+      // eslint-disable-next-line libram/verify-constants
+      after: ["The Sea/Kill Yog-urt", "The Sea/Kill Shub-Jigg"],
+      prepare: () => {
+        if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
+      }, // ensure fishy
+      completed: () => get("seahorseName") !== "",
+      do: $location`Mer-kin Library`,
+      // eslint-disable-next-line libram/verify-constants
+      limit: { tries: myPath() === $path`11037 Leagues under the Sea` ? 3 : 1 },
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "+hp, spell dmg" }, // Ensure we can breath water
+      combat: new CombatStrategy()
+        .macro(() => Macro.externalIf(haveEquipped($item`June cleaver`), Macro.attack().repeat()))
+        .kill(),
+      freeaction: false,
+      boss: true,
     },
   ]
 }

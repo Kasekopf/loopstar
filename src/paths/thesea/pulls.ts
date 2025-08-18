@@ -112,6 +112,12 @@ export const seaPulls: PullSpec[] = [
     benefit: 100,
     description: "Complete the route",
   },
+  {
+    pull: $item`shark jumper`,
+    optional: false,
+    benefit: 100,
+    description: "Complete the route",
+  },
 ];
 
 export const SeaPullsQuest: Quest = {
