@@ -898,7 +898,7 @@ export const MiscQuest: Quest = {
       ready: () => have($item`S.I.T. Course Completion Certificate`),
       completed: () => get("_sitCourseCompleted", true) || have($skill`Insectologist`),
       do: () => use($item`S.I.T. Course Completion Certificate`),
-      choices: { [1494]: 2 },
+      choices: { [1494]: myPath() === $path`11037 leagues under the sea` ? 3 : 2 },
       limit: { tries: 1 },
       freeaction: true,
     },
@@ -1766,8 +1766,8 @@ function chooseBestLeprecondo(): number[] {
     myPath() === $path`11 Things I Hate About U` && furnitureFound.has(25)
       ? 25
       : furnitureFound.has(13)
-      ? 13
-      : 0; // Sous vide -> meat% and random food
+        ? 13
+        : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }
