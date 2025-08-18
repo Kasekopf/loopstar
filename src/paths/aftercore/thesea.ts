@@ -293,7 +293,7 @@ export const SeaQuest: Quest = {
           $monster`sea cow`,
           Macro.trySkill($skill`Swoop like a Bat`),
         ),
-      ).externalIf(get("lassoTrainingCount", 0) < 11 && have($item`sea lasso`), Macro.tryItem($item`sea lasso`))),
+      ).externalIf(get("lassoTrainingCount", 0) < 18 && have($item`sea lasso`), Macro.tryItem($item`sea lasso`)).externalIf(get("lassoTraining") === "deftly" && have($item`sea cowbell`, 3) && have($item`sea lasso`), Macro.if_($monster`wild seahorse`, Macro.tryItem($item`sea cowbell`).tryItem($item`sea cowbell`).tryItem($item`sea cowbell`).tryItem($item`sea lasso`)))),
       //combat - swoop sea cow
       outfit: { equip: $items`sea cowboy hat, sea chaps, bat wings` }, // Ensure we can breath water
       freeaction: false,
