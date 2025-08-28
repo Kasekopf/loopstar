@@ -1951,10 +1951,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libram@^0.11.6:
-  version "0.11.6"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.6.tgz#7428682bedb86852ea8a1d57a9f3f52b8cbeed87"
-  integrity sha512-qEXuIJQNPeoWLAglQjWgJBWSOATdDS1IkuiRVzkCaerMORucYj1Rd7FJNQpqLh1npX7Sh6rH1Ws/7aBGPtTr1A==
+libram@^0.11.9:
+  version "0.11.9"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.9.tgz#b8aba12db14e4fec27122ac8c94d1422e93cdd53"
+  integrity sha512-fj4RIOc0/K/ytvp0F1bOrScstPg5Fba2bt/8eNrRbmHPRPUPILepsq+dJ9d98H3Ae/KtNupkPicNB584lg0h1w==
   dependencies:
     html-entities "^2.5.2"
 
