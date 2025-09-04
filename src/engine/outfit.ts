@@ -372,7 +372,7 @@ export function equipDefaults(
     outfit.equip($item`sea salt scrubs`);
     outfit.equip($item`giant yellow hat`);
     outfit.equip($item`ice crown`);
-    if (get("_timeCopsFoughtToday", 0) < 11) {
+    if (get("_timeCopsFoughtToday", 0) < 11 && !freecombat) {
       // eslint-disable-next-line libram/verify-constants
       outfit.equip($item`Möbius ring`);
     }

@@ -2,29 +2,114 @@ import {
   cliExecute,
   drink,
   eat,
+  Effect,
   equip,
   familiarEquippedEquipment,
   fullnessLimit,
+  getWorkshed,
   inebrietyLimit,
+  Item,
   itemAmount,
+  mallPrice,
   myAdventures,
   myDaycount,
   myFullness,
   myInebriety,
   myLevel,
+  myMeat,
   restoreMp,
   retrieveItem,
   reverseNumberology,
   use,
   useFamiliar,
   useSkill,
+  visitUrl,
 } from "kolmafia";
-import { $effect, $familiar, $item, $skill, $slot, clamp, get, have } from "libram";
+import { $effect, $effects, $familiar, $item, $items, $skill, $slot, clamp, get, have, maxBy } from "libram";
 import { Quest } from "../../engine/task";
+import { Priorities } from "../../engine/priority";
+
+function calculateItemValue(item: Item): number {
+  return item.name.length / 10;
+}
+
+function bestPizzaItemForLetter(letter: string): Item | null {
+  const items = $items.all().filter((i) => i.name.startsWith(letter) && have(i));
+  if (items.length === 0) return null;
+
+  const itemsWithValues = items.map((item) => ({
+    item,
+    value: calculateItemValue(item),
+  }));
+
+  return maxBy(itemsWithValues, (entry) => entry.value)?.item ?? null;
+}
+
+// Function to design the pizza based on the effect's name letters
+function designPizza(effect: Effect): Item[] {
+  return effect.name
+    .substring(0, 4)
+    .split("")
+    .map((letter) => bestPizzaItemForLetter(letter))
+    .filter((x): x is Item => x !== null); // filter out nulls
+}
+
+// Simulation to calculate pizza cost and benefit
+export function simCreatePizza(effect: Effect): [number, number] {
+  const pizzaItems = designPizza(effect);
+
+  const benefit = pizzaItems.reduce(
+    (acc, it) => acc + calculateItemValue(it),
+    0,
+  );
+  const cost = pizzaItems.reduce((acc, it) => acc + mallPrice(it), 0);
+
+  return [cost, benefit];
+}
+
+// Function to create the pizza by calling the appropriate URL
+export function createPizza(effect: Effect) {
+  const pizzaItems = designPizza(effect);
+
+  if (pizzaItems.length < 4) {
+    throw `Not enough items to create pizza for ${effect.name}`;
+  }
+
+  visitUrl(
+    `campground.php?action=makepizza&pizza=${pizzaItems
+      .map((item) => item.id)
+      .join(",")}`,
+    true,
+    true,
+  );
+}
+
+const goodPizzaEffect = $effects`Bureaucratized, Down With Chow`;
 
 export const IH8UDietQuest: Quest = {
   name: "IH8UDiet",
   tasks: [
+    {
+      name: "Diabolic Pizza Cube",
+      priority: () => Priorities.Free,
+      ready: () => {
+        if (getWorkshed() !== $item`diabolic pizza cube`) return false;
+        return goodPizzaEffect.some(
+          (eff) => designPizza(eff).length === 4,
+        );
+      },
+      completed: () => myFullness() >= fullnessLimit(),
+      do: () => {
+        // actually make the pizza for the first effect that works
+        const effect = goodPizzaEffect.find(
+          (eff) => designPizza(eff).length === 4,
+        );
+        if (effect) createPizza(effect);
+        eat($item`diabolic pizza`);
+      },
+      limit: { tries: 15 },
+      freeaction: true,
+    },
     {
       name: "Consume Booze (Good)",
       after: [],
@@ -139,7 +224,7 @@ export const IH8UDietQuest: Quest = {
     {
       name: "Sausage",
       completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
-      ready: () => have($item`magical sausage casing`),
+      ready: () => have($item`magical sausage casing`) && myMeat() > 10_000,
       do: (): void => {
         // Pump-and-grind cannot be used from Left-Hand Man
         if (

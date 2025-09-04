@@ -1,4 +1,5 @@
-import { Item, Monster, myClass, myFury, myMaxmp, myMp, myTurncount, Skill } from "kolmafia";
+/* eslint-disable libram/verify-constants */
+import { Item, Monster, myClass, myFury, myMaxmp, myMp, myTurncount, Skill, toItem } from "kolmafia";
 import { BanishState } from "../engine/state";
 import {
   $class,
@@ -172,6 +173,13 @@ const killBanishSources: BanishSource[] = [
     available: () => have($item`cursed monkey's paw`) && get("_monkeyPawWishesUsed", 0) === 0,
     equip: $item`cursed monkey's paw`,
     do: $skill`Monkey Slap`,
+    free: false,
+  },
+  {
+    name: "Seadent",
+    available: () => have(toItem(11975)) && get("_seadentLightningUsed", 0) < 11,
+    equip: toItem(11975),
+    do: $skill`Sea *dent: Throw a Lightning Bolt`,
     free: false,
   },
   {
