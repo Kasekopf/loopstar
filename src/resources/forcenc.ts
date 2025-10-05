@@ -1,4 +1,5 @@
 import {
+  alliedRadio,
   cliExecute,
   equip,
   equippedItem,
@@ -18,6 +19,7 @@ import {
   $slot,
   AprilingBandHelmet,
   CinchoDeMayo,
+  clamp,
   get,
   have,
   Macro,
@@ -128,6 +130,19 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
     remaining: () => {
       if (!have($item`Clara's bell`) || !get("_claraBellUsed")) return 0;
       return 1;
+    },
+  },
+  {
+    name: "Radio",
+    // eslint-disable-next-line libram/verify-constants
+    available: () => have($item`Allied Radio Backpack`) && get("_alliedRadioDropsUsed", 0) < 3,
+    prepare: () => {
+      alliedRadio("sniper support");
+    },
+    remaining: () => {
+      // eslint-disable-next-line libram/verify-constants
+      if (!have($item`Allied Radio Backpack`)) return 0;
+      return clamp(3 - get("_alliedRadioDropsUsed", 0), 0, 3);
     },
   },
 ];
