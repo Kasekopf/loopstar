@@ -1475,7 +1475,7 @@ export const MiscQuest: Quest = {
         use($item`GameInformPowerDailyPro magazine`);
         visitUrl("inv_use.php?pwd&confirm=Yep.&whichitem=6174");
         runChoice(1);
-        adv1($location`Video Game Level 1`);
+        adv1($location`[DungeonFAQ - Level 1]`);
         use($item`dungeoneering kit`);
       },
       outfit: {
