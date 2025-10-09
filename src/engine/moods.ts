@@ -5,6 +5,7 @@ import {
   equip,
   equippedAmount,
   equippedItem,
+  getFuel,
   getInventory,
   getWorkshed,
   inCasual,
@@ -54,7 +55,7 @@ import {
   uneffect,
   unequip,
 } from "libram";
-import { asdonFualable } from "../lib";
+import { asdonFualable, fuelUp } from "../lib";
 import { underStandard } from "../lib";
 import { step } from "grimoire-kolmafia";
 import { toTempPref } from "../args";
@@ -267,11 +268,13 @@ export function applyEffects(modifier: string, other_effects: Effect[]): void {
 
   // Use asdon martin
   if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
-    if (modifier.includes("-combat") && have($effect`Silent Running`))
-      AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
+    // if (modifier.includes("-combat") && have($effect`Silent Running`))
+    // AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
     // else if (modifier.includes("+combat")) AsdonMartin.drive(AsdonMartin.Driving.Obnoxiously);
     // else if (modifier.includes("init")) AsdonMartin.drive(AsdonMartin.Driving.Quickly);
-    if (modifier.includes("meat") || modifier.includes("item")) {
+    if (modifier.includes("meat")) {
+      if (getFuel() < 50)
+        fuelUp();
       if (!have($effect`Driving Observantly`)) AsdonMartin.drive(AsdonMartin.Driving.Observantly);
     }
   }

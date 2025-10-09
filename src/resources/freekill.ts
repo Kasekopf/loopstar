@@ -1,6 +1,6 @@
-import { Item, Skill } from "kolmafia";
-import { $effect, $item, $items, $skill, AsdonMartin, get, have } from "libram";
-import { asdonFualable } from "../lib";
+import { getFuel, Item, Skill } from "kolmafia";
+import { $effect, $item, $items, $skill, get, have } from "libram";
+import { asdonFualable, fuelUp } from "../lib";
 import { CombatResource } from "./lib";
 
 interface FreekillSource extends CombatResource {
@@ -38,13 +38,22 @@ export const freekillSources: FreekillSource[] = [
   {
     name: "Asdon Martin: Missile Launcher",
     available: () => asdonFualable(100) && !get("_missileLauncherUsed"),
-    prepare: () => AsdonMartin.fillTo(100),
+    prepare: () => { if (getFuel() < 100) fuelUp() },
     do: $skill`Asdon Martin: Missile Launcher`,
   },
   {
     name: "Shadow Brick",
     available: () => have($item`shadow brick`) && get("_shadowBricksUsed") < 13,
     do: $item`shadow brick`,
+  },
+  {
+    name: "Sweat Bullets",
+    // eslint-disable-next-line libram/verify-constants
+    available: () => have($item`blood cubic zirconia`) && $skill`BCZ: Sweat Bullets`.timescast < 7,
+    // eslint-disable-next-line libram/verify-constants
+    do: $skill`BCZ: Sweat Bullets`,
+    // eslint-disable-next-line libram/verify-constants
+    equip: $item`blood cubic zirconia`,
   },
   {
     name: "Jurassic Parka",

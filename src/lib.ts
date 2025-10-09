@@ -1,7 +1,10 @@
 import { DelayedMacro, Guards, step } from "grimoire-kolmafia";
 import {
   appearanceRates,
+  availableAmount,
+  buy,
   cliExecute,
+  create,
   Effect,
   getFuel,
   getWorkshed,
@@ -18,6 +21,7 @@ import {
   print,
   Skill,
   totalTurnsPlayed,
+  use,
   visitUrl,
 } from "kolmafia";
 import {
@@ -212,10 +216,13 @@ export function asdonFualable(amount: number): boolean {
     return false; // Save early
   if (amount <= getFuel()) return true;
 
+  if (myMeat() < 6000) return false;
   // Use wad of dough with the bugbear outfit
   if (have($item`bugbear bungguard`) && have($item`bugbear beanie`)) {
     return myMeat() >= (amount - getFuel()) * 24 + 1000; // Save 1k meat as buffer
   }
+
+
 
   // Use all-purpose flower if we have enough ascensions
   if (myAscensions() >= 10 && (have($item`bitchin' meatcar`) || have($item`Desert Bus pass`))) {
@@ -308,4 +315,12 @@ export function getMacro(resourceDo: DelayedMacro | Item | Skill): Macro {
   if (resourceDo instanceof Item) return new Macro().item(resourceDo);
   if (resourceDo instanceof Skill) return new Macro().skill(resourceDo);
   return undelay(resourceDo);
+}
+
+export function fuelUp(): void {
+  buy(1, $item`all-purpose flower`);
+  use($item`all-purpose flower`);
+  buy(23, $item`soda water`);
+  create(23, $item`loaf of soda bread`);
+  cliExecute(`asdonmartin fuel ${availableAmount($item`loaf of soda bread`)} soda bread`);
 }

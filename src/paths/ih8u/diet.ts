@@ -224,7 +224,7 @@ export const IH8UDietQuest: Quest = {
     {
       name: "Sausage",
       completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
-      ready: () => have($item`magical sausage casing`) && myMeat() > 10_000,
+      ready: () => have($item`magical sausage casing`) && myMeat() > 1_100 * get("_sausagesEaten"),
       do: (): void => {
         // Pump-and-grind cannot be used from Left-Hand Man
         if (

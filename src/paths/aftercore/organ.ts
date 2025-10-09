@@ -70,9 +70,6 @@ export const OrganQuest: Quest = {
       }),
       prepare: () => {
         tryPlayApriling("-combat");
-        if (getWorkshed() === $item`Asdon Martin keyfob (on ring)` && asdonFualable(37)) {
-          AsdonMartin.drive(AsdonMartin.Driving.Stealthily);
-        }
       },
       do: $location`Infernal Rackets Backstage`,
       limit: { soft: 30 },

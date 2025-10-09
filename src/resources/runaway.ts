@@ -3,6 +3,7 @@ import {
   cliExecute,
   Familiar,
   familiarWeight,
+  getFuel,
   getProperty,
   Item,
   mySign,
@@ -18,13 +19,12 @@ import {
   $item,
   $items,
   $skill,
-  AsdonMartin,
   get,
   getActiveEffects,
   have,
   Macro,
 } from "libram";
-import { asdonFualable } from "../lib";
+import { asdonFualable, fuelUp } from "../lib";
 import { args } from "../args";
 import { CombatResource } from "./lib";
 
@@ -100,7 +100,7 @@ export function getRunawaySources(): RunawaySource[] {
     {
       name: "Asdon Martin",
       available: () => asdonBanishAvailable(),
-      prepare: () => AsdonMartin.fillTo(50),
+      prepare: () => { if (getFuel() < 50) fuelUp() },
       do: new Macro().skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
       chance: () => 1,
       banishes: true,

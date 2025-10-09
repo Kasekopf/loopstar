@@ -1,5 +1,5 @@
 /* eslint-disable libram/verify-constants */
-import { Item, Monster, myClass, myFury, myMaxmp, myMp, myTurncount, Skill, toItem } from "kolmafia";
+import { getFuel, Item, Monster, myClass, myFury, myMaxmp, myMp, myTurncount, Skill, toItem } from "kolmafia";
 import { BanishState } from "../engine/state";
 import {
   $class,
@@ -7,7 +7,6 @@ import {
   $item,
   $items,
   $skill,
-  AsdonMartin,
   Delayed,
   get,
   have,
@@ -16,7 +15,7 @@ import {
 import { args } from "../args";
 import { killMacro } from "../engine/combat";
 import { customRestoreMp } from "../engine/moods";
-import { asdonFualable } from "../lib";
+import { asdonFualable, fuelUp } from "../lib";
 import { refillLatte } from "./runaway";
 import { CombatResource } from "./lib";
 import { Task } from "../engine/task";
@@ -49,26 +48,6 @@ const banishSources: BanishSource[] = [
       have($item`cosmic bowling ball`) || get("cosmicBowlingBallReturnCombats") === 0,
     do: $skill`Bowl a Curveball`,
     free: true,
-  },
-  {
-    name: "Asdon Martin",
-    available: (): boolean => {
-      if (args.debug.lastasdonbumperturn && myTurncount() - args.debug.lastasdonbumperturn > 30)
-        return false;
-
-      // From libram
-      if (!asdonFualable(50)) return false;
-      const banishes = get("banishedMonsters").split(":");
-      const bumperIndex = banishes
-        .map((string) => string.toLowerCase())
-        .indexOf("spring-loaded front bumper");
-      if (bumperIndex === -1) return true;
-      return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
-    },
-    prepare: () => AsdonMartin.fillTo(50),
-    do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
-    free: true,
-    blocked: ["Tavern/Basement", "Bat/Boss Bat"],
   },
   {
     name: "Spring Shoes Kick Away",
@@ -164,6 +143,26 @@ const banishSources: BanishSource[] = [
     do: $skill`Batter Up!`,
     equip: { weapon: $item`seal-clubbing club` },
     free: false,
+  },
+  {
+    name: "Asdon Martin",
+    available: (): boolean => {
+      if (args.debug.lastasdonbumperturn && myTurncount() - args.debug.lastasdonbumperturn > 30)
+        return false;
+
+      // From libram
+      if (!asdonFualable(50)) return false;
+      const banishes = get("banishedMonsters").split(":");
+      const bumperIndex = banishes
+        .map((string) => string.toLowerCase())
+        .indexOf("spring-loaded front bumper");
+      if (bumperIndex === -1) return true;
+      return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
+    },
+    prepare: () => { if (getFuel() < 50) fuelUp() },
+    do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
+    free: true,
+    blocked: ["Tavern/Basement", "Bat/Boss Bat"],
   },
 ];
 

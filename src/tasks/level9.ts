@@ -23,7 +23,6 @@ import {
   $items,
   $location,
   $monster,
-  $monsters,
   $skill,
   AutumnAton,
   ensureEffect,
@@ -84,8 +83,11 @@ const ABoo: Task[] = [
     after: ["ABoo Start", "ABoo Carto"],
     completed: () => itemAmount($item`A-Boo clue`) * 30 >= get("booPeakProgress"),
     do: $location`A-Boo Peak`,
-    outfit: { modifier: "item", equip: $items`Space Trip safety headphones, HOA regulation book` },
-    combat: new CombatStrategy().killItem(),
+    // eslint-disable-next-line libram/verify-constants
+    outfit: { modifier: "item", equip: $items`Space Trip safety headphones, HOA regulation book, blood cubic zirconia` },
+    combat: new CombatStrategy()
+      // eslint-disable-next-line libram/verify-constants
+      .macro(new Macro().trySkill($skill`CLEESH`).trySkill($skill`BCZ: Refracted Gaze`).attack().repeat()),
     orbtargets: () => [],
     choices: { 611: 1, 1430: 1 },
     resources: () => {
@@ -223,9 +225,9 @@ const Twin: Task[] = [
     do: $location`Twin Peak`,
     choices: { 606: 1, 607: 1 },
     outfit: () => stenchPlanner.outfitFor(4, { modifier: "-combat, item" }),
-    combat: new CombatStrategy().killItem(
-      $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
-    ),
+    combat: new CombatStrategy()
+      // eslint-disable-next-line libram/verify-constants
+      .macro(new Macro().trySkill($skill`CLEESH`).trySkill($skill`BCZ: Refracted Gaze`).attack().repeat()),
     peridot: $monster`bearpig topiary animal`,
     limit: { soft: 10 },
   },
@@ -254,9 +256,9 @@ const Twin: Task[] = [
     do: $location`Twin Peak`,
     choices: { 606: 2, 608: 1 },
     outfit: { modifier: "item 50min, -combat" },
-    combat: new CombatStrategy().killItem(
-      $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
-    ),
+    combat: new CombatStrategy()
+      // eslint-disable-next-line libram/verify-constants
+      .macro(new Macro().trySkill($skill`CLEESH`).trySkill($skill`BCZ: Refracted Gaze`).attack().repeat()),
     peridot: $monster`bearpig topiary animal`,
     limit: { soft: 10 },
   },
@@ -280,9 +282,9 @@ const Twin: Task[] = [
     do: $location`Twin Peak`,
     choices: { 606: 3, 609: 1, 616: 1 },
     outfit: { modifier: "item, -combat" },
-    combat: new CombatStrategy().killItem(
-      $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
-    ),
+    combat: new CombatStrategy()
+      // eslint-disable-next-line libram/verify-constants
+      .macro(new Macro().trySkill($skill`CLEESH`).trySkill($skill`BCZ: Refracted Gaze`).attack().repeat()),
     peridot: $monster`bearpig topiary animal`,
     acquire: [{ item: $item`jar of oil` }],
     limit: { soft: 10 },
@@ -314,9 +316,9 @@ const Twin: Task[] = [
     do: $location`Twin Peak`,
     choices: { 606: 4, 610: 1, 1056: 1 },
     outfit: { modifier: "init 40 min, item, -combat" },
-    combat: new CombatStrategy().killItem(
-      $monsters`bearpig topiary animal, elephant (meatcar?) topiary animal, spider (duck?) topiary animal`
-    ),
+    combat: new CombatStrategy()
+      // eslint-disable-next-line libram/verify-constants
+      .macro(new Macro().trySkill($skill`CLEESH`).trySkill($skill`BCZ: Refracted Gaze`).attack().repeat()),
     peridot: $monster`bearpig topiary animal`,
     limit: { soft: 10 },
   },
@@ -403,7 +405,8 @@ export const ChasmQuest: Quest = {
       },
       outfit: () => {
         if (get("smutOrcNoncombatProgress") < 15) {
-          const equip = $items`Space Trip safety headphones, HOA regulation book`;
+          // eslint-disable-next-line libram/verify-constants
+          const equip = $items`Space Trip safety headphones, HOA regulation book, blood cubic zirconia`;
           if (have($item`frozen jeans`)) equip.push($item`frozen jeans`);
           else if (have($item`June cleaver`) && get("_juneCleaverCold", 0) >= 5)
             equip.push($item`June cleaver`);
@@ -414,10 +417,12 @@ export const ChasmQuest: Quest = {
             equip: equip,
             avoid: $items`broken champagne bottle`,
           };
-        } else return { modifier: "sleaze res", equip: $items`combat lover's locket` };
+          // eslint-disable-next-line libram/verify-constants
+        } else return { modifier: "sleaze res", equip: $items`combat lover's locket, blood cubic zirconia` };
       },
       combat: new CombatStrategy()
-        .macro(new Macro().attack().repeat(), [
+        // eslint-disable-next-line libram/verify-constants
+        .macro(new Macro().trySkill($skill`CLEESH`).trySkill($skill`BCZ: Refracted Gaze`).attack().repeat(), [
           $monster`smut orc jacker`,
           $monster`smut orc nailer`,
           $monster`smut orc pipelayer`,

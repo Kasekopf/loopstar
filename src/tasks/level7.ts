@@ -59,6 +59,7 @@ export function tryCape(sword: Item, ...rest: Item[]) {
   return rest;
 }
 
+// eslint-disable-next-line libram/verify-constants
 const slay_macro = new Macro().trySkill($skill`Slay the Dead`);
 
 const Alcove: Task[] = [
@@ -311,12 +312,14 @@ const Nook: Task[] = [
         !get("fireExtinguisherCyrptUsed")
       )
         return {
-          equip: $items`gravy boat, industrial fire extinguisher`,
+          // eslint-disable-next-line libram/verify-constants
+          equip: $items`gravy boat, industrial fire extinguisher, blood cubic zirconia`,
           modifier: "item 500max",
         };
       else
         return {
-          equip: tryCape($item`antique machete`, $item`gravy boat`, $item`deft pirate hook`),
+          // eslint-disable-next-line libram/verify-constants
+          equip: tryCape($item`antique machete`, $item`gravy boat`, $item`deft pirate hook`, $item`blood cubic zirconia`),
           modifier: "item 500max",
         };
     },
@@ -345,7 +348,8 @@ const Nook: Task[] = [
       .macro(slay_macro, $monsters`spiny skelelton, toothy sklelton`)
       .kill($monsters`spiny skelelton, toothy sklelton`)
       .macro(
-        new Macro().trySkill($skill`Fire Extinguisher: Zone Specific`),
+        // eslint-disable-next-line libram/verify-constants
+        new Macro().trySkill($skill`BCZ: Refracted Gaze`).trySkill($skill`Fire Extinguisher: Zone Specific`),
         $monster`party skelteon`
       )
       .banish($monster`party skelteon`),
@@ -399,6 +403,7 @@ export const CryptQuest: Quest = {
     {
       name: "Bonerdagon",
       after: ["Start", "Alcove Boss", "Cranny Boss", "Niche Boss", "Nook Boss"],
+      prepare: () => cliExecute("kolfix auto"),
       completed: () => step("questL07Cyrptic") >= 1,
       do: () => {
         adv1($location`Haert of the Cyrpt`, -1, "");
