@@ -48,7 +48,9 @@ export const freekillSources: FreekillSource[] = [
   },
   {
     name: "Sweat Bullets",
-    available: () => have($item`blood cubic zirconia`) && $skill`BCZ: Sweat Bullets`.timescast < 7,
+    available: () =>
+      have($item`blood cubic zirconia`) &&
+      get("_bczSweatBulletsCasts", 0) < 7,
     do: $skill`BCZ: Sweat Bullets`,
     equip: $item`blood cubic zirconia`,
   },
