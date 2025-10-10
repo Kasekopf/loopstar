@@ -1534,9 +1534,9 @@ eslint-config-prettier@^8.3.0:
   integrity sha512-/IGJ6+Dka158JnP5n5YFMOszjDWrXggGz1LaK/guZq9vZTmniaKlHcsscvkAhn9y4U+BU3JuUdYvtAMcv30y4A==
 
 eslint-plugin-libram@^0.4.22:
-  version "0.4.32"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.4.32.tgz#42f50a6e374db6023df0fb6b2329d5621b78f77e"
-  integrity sha512-zjfgHrnWQkHqs05h4cAuAu+ED1+ZyFu7DiybvTDWzLTH/W62evKtNUwuEgiE/GmRNgwK/OQPTOvmU12F8iC1DQ==
+  version "0.4.33"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.4.33.tgz#d76c0a16e5869e050e88f1c8a23f7081df49510c"
+  integrity sha512-QLajjkVuPNoiimfBH4iKHWXZCze8hnkUja+DHo/7ff0ddb1AQf6V2lk/nxXku/t+AtLVw2r0s1AliuZv4HV/8Q==
   dependencies:
     html-entities "^2.5.2"
     requireindex "~1.2.0"
@@ -1939,9 +1939,9 @@ keyv@^4.5.3:
     json-buffer "3.0.1"
 
 kolmafia@^5.28612.0:
-  version "5.28615.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28615.0.tgz#f95ec5b7bb613649dd3d8fe2583a16b531b5d932"
-  integrity sha512-HQDzQzi32sAheNWeVkDmKjZXxvUZHoTTpAKChmAoukmyqPJ8fvk7x95HbBKPMTrowoWtptV/KH88CrWaE72/vA==
+  version "5.28725.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28725.0.tgz#b4699c3b1bdb790d15ef0f127370041c4b8feb65"
+  integrity sha512-dPkZ1D0OOK20cMwsIYDKHU1/3ADy89k4rNfQRfyu3WAib3N2SWxoEA5/ohjyN1WnZ1U8aZ08GjwCr/WFL3m9dg==
 
 levn@^0.4.1:
   version "0.4.1"
