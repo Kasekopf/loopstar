@@ -47,6 +47,12 @@ export const freekillSources: FreekillSource[] = [
     do: $item`shadow brick`,
   },
   {
+    name: "Sweat Bullets",
+    available: () => have($item`blood cubic zirconia`) && get("_bczSweatBulletsCasts", 0) < 7,
+    do: $skill`BCZ: Sweat Bullets`,
+    equip: $item`blood cubic zirconia`,
+  },
+  {
     name: "Jurassic Parka",
     available: () =>
       have($skill`Torso Awareness`) &&
