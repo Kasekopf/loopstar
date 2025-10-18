@@ -1,5 +1,5 @@
-import { Item, Skill } from "kolmafia";
-import { $effect, $item, $items, $skill, AsdonMartin, get, have } from "libram";
+import { Item, myPath, Skill } from "kolmafia";
+import { $effect, $item, $items, $path, $skill, AsdonMartin, get, have } from "libram";
 import { asdonFualable } from "../lib";
 import { CombatResource } from "./lib";
 
@@ -48,7 +48,10 @@ export const freekillSources: FreekillSource[] = [
   },
   {
     name: "Sweat Bullets",
-    available: () => have($item`blood cubic zirconia`) && get("_bczSweatBulletsCasts", 0) < 7,
+    available: () =>
+      have($item`blood cubic zirconia`) &&
+      get("_bczSweatBulletsCasts", 0) < 7 &&
+      myPath() !== $path`Grey You`,
     do: $skill`BCZ: Sweat Bullets`,
     equip: $item`blood cubic zirconia`,
   },
