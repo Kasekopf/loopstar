@@ -1,30 +1,56 @@
 import {
+  $class,
+  $coinmaster,
   $effect,
+  $effects,
+  $familiar,
   $item,
   $items,
   $location,
   $monster,
+  $monsters,
   $path,
   $skill,
   $stat,
+  AprilingBandHelmet,
+  ChestMimic,
+  ensureEffect,
   get,
+  getActiveSongs,
+  getSongCount,
+  getSongLimit,
   have,
   Macro,
+  set,
+  uneffect,
 } from "libram";
 import { Quest, ResourceRequest, Resources } from "../../engine/task";
 import {
+  abort,
+  banishedBy,
+  buy,
   canAdventure,
-  haveEquipped,
+  cliExecute,
+  drink,
+  Effect,
+  equip,
+  inHardcore,
+  Location,
   monkeyPaw,
+  myClass,
+  myMaxhp,
   myMp,
   myPath,
   myPrimestat,
-  restoreMp,
+  pullsRemaining,
+  restoreHp,
   retrieveItem,
   use,
+  useSkill,
   visitUrl,
 } from "kolmafia";
 import { CombatStrategy } from "../../engine/combat";
+import { OutfitSpec, step } from "grimoire-kolmafia";
 
 export const SeaQuest: Quest = {
   name: "The Sea",
@@ -40,6 +66,55 @@ export const SeaQuest: Quest = {
         use($item`wardrobe-o-matic`);
         visitUrl("place.php?whichplace=sea_oldman&action=oldman_oldman"); // idk the visitUrls yet
       },
+      limit: { tries: 1 },
+      freeaction: true,
+    },
+    {
+      name: "Pulls",
+      ready: () => !inHardcore(),
+      completed: () => inHardcore() || pullsRemaining() < 20,
+      do: () => {
+        cliExecute("pull pro skateboard");
+        cliExecute("pull shark jumper");
+        // cliExecute("pull scale-mail underwear");
+        cliExecute("pull Flash Liquidizer Ultra Dousing Accessory");
+        cliExecute("pull spooky VHS tape");
+        cliExecute("pull groveling gravel");
+        // cliExecute("pull mer-kin healscroll");
+        // cliExecute("pull mer-kin killscroll");
+        cliExecute("pull sea lasso");
+        cliExecute("pull sea cowbell");
+        cliExecute("pull lodestone");
+        cliExecute("pull mer-kin pinkslip");
+        cliExecute("pull stuffed yam stinkbomb");
+        cliExecute("pull handful of split pea soup");
+        cliExecute("pull anchor bomb");
+        cliExecute("pull phosphor traces");
+        cliExecute("pull Platinum Yendorian Express Card");
+        cliExecute("pull ink bladder");
+        cliExecute("pull Mer-kin sneakmask");
+        if (!have($item`Platinum Yendorian Express Card`)) {
+          cliExecute("pull minin' dynamite");
+        }
+      },
+      limit: { tries: 1 },
+      freeaction: true,
+    },
+    {
+      name: "Drink beer",
+      after: [],
+      ready: () => have($item`astral six-pack`) || have($item`astral pilsner`),
+      completed: () => !have($item`astral six-pack`) && !have($item`astral pilsner`),
+      do: () => {
+        if (have($item`astral six-pack`)) use($item`astral six-pack`);
+        while (have($item`astral pilsner`)) {
+          if (!have($effect`Ode to Booze`)) {
+            useSkill($skill`The Ode to Booze`);
+          }
+          drink(1, $item`astral pilsner`);
+        }
+      },
+      effects: $effects`Ode to Booze`,
       limit: { tries: 1 },
       freeaction: true,
     },
@@ -70,18 +145,17 @@ export const SeaQuest: Quest = {
       do: $location`An Octopus's Garden`,
       limit: { tries: 10 },
       peridot: $monster`Neptune flytrap`,
-      combat: new CombatStrategy().macro(
-        Macro.externalIf(
-          have($skill`Transcendent Olfaction`) &&
-            (get("olfactedMonster") !== $monster`Neptune flytrap` ||
-              !have($effect`On the Trail`)) &&
-            get("_olfactionsUsed") < 3,
-          Macro.if_($monster`Neptune flytrap`, Macro.trySkill($skill`Transcendent Olfaction`))
-        )
-      ),
-      //Macro to olfact + RWB + pledge
-
-      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "item" }, // Ensure we can breath water
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)
+            .trySkill($skill`%fn, let's pledge allegiance to a Zone`)
+            .trySkill($skill`McHugeLarge Avalanche`);
+        })
+        .killFree(),
+      outfit: {
+        familiar: $familiar`Patriotic Eagle`,
+        equip: $items`Everfull Dart Holster, McHugeLarge left ski, Peridot of Peril, April Shower Thoughts shield`,
+      },
       freeaction: false,
     },
     {
@@ -98,7 +172,7 @@ export const SeaQuest: Quest = {
       limit: { tries: 1 },
 
       outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
-      freeaction: false,
+      freeaction: true,
     },
     {
       name: "Rescue Brother",
@@ -129,6 +203,7 @@ export const SeaQuest: Quest = {
       do: () => {
         visitUrl("monkeycastle.php?who=1");
         visitUrl("monkeycastle.php?who=2");
+        visitUrl("monkeycastle.php?who=1");
         retrieveItem($item`bubblin' stone`);
         // do skate park unlock
       },
@@ -136,6 +211,163 @@ export const SeaQuest: Quest = {
 
       outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
+    },
+    {
+      name: "Kill Miner",
+      ready: () => step("questS02Monkees") >= 4,
+      completed: () => have($item`Mer-kin digpick`),
+      do: $location`Anemone Mine`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.step("pickpocket");
+        })
+        .killFree(),
+      outfit: {
+        modifier: "item",
+        equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy Cupid bow`,
+        familiar: $familiar`Grouper Groupie`,
+      },
+      peridot: $monster`Mer-kin miner`,
+      limit: { tries: 1 },
+      freeaction: false,
+    },
+    {
+      name: "Manual Mining",
+      ready: () => have($item`Mer-kin digpick`),
+      completed: () =>
+        have($item`teflon ore`) ||
+        have($item`teflon swim fins`) ||
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`),
+      do: () => {
+        // Mining logic not implemented yet
+        abort();
+      },
+      outfit: {
+        equip: $items`Mer-kin digpick`,
+        avoid: $items`Peridot of Peril`,
+      },
+      limit: { tries: 1 },
+      freeaction: false,
+    },
+    {
+      name: "Dive Bar Noncombats",
+      after: ["Manual Mining"],
+      ready: () => step("questS02Monkees") >= 4,
+      completed: () => myClass() !== $class`Accordion Thief` || step("questS02Monkees") >= 5,
+      prepare: () => {
+        if (AprilingBandHelmet.have()) {
+          AprilingBandHelmet.conduct("Apriling Band Patrol Beat");
+        }
+      },
+      do: $location`The Dive Bar`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.step("pickpocket").if_(
+            "monstername nurse shark",
+            Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`)
+          );
+        })
+        .killHard($monster`time cop`)
+        .killFree(),
+      outfit: {
+        modifier: "-combat",
+        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { tries: 1 },
+      freeaction: false,
+    },
+    {
+      name: "Outpost Unlock",
+      after: ["Dive Bar Noncombats"],
+      completed: () => step("questS02Monkees") >= 6,
+      do: () => {
+        cliExecute("grandpa wife");
+      },
+      outfit: {
+        pants: $item`really, really nice swimming trunks`,
+      },
+      limit: { tries: 1 },
+      freeaction: true,
+    },
+    {
+      name: "Outpost Freerun",
+      after: ["Outpost Unlock"],
+      completed: () => get("_autosea_didfreerun", false) || have($item`Mer-kin lockkey`),
+      ready: () => !have($effect`Everything Looks Green`),
+      do: $location`The Mer-Kin Outpost`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.step("pickpocket")
+            .trySkill($skill`Darts: Throw at %part1`)
+            .trySkill($skill`Spring Away`);
+        }, $monsters`Mer-kin burglar, Mer-kin raider, Mer-kin healer`)
+        .macro((): Macro => {
+          return Macro.trySkill($skill`Darts: Throw at %part1`).trySkillRepeat($skill`Shieldbutt`);
+        }, $monster`time cop`),
+      post: () => {
+        if (have($effect`Everything Looks Green`)) {
+          set("_autosea_didfreerun", true);
+        }
+      },
+      outfit: {
+        equip: $items`Everfull Dart Holster, Möbius ring, spring shoes, little bitty bathysphere, Monodent of the Sea, April Shower Thoughts shield`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { tries: 1 },
+      freeaction: false,
+    },
+    {
+      name: "Run Crayon Egg",
+      after: ["Generate Crayon Egg"],
+      completed: () => get("_monsterHabitatsRecalled") > 0,
+      do: () => {
+        ChestMimic.differentiate($monster`Black Crayon Mer-kin`);
+      },
+      combat: new CombatStrategy().macro((): Macro => {
+        return Macro.step("pickpocket")
+          .trySkill($skill`Darts: Throw at %part1`)
+          .trySkill($skill`%fn, lay an egg`)
+          .trySkill($skill`Recall Facts: Monster Habitats`)
+          .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
+          .trySkill($skill`Transcendent Olfaction`)
+          .trySkill($skill`McHugeLarge Slash`)
+          .trySkill($skill`Lunging Thrust-Smack`)
+          .repeat();
+      }),
+      outfit: {
+        equip: $items`Monodent of the Sea, McHugeLarge left pole, toy Cupid bow, spring shoes, Everfull Dart Holster`,
+        familiar: $familiar`Chest Mimic`,
+      },
+      limit: { tries: 1 },
+      freeaction: true,
+    },
+    {
+      name: "Candelabra Egg",
+      after: ["Run Crayon Egg"],
+      completed: () =>
+        get("_monsterHabitatsRecalled") > 1 ||
+        get("_monsterHabitatsFightsLeft") === 0 ||
+        get("_unblemishedPearlTheBriniestDeepests", false) ||
+        have($effect`Everything Looks Purple`) ||
+        !have($item`Roman Candelabra`),
+      do: $location`The Briniest Deepests`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.step("pickpocket").trySkill("Blow the Purple Candle!");
+        }, $monsters`Black Crayon Mer-kin`)
+        .macro((): Macro => {
+          return Macro.trySkill("Sea *dent: Throw a Lightning Bolt");
+        }, $monsters`acoustic electric eel, decent white shark, ganger`)
+        .kill(),
+      outfit: {
+        equip: $items`Everfull Dart Holster, Möbius ring, spring shoes, little bitty bathysphere, Monodent of the Sea, Roman Candelabra, shark jumper, bat wings, prismatic beret`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { tries: 1 },
+      freeaction: true,
     },
     {
       name: "Rescue Grandpa",
@@ -148,8 +380,8 @@ export const SeaQuest: Quest = {
         myPrimestat === $stat`Muscle`
           ? $location`Anemone Mine`
           : myPrimestat === $stat`Mysticality`
-          ? $location`The Marinara Trench`
-          : $location`The Dive Bar`,
+            ? $location`The Marinara Trench`
+            : $location`The Dive Bar`,
       limit: { tries: 10 },
       outfit: { pants: $item`really, really nice swimming trunks`, modifier: "-combat" }, // Ensure we can breath water
       freeaction: false,
@@ -257,6 +489,34 @@ export const SeaQuest: Quest = {
       delay: 28,
     },
     {
+      name: "Outpost Refract",
+      after: ["Mimic diver"],
+      ready: () => get("_bczRefractedGazeCasts", 0) < 12,
+      completed: () =>
+        have($item`Mer-kin lockkey`) ||
+        have($item`Mer-kin trailmap`) ||
+        have($item`Mer-kin hidepaint`) ||
+        get("corralUnlocked") ||
+        banishedBy($monster`Mer-kin burglar`).length > 0,
+      do: $location`The Mer-Kin Outpost`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.ifNot(
+            "monstername time cop",
+            Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
+          ).skill($skill`BCZ: Refracted Gaze`);
+        })
+        .killHard($monsters`time cop`)
+        .killFree(),
+      outfit: {
+        modifier: "item",
+        equip: $items`Everfull Dart Holster, Monodent of the Sea, toy Cupid bow, blood cubic zirconia, Möbius ring`,
+        familiar: $familiar`Grouper Groupie`,
+      },
+      freeaction: false,
+      limit: { tries: 1 },
+    },
+    {
       name: "Finish Mer-kin outpost",
       after: ["The Sea/Rescue Grandma"],
       prepare: () => {
@@ -268,6 +528,76 @@ export const SeaQuest: Quest = {
       delay: 26,
       outfit: { pants: $item`really, really nice swimming trunks` }, // Ensure we can breath water
       freeaction: false,
+    },
+    {
+      name: "Stashbox Trailmap",
+      ready: () => have($item`Mer-kin stashbox`) || have($item`Mer-kin trailmap`),
+      completed: () => get("corralUnlocked"),
+      do: () => {
+        if (have($item`Mer-kin stashbox`)) use($item`Mer-kin stashbox`);
+        if (have($item`Mer-kin trailmap`)) use($item`Mer-kin trailmap`);
+        cliExecute("grandpa currents");
+      },
+      outfit: {
+        equip: [$item`really, really nice swimming trunks`],
+        familiar: $familiar`Grouper Groupie`,
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Spend sand dollars",
+      after: ["Corral Refract"],
+      ready: () => have($item`sand dollar`, 50) || have($item`damp old boot`),
+      completed: () => have($item`black glass`) && step("questS01OldGuy") === 999,
+      do: () => {
+        visitUrl("monkeycastle.php?who=1");
+        visitUrl("monkeycastle.php?who=2");
+        if (!have($item`black glass`) && have($item`sand dollar`, 13)) {
+          buy($coinmaster`Big Brother`, 1, $item`black glass`);
+        }
+        if (!have($item`damp old boot`) && step("questS01OldGuy") < 999) {
+          buy($coinmaster`Big Brother`, 1, $item`damp old boot`);
+        }
+        if (have($item`damp old boot`)) {
+          visitUrl("place.php?whichplace=sea_oldman&action=oldman_oldman");
+          if (have($item`sand dollar`, 10)) {
+            visitUrl(
+              "place.php?whichplace=sea_oldman&action=oldman_oldman&preaction=pickreward&whichreward=3609",
+              true
+            );
+          } else {
+            visitUrl(
+              "place.php?whichplace=sea_oldman&action=oldman_oldman&preaction=pickreward&whichreward=6313",
+              true
+            );
+            use($item`damp old wallet`);
+          }
+        }
+        if (have($item`sand dollar`, 5)) {
+          buy($coinmaster`Big Brother`, 1, $item`sea grease`);
+          use($item`sea grease`);
+        }
+      },
+      outfit: {
+        equip: [$item`really, really nice swimming trunks`],
+        familiar: $familiar`Grouper Groupie`,
+      },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Create Sea Clothes",
+      after: ["Corral Refract", "Spend sand dollars"],
+      completed: () => have($item`sea cowboy hat`),
+      do: () => {
+        cliExecute("create sea chaps");
+        cliExecute("create sea cowboy hat");
+        cliExecute("create aerated diving helmet");
+        cliExecute("create teflon swim fins");
+      },
+      freeaction: true,
+      limit: { tries: 1 },
     },
     {
       name: "Prepare for seahorse",
@@ -309,8 +639,8 @@ export const SeaQuest: Quest = {
           )
           .externalIf(
             get("lassoTraining") === "deftly" &&
-              have($item`sea cowbell`, 3) &&
-              have($item`sea lasso`),
+            have($item`sea cowbell`, 3) &&
+            have($item`sea lasso`),
             Macro.if_(
               $monster`wild seahorse`,
               Macro.tryItem($item`sea cowbell`)
@@ -386,25 +716,105 @@ export const SeaQuest: Quest = {
       freeaction: false,
     },
     {
-      name: "Do Gladiators",
-      after: ["The Sea/Prepare Gladiators"],
-      prepare: () => {
-        if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
-        if (myMp() < 500) restoreMp(500);
-      }, // ensure fishy
-      completed: () => get("lastColosseumRoundWon") === 15,
-      do: $location`Mer-kin Colosseum`,
-      limit: { tries: 15 },
+      name: "Get gladiator outfit",
+      ready: () =>
+        have($item`Mer-kin scholar mask`) &&
+        have($item`Mer-kin scholar tailpiece`) &&
+        get("yogUrtDefeated") &&
+        have($item`Mer-kin thighguard`) &&
+        have($item`Mer-kin headguard`),
+      completed: () =>
+        get("yogUrtDefeated") &&
+        have($item`Mer-kin gladiator mask`) &&
+        have($item`Mer-kin gladiator tailpiece`),
+      do: () => {
+        visitUrl("shop.php?whichshop=grandma");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=131&pwd");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=1619&pwd");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=126&pwd");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=127&pwd");
+      },
       outfit: {
-        equip: $items`big hot pepper, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
-        modifier: "Spell Dmg",
-      }, // Ensure we can breath water
-      combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`Stuffed Mortar Shell`)
-          .trySkill($skill`Raise Backup Dancer`)
-          .trySkill($skill`Raise Backup Dancer`)
-      ),
-      freeaction: false,
+        equip: [$item`really, really nice swimming trunks`, $item`prismatic beret`],
+      },
+    },
+    {
+      name: "Fights",
+      ready: () => have($item`Mer-kin gladiator mask`) && have($item`Mer-kin gladiator tailpiece`),
+      completed: () => get("lastColosseumRoundWon") >= 12,
+      do: $location`Mer-kin Colosseum`,
+      combat: new CombatStrategy().macro((): Macro => {
+        return Macro.trySkillRepeat($skill`Saucegeyser`);
+      }),
+      outfit: {
+        modifier: "mysticality",
+        familiar: $familiar`Foul Ball`,
+        equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, august scepter, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
+      },
+      limit: { turns: 12 },
+    },
+    {
+      name: "Buff for hard fights",
+      after: ["Fights"],
+      completed: () => get("isMerkinGladiatorChampion") || get("_aprilShowerSimmer"),
+      do: () => {
+        equip($item`April Shower Thoughts shield`);
+        useSkill($skill`Simmer`);
+        ensureEffect($skill`Elron's Explosive Etude`, $effect`Elron's Explosive Etude`, 1);
+        ensureEffect(
+          $skill`Arched Eyebrow of the Archmage`,
+          $effect`Arched Eyebrow of the Archmage`,
+          1
+        );
+        cliExecute("telescope high");
+        cliExecute("monorail");
+        cliExecute("buy 5 glittery mascara; use 5 glittery mascara");
+      },
+    },
+    {
+      name: "Hard fights",
+      after: ["Buff for hard fights"],
+      completed: () => get("isMerkinGladiatorChampion"),
+      do: $location`Mer-kin Colosseum`,
+      combat: new CombatStrategy().macro((): Macro => {
+        return Macro.trySkillRepeat($skill`Raise Backup Dancer`);
+      }),
+      minturns: 3,
+      avgturns: 3,
+      outfit: {
+        modifier: "mysticality",
+        familiar: $familiar`Foul Ball`,
+        equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, august scepter, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
+      },
+    },
+    {
+      name: "Shub",
+      after: ["Hard fights"],
+      completed: () => get("shubJigguwattDefeated"),
+      prepare: () => {
+        // Restore hp and empty mana
+        restoreHp(myMaxhp());
+        const numcasts = Math.floor(myMp() / 2);
+        useSkill(numcasts, $skill`The Moxious Madrigal`);
+      },
+      do: $location`Mer-kin Temple Left Door`,
+      combat: new CombatStrategy().macro((): Macro => {
+        return Macro.item([$item`crayon shavings`, $item`crayon shavings`])
+          .item([$item`crayon shavings`, $item`crayon shavings`])
+          .item([$item`crayon shavings`, $item`crayon shavings`])
+          .item([$item`crayon shavings`, $item`crayon shavings`])
+          .attack()
+          .repeat();
+      }),
+      post: () => {
+        if (myMp() < 200) {
+          useSkill($skill`Rest upside down`);
+        }
+      },
+      outfit: {
+        familiar: $familiar`Peace Turkey`,
+        equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, April Shower Thoughts shield, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
+      },
     },
     {
       name: "Kill Yog-urt",
@@ -437,52 +847,198 @@ export const SeaQuest: Quest = {
       boss: true,
     },
     {
-      name: "Kill Shub-Jigg",
-      after: ["The Sea/Do Gladiators"],
-      prepare: () => {
-        if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
-      }, // ensure fishy
-      completed: () => get("seahorseName") !== "",
-      do: $location`Mer-kin Library`,
-      // eslint-disable-next-line libram/verify-constants
-      limit: { tries: myPath() === $path`11037 Leagues under the Sea` ? 3 : 1 },
-      choices: { 708: 1, 709: 1 },
-      combat: new CombatStrategy().macro(
-        Macro.if_(
-          $monster`Shub-Jigguwatt, Elder God of Violence`,
-          Macro.tryItem($item`crayon shavings`, $item`crayon shavings`)
-            .tryItem($item`crayon shavings`, $item`crayon shavings`)
-            .tryItem($item`crayon shavings`, $item`crayon shavings`)
-            .attack()
-            .attack()
-            .attack()
-        )
-      ),
-      outfit: {
-        equip: $items`Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
-        modifier: "+hp, weapon dmg",
-      }, // Ensure we can breath water
-      // new combat for all three bosses - probably need prefs
-      freeaction: false,
-      boss: true,
+      name: "Final Abyss",
+      ready: () => get("shubJigguwattDefeated"),
+      completed: () => get("momSeaMonkeeProgress") >= 40,
+      do: $location`The Caliginous Abyss`,
+      combat: new CombatStrategy().killHard($monsters`Peanut`).killHard(),
+      outfit: () => {
+        const baseOutfit: OutfitSpec = {
+          familiar: $familiar`Peace Turkey`,
+          equip: $items`black glass, shark jumper, scale-mail underwear`,
+        };
+        if (get("_assertYourAuthorityCast") < 3) {
+          baseOutfit.equip.push(...$items`Sheriff badge, Sheriff moustache, Sheriff pistol`);
+        }
+        return baseOutfit;
+      },
     },
     {
-      name: "Kill Seaceress",
-
-      after: ["The Sea/Kill Yog-urt", "The Sea/Kill Shub-Jigg"],
-      prepare: () => {
-        if (!have($effect`Fishy`)) throw "Get Fishy, rerun";
-      }, // ensure fishy
-      completed: () => get("seahorseName") !== "",
-      do: $location`Mer-kin Library`,
-      // eslint-disable-next-line libram/verify-constants
-      limit: { tries: myPath() === $path`11037 Leagues under the Sea` ? 3 : 1 },
-      outfit: { pants: $item`really, really nice swimming trunks`, modifier: "+hp, spell dmg" }, // Ensure we can breath water
+      name: "Abyss Mom",
+      after: ["Final Abyss"],
+      completed: () => step("questS02Monkees") === 999,
+      do: $location`The Caliginous Abyss`,
+      outfit: {
+        equip: $items`black glass`,
+      },
+      limit: { tries: 1 },
+    },
+    {
+      name: "Fish Banish",
+      after: ["Abyss Mom"],
+      completed: () => get("screechCombats") !== 0 || !fishLocationAvailable(),
+      do: () => getFishLocation()!,
       combat: new CombatStrategy()
-        .macro(() => Macro.externalIf(haveEquipped($item`June cleaver`), Macro.attack().repeat()))
-        .kill(),
-      freeaction: false,
+        .killHard($monsters`time cop, Black Crayon Mer-kin`)
+        .macro((): Macro => {
+          return Macro.trySkill($skill`%fn, Release the Patriotic Screech!`);
+        })
+        .killHard(),
+      outfit: {
+        familiar: $familiar`Patriotic Eagle`,
+        equip: $items`Monodent of the Sea, Everfull Dart Holster, cursed monkey's paw, Möbius ring, shark jumper, bat wings`,
+      },
+      limit: { turns: 10 },
+    },
+    {
+      name: "Habitat Egg",
+      after: ["Fish Banish"],
+      ready: () => ChestMimic.eggMonsters().has($monster`Black Crayon Mer-kin`),
+      completed: () =>
+        !ChestMimic.have() || !have($skill`Just the Facts`) || get("_monsterHabitatsRecalled") > 1,
+      do: () => {
+        ChestMimic.differentiate($monster`Black Crayon Mer-kin`);
+      },
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.step("pickpocket").skill($skill`Recall Facts: Monster Habitats`);
+        })
+        .killHard(),
+      outfit: {
+        familiar: $familiar`Peace Turkey`,
+        equip: $items`Everfull Dart Holster, spring shoes`,
+      },
+      limit: { turns: 10 },
+    },
+    {
+      name: "Do Habs",
+      after: ["Habitat Egg"],
+      completed: () => !pearlZoneAvailable() || get("_monsterHabitatsFightsLeft") == 0,
+      do: () => getNextPearlZone()!,
+      combat: new CombatStrategy()
+        .killHard($monsters`time cop`)
+        .macro((): Macro => {
+          return Macro.externalIf(
+            getNextPearlTurns() > 2,
+            Macro.trySkill($skill`Blow the Purple Candle!`).trySkill($skill`Create an Afterimage`)
+          ).trySkill($skill`Recall Facts: Monster Habitats`);
+        }, $monsters`Black Crayon Mer-kin`)
+        .killHard($monsters`Black Crayon Mer-kin`)
+        .macro((): Macro => {
+          return Macro.trySkill($skill`Punch Out your Foe`)
+            .tryItem($item`stuffed yam stinkbomb`)
+            .tryItem($item`handful of split pea soup`)
+            .trySkill($skill`Sea *dent: Throw a Lightning Bolt`);
+        }, $monsters`Mer-kin miner, killer clownfish, Mer-kin tippler`)
+        .killHard(),
+      outfit: {
+        modifier: "-combat",
+        equip: $items`Monodent of the Sea, Everfull Dart Holster, Roman Candelabra, cursed monkey's paw, Möbius ring, shark jumper, bat wings`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { turns: 10 },
+    },
+    {
+      name: "Nautical Seaceress",
+      ready: () =>
+        pearlsReady() &&
+        get("shubJigguwattDefeated") &&
+        get("yogUrtDefeated") &&
+        step("questS02Monkees") === 999,
+      completed: () => step("questL13Final") === 999,
+      prepare: () => {
+        // buy($coinmaster`Wet Crap For Sale`, 1, $item`scroll of sea strength`);
+        // Actually, seems like the coinmaster only has sand penny stuff
+        if (!have($effect`Sea Strength`)) {
+          cliExecute("buy scroll of sea strength");
+          use($item`scroll of sea strength`);
+        }
+        if (!have($effect`Sea Smarm`)) {
+          // buy($coinmaster`Wet Crap For Sale`, 1, $item`scroll of sea smarm`);
+          cliExecute("buy scroll of sea smarm");
+          use($item`scroll of sea smarm`);
+        }
+        if (myMp() < 300) {
+          useSkill($skill`Rest upside down`);
+        }
+        if (getSongCount() > getSongLimit()) {
+          uneffect(<Effect>getActiveSongs().pop());
+          useSkill($skill`Song of Bravado`);
+        }
+        restoreHp(myMaxhp());
+      },
+      do: $location`Mer-kin Temple (Center Door)`,
+      combat: new CombatStrategy().macro((): Macro => {
+        return Macro.item([$item`crayon shavings`, $item`crayon shavings`])
+          .item([$item`crayon shavings`, $item`crayon shavings`])
+          .trySkillRepeat($skill`Saucegeyser`);
+      }),
+      outfit: {
+        modifier: "moxie",
+        familiar: $familiar`Peace Turkey`,
+        equip: $items`Everfull Dart Holster, spring shoes, bat wings, shark jumper, Monodent of the Sea, April Shower Thoughts shield`,
+      },
       boss: true,
+      limit: { turns: 2 },
     },
   ],
 };
+
+function getFishLocation(): Location | undefined {
+  if (!get("_unblemishedPearlTheBriniestDeepests")) {
+    return $location`The Briniest Deepests`;
+  } else if (!get("_unblemishedPearlMadnessReef")) {
+    return $location`Madness Reef`;
+  }
+  return undefined;
+}
+
+function fishLocationAvailable(): boolean {
+  return getFishLocation() !== undefined;
+}
+
+function getNextPearlZone(): Location | undefined {
+  if (!get("_unblemishedPearlAnemoneMine")) {
+    return $location`Anemone Mine`;
+  } else if (!get("_unblemishedPearlTheBriniestDeepests")) {
+    return $location`The Briniest Deepests`;
+  } else if (!get("_unblemishedPearlMadnessReef")) {
+    return $location`Madness Reef`;
+  } else if (!get("_unblemishedPearlDiveBar")) {
+    return $location`The Dive Bar`;
+  }
+  return undefined;
+}
+
+function pearlZoneAvailable(): boolean {
+  return getNextPearlZone() !== undefined;
+}
+
+function getNextPearlTurns(): number {
+  if (!get("_unblemishedPearlAnemoneMine")) {
+    return Math.ceil((100 - get("_unblemishedPearlAnemoneMineProgress") - 0.0001) / 10.0);
+  } else if (!get("_unblemishedPearlTheBriniestDeepests")) {
+    return Math.ceil((100 - get("_unblemishedPearlTheBriniestDeepestsProgress") - 0.0001) / 10.0);
+  } else if (!get("_unblemishedPearlMadnessReef")) {
+    return Math.ceil((100 - get("_unblemishedPearlMadnessReefProgress") - 0.0001) / 10.0);
+  } else if (!get("_unblemishedPearlDiveBar")) {
+    return Math.ceil((100 - get("_unblemishedPearlDiveBarProgress") - 0.0001) / 10.0);
+  }
+  return 0;
+}
+
+function pearlsReady(): boolean {
+  if (have($item`unblemished pearl`, 5)) {
+    return true;
+  } else if (
+    get("_unblemishedPearlAnemoneMine") &&
+    get("_unblemishedPearlDiveBar") &&
+    get("_unblemishedPearlMadnessReef") &&
+    get("_unblemishedPearlMarinaraTrench") &&
+    get("_unblemishedPearlTheBriniestDeepests")
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
