@@ -57,7 +57,7 @@ export const SeaQuest: Quest = {
   tasks: [
     {
       name: "Start",
-      ready: () => get("kingLiberated") || myPath() === $path`11037 Leagues Under the Sea`,
+      ready: () => get("kingLiberated") || myPath() === $path`11038 Leagues Under the Sea`,
       completed: () => get("questS01OldGuy") === "started",
       do: (): void => {
         retrieveItem($item`Spooky VHS Tape`, 1);
@@ -737,6 +737,8 @@ export const SeaQuest: Quest = {
       outfit: {
         equip: [$item`really, really nice swimming trunks`, $item`prismatic beret`],
       },
+      freeaction: true,
+      limit: { tries: 1 }
     },
     {
       name: "Fights",
@@ -770,6 +772,8 @@ export const SeaQuest: Quest = {
         cliExecute("monorail");
         cliExecute("buy 5 glittery mascara; use 5 glittery mascara");
       },
+      freeaction: true,
+      limit: { tries: 1 }
     },
     {
       name: "Hard fights",
@@ -779,13 +783,13 @@ export const SeaQuest: Quest = {
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.trySkillRepeat($skill`Raise Backup Dancer`);
       }),
-      minturns: 3,
-      avgturns: 3,
       outfit: {
         modifier: "mysticality",
         familiar: $familiar`Foul Ball`,
         equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, august scepter, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
       },
+      freeaction: false,
+      limit: { turns: 12 },
     },
     {
       name: "Shub",
@@ -815,6 +819,8 @@ export const SeaQuest: Quest = {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, April Shower Thoughts shield, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
       },
+      freeaction: false,
+      limit: { turns: 10 },
     },
     {
       name: "Kill Yog-urt",
@@ -862,6 +868,8 @@ export const SeaQuest: Quest = {
         }
         return baseOutfit;
       },
+      freeaction: false,
+      limit: { turns: 10 },
     },
     {
       name: "Abyss Mom",
@@ -913,7 +921,7 @@ export const SeaQuest: Quest = {
     {
       name: "Do Habs",
       after: ["Habitat Egg"],
-      completed: () => !pearlZoneAvailable() || get("_monsterHabitatsFightsLeft") == 0,
+      completed: () => !pearlZoneAvailable() || get("_monsterHabitatsFightsLeft") === 0,
       do: () => getNextPearlZone()!,
       combat: new CombatStrategy()
         .killHard($monsters`time cop`)
