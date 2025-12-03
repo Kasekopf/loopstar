@@ -762,11 +762,9 @@ export const SeaQuest: Quest = {
       do: () => {
         equip($item`April Shower Thoughts shield`);
         useSkill($skill`Simmer`);
-        ensureEffect($skill`Elron's Explosive Etude`, $effect`Elron's Explosive Etude`, 1);
+        ensureEffect($effect`Elron's Explosive Etude`, 1);
         ensureEffect(
-          $skill`Arched Eyebrow of the Archmage`,
           $effect`Arched Eyebrow of the Archmage`,
-          1
         );
         cliExecute("telescope high");
         cliExecute("monorail");
