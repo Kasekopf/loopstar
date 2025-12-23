@@ -1446,6 +1446,11 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+data-of-loathing@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/data-of-loathing/-/data-of-loathing-2.6.2.tgz#b3f12d348dba44e4e3b4e892f36c2938d40bc1ee"
+  integrity sha512-/cldchEU08vJTx0HTP7Cxl1yMOuWfQa9yPFcOFfOzxdPyPsp8/L9ZtmTqWuJyL80rVz+gZa2GyLGQ24oLbxaaQ==
+
 debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4, debug@^4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.1.tgz#e5a8bc6cbc4c6cd3e64308b0693a3d4fa550189b"
@@ -1481,6 +1486,11 @@ electron-to-chromium@^1.5.173:
   version "1.5.197"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.197.tgz#117f9d1afd82ae84bbfedd168ddcf52e4afb6216"
   integrity sha512-m1xWB3g7vJ6asIFz+2pBUbq3uGmfmln1M9SSvBe4QIFWYrRHylP73zL/3nMjDmwz8V+1xAXQDfBd6+HPW0WvDQ==
+
+entities@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-7.0.0.tgz#2ae4e443f3f17d152d3f5b0f79b932c1e59deb7a"
+  integrity sha512-FDWG5cmEYf2Z00IkYRhbFrwIwvdFKH07uV8dvNy0omp/Qb1xcyCWp2UDtcwJF4QZZvk0sLudP6/hAu42TaqVhQ==
 
 esbuild-plugin-babel@^0.2.3:
   version "0.2.3"
@@ -1533,13 +1543,13 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.10.2.tgz#0642e53625ebc62c31c24726b0f050df6bd97a2e"
   integrity sha512-/IGJ6+Dka158JnP5n5YFMOszjDWrXggGz1LaK/guZq9vZTmniaKlHcsscvkAhn9y4U+BU3JuUdYvtAMcv30y4A==
 
-eslint-plugin-libram@^0.4.33:
-  version "0.4.33"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.4.33.tgz#d76c0a16e5869e050e88f1c8a23f7081df49510c"
-  integrity sha512-QLajjkVuPNoiimfBH4iKHWXZCze8hnkUja+DHo/7ff0ddb1AQf6V2lk/nxXku/t+AtLVw2r0s1AliuZv4HV/8Q==
+eslint-plugin-libram@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.5.3.tgz#287dae19267ccad78c44145229afaac9165fb616"
+  integrity sha512-F2mLTf5T1OxP9VX8tA8gRSJJqHVHihCoJKTJEDOwYgEDuexeoxaBnnroc2lCYdvsCn1H+DFKFsYsL7zJFsfsrg==
   dependencies:
-    html-entities "^2.5.2"
-    requireindex "~1.2.0"
+    data-of-loathing "^2.6.2"
+    entities "^7.0.0"
 
 eslint-scope@^5.1.1:
   version "5.1.1"
@@ -1733,10 +1743,10 @@ function-bind@^1.1.2:
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.2.tgz#2c02d864d97f3ea6c8830c464cbd11ab6eab7a1c"
   integrity sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==
 
-garbo-lib@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/garbo-lib/-/garbo-lib-1.0.2.tgz#fcba5efb37f9a8e4fc051f802c4f1aef4d010395"
-  integrity sha512-hwB70pLiuDGVs8Iva7M9jsxbI5fQRPVf/yKzJShHFgzf8vjkZu3q92O+tt2FGLTMOO1mE7VcGRnedQ0GPuBj3A==
+garbo-lib@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/garbo-lib/-/garbo-lib-1.0.3.tgz#e31dff51f616e2bb59d513f285706b4b6a6845b2"
+  integrity sha512-V6XWYXHCUlR7m7QZZv30XJFlxdF0+8JJQUV4qFSzNq0Z/LrKiVQydygQqFR8mU9AXLckZqgmaf7guOxSqOuy2Q==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -1793,7 +1803,7 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
-grimoire-kolmafia@^0.3.31:
+grimoire-kolmafia@^0.3.33:
   version "0.3.33"
   resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.33.tgz#b56fa60cba48aea3fde88d68090ed2174a607b78"
   integrity sha512-yidkJES1IKMAGuqAw8OLgX7p/XBcdDNXs2yt6zjP640ZgwFQKfLgxm42pdK/dt9WGzlSKMjIwrosndsENnOBNQ==
@@ -1938,10 +1948,10 @@ keyv@^4.5.3:
   dependencies:
     json-buffer "3.0.1"
 
-kolmafia@^5.28301.0:
-  version "5.28759.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28759.0.tgz#101006e31ae61286f26670b0849a7492c2f146f6"
-  integrity sha512-mG/gcBSmOqfI7YwZZB5vc1HPq9mQNq3DA1DgthI8TftJaX6TYVK4qZKSVBmeTeWswaBGao2lkuX1Buxq2rfPSw==
+kolmafia@^5.28825.0:
+  version "5.28825.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28825.0.tgz#a2a011896d4eb6f2316dff56b0fc9a7d27b4b2c2"
+  integrity sha512-P38F20+iXZxtyeyP1bIQ9XLlt3TPBIFFlA1APaelnrgb31SAnPcUSQLVPJNx+q9RwbmAbp31hUVk4b44qHO61Q==
 
 levn@^0.4.1:
   version "0.4.1"
@@ -1951,10 +1961,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libram@^0.11.11:
-  version "0.11.11"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.11.tgz#b87b9e68b1e45ff0d69fc1e2762684acd522a905"
-  integrity sha512-Y4dFrQ2sHEl1h0RIK5Cl42JGrmAM+PfFrsigWm2A9xWbtnuFA2SEruxoPnuxwfJwCY5JL6wZEP9FQ7hpothH6A==
+libram@^0.11.14:
+  version "0.11.14"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.14.tgz#011527aba45e3225809e9f0decaf9b83fcce8325"
+  integrity sha512-EzuyU8fru9rYWnQkaWGcknZJ6JgwLIH+GDI8NbCKgVsA7MuSKE6CU/Do/I18vm/dmgjqSbivzE8wcjKxUDNTAQ==
   dependencies:
     html-entities "^2.5.2"
 
@@ -2199,11 +2209,6 @@ regjsparser@^0.12.0:
   integrity sha512-cnE+y8bz4NhMjISKbgeVJtqNbtf5QpjZP+Bslo+UqkIt9QPnX9q095eiRRASJG1/tz6dlNr6Z5NsBiWYokp6EQ==
   dependencies:
     jsesc "~3.0.2"
-
-requireindex@~1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
-  integrity sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
 
 resolve-from@^4.0.0:
   version "4.0.0"
