@@ -57,7 +57,7 @@ export const SeaQuest: Quest = {
   tasks: [
     {
       name: "Start",
-      ready: () => get("kingLiberated") || myPath() === $path`11038 Leagues Under the Sea`,
+      ready: () => get("kingLiberated") || myPath() === $path`11,037 Leagues Under the Sea`,
       completed: () => get("questS01OldGuy") === "started",
       do: (): void => {
         retrieveItem($item`Spooky VHS Tape`, 1);
@@ -799,7 +799,7 @@ export const SeaQuest: Quest = {
         const numcasts = Math.floor(myMp() / 2);
         useSkill(numcasts, $skill`The Moxious Madrigal`);
       },
-      do: $location`Mer-kin Temple Left Door`,
+      do: $location`Mer-kin Temple (Left Door)`,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.item([$item`crayon shavings`, $item`crayon shavings`])
           .item([$item`crayon shavings`, $item`crayon shavings`])
@@ -883,7 +883,7 @@ export const SeaQuest: Quest = {
       name: "Fish Banish",
       after: ["Abyss Mom"],
       completed: () => get("screechCombats") !== 0 || !fishLocationAvailable(),
-      do: () => getFishLocation()!,
+      do: () => getFishLocation(),
       combat: new CombatStrategy()
         .killHard($monsters`time cop, Black Crayon Mer-kin`)
         .macro((): Macro => {
@@ -920,7 +920,7 @@ export const SeaQuest: Quest = {
       name: "Do Habs",
       after: ["Habitat Egg"],
       completed: () => !pearlZoneAvailable() || get("_monsterHabitatsFightsLeft") === 0,
-      do: () => getNextPearlZone()!,
+      do: () => getNextPearlZone(),
       combat: new CombatStrategy()
         .killHard($monsters`time cop`)
         .macro((): Macro => {

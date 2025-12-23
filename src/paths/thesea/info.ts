@@ -1,12 +1,12 @@
-import { getTasks, step } from "grimoire-kolmafia";
+import { getTasks } from "grimoire-kolmafia";
 import { myPath } from "kolmafia";
-import { $familiar, $path, get } from "libram";
+import { $path, get } from "libram";
 import { args } from "../../args";
 import { findAndMerge, Task } from "../../engine/task";
-import { Requirement, RequirementCategory } from "../../sim";
+import { Requirement } from "../../sim";
 import { PathInfo } from "../pathinfo";
 import { SeaPullsQuest } from "./pulls";
-import { SeaQuest } from "../aftercore/thesea";
+import { SeaQuest } from "./thesea";
 import { Engine } from "../../engine/engine";
 
 export class TheSeaInfo implements PathInfo {
@@ -15,7 +15,7 @@ export class TheSeaInfo implements PathInfo {
   }
 
   active(): boolean {
-    return myPath() === $path`11037 Leagues Under the Sea`;
+    return myPath() === $path`11,037 Leagues Under the Sea`;
   }
 
   finished(): boolean {
@@ -43,12 +43,6 @@ export class TheSeaInfo implements PathInfo {
   getRequirements(reqs: Requirement[]): Requirement[] {
     return [
       ...reqs,
-      {
-        thing: $familiar`Mini Kiwi`,
-        why: "Adv gain",
-        required: true,
-        category: RequirementCategory.IOTM,
-      },
     ];
   }
 
