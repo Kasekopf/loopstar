@@ -183,6 +183,13 @@ const killBanishSources: BanishSource[] = [
     nokill: Macro.trySkill($skill`Spring Kick`),
     free: false,
   },
+  {
+    name: "Monodent",
+    available: () => have($item`Monodent of the Sea`) && get("_seadentLightningUsed", 0) < 11,
+    equip: $item`Monodent of the Sea`,
+    do: $skill`Sea *dent: Throw a Lightning Bolt`,
+    free: false,
+  },
 ];
 
 /**

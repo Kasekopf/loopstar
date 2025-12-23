@@ -98,6 +98,18 @@ export function getRunawaySources(): RunawaySource[] {
       useactively: true,
     },
     {
+      name: "Roman Candelabra",
+      available: () =>
+        have($item`Roman Candelabra`) &&
+        !have($effect`Everything Looks Green`) &&
+        !have($item`spring shoes`),
+      equip: $item`Roman Candelabra`,
+      do: Macro.trySkill($skill`Blow the Green Candle!`),
+      chance: () => 1,
+      banishes: false,
+      useactively: true,
+    },
+    {
       name: "Asdon Martin",
       available: () => asdonBanishAvailable(),
       prepare: () => AsdonMartin.fillTo(50),

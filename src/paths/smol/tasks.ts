@@ -1,4 +1,5 @@
 import {
+  beretBuskingEffects,
   cliExecute,
   drink,
   eat,
@@ -30,12 +31,52 @@ import {
   get,
   have,
   Macro,
+  PrismaticBeret,
 } from "libram";
 import { NamedDeltaTask, Quest } from "../../engine/task";
 import { atLevel, tryWish } from "../../lib";
 import { args } from "../../args";
 import { customRestoreMp } from "../../engine/moods";
 import { CombatStrategy, killMacro } from "../../engine/combat";
+
+function saltyMouthBusk() {
+  // Only try with the first two busks, and a check for hammertime for now
+  if (!PrismaticBeret.have() || get("_beretBuskingUses") >= 5) return;
+  const busk1Power = PrismaticBeret.findOptimalOutfitPower($effects`Salty Mouth`);
+  const busk1Effects = Object.keys(beretBuskingEffects(busk1Power, get("_beretBuskingUses")));
+  if (busk1Effects.includes("Salty Mouth")) {
+    if (PrismaticBeret.buskAt(busk1Power)) return;
+  }
+  if (get("_beretBuskingUses") >= 4) return;
+  const busk2Power = PrismaticBeret.findOptimalOutfitPower(
+    $effects`Salty Mouth`,
+    {},
+    get("_beretBuskingUses") + 1
+  );
+  const busk2Effects = Object.keys(beretBuskingEffects(busk2Power, get("_beretBuskingUses") + 1));
+  if (busk2Effects.includes("Salty Mouth")) {
+    PrismaticBeret.buskFor({ "Familiar Weight": 2, "Meat Drop": 1 }, {});
+    if (PrismaticBeret.buskAt(busk2Power)) return;
+  }
+  const hammertimeBusk1Power = PrismaticBeret.findOptimalOutfitPower($effects`Hammertime`);
+  const hammertimeEffects = Object.keys(
+    beretBuskingEffects(hammertimeBusk1Power, get("_beretBuskingUses"))
+  );
+  if (hammertimeEffects.includes("Hammertime")) {
+    const busk2PowerWithHammertime = PrismaticBeret.findOptimalOutfitPower(
+      $effects`Salty Mouth`,
+      { hammerTime: true },
+      get("_beretBuskingUses") + 1
+    );
+    const busk2WithHammertimeEffects = Object.keys(
+      beretBuskingEffects(busk2PowerWithHammertime, get("_beretBuskingUses") + 1)
+    );
+    if (busk2WithHammertimeEffects.includes("Salty Mouth")) {
+      PrismaticBeret.buskAt(hammertimeBusk1Power);
+      PrismaticBeret.buskAt(busk2PowerWithHammertime);
+    }
+  }
+}
 
 export const SmolQuest: Quest = {
   name: "Smol",
@@ -82,6 +123,7 @@ export const SmolQuest: Quest = {
         if (have($item`astral six-pack`)) use($item`astral six-pack`);
         customRestoreMp(20);
         useSkill($skill`Cannelloni Cocoon`);
+        saltyMouthBusk();
         if (!args.smol.skipmug) drink(1, $item`Frosty's frosty mug`);
         drink(1, $item`astral pilsner`);
       },
