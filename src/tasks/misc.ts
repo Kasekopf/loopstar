@@ -898,7 +898,7 @@ export const MiscQuest: Quest = {
       ready: () => have($item`S.I.T. Course Completion Certificate`),
       completed: () => get("_sitCourseCompleted", true) || have($skill`Insectologist`),
       do: () => use($item`S.I.T. Course Completion Certificate`),
-      choices: { [1494]: myPath() === $path`11037 leagues under the sea` ? 3 : 2 },
+      choices: { [1494]: myPath() === $path`11,037 Leagues Under the Sea` ? 3 : 2 },
       limit: { tries: 1 },
       freeaction: true,
     },

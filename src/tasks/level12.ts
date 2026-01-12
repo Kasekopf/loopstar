@@ -741,6 +741,7 @@ export const WarQuest: Quest = {
       post: dimesForGarters,
       combat: new CombatStrategy()
         .killHard(warHeroes)
+        .killFree()
         .kill()
         .macro(() => {
           const result = Macro.trySkill($skill`%fn, let's pledge allegiance to a Zone`).trySkill(

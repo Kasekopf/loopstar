@@ -738,7 +738,7 @@ export const SeaQuest: Quest = {
         equip: [$item`really, really nice swimming trunks`, $item`prismatic beret`],
       },
       freeaction: true,
-      limit: { tries: 1 }
+      limit: { tries: 1 },
     },
     {
       name: "Fights",
@@ -763,15 +763,13 @@ export const SeaQuest: Quest = {
         equip($item`April Shower Thoughts shield`);
         useSkill($skill`Simmer`);
         ensureEffect($effect`Elron's Explosive Etude`, 1);
-        ensureEffect(
-          $effect`Arched Eyebrow of the Archmage`,
-        );
+        ensureEffect($effect`Arched Eyebrow of the Archmage`);
         cliExecute("telescope high");
         cliExecute("monorail");
         cliExecute("buy 5 glittery mascara; use 5 glittery mascara");
       },
       freeaction: true,
-      limit: { tries: 1 }
+      limit: { tries: 1 },
     },
     {
       name: "Hard fights",
@@ -830,7 +828,7 @@ export const SeaQuest: Quest = {
       do: $location`Mer-kin Library`,
 
       // eslint-disable-next-line libram/verify-constants
-      limit: { tries: myPath() === $path`11037 Leagues under the Sea` ? 3 : 1 },
+      limit: { tries: myPath() === $path`11,037 Leagues Under the Sea` ? 3 : 1 },
       choices: { 710: 1, 711: 1, 712: 1, 713: 1 },
       combat: new CombatStrategy().macro(
         Macro.if_(

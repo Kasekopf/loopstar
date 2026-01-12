@@ -11,7 +11,7 @@ import { Engine } from "../../engine/engine";
 
 export class TheSeaInfo implements PathInfo {
   name(): string {
-    return "11037 Leagues Under the Sea";
+    return `11,037 Leagues Under the Sea`;
   }
 
   active(): boolean {

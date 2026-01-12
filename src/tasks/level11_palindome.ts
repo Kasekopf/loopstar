@@ -254,6 +254,7 @@ const Zepplin: Task[] = [
       .killHard($monster`The Nuge`)
       .killItem($monster`Blue Oyster cultist`)
       .killItem($monster`lynyrd skinner`)
+      .killFree()
       .kill(),
     choices: () => {
       return {
@@ -315,6 +316,7 @@ const Zepplin: Task[] = [
         return Macro.externalIf(get("_glarkCableUses") < 5, Macro.tryItem($item`glark cable`));
       }, $monsters`man with the red buttons, red skeleton, red butler`)
       .banish($monsters`Red Herring, Red Snapper`)
+      .killFree()
       .kill(),
     peridot: $monster`red butler`,
     orbtargets: () => $monsters`man with the red buttons, red skeleton, red butler`,
