@@ -1446,6 +1446,11 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+data-of-loathing@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/data-of-loathing/-/data-of-loathing-2.6.2.tgz#b3f12d348dba44e4e3b4e892f36c2938d40bc1ee"
+  integrity sha512-/cldchEU08vJTx0HTP7Cxl1yMOuWfQa9yPFcOFfOzxdPyPsp8/L9ZtmTqWuJyL80rVz+gZa2GyLGQ24oLbxaaQ==
+
 debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4, debug@^4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.1.tgz#e5a8bc6cbc4c6cd3e64308b0693a3d4fa550189b"
@@ -1481,6 +1486,11 @@ electron-to-chromium@^1.5.173:
   version "1.5.197"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.197.tgz#117f9d1afd82ae84bbfedd168ddcf52e4afb6216"
   integrity sha512-m1xWB3g7vJ6asIFz+2pBUbq3uGmfmln1M9SSvBe4QIFWYrRHylP73zL/3nMjDmwz8V+1xAXQDfBd6+HPW0WvDQ==
+
+entities@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-7.0.0.tgz#2ae4e443f3f17d152d3f5b0f79b932c1e59deb7a"
+  integrity sha512-FDWG5cmEYf2Z00IkYRhbFrwIwvdFKH07uV8dvNy0omp/Qb1xcyCWp2UDtcwJF4QZZvk0sLudP6/hAu42TaqVhQ==
 
 esbuild-plugin-babel@^0.2.3:
   version "0.2.3"
@@ -1533,13 +1543,13 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.10.2.tgz#0642e53625ebc62c31c24726b0f050df6bd97a2e"
   integrity sha512-/IGJ6+Dka158JnP5n5YFMOszjDWrXggGz1LaK/guZq9vZTmniaKlHcsscvkAhn9y4U+BU3JuUdYvtAMcv30y4A==
 
-eslint-plugin-libram@^0.4.22:
-  version "0.4.33"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.4.33.tgz#d76c0a16e5869e050e88f1c8a23f7081df49510c"
-  integrity sha512-QLajjkVuPNoiimfBH4iKHWXZCze8hnkUja+DHo/7ff0ddb1AQf6V2lk/nxXku/t+AtLVw2r0s1AliuZv4HV/8Q==
+eslint-plugin-libram@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.5.3.tgz#287dae19267ccad78c44145229afaac9165fb616"
+  integrity sha512-F2mLTf5T1OxP9VX8tA8gRSJJqHVHihCoJKTJEDOwYgEDuexeoxaBnnroc2lCYdvsCn1H+DFKFsYsL7zJFsfsrg==
   dependencies:
-    html-entities "^2.5.2"
-    requireindex "~1.2.0"
+    data-of-loathing "^2.6.2"
+    entities "^7.0.0"
 
 eslint-scope@^5.1.1:
   version "5.1.1"
@@ -1938,10 +1948,10 @@ keyv@^4.5.3:
   dependencies:
     json-buffer "3.0.1"
 
-kolmafia@^5.28612.0:
-  version "5.28725.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28725.0.tgz#b4699c3b1bdb790d15ef0f127370041c4b8feb65"
-  integrity sha512-dPkZ1D0OOK20cMwsIYDKHU1/3ADy89k4rNfQRfyu3WAib3N2SWxoEA5/ohjyN1WnZ1U8aZ08GjwCr/WFL3m9dg==
+kolmafia@^5.28889.0:
+  version "5.28889.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28889.0.tgz#8d760dc68fe0adbb61661e01a7a5785fa9456cb1"
+  integrity sha512-j38hFACHQm4F09hlXtN/zlUVYua5yQIhYn6GsqIa87yhqMMc/Opv5QOJTN/QGu8cT83QWHHubKBswxPLWBhyMA==
 
 levn@^0.4.1:
   version "0.4.1"
@@ -1951,10 +1961,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libram@^0.11.9:
-  version "0.11.9"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.9.tgz#b8aba12db14e4fec27122ac8c94d1422e93cdd53"
-  integrity sha512-fj4RIOc0/K/ytvp0F1bOrScstPg5Fba2bt/8eNrRbmHPRPUPILepsq+dJ9d98H3Ae/KtNupkPicNB584lg0h1w==
+libram@^0.11.14:
+  version "0.11.14"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.14.tgz#011527aba45e3225809e9f0decaf9b83fcce8325"
+  integrity sha512-EzuyU8fru9rYWnQkaWGcknZJ6JgwLIH+GDI8NbCKgVsA7MuSKE6CU/Do/I18vm/dmgjqSbivzE8wcjKxUDNTAQ==
   dependencies:
     html-entities "^2.5.2"
 
@@ -2199,11 +2209,6 @@ regjsparser@^0.12.0:
   integrity sha512-cnE+y8bz4NhMjISKbgeVJtqNbtf5QpjZP+Bslo+UqkIt9QPnX9q095eiRRASJG1/tz6dlNr6Z5NsBiWYokp6EQ==
   dependencies:
     jsesc "~3.0.2"
-
-requireindex@~1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
-  integrity sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
 
 resolve-from@^4.0.0:
   version "4.0.0"
