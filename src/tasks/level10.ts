@@ -70,6 +70,53 @@ export const GiantQuest: Quest = {
       freeaction: true,
     },
     {
+      name: "Airship Refract",
+      after: ["Grow Beanstalk"],
+      prepare: () => tryPlayApriling("-combat"),
+      completed: () => have($item`amulet of extreme plot significance`)
+        || !have($item`Peridot of Peril`)
+        || !have($item`blood cubic zirconia`),
+      do: $location`The Penultimate Fantasy Airship`,
+      // Other options (bat wings) are sometimes chosen by choice script
+      choices: { 182: 1 },
+      post: () => {
+        if (have($effect`Temporary Amnesia`)) cliExecute("uneffect Temporary Amnesia");
+      },
+      orbtargets: () => {
+        if (have($item`Fourth of May Cosplay Saber`)) {
+          if (have($item`Mohawk wig`)) return $monsters`Quiet Healer`;
+          else return $monsters`Quiet Healer, Burly Sidekick`;
+        } else {
+          return undefined; // Avoid orb dancing if we are using a real YR
+        }
+      },
+      limit: { soft: 2 },
+      delay: () => {
+        if (have($item`bat wings`)) {
+          if (have($item`Plastic Wrap Immateria`)) return 20;
+          if (have($item`Gauze Immateria`)) return 16;
+          return 12;
+        } else {
+          if (have($item`Plastic Wrap Immateria`)) return 25;
+          if (have($item`Gauze Immateria`)) return 20;
+          return 15;
+        }
+      },
+      outfit: () => {
+        const turns = $location`The Penultimate Fantasy Airship`.turnsSpent;
+        return {
+          modifier: turns < 5 ? "-combat, item" : "item",
+          equip: $items`bat wings, peridot of peril, blood cubic zirconia`,
+          avoid: $items`broken champagne bottle`,
+        };
+      },
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`BCZ Refracted Gaze`).step(killMacro())
+        ),
+      peridot: $monster`Irritating Series of Random Encounters`
+    },
+    {
       name: "Airship YR Healer",
       after: ["Grow Beanstalk"],
       prepare: () => tryPlayApriling("-combat"),
