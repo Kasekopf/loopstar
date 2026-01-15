@@ -36,7 +36,7 @@
     "kolmafia": "^5.28889.0",
     "libram": "^0.11.14",
     "mafia-shared-relay": "^0.0.7",
-    "node": "^21.1.0"
+    "node": "^25.3.0"
   },
   "author": "Kasekopf",
   "license": "ISC",
