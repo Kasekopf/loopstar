@@ -30,7 +30,7 @@ export default defineConfig([
     rules: {
       "block-scoped-var": "error",
       "eol-last": "error",
-      "eqeqeq": "error",
+      eqeqeq: "error",
       "no-trailing-spaces": "error",
       "no-var": "error",
       "prefer-arrow-callback": "error",
@@ -39,13 +39,13 @@ export default defineConfig([
       "sort-imports": [
         "error",
         {
-          "ignoreCase": true,
-          "ignoreDeclarationSort": true
-        }
+          ignoreCase: true,
+          ignoreDeclarationSort: true,
+        },
       ],
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
-      "libram/verify-constants": "error"
-    }
+      "libram/verify-constants": "error",
+    },
   },
 ]);
