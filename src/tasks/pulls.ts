@@ -229,7 +229,7 @@ export const pulls: PullSpec[] = [
       !(
         AprilingBandHelmet.canJoinSection() &&
         get("_aprilBandInstruments") + args.resources.saveapriling <=
-          1 + itemAmount($item`Apriling band tuba`)
+        1 + itemAmount($item`Apriling band tuba`)
       ),
     benefit: 5,
   },
@@ -320,9 +320,7 @@ class Pull {
     this.price = spec.price;
     this.post =
       spec.post ??
-      (() => {
-        null;
-      });
+      (() => { });
     this.priority = spec.benefit;
     this.state = PullState.MAYBE_UNSURE;
   }

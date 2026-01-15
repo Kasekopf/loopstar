@@ -514,8 +514,8 @@ export const borisDeltas: NamedDeltaTask[] = [
           // save 1 bat wing swoop for filthworms
           result.externalIf(
             get("_batWingsSwoopUsed") < 10 &&
-              (get("_glarkCableUses") + itemAmount($item`glark cable`) < 4 ||
-                (!have($item`glark cable`) && get("_glarkCableUses") < 5)),
+            (get("_glarkCableUses") + itemAmount($item`glark cable`) < 4 ||
+              (!have($item`glark cable`) && get("_glarkCableUses") < 5)),
             Macro.trySkill($skill`Swoop like a Bat`)
           );
           result.externalIf(get("_glarkCableUses") < 5, Macro.tryItem($item`glark cable`));
@@ -838,7 +838,6 @@ export const BorisQuest: Quest = {
       after: ["Mayam Calendar 1", "BorisDiet/Such Great Heights"],
       completed: () => !MayamCalendar.have() || MayamCalendar.remainingUses() === 0,
       do: () => {
-        cliExecute;
         cliExecute("mayam rings vessel yam cheese explosion"); // stuffed yam stinkbomb
         cliExecute("mayam rings chair wood wall clock");
         cliExecute("mayam rings eye meat eyepatch yam");
