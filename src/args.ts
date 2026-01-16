@@ -228,6 +228,11 @@ export const args = Args.create(
         help: "Extra command-line arguments to be used only in ih8u runs.",
       }),
     }),
+    thesea: Args.group("Path or Aftercore The Sea (Work in Progress)", {
+      theseaargs: Args.string({
+        help: "Extra command-line arguments to be used only in the sea runs."
+      })
+    }),
     aftercore: Args.group("Path: Aftercore", {
       goal: Args.string({
         help: "An aftercore goal to accomplish.",

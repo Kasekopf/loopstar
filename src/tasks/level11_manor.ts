@@ -52,7 +52,7 @@ const Manor1: Task[] = [
     do: $location`The Haunted Kitchen`,
     outfit: { modifier: "stench res, hot res", avoid: $items`Roman Candelabra` },
     choices: { 893: 2 },
-    combat: new CombatStrategy().kill(),
+    combat: new CombatStrategy().killFree().kill(),
     limit: { soft: 21 },
     delay: 7,
     nochain: true,

@@ -48,9 +48,9 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
     return this.kill(target);
   }
 
-  killFree() {
-    return this.abort();
-  } // Abort if no resource provided
+  killFree(target?: Monster | Location) {
+    return this.kill(target);
+  }
 
   banish(target?: Monster | Location) {
     return this.kill(target);
