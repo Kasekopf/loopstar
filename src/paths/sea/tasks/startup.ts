@@ -8,6 +8,7 @@ import {
   $item,
   $items,
   $location,
+  $phylum,
   $skill,
   AprilingBandHelmet,
   AugustScepter,
@@ -18,6 +19,7 @@ import {
   have,
   Leprecondo,
   MayamCalendar,
+  Snapper,
   TakerSpace,
 } from "libram";
 import {
@@ -71,7 +73,7 @@ export const StartupQuest: Quest = {
         pull($item`Platinum Yendorian Express Card`);
         pull($item`ink bladder`);
         pull($item`Mer-kin sneakmask`);
-        // cliExecute("pull phosphor traces");
+        pull($item`fishy pipe`);
         if (!have($item`Platinum Yendorian Express Card`)) {
           pull($item`minin' dynamite`);
         }
@@ -92,6 +94,14 @@ export const StartupQuest: Quest = {
       do: () => cliExecute("swim sprints"),
       freeaction: true,
       limit: { soft: 11 },
+    },
+    {
+      name: "Tune Snapper",
+      ready: () => Snapper.have(),
+      completed: () => Snapper.getTrackedPhylum() === $phylum`fish`,
+      do: () => Snapper.trackPhylum($phylum`fish`),
+      freeaction: true,
+      limit: { soft: 1 },
     },
     {
       name: "Drink beer",
@@ -150,7 +160,7 @@ export const StartupQuest: Quest = {
       outfit: () => {
         if (have($familiar`Chest Mimic`))
           return { modifier: "mp", familiar: $familiar`Chest Mimic` };
-        return { modifier: "mp", familiar: $familiar`Grouper Groupie` };
+        return { modifier: "mp", familiar: $familiar`red-nosed snapper` };
       },
     },
     {
@@ -267,7 +277,7 @@ export const StartupQuest: Quest = {
       limit: { soft: 11 },
       outfit: () => {
         if (have($familiar`Chest Mimic`)) return { familiar: $familiar`Chest Mimic` };
-        return { familiar: $familiar`Grouper Groupie` };
+        return { familiar: $familiar`red-nosed snapper` };
       },
     },
     {

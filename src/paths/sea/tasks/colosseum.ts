@@ -52,7 +52,7 @@ export const ColosseumQuest: Quest = {
       limit: { soft: 12 },
       outfit: {
         modifier: "mysticality",
-        familiar: $familiar`Foul Ball`,
+        familiar: $familiar`Tiny Plastic Santa Claus Skeleton`,
         equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, august scepter, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
       },
     },
@@ -82,7 +82,6 @@ export const ColosseumQuest: Quest = {
       limit: { soft: 3 },
       outfit: {
         modifier: "mysticality",
-        familiar: $familiar`Foul Ball`,
         equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, august scepter, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
       },
     },
@@ -98,11 +97,11 @@ export const ColosseumQuest: Quest = {
       },
       do: $location`Mer-kin Temple Left Door`,
       combat: new CombatStrategy().macro((): Macro => {
-        return Macro.item([$item`crayon shavings`, $item`crayon shavings`])
-          .item([$item`crayon shavings`, $item`crayon shavings`])
-          .item([$item`crayon shavings`, $item`crayon shavings`])
-          .tryItem([$item`crayon shavings`, $item`crayon shavings`])
-          .tryItem($item`crayon shavings`)
+        return Macro.item([$item`jam band bootleg`, $item`jam band bootleg`])
+          .item([$item`jam band bootleg`, $item`jam band bootleg`])
+          .item([$item`jam band bootleg`, $item`jam band bootleg`])
+          .tryItem([$item`jam band bootleg`, $item`jam band bootleg`])
+          .tryItem($item`jam band bootleg`)
           .attack()
           .repeat();
       }),

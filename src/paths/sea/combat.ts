@@ -54,12 +54,10 @@ export class SeaActionDefaults implements ActionDefaults<CombatActions> {
   }
 }
 
-export function seaKillMacro(
-  target: Monster | Location | undefined,
-): Macro {
+export function seaKillMacro(target: Monster | Location | undefined): Macro {
   const result = new Macro();
   if (get("lassoTrainingCount") < 18) {
-    result.tryItem($item`sea lasso`)
+    result.tryItem($item`sea lasso`);
   }
   if (haveEquipped($item`Everfull Dart Holster`)) {
     if (!have($effect`Everything Looks Red`)) {

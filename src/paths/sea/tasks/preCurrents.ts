@@ -63,7 +63,7 @@ export const PreItemTask: Quest = {
       outfit: {
         modifier: "item",
         equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy cupid bow`,
-        familiar: $familiar`Grouper Groupie`,
+        familiar: $familiar`red-nosed snapper`,
       },
       peridot: $monster`Mer-kin miner`,
       limit: { soft: 11 },
@@ -252,7 +252,7 @@ export const PreItemTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Generate Crayon Egg",
+      name: "Generate Sausage Goblin Egg",
       after: ["Outpost Unlock"],
       completed: () =>
         get("_autosea_egg_generated", false) ||
@@ -260,7 +260,7 @@ export const PreItemTask: Quest = {
         get("_monsterHabitatsRecalled") > 0,
       ready: () => ChestMimic.have(),
       do: () => {
-        ChestMimic.receive($monster`Black Crayon Fish`);
+        ChestMimic.receive($monster`Sausage Goblin`);
       },
       post: () => {
         set("_autosea_egg_generated", true);
@@ -276,7 +276,7 @@ export const PreItemTask: Quest = {
       after: ["Generate Crayon Egg"],
       completed: () => get("_monsterHabitatsRecalled") > 0,
       do: () => {
-        ChestMimic.differentiate($monster`Black Crayon Fish`);
+        ChestMimic.differentiate($monster`Sausage Goblin`);
       },
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.step("pickpocket")
@@ -307,8 +307,8 @@ export const PreItemTask: Quest = {
       do: $location`Madness Reef`,
       combat: new CombatStrategy()
         .macro((): Macro => {
-          return Macro.step("pickpocket").trySkill("Blow the Purple Candle!");
-        }, $monsters`Black Crayon Fish`)
+          return Macro.trySkill("Blow the Purple Candle!");
+        }, $monsters`Sausage Goblin`)
         .macro((): Macro => {
           return Macro.trySkill("Sea *dent: Throw a Lightning Bolt");
         }, $monsters`magic dragonfish`)
@@ -328,7 +328,7 @@ export const PreItemTask: Quest = {
         get("_monsterHabitatsFightsLeft") == 0 ||
         get("_unblemishedPearlMadnessReef", false),
       do: $location`Madness Reef`,
-      combat: new CombatStrategy().killHard($monsters`Black Crayon Fish, Time Cop`).kill(),
+      combat: new CombatStrategy().killHard($monsters`Sausage Goblin`).kill(),
       outfit: {
         equip: $items`Everfull Dart Holster, Möbius ring, Spring shoes, little bitty bathysphere, Monodent of the Sea, April shower thoughts shield, shark jumper, bat wings, prismatic beret`,
         familiar: $familiar`Peace Turkey`,
@@ -350,7 +350,7 @@ export const PreItemTask: Quest = {
         .kill(),
       outfit: {
         equip: $items`Everfull Dart Holster, Peridot of Peril, Spring Shoes, Monodent of the Sea, McHugeLarge Left Pole, bat wings, prismatic beret, shark jumper`,
-        familiar: $familiar`Grouper Groupie`,
+        familiar: $familiar`Red-nosed Snapper`,
       },
       limit: { soft: 11 },
     },
@@ -371,7 +371,7 @@ export const PreItemTask: Quest = {
         .killFree(),
       outfit: {
         equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April shower thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
-        familiar: $familiar`Grouper Groupie`,
+        familiar: $familiar`Red-nosed Snapper`,
       },
       limit: { soft: 11 },
     },
@@ -390,7 +390,7 @@ export const PreItemTask: Quest = {
         .kill(),
       outfit: {
         equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April shower thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
-        familiar: $familiar`Grouper Groupie`,
+        familiar: $familiar`Red-nosed Snapper`,
       },
       limit: { soft: 11 },
     },

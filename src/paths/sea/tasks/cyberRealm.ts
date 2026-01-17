@@ -1,18 +1,19 @@
 import {
-  $familiar,
   $item,
   $items,
   $location,
+  $monster,
   $monsters,
   $skill,
+  BloodCubicZirconia,
   get,
   have,
   Macro,
   withChoice,
 } from "libram";
-import { CombatStrategy } from "grimoire-kolmafia";
 import { useSkill } from "kolmafia";
 import { Quest } from "../../../engine/task";
+import { CombatStrategy } from "../../../engine/combat";
 
 export const CyberRealmTask: Quest = {
   name: "Cyber Realm",
@@ -32,7 +33,6 @@ export const CyberRealmTask: Quest = {
           return Macro.trySkillRepeat($skill`Throw Cyber Rock`);
         }, $monsters`zombie process, botfly, network worm, ICE man, rat (remote access trojan), firewall, ICE barrier, corruption quarantine, parental controls, null container`),
       outfit: {
-        familiar: $familiar`Peace Turkey`,
         equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow, rake`,
         avoid: $items`bat wings`,
       },
@@ -64,7 +64,26 @@ export const CyberRealmTask: Quest = {
         }, $monsters`zombie process, botfly, network worm, ICE man, rat (remote access trojan), firewall, ICE barrier, corruption quarantine, parental controls, null container`),
       limit: { soft: 11 },
       outfit: {
-        familiar: $familiar`Peace Turkey`,
+        equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow, rake`,
+        avoid: $items`bat wings`,
+      },
+    },
+    {
+      name: "NEP",
+      ready: () => get("neverendingPartyAlways"),
+      completed: () => get("_neverendingPartyFreeTurns") <= 0,
+      do: $location`The Neverending Party`,
+      combat: new CombatStrategy()
+        .killItem($monster`burnout`)
+        .macro(
+          Macro.externalIf(
+            BloodCubicZirconia.availableCasts($skill`Refractory Gaze`, 200) > 6,
+            Macro.if_("!monstername burnout", Macro.trySkill($skill`Refractory Gaze`))
+          )
+        )
+        .kill(),
+      limit: { soft: 11 },
+      outfit: {
         equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow, rake`,
         avoid: $items`bat wings`,
       },

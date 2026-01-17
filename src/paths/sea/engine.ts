@@ -3,14 +3,11 @@ import { ActiveTask, Engine } from "../../engine/engine";
 import { CombatActions, CombatStrategy } from "../../engine/combat";
 import { $effect, $monsters, have, PropertiesManager, undelay } from "libram";
 import { Task } from "../../engine/task";
-import { doFirstAvailableWaterBreathSource } from "./util";
+import { doFirstAvailableFishySource, doFirstAvailableWaterBreathSource } from "./util";
 import { SeaActionDefaults } from "./combat";
 
 export class TheSeaEngine extends Engine {
-  constructor(
-    tasks: Task[],
-    options: EngineOptions<CombatActions, ActiveTask> = {}
-  ) {
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
     if (!options.combat_defaults) {
       options.combat_defaults = new SeaActionDefaults();
     }
@@ -41,6 +38,9 @@ export class TheSeaEngine extends Engine {
   override prepare(): void {
     if (!have($effect`Driving Waterproofly`)) {
       doFirstAvailableWaterBreathSource();
+    }
+    if (!have($effect`fishy`)) {
+      doFirstAvailableFishySource();
     }
   }
 

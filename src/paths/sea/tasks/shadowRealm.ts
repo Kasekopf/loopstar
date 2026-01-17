@@ -75,21 +75,7 @@ export const ShadowRealmTask: Quest = {
         equip: $items`Everfull Dart Holster, spring shoes, designer sweatpants, Monodent of the Sea, April Shower Thoughts shield, bat wings, toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory, prismatic beret`,
       },
     },
-    {
-      name: "Eat Apron Meal",
-      after: ["Open Shadow Realm"],
-      completed: () => !have($item`Black and White Apron Meal Kit`) || get("bwApronMealsEaten") > 0,
-      do: () => {
-        visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=11472`, false, true);
-        visitUrl(
-          `choice.php?pwd&whichchoice=1518&option=1&meal=1&ingredients1[]=2524`,
-          true,
-          false
-        );
-      },
-      freeaction: true,
-      limit: { soft: 11 },
-    },
+
     {
       name: "Express Card",
       after: ["Eat Apron Meal"],

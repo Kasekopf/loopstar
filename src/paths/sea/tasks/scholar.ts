@@ -321,7 +321,7 @@ export const ScholarTask: Quest = {
       combat: new CombatStrategy().kill(),
       outfit: {
         equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, shark jumper, toy Cupid bow, really\, really nice swimming trunks`,
-        familiar: $familiar`Grouper Groupie`,
+        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       limit: { soft: 11 },
