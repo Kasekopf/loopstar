@@ -127,12 +127,10 @@ export const MiscQuest: Quest = {
     },
     {
       name: "Leprecondo",
-      // eslint-disable-next-line libram/verify-constants
       ready: () => have($item`Leprecondo`),
       completed: () => isLeprecondoComplete() || get("_leprecondoRearrangements", 0) >= 3,
       do: () => {
         const furniture = chooseBestLeprecondo();
-        // eslint-disable-next-line libram/verify-constants
         directlyUse($item`Leprecondo`);
         visitUrl(
           `choice.php?pwd&option=1&whichchoice=1556&r0=${furniture[0]}&r1=${furniture[1]}&r2=${furniture[2]}&r3=${furniture[3]}`

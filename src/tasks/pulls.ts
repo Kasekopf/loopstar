@@ -318,11 +318,7 @@ class Pull {
     this.optional = spec.optional ?? false;
     this.useful = spec.useful ?? (() => true);
     this.price = spec.price;
-    this.post =
-      spec.post ??
-      (() => {
-        null;
-      });
+    this.post = spec.post ?? (() => {});
     this.priority = spec.benefit;
     this.state = PullState.MAYBE_UNSURE;
   }

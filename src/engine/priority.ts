@@ -429,7 +429,6 @@ function orbPriority(task: Task, monster: Monster): Priority {
       task_combat.can("killHard") ||
       task_combat.can("killItem") ||
       task_combat.can("killBanish");
-    pathTargets.size;
 
     if (next_useless && others_useful) {
       return Priorities.BadOrb;

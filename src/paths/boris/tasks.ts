@@ -838,7 +838,6 @@ export const BorisQuest: Quest = {
       after: ["Mayam Calendar 1", "BorisDiet/Such Great Heights"],
       completed: () => !MayamCalendar.have() || MayamCalendar.remainingUses() === 0,
       do: () => {
-        cliExecute;
         cliExecute("mayam rings vessel yam cheese explosion"); // stuffed yam stinkbomb
         cliExecute("mayam rings chair wood wall clock");
         cliExecute("mayam rings eye meat eyepatch yam");
