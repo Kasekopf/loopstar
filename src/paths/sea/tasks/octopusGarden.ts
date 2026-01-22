@@ -17,62 +17,29 @@ import {
 } from "libram";
 import { adv1, haveFamiliar, inHardcore, myHash, runCombat, use, visitUrl } from "kolmafia";
 import { step } from "grimoire-kolmafia";
-import { Quest } from "../../../engine/task";
+import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
+import { yellowRayPossible } from "../../../resources/yellowray";
+import { grandpaZone } from "../util";
 
 export const OctopusGardenTask: Quest = {
   name: "Octopus Garden",
   tasks: [
     {
-      name: "Quiet Brawl",
-      after: ["Shadow Realm/Remaining Shadow Realm Fights", "Cyber Realm/Finish Cyber Realm"],
-      completed: () => !get("ownsSpeakeasy") || get("_speakeasyFreeFights") >= 3,
-      do: $location`An Unusually Quiet Barroom Brawl`,
-      combat: new CombatStrategy().killHard(),
-      outfit: {
-        modifier: "item",
-        familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, spring shoes, April Shower Thoughts Shield`,
-        avoid: $items`Peridot of Peril`,
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Pre Flyer",
-      after: ["Shadow Realm/Remaining Shadow Realm Fights", "Cyber Realm/Finish Cyber Realm"],
-      completed: () =>
-        !BurningLeaves.have() ||
-        BurningLeaves.numberOfLeaves() < 11 ||
-        get("_leafMonstersFought") >= 5,
-      do: () => {
-        BurningLeaves.burnLeaves(11);
-      },
-      combat: new CombatStrategy().killHard(),
-      outfit: {
-        familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, April Shower Thoughts Shield, toy Cupid bow`,
-      },
-      limit: { soft: 11 },
-    },
-    {
       name: "Dynamite",
-      after: ["Pre Flyer"],
       ready: () =>
-        inHardcore() &&
         have($item`pocket wish`) &&
         have($item`spitball`) &&
         have($item`Spooky VHS Tape`) &&
-        !have($effect`Everything Looks Yellow`),
-      completed: () => get("_autosea_gotdynamites", false),
+        yellowRayPossible(),
+      completed: () => have($item`minin' dynamite`, 2),
       do: () => {
-        visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=9537`, false, true);
-        visitUrl(
-          `choice.php?pwd&whichchoice=1267&option=1&wish=to fight a tetched prospector`,
-          true,
-          true
-        );
-        visitUrl(`main.php`, false);
-        runCombat();
+        throw `Attempted to summon tetched prospector with no allocation`;
+      },
+      resources: {
+        which: { summon: $monster`tetched prospector` },
+        benefit: 200,
+        required: true,
       },
       combat: new CombatStrategy()
         .macro((): Macro => {
@@ -82,8 +49,7 @@ export const OctopusGardenTask: Quest = {
           ]);
         })
         .killHard(),
-      post: () => set("_autosea_gotdynamites", true),
-      limit: { soft: 11 },
+      limit: { tries: 2 },
       outfit: {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow`,
@@ -91,9 +57,8 @@ export const OctopusGardenTask: Quest = {
     },
     {
       name: "Blast Garden",
-      after: ["Quiet Brawl", "Pre Flyer"],
+      ready: () => have($item`minin' dynamite`),
       completed: () =>
-        $location`An Octopus's Garden`.turnsSpent >= 1 ||
         get("bigBrotherRescued") ||
         !haveFamiliar($familiar`Patriotic Eagle`),
       do: $location`An Octopus's Garden`,
@@ -101,7 +66,6 @@ export const OctopusGardenTask: Quest = {
         .macro((): Macro => {
           return Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)
             .trySkill($skill`%fn, let's pledge allegiance to a Zone`)
-            .trySkill($skill`McHugeLarge Avalanche`);
         })
         .killFree(),
       peridot: $monster`Neptune Flytrap`,
@@ -167,19 +131,21 @@ export const OctopusGardenTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Do Wreck",
+      name: "Do Grandpa Zone",
       ready: () => step("questS02Monkees") == 1,
       completed: () => step("questS02Monkees") > 1,
       do: () => {
-        withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`));
+        grandpaZone();
+      },
+      resources: {
+        which: Resources.NCForce,
+        benefit: 5,
       },
       outfit: {
         modifier: "mp",
         avoid: $items`Peridot of Peril`,
-        familiar: $familiar`red-nosed snapper`,
         pants: $item`really, really nice swimming trunks`,
       },
-      peridot: $monster`holy diver`,
       limit: { soft: 11 },
     },
     {

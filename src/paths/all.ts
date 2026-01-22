@@ -12,6 +12,7 @@ import { GyouInfo } from "./gyou/info";
 import { BorisInfo } from "./boris/info";
 import { IH8UInfo } from "./ih8u/info";
 import { TheSeaInfo } from "./sea/info";
+import { TheSeaQuest } from "./sea/tasks";
 
 const pathInfos = {
   smol: new SmolInfo(),

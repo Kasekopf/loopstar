@@ -154,7 +154,6 @@ export const ItemTask: Quest = {
     },
     {
       name: "Outpost Refract",
-      after: ["Mimic diver"],
       ready: () => get("_bczRefractedGazeCasts") < 12,
       completed: () =>
         have($item`Mer-kin lockkey`) ||
@@ -381,7 +380,6 @@ export const ItemTask: Quest = {
     },
     {
       name: "Dive Bar Peridot",
-      after: ["VHS First Monster"],
       completed: () =>
         get("_unblemishedPearlDiveBar") ||
         !PeridotOfPeril.have() ||

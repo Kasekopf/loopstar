@@ -230,7 +230,7 @@ export const args = Args.create(
       }),
     }),
     sea: Args.group("11,037 Leagues Under the Sea", {
-      ih8uargs: Args.string({
+      seaargs: Args.string({
         help: "Extra command-line arguments to be used only in Sea runs.",
       }),
     }),

@@ -8,13 +8,14 @@ import {
   $monster,
   $monsters,
   $skill,
+  $stat,
   ClosedCircuitPayphone,
   get,
   have,
   Macro,
 } from "libram";
 import { CombatStrategy } from "grimoire-kolmafia";
-import { cliExecute, holiday, mpCost, myHash, myMp, use, useSkill, visitUrl } from "kolmafia";
+import { canAdventure, cliExecute, holiday, mpCost, myHash, myMp, myPrimestat, use, useSkill, visitUrl } from "kolmafia";
 import { Quest } from "../../../engine/task";
 
 export const ShadowRealmTask: Quest = {
@@ -33,52 +34,12 @@ export const ShadowRealmTask: Quest = {
           }
         }),
       freeaction: true,
-      limit: { soft: 11 },
+      limit: { tries: 1 },
       effects: $effects`The Ballad of Richie Thingfinder, Chorale of Companionship`,
       // post: () => abort()
     },
     {
-      name: "Displaced Fish Shadow Realm",
-      after: ["Open Shadow Realm"],
-      completed: () =>
-        !have($item`closed-circuit pay phone`) ||
-        have($item`displaced fish`) ||
-        get("bwApronMealsEaten") > 0 ||
-        !have($effect`Shadow Affinity`),
-      do: $location`Shadow Rift (The Misspelled Cemetary)`,
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return (
-            Macro.step("pickpocket")
-              .while_("hasskill 226", Macro.skill($skill`Perpetrate Mild Evil`))
-              .trySkill($skill`Swoop like a Bat`)
-              //while !match "The force of the blow knocks something" && !times 3
-              .tryItem("11646")
-              .trySkill($skill`Darts: Throw at %part1`)
-              .while_(`hasskill 7448 && !pastround 25`, Macro.skill($skill`Douse Foe`))
-              .trySkill($skill`CLEESH`)
-              .trySkillRepeat($skill`Saucegeyser`)
-          );
-        }, $monster`shadow slab`)
-        .macro((): Macro => {
-          return Macro.step("pickpocket")
-            .trySkill($skill`Swoop like a Bat`)
-            .trySkill($skill`CLEESH`)
-            .trySkill($skill`Darts: Throw at %part1`)
-            .trySkillRepeat($skill`Shieldbutt`);
-        }, $monsters`shadow guy, shadow tree`),
-      freeaction: true,
-      limit: { soft: 11 },
-      outfit: {
-        familiar: $familiar`Jill-of-All-Trades`,
-        modifier: "item",
-        equip: $items`Everfull Dart Holster, spring shoes, designer sweatpants, Monodent of the Sea, April Shower Thoughts shield, bat wings, toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory, prismatic beret`,
-      },
-    },
-
-    {
       name: "Express Card",
-      after: ["Eat Apron Meal"],
       completed: () => !have($item`Platinum Yendorian Express Card`) || get("expressCardUsed"),
       do: () => {
         use($item`lodestone`);
@@ -90,13 +51,14 @@ export const ShadowRealmTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Remaining Shadow Realm Fights",
-      after: ["Displaced Fish Shadow Realm", "Eat Apron Meal", "Express Card"],
+      name: "Shadow Realm Fights",
+      after: ["Express Card"],
       completed: () =>
         !have($item`closed-circuit pay phone`) ||
         (get("_shadowAffinityToday") &&
           !have($effect`Shadow Affinity`) &&
-          get("encountersUntilSRChoice") !== 0),
+          get("encountersUntilSRChoice") !== 0) ||
+        !canAdventure($location`Shadow Rift (the Misspelled Cemetary)`),
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
       combat: new CombatStrategy()
         .macro((): Macro => {
@@ -140,6 +102,7 @@ export const ShadowRealmTask: Quest = {
     },
     {
       name: "Use Candy Map",
+      ready: () => have($item`map to a candy-rich block`),
       completed: () => holiday().includes("Halloween") || get("_mapToACandyRichBlockUsed"),
       do: () => {
         cliExecute("use map to a candy-rich block");

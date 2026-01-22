@@ -8,6 +8,7 @@ import { getTasks } from "grimoire-kolmafia";
 import { Engine } from "../../engine/engine";
 import { TheSeaQuest } from "./tasks";
 import { TheSeaEngine } from "./engine";
+import { searoute } from "./route";
 
 export class TheSeaInfo implements PathInfo {
   name(): string {
@@ -25,11 +26,11 @@ export class TheSeaInfo implements PathInfo {
   getTasks(tasks: Task[]): Task[] {
     const newQuests = TheSeaQuest;
     const newTasks = getTasks(newQuests, false, false);
-    return findAndMerge([...tasks, ...newTasks], []);
+    return findAndMerge([...newTasks], []);
   }
 
   getRoute(route: string[]): string[] {
-    return route;
+    return [];
   }
 
   getEngine(tasks: Task[]): Engine {

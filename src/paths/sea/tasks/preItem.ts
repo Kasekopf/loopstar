@@ -20,8 +20,8 @@ import {
 } from "libram";
 import { step } from "grimoire-kolmafia";
 
-import { abort, adv1, cliExecute, myClass, print, useSkill } from "kolmafia";
-import { Quest } from "../../../engine/task";
+import { abort, adv1, canAdventure, cliExecute, myClass, print, useSkill } from "kolmafia";
+import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import {
   countFreeMines,
@@ -190,11 +190,15 @@ export const PreItemTask: Quest = {
       name: "Dive Bar Noncombats",
       after: ["Manual Mining"],
       ready: () => step("questS02Monkees") >= 4,
-      completed: () => myClass() !== $class`Accordion Thief` || step("questS02Monkees") >= 5,
+      completed: () => step("questS02Monkees") >= 5,
       prepare: () => {
         if (AprilingBandHelmet.have()) {
           AprilingBandHelmet.conduct("Apriling Band Patrol Beat");
         }
+      },
+      resources: {
+        which: Resources.NCForce,
+        benefit: 3,
       },
       do: $location`The Dive Bar`,
       combat: new CombatStrategy()
@@ -228,8 +232,8 @@ export const PreItemTask: Quest = {
     {
       name: "Outpost Freerun",
       after: ["Outpost Unlock"],
-      completed: () => get("_autosea_didfreerun", false) || have($item`Mer-kin lockkey`),
-      ready: () => !have($effect`Everything Looks Green`),
+      completed: () => have($item`Mer-kin lockkey`) || get("seahorseName") !== "",
+      ready: () => !have($effect`Everything Looks Green`) && step("questS02Monkees") >= 6,
       do: $location`The Mer-Kin Outpost`,
       combat: new CombatStrategy()
         .macro((): Macro => {
@@ -258,7 +262,7 @@ export const PreItemTask: Quest = {
         get("_autosea_egg_generated", false) ||
         !have($skill`Just the Facts`) ||
         get("_monsterHabitatsRecalled") > 0,
-      ready: () => ChestMimic.have(),
+      ready: () => ChestMimic.have() && canAdventure($location`Madness Reef`), // this doesn't actually work but idk what will
       do: () => {
         ChestMimic.receive($monster`Sausage Goblin`);
       },
@@ -272,8 +276,8 @@ export const PreItemTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Run Crayon Egg",
-      after: ["Generate Crayon Egg"],
+      name: "Run Sausage Goblin Egg",
+      after: ["Generate Sausage Goblin Egg"],
       completed: () => get("_monsterHabitatsRecalled") > 0,
       do: () => {
         ChestMimic.differentiate($monster`Sausage Goblin`);
@@ -297,7 +301,7 @@ export const PreItemTask: Quest = {
     },
     {
       name: "Candelabra Egg",
-      after: ["Run Crayon Egg"],
+      after: ["Run Sausage Goblin Egg"],
       completed: () =>
         get("_monsterHabitatsRecalled") > 1 ||
         get("_monsterHabitatsFightsLeft") == 0 ||
@@ -397,7 +401,7 @@ export const PreItemTask: Quest = {
     {
       name: "Use ink bladders",
       after: ["Finish farming squids without freekills"],
-      completed: () => !have($item`ink bladder`) || $location`The Mer-kin Outpost`.turnsSpent > 20,
+      completed: () => !have($item`ink bladder`) || $location`The Mer-kin Outpost`.turnsSpent > 20 || get("seahorseName") !== "",
       do: $location`The Mer-kin Outpost`,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.step("pickpocket")

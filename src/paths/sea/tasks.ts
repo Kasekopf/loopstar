@@ -1,11 +1,11 @@
 import { Quest } from "../../engine/task";
 import { TootQuest } from "../../tasks/level1";
 import { ColosseumQuest } from "./tasks/colosseum";
-import { CyberRealmTask } from "./tasks/cyberRealm";
+import { FreeFightZoneTask } from "./tasks/freeFightZone";
 import { FinalQuest } from "./tasks/final";
 import { ItemTask } from "./tasks/itemRush";
 import { OctopusGardenTask } from "./tasks/octopusGarden";
-import { PreItemTask } from "./tasks/preCurrents";
+import { PreItemTask } from "./tasks/preItem";
 import { ScholarTask } from "./tasks/scholar";
 import { ShadowRealmTask } from "./tasks/shadowRealm";
 import { BuffQuest, StartupQuest } from "./tasks/startup";
@@ -16,7 +16,7 @@ export const TheSeaQuest: Quest[] = [
   StartupQuest,
   BuffQuest,
   ShadowRealmTask,
-  CyberRealmTask,
+  FreeFightZoneTask,
   OctopusGardenTask,
   PreItemTask,
   ItemTask,

@@ -10,8 +10,10 @@ import {
   use,
   mySpleenUse,
   spleenLimit,
+  myPrimestat,
+  Location,
 } from "kolmafia";
-import { $effect, $item, AsdonMartin, get, have } from "libram";
+import { $effect, $item, $location, $stat, AsdonMartin, get, have } from "libram";
 
 export function pull(item: Item) {
   if (storageAmount(item) === 0) {
@@ -94,4 +96,17 @@ export function doFirstAvailableWaterBreathSource(): boolean {
     }
   }
   return false;
+}
+
+export function grandpaZone(): Location {
+  switch (myPrimestat()) {
+    case $stat`Muscle`:
+      return $location`Anemone Mine`;
+    case $stat`Moxie`:
+      return $location`The Marinara Trench`;
+    case $stat`Mysticality`:
+      return $location`The Dive Bar`;
+    default:
+      return $location.none;
+  }
 }
