@@ -131,22 +131,19 @@ export const OctopusGardenTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Do Grandpa Zone",
+      name: "Do Wreck",
       ready: () => step("questS02Monkees") == 1,
       completed: () => step("questS02Monkees") > 1,
       do: () => {
-        grandpaZone();
-      },
-      resources: {
-        which: Resources.NCForce,
-        benefit: 5,
+        withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`))
       },
       outfit: {
         modifier: "mp",
         avoid: $items`Peridot of Peril`,
+        familiar: $familiar`Grouper Groupie`,
         pants: $item`really, really nice swimming trunks`,
       },
-      limit: { soft: 11 },
+      limit: {}
     },
     {
       name: "Talk to brothers",

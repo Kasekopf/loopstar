@@ -32,6 +32,7 @@ import {
   mineCoordinate,
   MiningCoordinate,
 } from "../mining";
+import { grandpaZone } from "../util";
 
 export const PreItemTask: Quest = {
   name: "Pre-Item Run",
@@ -196,11 +197,13 @@ export const PreItemTask: Quest = {
           AprilingBandHelmet.conduct("Apriling Band Patrol Beat");
         }
       },
+      do: () => {
+        grandpaZone();
+      },
       resources: {
         which: Resources.NCForce,
-        benefit: 3,
+        benefit: 5,
       },
-      do: $location`The Dive Bar`,
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.step("pickpocket").if_(
