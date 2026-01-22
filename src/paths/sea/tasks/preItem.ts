@@ -32,7 +32,7 @@ import {
   mineCoordinate,
   MiningCoordinate,
 } from "../mining";
-import { grandpaZone } from "../util";
+import { bestCopyTarget, grandpaZone } from "../util";
 
 export const PreItemTask: Quest = {
   name: "Pre-Item Run",
@@ -259,7 +259,7 @@ export const PreItemTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Generate Sausage Goblin Egg",
+      name: "Generate Egg",
       after: ["Outpost Unlock"],
       completed: () =>
         get("_autosea_egg_generated", false) ||
@@ -267,7 +267,7 @@ export const PreItemTask: Quest = {
         get("_monsterHabitatsRecalled") > 0,
       ready: () => ChestMimic.have() && canAdventure($location`Madness Reef`), // this doesn't actually work but idk what will
       do: () => {
-        ChestMimic.receive($monster`Sausage Goblin`);
+        ChestMimic.receive(bestCopyTarget());
       },
       post: () => {
         set("_autosea_egg_generated", true);
@@ -279,11 +279,11 @@ export const PreItemTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Run Sausage Goblin Egg",
-      after: ["Generate Sausage Goblin Egg"],
+      name: "Run Egg",
+      after: ["Generate Egg"],
       completed: () => get("_monsterHabitatsRecalled") > 0,
       do: () => {
-        ChestMimic.differentiate($monster`Sausage Goblin`);
+        ChestMimic.differentiate(bestCopyTarget());
       },
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.step("pickpocket")
@@ -304,7 +304,7 @@ export const PreItemTask: Quest = {
     },
     {
       name: "Candelabra Egg",
-      after: ["Run Sausage Goblin Egg"],
+      after: ["Run Egg"],
       completed: () =>
         get("_monsterHabitatsRecalled") > 1 ||
         get("_monsterHabitatsFightsLeft") == 0 ||
@@ -315,7 +315,7 @@ export const PreItemTask: Quest = {
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.trySkill("Blow the Purple Candle!");
-        }, $monsters`Sausage Goblin`)
+        }, bestCopyTarget())
         .macro((): Macro => {
           return Macro.trySkill("Sea *dent: Throw a Lightning Bolt");
         }, $monsters`magic dragonfish`)
@@ -335,7 +335,7 @@ export const PreItemTask: Quest = {
         get("_monsterHabitatsFightsLeft") == 0 ||
         get("_unblemishedPearlMadnessReef", false),
       do: $location`Madness Reef`,
-      combat: new CombatStrategy().killHard($monsters`Sausage Goblin`).kill(),
+      combat: new CombatStrategy().killHard(bestCopyTarget()).kill(),
       outfit: {
         equip: $items`Everfull Dart Holster, Möbius ring, Spring shoes, little bitty bathysphere, Monodent of the Sea, April shower thoughts shield, shark jumper, bat wings, prismatic beret`,
         familiar: $familiar`Peace Turkey`,

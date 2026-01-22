@@ -694,6 +694,7 @@ export const ItemTask: Quest = {
         familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
+      delay: 5,
       limit: { soft: 11 },
     },
     {

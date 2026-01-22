@@ -12,8 +12,9 @@ import {
   spleenLimit,
   myPrimestat,
   Location,
+  Monster,
 } from "kolmafia";
-import { $effect, $item, $location, $stat, AsdonMartin, get, have } from "libram";
+import { $effect, $item, $location, $monster, $stat, AsdonMartin, get, have } from "libram";
 
 export function pull(item: Item) {
   if (storageAmount(item) === 0) {
@@ -109,4 +110,9 @@ export function grandpaZone(): Location {
     default:
       return $location.none;
   }
+}
+
+export function bestCopyTarget(): Monster {
+  if (get("neverendingPartyAlways")) return $monster`Sausage Goblin`;
+  return $monster`black crayon fish`
 }

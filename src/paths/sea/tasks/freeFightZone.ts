@@ -4,6 +4,7 @@ import {
     $location,
     $monster,
     $skill,
+    BloodCubicZirconia,
     BurningLeaves,
     CyberRealm,
     get,
@@ -21,14 +22,6 @@ type FreeZone = {
 };
 
 function bestFreeZone(): Location {
-    const saved = get("_seadentWaveZone", $location.none);
-    const validZones = [
-        $location`The Neverending Party`,
-        $location`The X-32-F Combat Training Snowman`,
-        $location`Cyberzone 1`,
-    ];
-    if (validZones.includes(saved)) return saved;
-
     const zones: FreeZone[] = [
         {
             location: $location`The Neverending Party`,
@@ -81,10 +74,11 @@ export const FreeFightZoneTask: Quest = {
                     ).externalIf(
                         zone !== $location`Cyberzone 1`,
                         // NON-CYBERREALM
-                        Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
+                        Macro
                             .externalIf(
-                                zone === $location`The Neverending Party`,
-                                Macro.trySkill($skill`BCZ: Refracted Gaze`)
+                                zone === $location`The Neverending Party` &&
+                                BloodCubicZirconia.timesCast($skill`BCZ: Refracted Gaze`) < 4,
+                                Macro.if_("!monstername burnout ", Macro.trySkill($skill`BCZ: Refracted Gaze`))
                             )
                     );
                 }).kill(),
@@ -93,7 +87,6 @@ export const FreeFightZoneTask: Quest = {
                 equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow, rake`,
                 familiar: have($familiar`red-nosed snapper`) ? $familiar`red-nosed snapper` : $familiar`peace turkey`
             },
-            post: () => !get("_seadentWaveUsed") ? useSkill($skill`Sea *dent: Summon a Wave`) : null
         },
         {
             name: "Free Fights (Barroom)",

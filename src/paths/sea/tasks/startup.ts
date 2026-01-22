@@ -41,6 +41,7 @@ import {
 } from "kolmafia";
 import { Quest } from "../../../engine/task";
 import { pull } from "../util";
+import { args } from "../../../args";
 
 export const StartupQuest: Quest = {
   name: "Startup",
@@ -68,6 +69,9 @@ export const StartupQuest: Quest = {
         pull($item`fishy pipe`);
         if (!have($item`Platinum Yendorian Express Card`)) {
           pull($item`minin' dynamite`);
+        }
+        if (!args.resources.speed) {
+          pull($item`scale-mail underwear`)
         }
       },
       freeaction: true,

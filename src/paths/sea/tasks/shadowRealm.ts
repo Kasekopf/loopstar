@@ -92,6 +92,7 @@ export const ShadowRealmTask: Quest = {
         }),
       post: () => {
         ClosedCircuitPayphone.submitQuest();
+        !get("_seadentWaveUsed") ? useSkill($skill`Sea *dent: Summon a Wave`) : null;
       },
       freeaction: true,
       limit: { soft: 11 },
