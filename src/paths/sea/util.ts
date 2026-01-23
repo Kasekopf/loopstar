@@ -1,4 +1,4 @@
-import { OutfitSpec } from "grimoire-kolmafia";
+import { Outfit, OutfitSpec } from "grimoire-kolmafia";
 import {
   buyUsingStorage,
   cliExecute,
@@ -13,11 +13,14 @@ import {
   myPrimestat,
   Location,
   Monster,
+  toInt,
 } from "kolmafia";
-import { $effect, $item, $location, $monster, $stat, AsdonMartin, get, have } from "libram";
+import { $effect, $item, $items, $location, $monster, $stat, AsdonMartin, get, have } from "libram";
 
 export function pull(item: Item) {
+  if (get("_roninStoragePulls").split(",").includes(toInt(item).toString())) return;
   if (storageAmount(item) === 0) {
+    if (!item.tradeable) return;
     if (buyUsingStorage(item, 1, 15000) === 0) {
       abort(`Unable to buy desired pull item ${item.name}`);
     }
@@ -42,6 +45,57 @@ export function getWaterBreathSources(): WaterBreathSource[] {
       do: () => {
         AsdonMartin.drive($effect`Driving Waterproofly`);
       },
+    },
+    {
+      name: $item`Mer-kin gladiator mask`,
+      available: () => have($item`Mer-kin gladiator mask`),
+      outfit: { equip: $items`Mer-kin gladiator mask` },
+    },
+    {
+      name: $item`Mer-kin scholar mask`,
+      available: () => have($item`Mer-kin scholar mask`),
+      outfit: { equip: $items`Mer-kin scholar mask` },
+    },
+    {
+      name: $item`crappy Mer-kin mask`,
+      available: () => have($item`crappy Mer-kin mask`),
+      outfit: { equip: $items`crappy Mer-kin mask` },
+    },
+    {
+      name: $item`old SCUBA tank`,
+      available: () => have($item`old SCUBA tank`),
+      outfit: { equip: $items`old SCUBA tank` },
+    },
+  ];
+}
+
+export type FamiliarBreathSource = {
+  name: Item | Skill;
+  available?: () => boolean;
+  outfit?: OutfitSpec | (() => OutfitSpec);
+  do?: () => void;
+}
+
+export function getFamiliarWaterBreathSources(): WaterBreathSource[] {
+  return [
+    {
+      name: $item`Asdon Martin keyfob (on ring)`,
+      available: () =>
+        have($item`Asdon Martin keyfob (on ring)`) ||
+        getWorkshed() === $item`Asdon Martin keyfob (on ring)`,
+      do: () => {
+        AsdonMartin.drive($effect`Driving Waterproofly`);
+      },
+    },
+    {
+      name: $item`das boot`,
+      available: () => have($item`das boot`),
+      outfit: { equip: $items`das boot` },
+    },
+    {
+      name: $item`little bitty bathysphere`,
+      available: () => have($item`little bitty bathysphere`),
+      outfit: { equip: $items`little bitty bathysphere` },
     },
   ];
 }
@@ -89,13 +143,49 @@ export function doFirstAvailableFishySource(): boolean {
   return false;
 }
 
-export function doFirstAvailableWaterBreathSource(): boolean {
+export function applyFirstAvailableWaterBreathSource(outfit: Outfit): boolean {
   for (const source of getWaterBreathSources()) {
-    if (source.available?.() ?? true) {
-      source.do?.();
-      return true;
+    if (!(source.available?.() ?? true)) continue;
+
+    if (source.outfit) {
+      const spec =
+        typeof source.outfit === "function"
+          ? source.outfit()
+          : source.outfit;
+
+      if (spec.equip) {
+        if (!outfit.equip(spec.equip)) return false;
+      }
     }
+
+    source.do?.();
+    return true;
   }
+
+  return false;
+}
+
+export function applyFirstAvailableFamiliarWaterBreathSource(
+  outfit: Outfit
+): boolean {
+  for (const source of getFamiliarWaterBreathSources()) {
+    if (!(source.available?.() ?? true)) continue;
+
+    if (source.outfit) {
+      const spec =
+        typeof source.outfit === "function"
+          ? source.outfit()
+          : source.outfit;
+
+      if (spec.equip) {
+        if (!outfit.equip(spec.equip)) return false;
+      }
+    }
+
+    source.do?.();
+    return true;
+  }
+
   return false;
 }
 

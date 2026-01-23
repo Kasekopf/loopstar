@@ -1,9 +1,9 @@
 import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 import { CombatActions, CombatStrategy } from "../../engine/combat";
-import { $effect, $effects, $familiar, $item, $items, $location, $monsters, Counter, ensureEffect, have, PropertiesManager, undelay, uneffect } from "libram";
+import { $effect, $effects, $item, $location, $monsters, ensureEffect, have, PropertiesManager, uneffect } from "libram";
 import { Task } from "../../engine/task";
-import { doFirstAvailableFishySource, doFirstAvailableWaterBreathSource } from "./util";
+import { applyFirstAvailableFamiliarWaterBreathSource, applyFirstAvailableWaterBreathSource, doFirstAvailableFishySource } from "./util";
 import { SeaActionDefaults } from "./combat";
 import { abort, cliExecute, create, Location, myHp, myMaxhp, myMaxmp, myMp, numericModifier, print, restoreHp, restoreMp, setLocation, use } from "kolmafia";
 
@@ -29,46 +29,29 @@ export class TheSeaEngine extends Engine {
   }
 
   override prepare(): void {
-    if (!have($effect`Driving Waterproofly`)) {
-      doFirstAvailableWaterBreathSource();
-    }
     if (!have($effect`fishy`)) {
       doFirstAvailableFishySource();
     }
   }
 
   override createOutfit(task: ActiveTask): Outfit {
-    print("Running createOutfit for task");
-    print(task.name);
 
     const outfit = super.createOutfit(task);
 
     const underwater =
-      (task.do instanceof Location && task.do.environment === "underwater");
+      task.do instanceof Location &&
+      task.do.environment === "underwater";
 
     if (underwater) {
-      if (
-        !(
-          outfit.haveEquipped($item`Mer-kin gladiator mask`) ||
-          outfit.haveEquipped($item`Mer-kin scholar mask`) ||
-          outfit.haveEquipped($item`crappy Mer-kin mask`) ||
-          outfit.haveEquipped($item`old SCUBA tank`)
-        )
-      ) {
-        if (!outfit.equip($item`really, really nice swimming trunks`)) {
-          throw `Unable to breathe underwater for ${task.name}`;
-        }
+      // Player breathing
+      if (!applyFirstAvailableWaterBreathSource(outfit)) {
+        throw `Unable to breathe underwater for ${task.name}`;
       }
 
-      if (!outfit.familiar?.underwater) {
-        if (have($item`das boot`)) {
-          if (!outfit.equip($item`das boot`)) {
-            throw `Unable to breathe underwater for ${task.name}`;
-          }
-        } else {
-          if (!outfit.equip($item`little bitty bathysphere`)) {
-            throw `Unable to breathe underwater for ${task.name}`;
-          }
+      // Familiar breathing
+      if (outfit.familiar && outfit.familiar.underwater === false) {
+        if (!applyFirstAvailableFamiliarWaterBreathSource(outfit)) {
+          throw `Unable to provide familiar water breathing for ${task.name}`;
         }
       }
     }

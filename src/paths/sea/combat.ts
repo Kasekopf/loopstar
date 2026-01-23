@@ -1,5 +1,5 @@
 import { ActionDefaults } from "grimoire-kolmafia";
-import { haveEquipped, Location, Monster } from "kolmafia";
+import { haveEquipped, Location, Monster, myLocation } from "kolmafia";
 import { $effect, $item, $skill, CinchoDeMayo, get, have, Macro } from "libram";
 import { CombatActions } from "../../engine/combat";
 import { args } from "../../args";
@@ -56,7 +56,7 @@ export class SeaActionDefaults implements ActionDefaults<CombatActions> {
 
 export function seaKillMacro(target: Monster | Location | undefined): Macro {
   const result = new Macro();
-  if (get("lassoTrainingCount") < 18) {
+  if (get("lassoTrainingCount") < 18 && myLocation().environment === "underwater") {
     result.tryItem($item`sea lasso`);
   }
   if (haveEquipped($item`Everfull Dart Holster`)) {

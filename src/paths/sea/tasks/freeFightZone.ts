@@ -2,58 +2,14 @@ import {
     $familiar,
     $items,
     $location,
-    $monster,
     $skill,
     BloodCubicZirconia,
     BurningLeaves,
-    CyberRealm,
     get,
-    have,
     Macro,
 } from "libram";
 import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
-import { Location, useSkill } from "kolmafia";
-
-type FreeZone = {
-    location: Location;
-    score: () => number;
-    bias?: number;
-};
-
-function bestFreeZone(): Location {
-    const zones: FreeZone[] = [
-        {
-            location: $location`The Neverending Party`,
-            score: () =>
-                get("neverendingPartyAlways")
-                    ? 10 - get("_neverendingPartyFreeTurns")
-                    : 0,
-            bias: 1, // NEP preference
-        },
-        {
-            location: $location`The X-32-F Combat Training Snowman`,
-            score: () =>
-                get("snojoAvailable")
-                    ? 10 - get("_snojoFreeFights")
-                    : 0,
-        },
-        {
-            location: $location`Cyberzone 1`,
-            score: () =>
-                CyberRealm.have() && have($skill`OVERCLOCK(10)`)
-                    ? 10 - get("_cyberFreeFights")
-                    : 0,
-        },
-    ];
-
-    return zones
-        .map((z) => ({
-            location: z.location,
-            value: z.score() + (z.bias ?? 0),
-        }))
-        .sort((a, b) => b.value - a.value)[0].location;
-}
 
 export const FreeFightZoneTask: Quest = {
     name: "Free Fights for Fishy",
@@ -62,29 +18,19 @@ export const FreeFightZoneTask: Quest = {
             name: "Free Zone Fights",
             ready: () => get("neverendingPartyAlways"),
             completed: () => get("_neverendingPartyFreeTurns") >= 10,
-            do: bestFreeZone(),
+            do: $location`The Neverending Party`,
             combat: new CombatStrategy()
-                .macro((): Macro => {
-                    const zone = bestFreeZone();
-
-                    return Macro.externalIf(
-                        zone === $location`Cyberzone 1`,
-                        // CYBERREALM
-                        Macro.skill($skill`Throw Cyber Rock`).repeat()
-                    ).externalIf(
-                        zone !== $location`Cyberzone 1`,
-                        // NON-CYBERREALM
-                        Macro
-                            .externalIf(
-                                zone === $location`The Neverending Party` &&
-                                BloodCubicZirconia.timesCast($skill`BCZ: Refracted Gaze`) < 4,
-                                Macro.if_("!monstername burnout ", Macro.trySkill($skill`BCZ: Refracted Gaze`))
-                            )
-                    );
-                }).kill(),
+                .macro(
+                    Macro
+                        .externalIf(
+                            BloodCubicZirconia.timesCast($skill`BCZ: Refracted Gaze`) < 4,
+                            Macro.if_("!monstername burnout ", Macro.trySkill($skill`BCZ: Refracted Gaze`))
+                        )
+                )
+                .kill(),
             limit: { soft: 11 },
             outfit: {
-                equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow, rake`,
+                equip: $items`Everfull Dart Holster, spring shoes, blood cubic zirconia, Monodent of the Sea, toy Cupid bow`,
                 familiar: $familiar`peace turkey`
             },
         },

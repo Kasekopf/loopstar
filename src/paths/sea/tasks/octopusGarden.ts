@@ -115,7 +115,7 @@ export const OctopusGardenTask: Quest = {
       completed: () => step("questS02Monkees") >= 0,
       do: () => use($item`wriggling flytrap pellet`),
       freeaction: true,
-      limit: { soft: 11 },
+      limit: { soft: 1 },
     },
     {
       name: "Turn in Quest",

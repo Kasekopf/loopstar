@@ -52,6 +52,9 @@ export const StartupQuest: Quest = {
       ready: () => !inHardcore(),
       completed: () => inHardcore() || pullsRemaining() < 20,
       do: () => {
+        // buyable items
+
+        // pull only items
         pull($item`pro skateboard`);
         pull($item`shark jumper`);
         pull($item`Flash Liquidizer Ultra Dousing Accessory`);
@@ -193,11 +196,11 @@ export const StartupQuest: Quest = {
       name: "Set SIT Course",
 
       completed: () =>
-        !have($item`S.I.T. Course Completion Certificate`) || have($skill`Psychogeologist`),
+        !have($item`S.I.T. Course Completion Certificate`) || get("_sitCourseCompleted"),
       do: () => {
         use($item`S.I.T. Course Completion Certificate`);
       },
-      choices: { [1494]: 1 },
+      choices: { 1494: 1 },
       freeaction: true,
       limit: { tries: 1 },
     },
