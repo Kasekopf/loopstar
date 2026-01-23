@@ -89,8 +89,7 @@ export function main(choice: number, page: string) {
   //Sea stuff
   else if (choice === 1565) {
     runChoice(1);
-  }
-  else if (choice >= 48 && choice <= 61) {
+  } else if (choice >= 48 && choice <= 61) {
     abort();
   } else if (choice === 312) {
     runChoice(3);
@@ -101,7 +100,8 @@ export function main(choice: number, page: string) {
   } else if (choice === 1562) {
     const getPriority = (option: string): number => MOBIUS_PRIORITIES[option as MobiusOption];
     const bestChoice = Object.entries(options).reduce((a, b) =>
-      getPriority(a[1]) <= getPriority(b[1]) ? a : b)[0];
+      getPriority(a[1]) <= getPriority(b[1]) ? a : b
+    )[0];
     runChoice(Number(bestChoice));
   } else if (choice === 704) {
     // still want to debug this
@@ -155,7 +155,7 @@ function getDreadscrollGuess(): string {
       const incorrectCount = parseInt(incorrectStr);
 
       // filter out all codes that don't match previous dreadscroll guesses
-      possibleCodes = possibleCodes.filter(candidate => {
+      possibleCodes = possibleCodes.filter((candidate) => {
         let differences = 0;
         for (let i = 0; i < 8; i++) {
           if (candidate[i] !== code[i]) {
@@ -180,7 +180,7 @@ function getDreadscrollGuess(): string {
         }
       }
       // Probability this position is wrong
-      const errorProb = 1 - (matchCount / possibleCodes.length);
+      const errorProb = 1 - matchCount / possibleCodes.length;
       expectedErrors += errorProb;
     }
 
@@ -198,8 +198,7 @@ function getDreadscrollGuess(): string {
 const MOBIUS_BASE_TO_RES = {
   "Borrow a cup of sugar from yourself": "Return the sugar you borrowed",
   "Draw a goatee on yourself": "Succumb to evil",
-  "Stop your arch-nemesis as a baby":
-    "Go back and make the Naughty Sorceress naughty again",
+  "Stop your arch-nemesis as a baby": "Go back and make the Naughty Sorceress naughty again",
   "Defend yourself": "Assassinate yourself",
   "Take the long odds on the trifecta": "Fix the race and also fix the race.",
   "Plant some seeds in the distant past": "Chop down some trees",
@@ -209,14 +208,12 @@ const MOBIUS_BASE_TO_RES = {
   "Shoot yourself in the foot": "Get shot in the foot",
   "Meet your parents when they were young": "Fix your parents' relationship",
   "Go back and take a 20-year-long nap": "Go back and set an alarm",
-  "Lift yourself up by your bootstraps":
-    "Let yourself get lifted up by your bootstraps",
+  "Lift yourself up by your bootstraps": "Let yourself get lifted up by your bootstraps",
   "Go back and write a best-seller.": "Replace your novel with AI drivel",
   "Peek in on your future": "Make yourself forget",
   "Steal a club from the past": "Prevent the deadly seal invasion",
   "Mind your own business": "Sit and write in your journal",
-  "Plant some trees and harvest them in the future":
-    "Teach hippies to make jams and jellies",
+  "Plant some trees and harvest them in the future": "Teach hippies to make jams and jellies",
   "Go for a nature walk": "Go back in time and kill a butterfly",
   "Hey, free gun!": "Sell the gun",
   "Make friends with a famous poet": "Make enemies with a famous poet",
@@ -225,9 +222,7 @@ const MOBIUS_BASE_TO_RES = {
   "I'm not messing with the timeline!": "I'm not messing with the timeline!",
 } as const;
 
-type MobiusOption =
-  | keyof typeof MOBIUS_BASE_TO_RES
-  | ValueOf<typeof MOBIUS_BASE_TO_RES>;
+type MobiusOption = keyof typeof MOBIUS_BASE_TO_RES | ValueOf<typeof MOBIUS_BASE_TO_RES>;
 
 const MOBIUS_PRIORITIES: Record<MobiusOption, number> = {
   "I'm not messing with the timeline!": 100,

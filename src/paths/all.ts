@@ -20,7 +20,7 @@ const pathInfos = {
   gyou: new GyouInfo(),
   boris: new BorisInfo(),
   ih8u: new IH8UInfo(),
-  thesea: new TheSeaInfo()
+  thesea: new TheSeaInfo(),
 } as const;
 
 export function getActivePath(overridePath: string | undefined = undefined): PathInfo | undefined {
