@@ -96,10 +96,10 @@ export function main(choice: number, page: string) {
   } else if (choice === 312) {
     runChoice(3);
   } else if (choice === 315) {
-    let encounters = get("_loopstar_outpost_choices", 0) + 1;
+    const encounters = get("_loopstar_outpost_choices", 0) + 1;
     set("_loopstar_outpost_choices", encounters);
     runChoice(encounters);
-  } else if (choice == 1562) {
+  } else if (choice === 1562) {
     const getPriority = (option: string): number => MOBIUS_PRIORITIES[option as MobiusOption];
     const bestChoice = Object.entries(options).reduce((a, b) =>
       getPriority(a[1]) <= getPriority(b[1]) ? a : b)[0];
@@ -115,11 +115,11 @@ export function main(choice: number, page: string) {
         return;
       }
     }
-  } else if (choice == 703) {
+  } else if (choice === 703) {
     const bestGuess = getDreadscrollGuess();
     const extra = `pro1=${bestGuess[0]}&pro2=${bestGuess[1]}&pro3=${bestGuess[2]}&pro4=${bestGuess[3]}&pro5=${bestGuess[4]}&pro6=${bestGuess[5]}&pro7=${bestGuess[6]}&pro8=${bestGuess[7]}`;
     runChoice(1, extra);
-  } else if (choice == 310) {
+  } else if (choice === 310) {
     if (have($item`rough fish scale`, 10)) {
       runChoice(2);
     } else {
@@ -189,11 +189,12 @@ function getDreadscrollGuess(): string {
       bestCode = candidate;
     }
   }
-  print("Possible codes: " + possibleCodes);
-  print("Best guess: " + bestCode);
+  print(`Possible codes: ${possibleCodes}`);
+  print(`Best guess: ${bestCode}`);
   return bestCode;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MOBIUS_BASE_TO_RES = {
   "Borrow a cup of sugar from yourself": "Return the sugar you borrowed",
   "Draw a goatee on yourself": "Succumb to evil",
@@ -227,13 +228,6 @@ const MOBIUS_BASE_TO_RES = {
 type MobiusOption =
   | keyof typeof MOBIUS_BASE_TO_RES
   | ValueOf<typeof MOBIUS_BASE_TO_RES>;
-
-const MOBIUS_PAIRS = {
-  ...MOBIUS_BASE_TO_RES,
-  ...Object.fromEntries(
-    Object.entries(MOBIUS_BASE_TO_RES).map(([k, v]) => [v, k]),
-  ),
-};
 
 const MOBIUS_PRIORITIES: Record<MobiusOption, number> = {
   "I'm not messing with the timeline!": 100,
