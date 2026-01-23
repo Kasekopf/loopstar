@@ -55,8 +55,8 @@ export const FinalQuest: Quest = {
         pearlsReady() &&
         get("shubJigguwattDefeated") &&
         get("yogUrtDefeated") &&
-        step("questS02Monkees") == 999,
-      completed: () => step("questL13Final") == 999,
+        step("questS02Monkees") === 999,
+      completed: () => step("questL13Final") === 999,
       prepare: () => {
         // buy($coinmaster`Wet Crap For Sale`, 1, $item`scroll of sea strength`);
         // Actually, seems like the coinmaster only has sand penny stuff
@@ -70,7 +70,7 @@ export const FinalQuest: Quest = {
           use($item`scroll of sea smarm`);
         }
         if (myMp() < 300) {
-          useSkill($skill`Rest Upside Down`);
+          useSkill($skill`Rest upside down`);
         }
         if (getSongCount() > getSongLimit()) {
           uneffect(<Effect>getActiveSongs().pop());

@@ -1,5 +1,4 @@
 import {
-  $class,
   $effect,
   $familiar,
   $item,
@@ -8,7 +7,6 @@ import {
   $monster,
   $monsters,
   $skill,
-  AprilingBandHelmet,
   ChestMimic,
   ClosedCircuitPayphone,
   get,
@@ -20,17 +18,17 @@ import {
 } from "libram";
 import { step } from "grimoire-kolmafia";
 
-import { abort, adv1, canAdventure, cliExecute, myClass, print, useSkill } from "kolmafia";
-import { Quest, Resources } from "../../../engine/task";
+import { abort, adv1, canAdventure, cliExecute, print, useSkill } from "kolmafia";
+import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import {
   countFreeMines,
-  visitMine,
-  Mine,
   getAsMatrix,
   getLayoutAsMatrix,
+  Mine,
   mineCoordinate,
   MiningCoordinate,
+  visitMine,
 } from "../mining";
 import { bestCopyTarget, grandpaZone } from "../util";
 
@@ -63,7 +61,7 @@ export const PreItemTask: Quest = {
         .kill(),
       outfit: {
         modifier: "item",
-        equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy cupid bow`,
+        equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy Cupid bow`,
       },
       peridot: $monster`Mer-kin miner`,
       limit: { soft: 11 },
@@ -160,8 +158,8 @@ export const PreItemTask: Quest = {
         avoid: $items`Peridot of Peril`,
       },
       post: () => {
-        if (have($effect`beaten up`)) {
-          useSkill($skill`tongue of the walrus`);
+        if (have($effect`Beaten Up`)) {
+          useSkill($skill`Tongue of the Walrus`);
         }
       },
       limit: { soft: 11 },
@@ -241,7 +239,7 @@ export const PreItemTask: Quest = {
         }
       },
       outfit: {
-        equip: $items`Everfull Dart Holster, Möbius ring, Spring shoes, little bitty bathysphere, Monodent of the Sea, April Shower Thoughts shield`,
+        equip: $items`Everfull Dart Holster, Möbius ring, spring shoes, little bitty bathysphere, Monodent of the Sea, April Shower Thoughts shield`,
         familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
@@ -284,7 +282,7 @@ export const PreItemTask: Quest = {
           .repeat();
       }),
       outfit: {
-        equip: $items`Monodent of the Sea, McHugeLarge left pole, toy cupid bow, Spring shoes, Everfull Dart Holster`,
+        equip: $items`Monodent of the Sea, McHugeLarge left pole, toy Cupid bow, spring shoes, Everfull Dart Holster`,
         familiar: $familiar`Peace Turkey`,
       },
       freeaction: true,
@@ -295,7 +293,7 @@ export const PreItemTask: Quest = {
       after: ["Run Egg"],
       completed: () =>
         get("_monsterHabitatsRecalled") > 1 ||
-        get("_monsterHabitatsFightsLeft") == 0 ||
+        get("_monsterHabitatsFightsLeft") === 0 ||
         get("_unblemishedPearlMadnessReef", false) ||
         have($effect`Everything Looks Purple`) ||
         !have($item`Roman Candelabra`),
@@ -320,7 +318,7 @@ export const PreItemTask: Quest = {
       after: ["Candelabra Egg"],
       completed: () =>
         get("_monsterHabitatsRecalled") > 1 ||
-        get("_monsterHabitatsFightsLeft") == 0 ||
+        get("_monsterHabitatsFightsLeft") === 0 ||
         get("_unblemishedPearlMadnessReef", false),
       do: $location`Madness Reef`,
       combat: new CombatStrategy().killHard(bestCopyTarget()).kill(),
@@ -344,8 +342,8 @@ export const PreItemTask: Quest = {
         })
         .kill(),
       outfit: {
-        equip: $items`Everfull Dart Holster, Peridot of Peril, Spring Shoes, Monodent of the Sea, McHugeLarge Left Pole, bat wings, prismatic beret, shark jumper`,
-        familiar: $familiar`Red-nosed Snapper`,
+        equip: $items`Everfull Dart Holster, Peridot of Peril, spring shoes, Monodent of the Sea, McHugeLarge left pole, bat wings, prismatic beret, shark jumper`,
+        familiar: $familiar`Red-Nosed Snapper`,
       },
       limit: { soft: 11 },
     },
@@ -361,12 +359,12 @@ export const PreItemTask: Quest = {
           return Macro.trySkill($skill`Sea *dent: Talk to Some Fish`);
         }, $monsters`diving belle, Mer-kin diver`)
         .macro((): Macro => {
-          return Macro.if_("!monstername giant squid", Macro.skill($skill`BCZ: refracted gaze`));
+          return Macro.if_("!monstername giant squid", Macro.skill($skill`BCZ: Refracted Gaze`));
         })
         .kill(),
       outfit: {
-        equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April shower thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
-        familiar: $familiar`Red-nosed Snapper`,
+        equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April Shower Thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
+        familiar: $familiar`Red-Nosed Snapper`,
       },
       limit: { soft: 11 },
     },
@@ -380,12 +378,12 @@ export const PreItemTask: Quest = {
           return Macro.trySkill($skill`Sea *dent: Talk to Some Fish`);
         }, $monsters`diving belle, Mer-kin diver`)
         .macro((): Macro => {
-          return Macro.if_("!monstername giant squid", Macro.skill($skill`BCZ: refracted gaze`));
+          return Macro.if_("!monstername giant squid", Macro.skill($skill`BCZ: Refracted Gaze`));
         })
         .kill(),
       outfit: {
-        equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April shower thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
-        familiar: $familiar`Red-nosed Snapper`,
+        equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April Shower Thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
+        familiar: $familiar`Red-Nosed Snapper`,
       },
       limit: { soft: 11 },
     },
@@ -394,9 +392,9 @@ export const PreItemTask: Quest = {
       after: ["Finish farming squids without freekills"],
       completed: () =>
         !have($item`ink bladder`) ||
-        $location`The Mer-kin Outpost`.turnsSpent > 20 ||
+        $location`The Mer-Kin Outpost`.turnsSpent > 20 ||
         get("seahorseName") !== "",
-      do: $location`The Mer-kin Outpost`,
+      do: $location`The Mer-Kin Outpost`,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.step("pickpocket")
           .trySkill($skill`Darts: Throw at %part1`)

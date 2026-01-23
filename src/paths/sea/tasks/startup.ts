@@ -58,7 +58,7 @@ export const StartupQuest: Quest = {
         pull($item`pro skateboard`);
         pull($item`shark jumper`);
         pull($item`Flash Liquidizer Ultra Dousing Accessory`);
-        pull($item`spooky VHS tape`);
+        pull($item`Spooky VHS Tape`);
         pull($item`sea lasso`);
         pull($item`sea cowbell`);
         pull($item`lodestone`);
@@ -112,7 +112,7 @@ export const StartupQuest: Quest = {
         if (have($item`astral six-pack`)) use($item`astral six-pack`);
         while (have($item`astral pilsner`)) {
           if (!have($effect`Ode to Booze`)) {
-            useSkill($skill`Ode to Booze`);
+            useSkill($skill`The Ode to Booze`);
           }
           drink(1, $item`astral pilsner`);
         }
@@ -318,7 +318,7 @@ export const StartupQuest: Quest = {
     {
       name: "Shower",
       completed: () =>
-        !have($item`April Shower Thoughts Shield`) ||
+        !have($item`April Shower Thoughts shield`) ||
         get("_aprilShowerGlobsCollected") ||
         have($item`spitball`),
       do: () => {

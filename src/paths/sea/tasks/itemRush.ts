@@ -11,7 +11,6 @@ import {
   AprilingBandHelmet,
   AugustScepter,
   BloodCubicZirconia,
-  ChestMimic,
   CursedMonkeyPaw,
   get,
   getBanishedMonsters,
@@ -25,7 +24,6 @@ import { step } from "grimoire-kolmafia";
 import {
   abort,
   adv1,
-  banishedBy,
   buy,
   cliExecute,
   closetAmount,
@@ -36,7 +34,6 @@ import {
   print,
   putCloset,
   retrieveItem,
-  runCombat,
   takeCloset,
   use,
   useSkill,
@@ -104,7 +101,7 @@ export const ItemTask: Quest = {
         have($item`teflon ore`) &&
         !have($item`ink bladder`) &&
         step("questS02Monkees") < 10 &&
-        get("_beretBuskingUses") == 0,
+        get("_beretBuskingUses") === 0,
       completed: () => get("_beretBuskingUses") > 0,
       do: () => {
         cliExecute("buy paper-plate-mail pants");
@@ -128,7 +125,7 @@ export const ItemTask: Quest = {
         if (have($item`lump of loyal latite`)) {
           use($item`lump of loyal latite`);
         }
-        useSkill($skill`steely-eyed squint`);
+        useSkill($skill`Steely-Eyed Squint`);
       },
       limit: { soft: 11 },
     },
@@ -158,7 +155,7 @@ export const ItemTask: Quest = {
       name: "Banish 1",
       completed: () =>
         get("corralUnlocked") || have($item`Mer-kin lockkey`) || have($item`Mer-kin stashbox`),
-      do: $location`The Mer-kin Outpost`,
+      do: $location`The Mer-Kin Outpost`,
       combat: new CombatStrategy().banish($monsters`Mer-kin burglar, Mer-kin raider`).kill(),
       outfit: {
         familiar: $familiar`Peace Turkey`,
@@ -171,7 +168,7 @@ export const ItemTask: Quest = {
       after: ["Banish 1"],
       completed: () =>
         have($item`Mer-kin lockkey`) || get("corralUnlocked") || have($item`Mer-kin stashbox`),
-      do: $location`The Mer-kin Outpost`,
+      do: $location`The Mer-Kin Outpost`,
       outfit: {
         equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, toy Cupid bow`,
         modifier: "item, -combat",
@@ -183,7 +180,7 @@ export const ItemTask: Quest = {
       after: ["Get lockkey"],
       completed: () =>
         have($item`Mer-kin stashbox`) || have($item`Mer-kin trailmap`) || get("corralUnlocked"),
-      do: $location`The Mer-kin Outpost`,
+      do: $location`The Mer-Kin Outpost`,
       outfit: {
         equip: $items`spring shoes, Everfull Dart Holster, blood cubic zirconia`,
         familiar: $familiar`Peace Turkey`,
@@ -220,7 +217,7 @@ export const ItemTask: Quest = {
       name: "Corral Refract",
       after: ["Stashbox Trailmap"],
       completed: () => have($item`sea leather`) || have($item`sea cowboy hat`),
-      do: $location`Coral Corral`,
+      do: $location`The Coral Corral`,
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.if_(
@@ -323,7 +320,7 @@ export const ItemTask: Quest = {
         }, $monsters`Mer-kin tippler`)
         .kill(),
       outfit: {
-        equip: $items`Everfull Dart Holster, peridot of peril, shark jumper, toy Cupid bow, sea cowboy hat, sea chaps, old SCUBA tank, McHugeLarge left pole`,
+        equip: $items`Everfull Dart Holster, Peridot of Peril, shark jumper, toy Cupid bow, sea cowboy hat, sea chaps, old SCUBA tank, McHugeLarge left pole`,
         modifier: "item",
       },
       peridot: $monster`Mer-kin tippler`,
@@ -366,7 +363,7 @@ export const ItemTask: Quest = {
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.tryItem($item`sea lasso`);
-        }, $monsters`anemone combatant, time cop`)
+        }, $monsters`Anemone combatant, time cop`)
         .macro((): Macro => {
           return Macro.tryItem($item`sea lasso`)
             .trySkill($skill`Sea *dent: Talk to Some Fish`)
@@ -375,7 +372,7 @@ export const ItemTask: Quest = {
         .kill(),
       outfit: {
         equip: $items`Monodent of the Sea, Everfull Dart Holster, blood cubic zirconia, shark jumper, sea cowboy hat, sea chaps, old SCUBA tank`,
-        familiar: $familiar`red-nosed snapper`,
+        familiar: $familiar`Red-Nosed Snapper`,
       },
       limit: { soft: 11 },
     },
@@ -424,7 +421,7 @@ export const ItemTask: Quest = {
         .banish($monsters`sea cowboy, sea cow`)
         .killHard(),
       outfit: {
-        equip: $items`Everfull dart holster, spring shoes, Möbius ring`,
+        equip: $items`Everfull Dart Holster, spring shoes, Möbius ring`,
         familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
@@ -436,7 +433,7 @@ export const ItemTask: Quest = {
       do: () => {
         try {
           adv1($location`The Coral Corral`);
-        } catch (e) {
+        } catch {
           print("Error while waffling for a seahorse ignored.");
         }
       },
@@ -459,7 +456,7 @@ export const ItemTask: Quest = {
           .trySkill($skill`Snokebomb`);
       }),
       outfit: {
-        equip: $items`Everfull dart holster, spring shoes, Möbius ring`,
+        equip: $items`Everfull Dart Holster, spring shoes, Möbius ring`,
         familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
@@ -521,7 +518,7 @@ export const ItemTask: Quest = {
         };
       },
       outfit: {
-        equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, blood cubic zirconia, Everfull Dart Holster, McHugeLarge left ski, toy cupid bow`,
+        equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, blood cubic zirconia, Everfull Dart Holster, McHugeLarge left ski, toy Cupid bow`,
         modifier: "item",
       },
       prepare: () => {
@@ -556,7 +553,7 @@ export const ItemTask: Quest = {
             AprilingBandHelmet.play($item`Apriling band tuba`);
           }
         } else {
-          if (itemAmount($item`Mer-kin hallpass`) == 0) {
+          if (itemAmount($item`Mer-kin hallpass`) === 0) {
             takeCloset(1, $item`Mer-kin hallpass`);
           }
           if (!have($item`Mer-kin bunwig`)) {
@@ -616,7 +613,7 @@ export const ItemTask: Quest = {
         })
         .kill(),
       outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy cupid bow, Möbius ring, Monodent of the Sea, everfull dart holster, blood cubic zirconia`,
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy Cupid bow, Möbius ring, Monodent of the Sea, Everfull Dart Holster, blood cubic zirconia`,
         modifier: "item",
       },
       delay: 5,
@@ -633,7 +630,7 @@ export const ItemTask: Quest = {
       do: $location`Mer-kin Elementary School`,
       peridot: $monster`Mer-kin monitor`,
       outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy cupid bow, Peridot of Peril, Monodent of the Sea, everfull dart holster, blood cubic zirconia`,
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy Cupid bow, Peridot of Peril, Monodent of the Sea, Everfull Dart Holster, blood cubic zirconia`,
         modifier: "item",
       },
       post: () => {
@@ -661,7 +658,7 @@ export const ItemTask: Quest = {
         );
       }, $monsters`Mer-kin alphabetizer, Mer-kin drifter, Mer-kin researcher`),
       outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, everfull dart holster, spring shoes`,
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, Everfull Dart Holster, spring shoes`,
         familiar: $familiar`Peace Turkey`,
       },
       post: () => {
@@ -686,7 +683,7 @@ export const ItemTask: Quest = {
         );
       }, $monsters`Mer-kin alphabetizer, Mer-kin drifter, Mer-kin researcher`),
       outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, everfull dart holster, spring shoes`,
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, Everfull Dart Holster, spring shoes`,
         familiar: $familiar`Peace Turkey`,
       },
       post: () => {

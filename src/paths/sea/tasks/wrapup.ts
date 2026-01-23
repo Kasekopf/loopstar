@@ -53,7 +53,7 @@ export const WrapupQuest: Quest = {
     {
       name: "Fish Banish",
       completed: () =>
-        !have($familiar`Patriotic Eagle`) || get("screechCombats") != 0 || !fishLocationAvailable(),
+        !have($familiar`Patriotic Eagle`) || get("screechCombats") !== 0 || !fishLocationAvailable(),
       do: () => getFishLocation()!,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.if_(
@@ -94,13 +94,13 @@ export const WrapupQuest: Quest = {
     {
       name: "Do Habs",
       after: ["Tricking"],
-      completed: () => !pearlZoneAvailable() || get("_monsterHabitatsFightsLeft") == 0,
+      completed: () => !pearlZoneAvailable() || get("_monsterHabitatsFightsLeft") === 0,
       do: () => getNextPearlZone()!,
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.externalIf(
             getNextPearlTurns() > 2,
-            Macro.trySkill($skill`Blow the Purple Candle`).trySkill($skill`Create an Afterimage`)
+            Macro.trySkill($skill`Blow the Purple Candle!`).trySkill($skill`Create an Afterimage`)
           ).trySkill($skill`Recall Facts: Monster Habitats`);
         }, $monsters`kid who is too old to be Trick-or-Treating, suburban security civilian, vandal kid`)
         .killHard(
@@ -111,7 +111,7 @@ export const WrapupQuest: Quest = {
             .tryItem($item`stuffed yam stinkbomb`)
             .tryItem($item`handful of split pea soup`)
             .trySkill($skill`Sea *dent: Throw a Lightning Bolt`);
-        }, $monsters`Mer-kin miner, Killer clownfish, Mer-kin tippler`),
+        }, $monsters`Mer-kin miner, killer clownfish, Mer-kin tippler`),
       outfit: {
         modifier: "-combat",
         equip: $items`Monodent of the Sea, Everfull Dart Holster, Roman Candelabra, cursed monkey's paw, Möbius ring, shark jumper, bat wings`,

@@ -1,5 +1,4 @@
 import {
-  $familiar,
   $items,
   $location,
   $skill,
@@ -29,8 +28,7 @@ export const FreeFightZoneTask: Quest = {
         .kill(),
       limit: { soft: 11 },
       outfit: {
-        equip: $items`Everfull Dart Holster, spring shoes, blood cubic zirconia, Monodent of the Sea, toy Cupid bow`,
-        familiar: $familiar`peace turkey`,
+        equip: $items`blood cubic zirconia`,
       },
     },
     {
@@ -38,12 +36,6 @@ export const FreeFightZoneTask: Quest = {
       completed: () => !get("ownsSpeakeasy") || get("_speakeasyFreeFights") >= 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
       combat: new CombatStrategy().killHard(),
-      outfit: {
-        modifier: "item",
-        familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, spring shoes, April Shower Thoughts Shield`,
-        avoid: $items`Peridot of Peril`,
-      },
       limit: { soft: 11 },
     },
     {
@@ -56,10 +48,6 @@ export const FreeFightZoneTask: Quest = {
         BurningLeaves.burnLeaves(11);
       },
       combat: new CombatStrategy().killHard(),
-      outfit: {
-        familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, April Shower Thoughts Shield, toy Cupid bow`,
-      },
       limit: { soft: 11 },
     },
   ],

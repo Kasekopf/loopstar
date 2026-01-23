@@ -54,7 +54,8 @@ export class SeaActionDefaults implements ActionDefaults<CombatActions> {
   }
 }
 
-export function seaKillMacro(target?: Monster | Location | undefined): Macro {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function seaKillMacro(target: Monster | Location | undefined): Macro {
   const result = new Macro();
   if (get("lassoTrainingCount") < 18) {
     result.tryItem($item`sea lasso`);

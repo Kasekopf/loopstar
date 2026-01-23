@@ -122,10 +122,16 @@ export class TheSeaEngine extends Engine {
       effects.forEach(ensureEffect);
     } else if (modifier === "item") {
       $effects`The Sonata of Sneakiness, Ode to Booze`.forEach(uneffect);
-      $effects`Donho's Bubbly Ballad, Fat Leon's Phat Loot Lyric, The Ballad of Richie Thingfinder,`.forEach(ensureEffect);
+      $effects`Donho's Bubbly Ballad, Fat Leon's Phat Loot Lyric, The Ballad of Richie Thingfinder, `.forEach(
+        ensureEffect
+      );
     } else if (modifier === "+combat") {
-      $effects`The Sonata of Sneakiness, Ode to Booze, Fat Leon's Phat Loot Lyric`.forEach(uneffect);
-      $effects`Crunchy Steps, Carlweather's Cantata of Confrontation, Musk of the Moose, Attracting Snakes, Bloodbathed, Towering Muscles`.forEach(ensureEffect);
+      $effects`The Sonata of Sneakiness, Ode to Booze, Fat Leon's Phat Loot Lyric`.forEach(
+        uneffect
+      );
+      $effects`Crunchy Steps, Carlweather's Cantata of Confrontation, Musk of the Moose, Attracting Snakes, Bloodbathed, Towering Muscles`.forEach(
+        ensureEffect
+      );
     }
 
     ensureResistsForTask(task);

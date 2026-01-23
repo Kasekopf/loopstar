@@ -5,10 +5,10 @@ import {
   $items,
   $location,
   $skill,
-  have,
-  get,
-  Macro,
   ensureEffect,
+  get,
+  have,
+  Macro,
 } from "libram";
 import { cliExecute, myMaxhp, myMp, restoreHp, useSkill, visitUrl } from "kolmafia";
 import { CombatStrategy } from "grimoire-kolmafia";
@@ -95,6 +95,7 @@ export const ColosseumQuest: Quest = {
         const numcasts = Math.floor(myMp() / 2);
         useSkill(numcasts, $skill`The Moxious Madrigal`);
       },
+      // eslint-disable-next-line libram/verify-constants
       do: $location`Mer-kin Temple Left Door`,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.item([$item`jam band bootleg`, $item`jam band bootleg`])

@@ -8,7 +8,6 @@ import {
   $monster,
   $monsters,
   $skill,
-  $stat,
   ClosedCircuitPayphone,
   get,
   have,
@@ -20,21 +19,18 @@ import {
   cliExecute,
   holiday,
   mpCost,
-  myHash,
   myMp,
-  myPrimestat,
   use,
   useSkill,
-  visitUrl,
 } from "kolmafia";
 import { Quest } from "../../../engine/task";
 
 const bestRift = () =>
-  canAdventure($location`Shadow Rift (the Misspelled Cemetary)`)
-    ? $location`Shadow Rift (the Misspelled Cemetary)`
-    : canAdventure($location`Shadow Rift (the nearby planes)`)
-    ? $location`Shadow Rift (the nearby planes)`
-    : $location`Shadow Rift (seaside town)`;
+  canAdventure($location`Shadow Rift (The Misspelled Cemetary)`)
+    ? $location`Shadow Rift (The Misspelled Cemetary)`
+    : canAdventure($location`Shadow Rift (The Nearby Plains)`)
+      ? $location`Shadow Rift (The Nearby Plains)`
+      : $location`Shadow Rift (The Right Side of the Tracks)`;
 
 export const ShadowRealmTask: Quest = {
   name: "Shadow Realm",
@@ -45,7 +41,7 @@ export const ShadowRealmTask: Quest = {
       completed: () => !have($item`closed-circuit pay phone`) || get("_shadowAffinityToday"),
       do: () =>
         ClosedCircuitPayphone.chooseQuest(({ entity }) => {
-          if (entity === $monster`Shadow Spire`) {
+          if (entity === $monster`shadow spire`) {
             return 1;
           } else {
             return 2;
@@ -62,7 +58,7 @@ export const ShadowRealmTask: Quest = {
       do: () => {
         use($item`lodestone`);
         cliExecute("cast party soundtrack");
-        let numCasts = Math.floor(myMp() / mpCost($skill`Bind Spice Ghost`));
+        const numCasts = Math.floor(myMp() / mpCost($skill`Bind Spice Ghost`));
         useSkill($skill`Bind Spice Ghost`, numCasts);
         use($item`Platinum Yendorian Express Card`);
       },
@@ -109,7 +105,7 @@ export const ShadowRealmTask: Quest = {
         }),
       post: () => {
         ClosedCircuitPayphone.submitQuest();
-        !get("_seadentWaveUsed") ? useSkill($skill`Sea *dent: Summon a Wave`) : null;
+        if (!get("_seadentWaveUsed")) useSkill($skill`Sea *dent: Summon a Wave`);
       },
       freeaction: true,
       limit: { soft: 11 },

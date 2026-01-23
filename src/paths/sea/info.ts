@@ -22,12 +22,14 @@ export class TheSeaInfo implements PathInfo {
     return get("kingLiberated");
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getTasks(tasks: Task[]): Task[] {
     const newQuests = TheSeaQuest;
     const newTasks = getTasks(newQuests, false, false);
     return findAndMerge([...newTasks], []);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoute(route: string[]): string[] {
     return [];
   }

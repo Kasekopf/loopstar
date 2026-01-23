@@ -9,7 +9,6 @@ import {
   $skill,
   AprilingBandHelmet,
   AugustScepter,
-  CinchoDeMayo,
   get,
   have,
   Macro,
@@ -27,7 +26,6 @@ import {
   myMp,
   totalFreeRests,
   use,
-  useFamiliar,
   useSkill,
   visitUrl,
 } from "kolmafia";
@@ -89,7 +87,7 @@ export const ScholarTask: Quest = {
       completed: () => have($item`Mer-kin dreadscroll`) || get("isMerkinHighPriest"),
       do: $location`Mer-kin Library`,
       outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, everfull dart holster, spring shoes`,
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, Everfull Dart Holster, spring shoes`,
         familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
@@ -138,7 +136,7 @@ export const ScholarTask: Quest = {
           use($item`scroll of minor invulnerability`);
         }
         if (myMp() < 200) {
-          useSkill($skill`rest upside down`);
+          useSkill($skill`Rest upside down`);
         }
         if (myHp() < 500) {
           useSkill($skill`Cannelloni Cocoon`);
@@ -160,6 +158,7 @@ export const ScholarTask: Quest = {
         buy($coinmaster`Wet Crap For Sale`, 1, $item`sea gel`);
         buy($coinmaster`Wet Crap For Sale`, 1, $item`waterlogged scroll of healing`);
       },
+      // eslint-disable-next-line libram/verify-constants
       do: $location`Mer-kin Temple Right Door`,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.item($item`Mer-kin healscroll`)
@@ -171,7 +170,7 @@ export const ScholarTask: Quest = {
         acc1: $item`Mer-kin prayerbeads`,
         acc2: $item`Mer-kin prayerbeads`,
         acc3: $item`Mer-kin prayerbeads`,
-        equip: $items`Mer-kin scholar tailpiece, Mer-kin scholar mask, Monodent of the Sea, April shower thoughts shield, bat wings, shark jumper`,
+        equip: $items`Mer-kin scholar tailpiece, Mer-kin scholar mask, Monodent of the Sea, April Shower Thoughts shield, bat wings, shark jumper`,
       },
       limit: { soft: 11 },
     },
@@ -235,7 +234,7 @@ export const ScholarTask: Quest = {
       },
       do: $location`The Skate Park`,
       outfit: () => {
-        let equipItems = $items`really\, really nice swimming trunks, möbius ring`;
+        const equipItems = $items`really\, really nice swimming trunks, Möbius ring`;
         if (have($item`skate blade`)) {
           equipItems.push($item`skate blade`);
         }
@@ -255,7 +254,7 @@ export const ScholarTask: Quest = {
     {
       name: "Get Fishy",
       after: ["Do Skate Park"],
-      ready: () => get("skateParkStatus") == "ice",
+      ready: () => get("skateParkStatus") === "ice",
       completed: () => get("_skateBuff1"),
       do: () => {
         visitUrl("sea_skatepark.php?action=state2buff1");
@@ -271,7 +270,7 @@ export const ScholarTask: Quest = {
       combat: new CombatStrategy().kill(),
       outfit: {
         equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, shark jumper, toy Cupid bow, really\, really nice swimming trunks`,
-        familiar: $familiar`red-nosed snapper`,
+        familiar: $familiar`Red-Nosed Snapper`,
         modifier: "item",
       },
       limit: { soft: 11 },
@@ -284,7 +283,7 @@ export const ScholarTask: Quest = {
       do: $location`The Caliginous Abyss`,
       combat: new CombatStrategy().killHard($monsters`Peanut`),
       outfit: () => {
-        let baseOutfit: OutfitSpec = {
+        const baseOutfit: OutfitSpec = {
           familiar: $familiar`Peace Turkey`,
           equip: $items`old SCUBA tank, black glass, shark jumper, scale-mail underwear`,
         };
@@ -298,7 +297,7 @@ export const ScholarTask: Quest = {
     {
       name: "Abyss Mom",
       after: ["Scholar Abyss"],
-      completed: () => step("questS02Monkees") == 999,
+      completed: () => step("questS02Monkees") === 999,
       do: $location`The Caliginous Abyss`,
       outfit: {
         equip: $items`black glass`,
@@ -326,7 +325,7 @@ export const ScholarTask: Quest = {
       do: $location`Mer-kin Gymnasium`,
       outfit: {
         equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, spring shoes`,
-        familiar: $familiar`jumpsuited hound dog`,
+        familiar: $familiar`Jumpsuited Hound Dog`,
         modifier: "+combat",
       },
       choices: { 701: 1 },

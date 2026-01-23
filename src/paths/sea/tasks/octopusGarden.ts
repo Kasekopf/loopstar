@@ -1,5 +1,4 @@
 import {
-  $effect,
   $familiar,
   $item,
   $items,
@@ -7,20 +6,17 @@ import {
   $monster,
   $monsters,
   $skill,
-  BurningLeaves,
   CursedMonkeyPaw,
   get,
   have,
   Macro,
-  set,
   withChoice,
 } from "libram";
-import { adv1, haveFamiliar, inHardcore, myHash, runCombat, use, visitUrl } from "kolmafia";
+import { adv1, haveFamiliar, inHardcore, use, visitUrl } from "kolmafia";
 import { step } from "grimoire-kolmafia";
-import { Quest, Resources } from "../../../engine/task";
+import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import { yellowRayPossible } from "../../../resources/yellowray";
-import { grandpaZone } from "../util";
 
 export const OctopusGardenTask: Quest = {
   name: "Octopus Garden",
@@ -68,7 +64,7 @@ export const OctopusGardenTask: Quest = {
           );
         })
         .kill(),
-      peridot: $monster`Neptune Flytrap`,
+      peridot: $monster`Neptune flytrap`,
       outfit: {
         familiar: $familiar`Patriotic Eagle`,
         equip: $items`Everfull Dart Holster, McHugeLarge left ski, Peridot of Peril, April Shower Thoughts shield`,
@@ -85,7 +81,7 @@ export const OctopusGardenTask: Quest = {
       do: $location`An Octopus's Garden`,
       outfit: {
         familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, Spring Shoes, April Shower Thoughts shield`,
+        equip: $items`Everfull Dart Holster, spring shoes, April Shower Thoughts shield`,
       },
       limit: { soft: 11 },
     },
@@ -103,7 +99,7 @@ export const OctopusGardenTask: Quest = {
         .kill(),
       outfit: {
         familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, Spring Shoes, April Shower Thoughts shield, blood cubic zirconia`,
+        equip: $items`Everfull Dart Holster, spring shoes, April Shower Thoughts shield, blood cubic zirconia`,
       },
       limit: { soft: 11 },
     },
@@ -117,7 +113,7 @@ export const OctopusGardenTask: Quest = {
     },
     {
       name: "Turn in Quest",
-      ready: () => step("questS02Monkees") == 0,
+      ready: () => step("questS02Monkees") === 0,
       completed: () => step("questS02Monkees") > 0,
       do: () => {
         visitUrl("monkeycastle.php?who=1");
@@ -130,7 +126,7 @@ export const OctopusGardenTask: Quest = {
     },
     {
       name: "Do Wreck",
-      ready: () => step("questS02Monkees") == 1,
+      ready: () => step("questS02Monkees") === 1,
       completed: () => step("questS02Monkees") > 1,
       do: () => {
         withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`));
