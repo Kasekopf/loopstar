@@ -716,6 +716,7 @@ export const ItemTask: Quest = {
     {
       name: "Learn scroll words",
       after: ["Mer-kin Scholar Refract"],
+      ready: () => get("seahorseName") !== "",
       completed: () =>
         get("isMerkinHighPriest") ||
         have($item`Mer-kin dreadscroll`) ||

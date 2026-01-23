@@ -191,18 +191,8 @@ export const PreItemTask: Quest = {
       after: ["Manual Mining"],
       ready: () => step("questS02Monkees") >= 4,
       completed: () => step("questS02Monkees") >= 5,
-      prepare: () => {
-        if (AprilingBandHelmet.have()) {
-          AprilingBandHelmet.conduct("Apriling Band Patrol Beat");
-        }
-      },
-      do: () => {
-        grandpaZone();
-      },
-      resources: {
-        which: Resources.NCForce,
-        benefit: 5,
-      },
+      do:
+        grandpaZone(),
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.step("pickpocket").if_(
@@ -320,8 +310,8 @@ export const PreItemTask: Quest = {
         }, $monsters`magic dragonfish`)
         .kill(),
       outfit: {
-        equip: $items`Everfull Dart Holster, Möbius ring, Spring shoes, little bitty bathysphere, Monodent of the Sea, Roman Candelabra, shark jumper, bat wings, prismatic beret`,
-        familiar: $familiar`Peace Turkey`,
+        equip: $items`Everfull Dart Holster, Monodent of the Sea, Roman Candelabra, bat wings`,
+        familiar: $familiar`Exotic Parrot`,
       },
       choices: { 311: 1 },
       limit: { soft: 11 },
@@ -336,8 +326,8 @@ export const PreItemTask: Quest = {
       do: $location`Madness Reef`,
       combat: new CombatStrategy().killHard(bestCopyTarget()).kill(),
       outfit: {
-        equip: $items`Everfull Dart Holster, Möbius ring, Spring shoes, little bitty bathysphere, Monodent of the Sea, April shower thoughts shield, shark jumper, bat wings, prismatic beret`,
-        familiar: $familiar`Peace Turkey`,
+        equip: $items`Everfull Dart Holster, Monodent of the Sea, bat wings`,
+        familiar: $familiar`Exotic Parrot`,
       },
       choices: { 311: 1 },
       limit: { soft: 11 },

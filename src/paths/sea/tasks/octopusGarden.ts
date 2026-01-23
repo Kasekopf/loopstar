@@ -60,7 +60,7 @@ export const OctopusGardenTask: Quest = {
       name: "Blast Garden",
       ready: () => have($item`minin' dynamite`),
       completed: () =>
-        get("bigBrotherRescued") ||
+        step("questS02Monkees") >= 0 ||
         !haveFamiliar($familiar`Patriotic Eagle`),
       do: $location`An Octopus's Garden`,
       combat: new CombatStrategy()
@@ -136,6 +136,10 @@ export const OctopusGardenTask: Quest = {
       completed: () => step("questS02Monkees") > 1,
       do: () => {
         withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`))
+      },
+      resources: {
+        which: Resources.NCForce,
+        benefit: 5,
       },
       outfit: {
         modifier: "mp",

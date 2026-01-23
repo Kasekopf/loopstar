@@ -70,6 +70,7 @@ export const WrapupQuest: Quest = {
     },
     {
       name: "Tricking",
+      ready: () => have($item`Mer-kin gladiator mask`) && have($item`Mer-kin gladiator tailpiece`),
       completed: () => get("_trickOrTreatBlock").split("D").length < 6,
       do: () => {
         visitUrl(`place.php?whichplace=town&action=town_trickortreat`);

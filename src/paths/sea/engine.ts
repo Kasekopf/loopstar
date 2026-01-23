@@ -165,6 +165,9 @@ function ensureResistsForTask(task: Task): void {
   }
 
   if (numericModifier(pearlResist) < 18) {
-    throw `Could not reach desired ${pearlResist} for ${location}`;
+    cliExecute(`maximize ${pearlResist}`)
+    if (numericModifier(pearlResist) < 18) {
+      throw `Could not reach desired ${pearlResist} for ${location}`;
+    }
   }
 }
