@@ -41,7 +41,6 @@ export class AftercoreInfo implements PathInfo {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getTasks(_: Task[], goalOverride: string | undefined = undefined): Task[] {
     const goal = goalOverride ?? args.aftercore.goal;
     if (!goal) return [];

@@ -134,13 +134,11 @@ export const noncombatForceNCSources: NoncombatForceNCSource[] = [
   },
   {
     name: "Radio",
-    // eslint-disable-next-line libram/verify-constants
     available: () => have($item`Allied Radio Backpack`) && get("_alliedRadioDropsUsed", 0) < 3,
     prepare: () => {
       alliedRadio("sniper support");
     },
     remaining: () => {
-      // eslint-disable-next-line libram/verify-constants
       if (!have($item`Allied Radio Backpack`)) return 0;
       return clamp(3 - get("_alliedRadioDropsUsed", 0), 0, 3);
     },
