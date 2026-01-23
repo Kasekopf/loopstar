@@ -191,8 +191,7 @@ export const PreItemTask: Quest = {
       after: ["Manual Mining"],
       ready: () => step("questS02Monkees") >= 4,
       completed: () => step("questS02Monkees") >= 5,
-      do:
-        grandpaZone(),
+      do: grandpaZone(),
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.step("pickpocket").if_(
@@ -393,7 +392,10 @@ export const PreItemTask: Quest = {
     {
       name: "Use ink bladders",
       after: ["Finish farming squids without freekills"],
-      completed: () => !have($item`ink bladder`) || $location`The Mer-kin Outpost`.turnsSpent > 20 || get("seahorseName") !== "",
+      completed: () =>
+        !have($item`ink bladder`) ||
+        $location`The Mer-kin Outpost`.turnsSpent > 20 ||
+        get("seahorseName") !== "",
       do: $location`The Mer-kin Outpost`,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.step("pickpocket")

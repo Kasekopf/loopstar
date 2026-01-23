@@ -59,14 +59,13 @@ export const OctopusGardenTask: Quest = {
     {
       name: "Blast Garden",
       ready: () => have($item`minin' dynamite`),
-      completed: () =>
-        step("questS02Monkees") >= 0 ||
-        !haveFamiliar($familiar`Patriotic Eagle`),
+      completed: () => step("questS02Monkees") >= 0 || !haveFamiliar($familiar`Patriotic Eagle`),
       do: $location`An Octopus's Garden`,
       combat: new CombatStrategy()
         .macro((): Macro => {
-          return Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)
-            .trySkill($skill`%fn, let's pledge allegiance to a Zone`)
+          return Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`).trySkill(
+            $skill`%fn, let's pledge allegiance to a Zone`
+          );
         })
         .kill(),
       peridot: $monster`Neptune Flytrap`,
@@ -134,14 +133,14 @@ export const OctopusGardenTask: Quest = {
       ready: () => step("questS02Monkees") == 1,
       completed: () => step("questS02Monkees") > 1,
       do: () => {
-        withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`))
+        withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`));
       },
       outfit: {
         modifier: "mp",
         avoid: $items`Peridot of Peril`,
         pants: $item`really, really nice swimming trunks`,
       },
-      limit: {}
+      limit: {},
     },
     {
       name: "Talk to brothers",

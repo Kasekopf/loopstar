@@ -157,14 +157,12 @@ export const ItemTask: Quest = {
     {
       name: "Banish 1",
       completed: () =>
-        get("corralUnlocked") ||
-        have($item`Mer-kin lockkey`) ||
-        have($item`Mer-kin stashbox`),
+        get("corralUnlocked") || have($item`Mer-kin lockkey`) || have($item`Mer-kin stashbox`),
       do: $location`The Mer-kin Outpost`,
       combat: new CombatStrategy().banish($monsters`Mer-kin burglar, Mer-kin raider`).kill(),
       outfit: {
         familiar: $familiar`Peace Turkey`,
-        modifier: "-combat"
+        modifier: "-combat",
       },
       limit: { soft: 11 },
     },
@@ -513,15 +511,14 @@ export const ItemTask: Quest = {
           return Macro.ifNot(
             "monstername time cop",
             Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
-          )
-            .skill($skill`BCZ: Refracted Gaze`)
+          ).skill($skill`BCZ: Refracted Gaze`);
         })
         .kill(),
       resources: () => {
         return {
           which: Resources.NCForce,
           benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
-        }
+        };
       },
       outfit: {
         equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, blood cubic zirconia, Everfull Dart Holster, McHugeLarge left ski, toy cupid bow`,
@@ -538,13 +535,12 @@ export const ItemTask: Quest = {
       name: "Elementary School Wrapup",
       completed: () => doneWithElementarySchool(),
       do: $location`Mer-kin Elementary School`,
-      combat: new CombatStrategy()
-        .kill($monsters`Mer-kin monitor`),
+      combat: new CombatStrategy().kill($monsters`Mer-kin monitor`),
       resources: () => {
         return {
           which: Resources.NCForce,
           benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
-        }
+        };
       },
       outfit: {
         equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, Everfull Dart Holster, McHugeLarge left ski`,

@@ -66,7 +66,8 @@ export const StartupQuest: Quest = {
         pull($item`stuffed yam stinkbomb`);
         pull($item`handful of split pea soup`);
         pull($item`anchor bomb`);
-        if (storageAmount($item`Platinum Yendorian Express Card`) >= 1) pull($item`Platinum Yendorian Express Card`);
+        if (storageAmount($item`Platinum Yendorian Express Card`) >= 1)
+          pull($item`Platinum Yendorian Express Card`);
         pull($item`ink bladder`);
         pull($item`Mer-kin sneakmask`);
         pull($item`fishy pipe`);
@@ -74,7 +75,7 @@ export const StartupQuest: Quest = {
           pull($item`minin' dynamite`);
         }
         if (!args.resources.speed) {
-          pull($item`scale-mail underwear`)
+          pull($item`scale-mail underwear`);
         }
       },
       freeaction: true,
@@ -225,7 +226,9 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Unlock Guild",
-      ready: () => (myClass() !== $class`Accordion Thief` && myClass() !== $class`Disco Bandit`) || !have($item`tearaway pants`),
+      ready: () =>
+        (myClass() !== $class`Accordion Thief` && myClass() !== $class`Disco Bandit`) ||
+        !have($item`tearaway pants`),
       completed: () => guildStoreAvailable(),
       do: () => cliExecute("guild"),
       choices: {

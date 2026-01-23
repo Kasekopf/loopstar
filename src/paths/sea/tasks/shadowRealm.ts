@@ -15,16 +15,26 @@ import {
   Macro,
 } from "libram";
 import { CombatStrategy } from "grimoire-kolmafia";
-import { canAdventure, cliExecute, holiday, mpCost, myHash, myMp, myPrimestat, use, useSkill, visitUrl } from "kolmafia";
+import {
+  canAdventure,
+  cliExecute,
+  holiday,
+  mpCost,
+  myHash,
+  myMp,
+  myPrimestat,
+  use,
+  useSkill,
+  visitUrl,
+} from "kolmafia";
 import { Quest } from "../../../engine/task";
 
-const bestRift = () => canAdventure($location`Shadow Rift (the Misspelled Cemetary)`)
-  ? $location`Shadow Rift (the Misspelled Cemetary)`
-  : canAdventure($location`Shadow Rift (the nearby planes)`)
+const bestRift = () =>
+  canAdventure($location`Shadow Rift (the Misspelled Cemetary)`)
+    ? $location`Shadow Rift (the Misspelled Cemetary)`
+    : canAdventure($location`Shadow Rift (the nearby planes)`)
     ? $location`Shadow Rift (the nearby planes)`
-    : $location`Shadow Rift (seaside town)`
-
-
+    : $location`Shadow Rift (seaside town)`;
 
 export const ShadowRealmTask: Quest = {
   name: "Shadow Realm",

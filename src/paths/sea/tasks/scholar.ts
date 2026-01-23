@@ -185,7 +185,7 @@ export const ScholarTask: Quest = {
         return {
           which: Resources.NCForce,
           benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
-        }
+        };
       },
       outfit: {
         familiar: $familiar`Peace Turkey`,
@@ -215,7 +215,7 @@ export const ScholarTask: Quest = {
         return {
           which: Resources.NCForce,
           benefit: 5,
-        }
+        };
       },
       outfit: {
         familiar: $familiar`Peace Turkey`,
