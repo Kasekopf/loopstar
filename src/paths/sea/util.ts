@@ -1,19 +1,19 @@
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
 import {
+  abort,
   buyUsingStorage,
   cliExecute,
-  Item,
-  abort,
-  storageAmount,
-  Skill,
   getWorkshed,
-  use,
-  mySpleenUse,
-  spleenLimit,
-  myPrimestat,
+  Item,
   Location,
   Monster,
+  myPrimestat,
+  mySpleenUse,
+  Skill,
+  spleenLimit,
+  storageAmount,
   toInt,
+  use,
 } from "kolmafia";
 import { $effect, $item, $items, $location, $monster, $stat, AsdonMartin, get, have } from "libram";
 
@@ -117,7 +117,7 @@ export function fishySource(source: FishySource): Required<FishySource> {
 export function fishySources(): Required<FishySource>[] {
   return [
     fishySource({
-      name: $item`cuppa gill tea`,
+      name: $item`cuppa Gill tea`,
     }),
     fishySource({
       name: $item`fish juice box`,
@@ -195,6 +195,6 @@ export function grandpaZone(): Location {
 }
 
 export function bestCopyTarget(): Monster {
-  if (get("neverendingPartyAlways")) return $monster`Sausage Goblin`;
-  return $monster`black crayon fish`;
+  if (get("neverendingPartyAlways")) return $monster`sausage goblin`;
+  return $monster`Black Crayon Fish`;
 }

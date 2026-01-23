@@ -1,7 +1,6 @@
 import { abort, availableChoiceOptions, getProperty, print, runChoice } from "kolmafia";
 import { $item, get, have, set, ValueOf } from "libram";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(choice: number, page: string) {
   const options: { [key: number]: string } = availableChoiceOptions();
 
@@ -109,6 +108,7 @@ export function main(choice: number, page: string) {
     print(page);
     const libraryOptions = get("merkinCatalogChoices").split(",");
     for (const option of libraryOptions) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [_, choiceNum, status] = option.split(":");
       if (status === "unknown") {
         runChoice(parseInt(choiceNum));
