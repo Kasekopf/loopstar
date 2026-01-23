@@ -52,7 +52,6 @@ export const WrapupQuest: Quest = {
   tasks: [
     {
       name: "Fish Banish",
-      after: ["Colosseum/Shub"],
       completed: () =>
         !have($familiar`Patriotic Eagle`) || get("screechCombats") != 0 || !fishLocationAvailable(),
       do: () => getFishLocation()!,
@@ -67,10 +66,10 @@ export const WrapupQuest: Quest = {
         equip: $items`Monodent of the Sea, Everfull Dart Holster, cursed monkey's paw, Möbius ring, shark jumper, bat wings`,
       },
       limit: { soft: 11 },
+      preferwanderer: true
     },
     {
       name: "Tricking",
-      after: ["Fish Banish"],
       completed: () => get("_trickOrTreatBlock").split("D").length < 6,
       do: () => {
         visitUrl(`place.php?whichplace=town&action=town_trickortreat`);
@@ -89,6 +88,7 @@ export const WrapupQuest: Quest = {
       },
       freeaction: true,
       limit: { soft: 11 },
+      preferwanderer: true
     },
     {
       name: "Do Habs",
@@ -117,6 +117,7 @@ export const WrapupQuest: Quest = {
         familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
+      preferwanderer: true
     },
     {
       name: "Get Pearls",
@@ -132,6 +133,7 @@ export const WrapupQuest: Quest = {
         familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
+      preferwanderer: true
     },
   ],
 };

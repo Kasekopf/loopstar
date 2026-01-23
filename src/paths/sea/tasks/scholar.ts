@@ -31,7 +31,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { Quest } from "../../../engine/task";
+import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import { pull } from "../util";
 
@@ -180,30 +180,13 @@ export const ScholarTask: Quest = {
       name: "Collect Emergency Dreadscroll Clues",
       after: ["Eat nigiri", "Use knucklebone", "Cast Deep Dark Visions"],
       completed: () => getNumMissingClues() <= 3,
-      prepare: () => {
-        if (!get("noncombatForcerActive")) {
-          if (get("_mcHugeLargeAvalancheUses") < 3) {
-            return;
-          } else if (CinchoDeMayo.have() && CinchoDeMayo.totalAvailableCinch() >= 60) {
-            if (have($familiar`skeleton of crimbo past`)) {
-              useFamiliar($familiar`skeleton of crimbo past`);
-            }
-            while (CinchoDeMayo.currentCinch() < 60) {
-              if (!freeRest()) {
-                throw "Failed to cinch up!";
-              }
-            }
-            useSkill($skill`Cincho: Fiesta Exit`);
-            useFamiliar($familiar`Peace Turkey`);
-          } else if (get("_aprilBandTubaUses") < 3) {
-            AprilingBandHelmet.play($item`Apriling band tuba`);
-          }
+      do: $location`Mer-kin Library`,
+      resources: () => {
+        return {
+          which: Resources.NCForce,
+          benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
         }
       },
-      do: $location`Mer-kin Library`,
-      combat: new CombatStrategy().macro((): Macro => {
-        return Macro.trySkill($skill`McHugeLarge avalanche`);
-      }),
       outfit: {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Mer-kin scholar tailpiece, Mer-kin scholar mask, McHugeLarge left ski`,
@@ -227,30 +210,13 @@ export const ScholarTask: Quest = {
       name: "Get More Clues",
       ready: () => have($item`Mer-kin dreadscroll`) && get("dreadScrollGuesses") !== "",
       completed: () => get("isMerkinHighPriest") || getNumMissingClues() < 3 || firstGuessWasGood(),
-      prepare: () => {
-        if (!get("noncombatForcerActive")) {
-          if (get("_mcHugeLargeAvalancheUses") < 3) {
-            return;
-          } else if (CinchoDeMayo.have() && CinchoDeMayo.totalAvailableCinch() >= 60) {
-            if (have($familiar`skeleton of crimbo past`)) {
-              useFamiliar($familiar`skeleton of crimbo past`);
-            }
-            while (CinchoDeMayo.currentCinch() < 60) {
-              if (!freeRest()) {
-                throw "Failed to cinch up!";
-              }
-            }
-            useSkill($skill`Cincho: Fiesta Exit`);
-            useFamiliar($familiar`Peace Turkey`);
-          } else if (get("_aprilBandTubaUses") < 3) {
-            AprilingBandHelmet.play($item`Apriling band tuba`);
-          }
+      do: $location`Mer-kin Library`,
+      resources: () => {
+        return {
+          which: Resources.NCForce,
+          benefit: 5,
         }
       },
-      do: $location`Mer-kin Library`,
-      combat: new CombatStrategy().macro((): Macro => {
-        return Macro.trySkill($skill`McHugeLarge avalanche`);
-      }),
       outfit: {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Mer-kin scholar tailpiece, Mer-kin scholar mask, McHugeLarge left ski`,
@@ -263,25 +229,9 @@ export const ScholarTask: Quest = {
       name: "Do Skate Park",
       after: ["Get More Clues"],
       completed: () => get("skateParkStatus") !== "war",
-      prepare: () => {
-        if (!get("noncombatForcerActive")) {
-          if (get("_mcHugeLargeAvalancheUses") < 3) {
-            return;
-          } else if (CinchoDeMayo.have() && CinchoDeMayo.totalAvailableCinch() >= 60) {
-            if (have($familiar`skeleton of crimbo past`)) {
-              useFamiliar($familiar`skeleton of crimbo past`);
-            }
-            while (CinchoDeMayo.currentCinch() < 60) {
-              if (!freeRest()) {
-                throw "Failed to cinch up!";
-              }
-            }
-            useSkill($skill`Cincho: Fiesta Exit`);
-            useFamiliar($familiar`Peace Turkey`);
-          } else if (get("_aprilBandTubaUses") < 3) {
-            AprilingBandHelmet.play($item`Apriling band tuba`);
-          }
-        }
+      resources: {
+        which: Resources.NCForce,
+        benefit: 5,
       },
       do: $location`The Skate Park`,
       outfit: () => {

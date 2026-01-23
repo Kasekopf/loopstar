@@ -40,7 +40,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { Quest } from "../../../engine/task";
+import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import { pull } from "../util";
 
@@ -578,12 +578,14 @@ export const ItemTask: Quest = {
             Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
           )
             .skill($skill`BCZ: Refracted Gaze`)
-            .externalIf(
-              !get("merkinElementaryTeacherUnlock"),
-              Macro.trySkill($skill`McHugeLarge Avalanche`)
-            );
         })
         .killFree(),
+      resources: () => {
+        return {
+          which: Resources.NCForce,
+          benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
+        }
+      },
       outfit: {
         equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, blood cubic zirconia, Everfull Dart Holster, McHugeLarge left ski, toy cupid bow`,
         modifier: "item",
@@ -601,13 +603,13 @@ export const ItemTask: Quest = {
       completed: () => doneWithElementarySchool(),
       do: $location`Mer-kin Elementary School`,
       combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.externalIf(
-            !get("merkinElementaryTeacherUnlock"),
-            Macro.trySkill($skill`McHugeLarge Avalanche`)
-          );
-        })
         .killFree($monsters`Mer-kin monitor`),
+      resources: () => {
+        return {
+          which: Resources.NCForce,
+          benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
+        }
+      },
       outfit: {
         equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, Everfull Dart Holster, McHugeLarge left ski`,
         familiar: $familiar`Peace Turkey`,
