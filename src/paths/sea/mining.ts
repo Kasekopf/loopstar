@@ -74,10 +74,6 @@ const stateIndexToCoord = (position: number) => {
   return tuple<MiningCoordinate>(col + 1, row + 1);
 };
 
-const stateCoordToIndex = (coordinate: MiningCoordinate) => {
-  return coordinate[0] * 8 + coordinate[1];
-};
-
 const getAccessibleSparklesForIndex = (state: string, index: number) => {
   // Translate index to 0-indexed coord
   const coords = stateIndexToCoord(index);

@@ -29,7 +29,6 @@ import {
   myMaxmp,
   myMp,
   numericModifier,
-  print,
   restoreHp,
   restoreMp,
   setLocation,
@@ -58,7 +57,7 @@ export class TheSeaEngine extends Engine {
   }
 
   override prepare(): void {
-    if (!have($effect`fishy`)) {
+    if (!have($effect`Fishy`)) {
       doFirstAvailableFishySource();
     }
   }
@@ -118,36 +117,15 @@ export class TheSeaEngine extends Engine {
     const modifier = outfit.modifier.join(",");
 
     if (modifier === "-combat") {
-      const effects = $effects`
-        Smooth Movements,
-        The Sonata of Sneakiness,
-        Hiding From Seekers,
-        Wild and Westy!,
-        Ultra-Soft Steps
-      `;
+      const effects = $effects`Smooth Movements, The Sonata of Sneakiness, Hiding From Seekers, Wild and Westy!, Ultra-Soft Steps`;
       uneffect($effect`Fat Leon's Phat Loot Lyric`);
       effects.forEach(ensureEffect);
     } else if (modifier === "item") {
       $effects`The Sonata of Sneakiness, Ode to Booze`.forEach(uneffect);
-      $effects`
-        Donho's Bubbly Ballad,
-        Fat Leon's Phat Loot Lyric,
-        The Ballad of Richie Thingfinder,
-      `.forEach(ensureEffect);
+      $effects`Donho's Bubbly Ballad, Fat Leon's Phat Loot Lyric, The Ballad of Richie Thingfinder,`.forEach(ensureEffect);
     } else if (modifier === "+combat") {
-      $effects`
-        The Sonata of Sneakiness,
-        Ode to Booze,
-        Fat Leon's Phat Loot Lyric
-      `.forEach(uneffect);
-      $effects`
-        Crunchy Steps,
-        Carlweather's Cantata of Confrontation,
-        Musk of the Moose,
-        Attracting Snakes,
-        Bloodbathed,
-        Towering Muscles
-      `.forEach(ensureEffect);
+      $effects`The Sonata of Sneakiness, Ode to Booze, Fat Leon's Phat Loot Lyric`.forEach(uneffect);
+      $effects`Crunchy Steps, Carlweather's Cantata of Confrontation, Musk of the Moose, Attracting Snakes, Bloodbathed, Towering Muscles`.forEach(ensureEffect);
     }
 
     ensureResistsForTask(task);
@@ -164,9 +142,9 @@ export class TheSeaEngine extends Engine {
 
 const pearlResists = new Map<Location, string>([
   [$location`Anemone Mine`, "Spooky resistance"],
-  [$location`Dive Bar`, "Sleaze resistance"],
+  [$location`The Dive Bar`, "Sleaze resistance"],
   [$location`Madness Reef`, "Stench resistance"],
-  [$location`Marinara Trench`, "Hot resistance"],
+  [$location`The Marinara Trench`, "Hot resistance"],
   [$location`The Briniest Deepests`, "Cold resistance"],
 ]);
 

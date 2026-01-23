@@ -8,7 +8,6 @@ import { getTasks } from "grimoire-kolmafia";
 import { Engine } from "../../engine/engine";
 import { TheSeaQuest } from "./tasks";
 import { TheSeaEngine } from "./engine";
-import { searoute } from "./route";
 
 export class TheSeaInfo implements PathInfo {
   name(): string {
