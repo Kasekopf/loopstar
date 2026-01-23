@@ -18,6 +18,14 @@ import { CombatStrategy } from "grimoire-kolmafia";
 import { canAdventure, cliExecute, holiday, mpCost, myHash, myMp, myPrimestat, use, useSkill, visitUrl } from "kolmafia";
 import { Quest } from "../../../engine/task";
 
+const bestRift = () => canAdventure($location`Shadow Rift (the Misspelled Cemetary)`)
+  ? $location`Shadow Rift (the Misspelled Cemetary)`
+  : canAdventure($location`Shadow Rift (the nearby planes)`)
+    ? $location`Shadow Rift (the nearby planes)`
+    : $location`Shadow Rift (seaside town)`
+
+
+
 export const ShadowRealmTask: Quest = {
   name: "Shadow Realm",
   tasks: [
@@ -57,9 +65,8 @@ export const ShadowRealmTask: Quest = {
         !have($item`closed-circuit pay phone`) ||
         (get("_shadowAffinityToday") &&
           !have($effect`Shadow Affinity`) &&
-          get("encountersUntilSRChoice") !== 0) ||
-        !canAdventure($location`Shadow Rift (the Misspelled Cemetary)`),
-      do: $location`Shadow Rift (The Misspelled Cemetary)`,
+          get("encountersUntilSRChoice") !== 0),
+      do: bestRift(),
       combat: new CombatStrategy()
         .macro((): Macro => {
           return Macro.step("pickpocket")
