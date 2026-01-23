@@ -53,7 +53,9 @@ export const WrapupQuest: Quest = {
     {
       name: "Fish Banish",
       completed: () =>
-        !have($familiar`Patriotic Eagle`) || get("screechCombats") !== 0 || !fishLocationAvailable(),
+        !have($familiar`Patriotic Eagle`) ||
+        get("screechCombats") !== 0 ||
+        !fishLocationAvailable(),
       do: () => getFishLocation()!,
       combat: new CombatStrategy().macro((): Macro => {
         return Macro.if_(

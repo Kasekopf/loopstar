@@ -1,12 +1,4 @@
-import {
-  $items,
-  $location,
-  $skill,
-  BloodCubicZirconia,
-  BurningLeaves,
-  get,
-  Macro,
-} from "libram";
+import { $items, $location, $skill, BloodCubicZirconia, BurningLeaves, get, Macro } from "libram";
 import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 
