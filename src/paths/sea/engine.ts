@@ -1,11 +1,40 @@
 import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
 import { CombatActions, CombatStrategy } from "../../engine/combat";
-import { $effect, $effects, $item, $location, $monsters, ensureEffect, have, PropertiesManager, uneffect } from "libram";
+import {
+  $effect,
+  $effects,
+  $item,
+  $location,
+  $monsters,
+  ensureEffect,
+  have,
+  PropertiesManager,
+  uneffect,
+} from "libram";
 import { Task } from "../../engine/task";
-import { applyFirstAvailableFamiliarWaterBreathSource, applyFirstAvailableWaterBreathSource, doFirstAvailableFishySource } from "./util";
+import {
+  applyFirstAvailableFamiliarWaterBreathSource,
+  applyFirstAvailableWaterBreathSource,
+  doFirstAvailableFishySource,
+} from "./util";
 import { SeaActionDefaults } from "./combat";
-import { abort, cliExecute, create, Location, myHp, myMaxhp, myMaxmp, myMp, numericModifier, print, restoreHp, restoreMp, setLocation, use } from "kolmafia";
+import {
+  abort,
+  cliExecute,
+  create,
+  Location,
+  myHp,
+  myMaxhp,
+  myMaxmp,
+  myMp,
+  numericModifier,
+  print,
+  restoreHp,
+  restoreMp,
+  setLocation,
+  use,
+} from "kolmafia";
 
 export class TheSeaEngine extends Engine {
   constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
@@ -35,12 +64,9 @@ export class TheSeaEngine extends Engine {
   }
 
   override createOutfit(task: ActiveTask): Outfit {
-
     const outfit = super.createOutfit(task);
 
-    const underwater =
-      task.do instanceof Location &&
-      task.do.environment === "underwater";
+    const underwater = task.do instanceof Location && task.do.environment === "underwater";
 
     if (underwater) {
       // Player breathing
@@ -94,7 +120,6 @@ export class TheSeaEngine extends Engine {
     if (modifier === "-combat") {
       const effects = $effects`
         Smooth Movements,
-        Chorale of Companionship,
         The Sonata of Sneakiness,
         Hiding From Seekers,
         Wild and Westy!,
@@ -108,7 +133,6 @@ export class TheSeaEngine extends Engine {
         Donho's Bubbly Ballad,
         Fat Leon's Phat Loot Lyric,
         The Ballad of Richie Thingfinder,
-        Chorale of Companionship
       `.forEach(ensureEffect);
     } else if (modifier === "+combat") {
       $effects`
@@ -143,8 +167,8 @@ const pearlResists = new Map<Location, string>([
   [$location`Dive Bar`, "Sleaze resistance"],
   [$location`Madness Reef`, "Stench resistance"],
   [$location`Marinara Trench`, "Hot resistance"],
-  [$location`The Briniest Deepests`, "Cold resistance"]
-])
+  [$location`The Briniest Deepests`, "Cold resistance"],
+]);
 
 function taskLocation(task: Task): Location | undefined {
   if (task.do instanceof Location) return task.do;
@@ -165,7 +189,7 @@ function ensureResistsForTask(task: Task): void {
   }
 
   if (numericModifier(pearlResist) < 18) {
-    cliExecute(`maximize ${pearlResist}`)
+    cliExecute(`maximize ${pearlResist}`);
     if (numericModifier(pearlResist) < 18) {
       throw `Could not reach desired ${pearlResist} for ${location}`;
     }

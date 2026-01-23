@@ -68,7 +68,7 @@ export const OctopusGardenTask: Quest = {
           return Macro.trySkill($skill`%fn, fire a Red, White and Blue Blast`)
             .trySkill($skill`%fn, let's pledge allegiance to a Zone`)
         })
-        .killFree(),
+        .kill(),
       peridot: $monster`Neptune Flytrap`,
       outfit: {
         familiar: $familiar`Patriotic Eagle`,
@@ -84,7 +84,6 @@ export const OctopusGardenTask: Quest = {
         step("questS02Monkees") >= 0 ||
         get("rwbMonsterCount") < 1,
       do: $location`An Octopus's Garden`,
-      combat: new CombatStrategy().killFree(),
       outfit: {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Everfull Dart Holster, Spring Shoes, April Shower Thoughts shield`,
@@ -102,7 +101,7 @@ export const OctopusGardenTask: Quest = {
             $skill`BCZ: Refracted Gaze`
           );
         }, $monsters`octopus gardener, sponge, stranglin' algae`)
-        .killFree(),
+        .kill(),
       outfit: {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Everfull Dart Holster, Spring Shoes, April Shower Thoughts shield, blood cubic zirconia`,
@@ -137,14 +136,9 @@ export const OctopusGardenTask: Quest = {
       do: () => {
         withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`))
       },
-      resources: {
-        which: Resources.NCForce,
-        benefit: 5,
-      },
       outfit: {
         modifier: "mp",
         avoid: $items`Peridot of Peril`,
-        familiar: $familiar`Grouper Groupie`,
         pants: $item`really, really nice swimming trunks`,
       },
       limit: {}

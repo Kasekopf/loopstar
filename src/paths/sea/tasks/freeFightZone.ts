@@ -23,7 +23,7 @@ export const FreeFightZoneTask: Quest = {
                 .macro(
                     Macro
                         .externalIf(
-                            BloodCubicZirconia.timesCast($skill`BCZ: Refracted Gaze`) < 4,
+                            BloodCubicZirconia.timesCast($skill`BCZ: Refracted Gaze`) < 2,
                             Macro.if_("!monstername burnout ", Macro.trySkill($skill`BCZ: Refracted Gaze`))
                         )
                 )

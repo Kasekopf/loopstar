@@ -60,7 +60,7 @@ export const PreItemTask: Quest = {
         .macro((): Macro => {
           return Macro.step("pickpocket");
         })
-        .killFree(),
+        .kill(),
       outfit: {
         modifier: "item",
         equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy cupid bow`,
@@ -200,7 +200,7 @@ export const PreItemTask: Quest = {
             Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`)
           );
         })
-        .killFree(),
+        .kill(),
       outfit: {
         modifier: "-combat",
         equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
@@ -364,7 +364,7 @@ export const PreItemTask: Quest = {
         .macro((): Macro => {
           return Macro.if_("!monstername giant squid", Macro.skill($skill`BCZ: refracted gaze`));
         })
-        .killFree(),
+        .kill(),
       outfit: {
         equip: $items`Everfull Dart Holster, blood cubic zirconia, Möbius ring, Monodent of the Sea, April shower thoughts shield, bat wings, prismatic beret, shark jumper, toy Cupid bow`,
         familiar: $familiar`Red-nosed Snapper`,

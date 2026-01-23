@@ -74,7 +74,7 @@ export type FamiliarBreathSource = {
   available?: () => boolean;
   outfit?: OutfitSpec | (() => OutfitSpec);
   do?: () => void;
-}
+};
 
 export function getFamiliarWaterBreathSources(): WaterBreathSource[] {
   return [
@@ -148,10 +148,7 @@ export function applyFirstAvailableWaterBreathSource(outfit: Outfit): boolean {
     if (!(source.available?.() ?? true)) continue;
 
     if (source.outfit) {
-      const spec =
-        typeof source.outfit === "function"
-          ? source.outfit()
-          : source.outfit;
+      const spec = typeof source.outfit === "function" ? source.outfit() : source.outfit;
 
       if (spec.equip) {
         if (!outfit.equip(spec.equip)) return false;
@@ -165,17 +162,12 @@ export function applyFirstAvailableWaterBreathSource(outfit: Outfit): boolean {
   return false;
 }
 
-export function applyFirstAvailableFamiliarWaterBreathSource(
-  outfit: Outfit
-): boolean {
+export function applyFirstAvailableFamiliarWaterBreathSource(outfit: Outfit): boolean {
   for (const source of getFamiliarWaterBreathSources()) {
     if (!(source.available?.() ?? true)) continue;
 
     if (source.outfit) {
-      const spec =
-        typeof source.outfit === "function"
-          ? source.outfit()
-          : source.outfit;
+      const spec = typeof source.outfit === "function" ? source.outfit() : source.outfit;
 
       if (spec.equip) {
         if (!outfit.equip(spec.equip)) return false;
@@ -204,5 +196,5 @@ export function grandpaZone(): Location {
 
 export function bestCopyTarget(): Monster {
   if (get("neverendingPartyAlways")) return $monster`Sausage Goblin`;
-  return $monster`black crayon fish`
+  return $monster`black crayon fish`;
 }
