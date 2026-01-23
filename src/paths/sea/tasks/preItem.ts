@@ -64,7 +64,6 @@ export const PreItemTask: Quest = {
       outfit: {
         modifier: "item",
         equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy cupid bow`,
-        familiar: $familiar`red-nosed snapper`,
       },
       peridot: $monster`Mer-kin miner`,
       limit: { soft: 11 },

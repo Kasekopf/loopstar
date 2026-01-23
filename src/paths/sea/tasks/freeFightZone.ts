@@ -85,7 +85,7 @@ export const FreeFightZoneTask: Quest = {
             limit: { soft: 11 },
             outfit: {
                 equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow, rake`,
-                familiar: have($familiar`red-nosed snapper`) ? $familiar`red-nosed snapper` : $familiar`peace turkey`
+                familiar: $familiar`peace turkey`
             },
         },
         {

@@ -155,7 +155,7 @@ export const StartupQuest: Quest = {
       outfit: () => {
         if (have($familiar`Chest Mimic`))
           return { modifier: "mp", familiar: $familiar`Chest Mimic` };
-        return { modifier: "mp", familiar: $familiar`red-nosed snapper` };
+        return { modifier: "mp", familiar: $familiar`Pocket Professor` };
       },
     },
     {

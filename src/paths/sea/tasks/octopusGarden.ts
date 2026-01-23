@@ -28,6 +28,7 @@ export const OctopusGardenTask: Quest = {
     {
       name: "Dynamite",
       ready: () =>
+        inHardcore() &&
         have($item`pocket wish`) &&
         have($item`spitball`) &&
         have($item`Spooky VHS Tape`) &&
@@ -124,7 +125,6 @@ export const OctopusGardenTask: Quest = {
         visitUrl("monkeycastle.php?who=1");
       },
       outfit: {
-        familiar: $familiar`red-nosed snapper`,
         pants: $item`really, really nice swimming trunks`,
       },
       freeaction: true,
@@ -155,7 +155,6 @@ export const OctopusGardenTask: Quest = {
         visitUrl("monkeycastle.php?who=1");
       },
       outfit: {
-        familiar: $familiar`red-nosed snapper`,
         pants: $item`really, really nice swimming trunks`,
       },
       freeaction: true,

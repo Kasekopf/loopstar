@@ -173,7 +173,6 @@ export const ItemTask: Quest = {
       outfit: {
         modifier: "item",
         equip: $items`Everfull Dart Holster, Monodent of the Sea, toy Cupid bow, blood cubic zirconia, Möbius ring`,
-        familiar: $familiar`red-nosed snapper`,
       },
       limit: { soft: 11 },
     },
@@ -242,7 +241,6 @@ export const ItemTask: Quest = {
       combat: new CombatStrategy().killFree(),
       outfit: {
         equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, toy Cupid bow`,
-        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       limit: { soft: 11 },
@@ -283,7 +281,6 @@ export const ItemTask: Quest = {
       },
       outfit: {
         equip: [$item`really, really nice swimming trunks`],
-        familiar: $familiar`red-nosed snapper`,
       },
       limit: { soft: 11 },
     },
@@ -306,7 +303,6 @@ export const ItemTask: Quest = {
       outfit: {
         modifier: "item",
         equip: $items`Monodent of the Sea, toy Cupid bow, pro skateboard, spring shoes, blood cubic zirconia`,
-        familiar: $familiar`red-nosed snapper`,
       },
       post: () => use($item`Mer-kin thingpouch`, itemAmount($item`Mer-kin thingpouch`)),
       limit: { soft: 11 },
@@ -347,7 +343,6 @@ export const ItemTask: Quest = {
       },
       outfit: {
         equip: [$item`really, really nice swimming trunks`],
-        familiar: $familiar`red-nosed snapper`,
       },
       freeaction: true,
       limit: { soft: 11 },
@@ -397,7 +392,6 @@ export const ItemTask: Quest = {
         .killFree(),
       outfit: {
         equip: $items`spring shoes, Everfull Dart Holster, peridot of peril, shark jumper, toy Cupid bow, sea cowboy hat, sea chaps, old SCUBA tank, McHugeLarge left pole`,
-        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       peridot: $monster`Mer-kin tippler`,
@@ -423,7 +417,6 @@ export const ItemTask: Quest = {
         .killFree(),
       outfit: {
         equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, shark jumper, toy Cupid bow, sea cowboy hat, sea chaps, old SCUBA tank`,
-        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       limit: { soft: 11 },
@@ -593,7 +586,6 @@ export const ItemTask: Quest = {
         .killFree(),
       outfit: {
         equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, blood cubic zirconia, Everfull Dart Holster, McHugeLarge left ski, toy cupid bow`,
-        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       prepare: () => {
@@ -691,7 +683,6 @@ export const ItemTask: Quest = {
         .killFree(),
       outfit: {
         equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy cupid bow, Möbius ring, Monodent of the Sea, everfull dart holster, blood cubic zirconia`,
-        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       delay: 5,
@@ -710,7 +701,6 @@ export const ItemTask: Quest = {
       peridot: $monster`Mer-kin monitor`,
       outfit: {
         equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy cupid bow, Peridot of Peril, Monodent of the Sea, everfull dart holster, blood cubic zirconia`,
-        familiar: $familiar`red-nosed snapper`,
         modifier: "item",
       },
       post: () => {
