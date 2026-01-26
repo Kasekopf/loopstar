@@ -31,6 +31,7 @@ import {
   inHardcore,
   itemAmount,
   myClass,
+  myDaycount,
   myGardenType,
   pullsRemaining,
   Skill,
@@ -48,9 +49,8 @@ export const StartupQuest: Quest = {
   tasks: [
     {
       name: "Pulls",
-
       ready: () => !inHardcore(),
-      completed: () => inHardcore() || pullsRemaining() < 20,
+      completed: () => inHardcore() || pullsRemaining() < 20 || myDaycount() > 1,
       do: () => {
         // buyable items
 
@@ -105,7 +105,6 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Drink beer",
-
       ready: () => have($item`astral six-pack`) || have($item`astral pilsner`),
       completed: () => !have($item`astral six-pack`) && !have($item`astral pilsner`),
       do: () => {
@@ -118,17 +117,6 @@ export const StartupQuest: Quest = {
         }
       },
       effects: $effects`Ode to Booze`,
-      freeaction: true,
-      limit: { tries: 1 },
-    },
-    {
-      name: "Summon Resort Pass",
-
-      completed: () =>
-        !have($skill`Summon Kokomo Resort Pass`) || !(get("_summonResortPassesUsed") === 0),
-      do: () => {
-        useSkill($skill`Summon Kokomo Resort Pass`); // TODO: Figure out how to use this up to the cap
-      },
       freeaction: true,
       limit: { tries: 1 },
     },
@@ -147,7 +135,6 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Mayam Calendar",
-
       completed: () => !MayamCalendar.have() || MayamCalendar.remainingUses() === 0,
       do: () => {
         MayamCalendar.submit("vessel yam2 cheese explosion");
@@ -164,7 +151,6 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Asdon",
-
       completed: () => !AsdonMartin.have() || AsdonMartin.installed(),
       do: () => {
         use($item`Asdon Martin keyfob (on ring)`);
@@ -174,7 +160,6 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Grab Rakes",
-
       completed: () => !BurningLeaves.have() || have($item`rake`),
       do: () => {
         visitUrl("campground.php?preaction=leaves");
@@ -184,18 +169,15 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Grab Scepter Items",
-
       completed: () => !AugustScepter.have() || AugustScepter.getAugustCast(24),
       do: () => {
         useSkill($skill`Aug. 24th: Waffle Day!`);
-        // useSkill($skill`Aug. 18th: Serendipity Day!`);
       },
       freeaction: true,
       limit: { tries: 1 },
     },
     {
       name: "Set SIT Course",
-
       completed: () =>
         !have($item`S.I.T. Course Completion Certificate`) || get("_sitCourseCompleted"),
       do: () => {
@@ -207,7 +189,6 @@ export const StartupQuest: Quest = {
     },
     {
       name: "Guild Pants Unlock",
-
       ready: () => myClass() === $class`Accordion Thief` || myClass() === $class`Disco Bandit`,
       completed: () => !have($item`tearaway pants`) || canAdventure($location`The Unquiet Garves`),
       do: () => {
@@ -266,7 +247,6 @@ export const StartupQuest: Quest = {
       completed: () => !have($item`Sept-Ember Censer`) || get("availableSeptEmbers") <= 7,
       do: () => {
         visitUrl("shop.php?whichshop=september");
-        // visitUrl("shop.php?whichshop=september&action=buyitem&quantity=3&whichrow=1513&pwd");
       },
       freeaction: true,
       limit: { tries: 1 },
@@ -417,7 +397,6 @@ export const BuffQuest: Quest = {
     },
     {
       name: "Zirconia Buffs",
-
       completed: () => !have($item`blood cubic zirconia`) || get("_bczSweatEquityCasts") > 0,
       do: () => {
         for (let i = 0; i < 3; i++) {
@@ -434,7 +413,6 @@ export const BuffQuest: Quest = {
     },
     {
       name: "Alliedradio Boon",
-
       ready: () => have($item`Allied Radio Backpack`),
       completed: () => get("_alliedRadioWildsunBoon"),
       do: () => cliExecute("alliedradio effect boon"),
@@ -443,7 +421,6 @@ export const BuffQuest: Quest = {
     },
     {
       name: "Softcore Lighthouse",
-
       ready: () => AugustScepter.have(),
       completed: () => !AugustScepter.have() || !AugustScepter.canCast(7),
       do: () => {

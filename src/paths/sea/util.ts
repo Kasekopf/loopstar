@@ -144,41 +144,53 @@ export function doFirstAvailableFishySource(): boolean {
 }
 
 export function applyFirstAvailableWaterBreathSource(outfit: Outfit): boolean {
-  for (const source of getWaterBreathSources()) {
-    if (!(source.available?.() ?? true)) continue;
-
-    if (source.outfit) {
-      const spec = typeof source.outfit === "function" ? source.outfit() : source.outfit;
-
-      if (spec.equip) {
-        if (!outfit.equip(spec.equip)) return false;
-      }
-    }
-
-    source.do?.();
-    return true;
-  }
-
-  return false;
+  return applyBreathSources(outfit, getWaterBreathSources());
 }
 
 export function applyFirstAvailableFamiliarWaterBreathSource(outfit: Outfit): boolean {
-  for (const source of getFamiliarWaterBreathSources()) {
+  return applyBreathSources(outfit, getFamiliarWaterBreathSources());
+}
+
+function applyBreathSources(
+  outfit: Outfit,
+  sources: {
+    available?: () => boolean;
+    outfit?: OutfitSpec | (() => OutfitSpec);
+    do?: () => void;
+  }[]
+): boolean {
+  let fallback: typeof sources[number] | null = null;
+
+  for (const source of sources) {
     if (!(source.available?.() ?? true)) continue;
 
-    if (source.outfit) {
-      const spec = typeof source.outfit === "function" ? source.outfit() : source.outfit;
+    const spec =
+      typeof source.outfit === "function" ? source.outfit?.() : source.outfit;
 
-      if (spec.equip) {
-        if (!outfit.equip(spec.equip)) return false;
-      }
+
+    if (spec && outfitAlreadySatisfies(outfit, spec)) {
+      return true;
     }
 
-    source.do?.();
-    return true;
+    if (!fallback) fallback = source;
   }
 
-  return false;
+  if (!fallback) return false;
+
+  const spec =
+    typeof fallback.outfit === "function" ? fallback.outfit() : fallback.outfit;
+
+  if (spec?.equip && !outfit.equip(spec.equip)) return false;
+
+  fallback.do?.();
+  return true;
+}
+
+function outfitAlreadySatisfies(outfit: Outfit, spec: OutfitSpec): boolean {
+  if (!spec.equip) return false;
+
+  const items = Array.isArray(spec.equip) ? spec.equip : [spec.equip];
+  return items.every(item => outfit.haveEquipped(item));
 }
 
 export function grandpaZone(): Location {
