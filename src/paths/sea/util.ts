@@ -62,6 +62,31 @@ export function getWaterBreathSources(): WaterBreathSource[] {
       outfit: { equip: $items`crappy Mer-kin mask` },
     },
     {
+      name: $item`aerated diving helmet`,
+      available: () => have($item`aerated diving helmet`),
+      outfit: { equip: $items`aerated diving helmet` },
+    },
+    {
+      name: $item`The Crown of Ed the Undying`,
+      available: () => have($item`The Crown of Ed the Undying`),
+      outfit: { equip: $items`The Crown of Ed the Undying` },
+    },
+    {
+      name: $item`really, really nice swimming trunks`,
+      available: () => have($item`really, really nice swimming trunks`),
+      outfit: { equip: $items`really\, really nice swimming trunks` },
+    },
+    {
+      name: $item`fish juice box`,
+      available: () => have($item`fish juice box`),
+      do: () => use($item`fish juice box`),
+    },
+    {
+      name: $item`hyperinflated seal lung`,
+      available: () => have($item`hyperinflated seal lung`),
+      do: () => use($item`hyperinflated seal lung`),
+    },
+    {
       name: $item`old SCUBA tank`,
       available: () => have($item`old SCUBA tank`),
       outfit: { equip: $items`old SCUBA tank` },
@@ -159,14 +184,12 @@ function applyBreathSources(
     do?: () => void;
   }[]
 ): boolean {
-  let fallback: typeof sources[number] | null = null;
+  let fallback: (typeof sources)[number] | null = null;
 
   for (const source of sources) {
     if (!(source.available?.() ?? true)) continue;
 
-    const spec =
-      typeof source.outfit === "function" ? source.outfit?.() : source.outfit;
-
+    const spec = typeof source.outfit === "function" ? source.outfit?.() : source.outfit;
 
     if (spec && outfitAlreadySatisfies(outfit, spec)) {
       return true;
@@ -177,8 +200,7 @@ function applyBreathSources(
 
   if (!fallback) return false;
 
-  const spec =
-    typeof fallback.outfit === "function" ? fallback.outfit() : fallback.outfit;
+  const spec = typeof fallback.outfit === "function" ? fallback.outfit() : fallback.outfit;
 
   if (spec?.equip && !outfit.equip(spec.equip)) return false;
 
@@ -190,7 +212,7 @@ function outfitAlreadySatisfies(outfit: Outfit, spec: OutfitSpec): boolean {
   if (!spec.equip) return false;
 
   const items = Array.isArray(spec.equip) ? spec.equip : [spec.equip];
-  return items.every(item => outfit.haveEquipped(item));
+  return items.every((item) => outfit.haveEquipped(item));
 }
 
 export function grandpaZone(): Location {

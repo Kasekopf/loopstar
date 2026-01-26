@@ -66,15 +66,20 @@ export class TheSeaEngine extends Engine {
     const outfit = super.createOutfit(task);
 
     const underwater = task.do instanceof Location && task.do.environment === "underwater";
+    const waterbreathingeffects = $effects`Driving Waterproofly, Really Deep Breath, Pumped Stomach, Oxygenated Blood, Pneumatic`;
 
-    if (underwater) {
+    if (underwater && waterbreathingeffects.forEach((e) => !have(e))) {
       // Player breathing
       if (!applyFirstAvailableWaterBreathSource(outfit)) {
         throw `Unable to breathe underwater for ${task.name}`;
       }
 
       // Familiar breathing
-      if (outfit.familiar && outfit.familiar.underwater === false) {
+      if (
+        outfit.familiar &&
+        outfit.familiar.underwater === false &&
+        !have($effect`Driving Waterproofly`)
+      ) {
         if (!applyFirstAvailableFamiliarWaterBreathSource(outfit)) {
           throw `Unable to provide familiar water breathing for ${task.name}`;
         }
