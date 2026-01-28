@@ -87,8 +87,9 @@ export const ScholarTask: Quest = {
       completed: () => have($item`Mer-kin dreadscroll`) || get("isMerkinHighPriest"),
       do: $location`Mer-kin Library`,
       outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, Möbius ring, Monodent of the Sea, Everfull Dart Holster, spring shoes`,
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece`,
         familiar: $familiar`Peace Turkey`,
+        modifier: "-combat"
       },
       limit: { soft: 11 },
     },

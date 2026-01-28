@@ -210,6 +210,8 @@ export const ItemTask: Quest = {
       },
       outfit: {
         equip: [$item`really, really nice swimming trunks`],
+        familiar: $familiar`Peace Turkey`,
+        modifier: "-combat",
       },
       limit: { soft: 11 },
     },

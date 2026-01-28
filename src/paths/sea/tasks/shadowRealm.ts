@@ -29,7 +29,7 @@ export const ShadowRealmTask: Quest = {
   tasks: [
     {
       name: "Open Shadow Realm",
-      after: ["Startup/Guild Pants Unlock"],
+      after: ["Startup/Guild Pants Unlock", "Startup/Unlock Guild"],
       completed: () => !have($item`closed-circuit pay phone`) || get("_shadowAffinityToday"),
       do: () =>
         ClosedCircuitPayphone.chooseQuest(({ entity }) => {
@@ -58,7 +58,7 @@ export const ShadowRealmTask: Quest = {
     },
     {
       name: "Shadow Realm Fights",
-      after: ["Express Card"],
+      after: ["Open Shadow Realm"],
       completed: () =>
         !have($item`closed-circuit pay phone`) ||
         get("_shadowAffinityToday") ||

@@ -1,4 +1,4 @@
-import { $items, $location, $skill, BloodCubicZirconia, BurningLeaves, get, Macro } from "libram";
+import { $items, $location, $skill, BurningLeaves, get, Macro } from "libram";
 import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 
@@ -13,7 +13,7 @@ export const FreeFightZoneTask: Quest = {
       combat: new CombatStrategy()
         .macro(
           Macro.externalIf(
-            BloodCubicZirconia.timesCast($skill`BCZ: Refracted Gaze`) < 2,
+            get("_bczRefractedGazeCasts") < 2,
             Macro.if_("!monstername burnout ", Macro.trySkill($skill`BCZ: Refracted Gaze`))
           )
         )

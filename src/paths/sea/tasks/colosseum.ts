@@ -38,6 +38,7 @@ export const ColosseumQuest: Quest = {
       },
       outfit: {
         equip: [$item`really, really nice swimming trunks`, $item`prismatic beret`],
+        modifier: "+combat"
       },
       limit: { soft: 11 },
     },
