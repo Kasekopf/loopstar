@@ -138,25 +138,35 @@ export const ItemTask: Quest = {
       completed: () => have($item`aerated diving helmet`) || have($item`rusty rivet`),
       do: () => {
         visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=9537`, false, true);
-        visitUrl(`choice.php?pwd&whichchoice=1267&option=1&wish=to fight an unholy diver`, true, true);
+        visitUrl(
+          `choice.php?pwd&whichchoice=1267&option=1&wish=to fight an unholy diver`,
+          true,
+          true
+        );
         visitUrl(`main.php`, false);
         runCombat();
       },
-      combat: new CombatStrategy().macro((): Macro => {
-        return Macro.trySkill($skill`%fn, lay an egg`)
-          .trySkill($skill`%fn, lay an egg`)
-      }).killFree(),
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.trySkill($skill`%fn, lay an egg`).trySkill($skill`%fn, lay an egg`);
+        })
+        .killFree(),
       outfit: {
         modifier: "item",
         familiar: $familiar`Chest Mimic`,
-        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`
+        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
       },
-      limit: { turns: 1 }
+      limit: { turns: 1 },
     },
     {
       name: "Mimic diver",
       ready: () => ChestMimic.eggMonsters().has($monster`unholy diver`),
-      completed: () => have($item`aerated diving helmet`) || have($item`rusty rivet`, 8) || have($item`crappy Mer-kin mask`) || have($item`Mer-kin scholar mask`) || have($item`Mer-kin gladiator mask`),
+      completed: () =>
+        have($item`aerated diving helmet`) ||
+        have($item`rusty rivet`, 8) ||
+        have($item`crappy Mer-kin mask`) ||
+        have($item`Mer-kin scholar mask`) ||
+        have($item`Mer-kin gladiator mask`),
       do: () => {
         ChestMimic.differentiate($monster`unholy diver`);
         if (!inHardcore() && itemAmount($item`rusty rivet`) === 7) {
@@ -167,9 +177,9 @@ export const ItemTask: Quest = {
       outfit: {
         modifier: "item",
         familiar: $familiar`Grey Goose`,
-        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`
+        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
       },
-      limit: { turns: 1 }
+      limit: { turns: 1 },
     },
     {
       name: "Buy scuba gear",

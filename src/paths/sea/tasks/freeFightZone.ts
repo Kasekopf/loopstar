@@ -8,13 +8,14 @@ export const FreeFightZoneTask: Quest = {
     {
       name: "Free Zone Fights",
       ready: () => get("neverendingPartyAlways"),
-      completed: () => get("_neverendingPartyFreeTurns") >= 10,
+      completed: () =>
+        get("_neverendingPartyFreeTurns") >= 10 || get("_bczRefractedGazeCasts") >= 2,
       do: $location`The Neverending Party`,
       combat: new CombatStrategy()
         .macro(
           Macro.externalIf(
             get("_bczRefractedGazeCasts") < 2,
-            Macro.if_("!monstername burnout ", Macro.trySkill($skill`BCZ: Refracted Gaze`))
+            Macro.if_("!monstername burnout", Macro.trySkill($skill`BCZ: Refracted Gaze`))
           )
         )
         .kill(),
@@ -22,6 +23,13 @@ export const FreeFightZoneTask: Quest = {
       outfit: {
         equip: $items`blood cubic zirconia`,
       },
+    },
+    {
+      name: "Free Zone Fights",
+      ready: () => get("neverendingPartyAlways"),
+      completed: () => get("_neverendingPartyFreeTurns") >= 10,
+      do: $location`The Neverending Party`,
+      limit: { soft: 11 },
     },
     {
       name: "Free Fights (Barroom)",

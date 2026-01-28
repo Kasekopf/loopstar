@@ -247,11 +247,17 @@ export const PreItemTask: Quest = {
     {
       name: "Generate Egg",
       after: ["Outpost Unlock"],
+      ready: () => {
+        if (!ChestMimic.have()) return false;
+        if (!canAdventure($location`Madness Reef`)) return false;
+        if (bestCopyTarget() === $monster`sausage goblin` && have($item`Kramco Sausage-o-Matic™`))
+          return false;
+        return true;
+      },
       completed: () =>
         get("_autosea_egg_generated", false) ||
         !have($skill`Just the Facts`) ||
         get("_monsterHabitatsRecalled") > 0,
-      ready: () => ChestMimic.have() && canAdventure($location`Madness Reef`), // this doesn't actually work but idk what will
       do: () => {
         ChestMimic.receive(bestCopyTarget());
       },
@@ -267,6 +273,7 @@ export const PreItemTask: Quest = {
     {
       name: "Run Egg",
       after: ["Generate Egg"],
+      ready: () => ChestMimic.differentiableQuantity(bestCopyTarget()) >= 1,
       completed: () => get("_monsterHabitatsRecalled") > 0,
       do: () => {
         ChestMimic.differentiate(bestCopyTarget());
@@ -305,9 +312,18 @@ export const PreItemTask: Quest = {
           return Macro.trySkill("Sea *dent: Throw a Lightning Bolt");
         }, $monsters`magic dragonfish`)
         .kill(),
-      outfit: {
-        equip: $items`Everfull Dart Holster, Monodent of the Sea, Roman Candelabra, bat wings`,
-        familiar: $familiar`Exotic Parrot`,
+      outfit: () => {
+        if (bestCopyTarget() === $monster`sausage goblin`) {
+          return {
+            equip: $items`Everfull Dart Holster, Monodent of the Sea, Roman Candelabra, bat wings, Kramco Sausage-o-Matic™`,
+            familiar: $familiar`Exotic Parrot`,
+          };
+        } else {
+          return {
+            equip: $items`Everfull Dart Holster, Monodent of the Sea, Roman Candelabra, bat wings`,
+            familiar: $familiar`Artistic Goth Kid`,
+          };
+        }
       },
       choices: { 311: 1 },
       limit: { soft: 11 },
@@ -323,7 +339,7 @@ export const PreItemTask: Quest = {
       combat: new CombatStrategy().killHard(bestCopyTarget()).kill(),
       outfit: {
         equip: $items`Everfull Dart Holster, Monodent of the Sea, bat wings`,
-        familiar: $familiar`Exotic Parrot`,
+        familiar: $familiar`Artistic Goth Kid`,
       },
       choices: { 311: 1 },
       limit: { soft: 11 },

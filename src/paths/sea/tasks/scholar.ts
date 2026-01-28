@@ -89,7 +89,7 @@ export const ScholarTask: Quest = {
       outfit: {
         equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece`,
         familiar: $familiar`Peace Turkey`,
-        modifier: "-combat"
+        modifier: "-combat",
       },
       limit: { soft: 11 },
     },
