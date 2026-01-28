@@ -56,7 +56,7 @@ export class TheSeaEngine extends Engine {
     resources: CombatResources<CombatActions>
   ): void {
     // Add your custom combat behavior
-    combat.action("killHard", $monsters`time cop`);
+    combat.action("killHard", $monsters`time cop, some fish`);
 
     if (combat.can("killFree"))
       resources.provide("killFree", equipFirst(outfit, freekillSources));
