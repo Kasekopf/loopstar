@@ -14,7 +14,7 @@ import {
   Macro,
 } from "libram";
 import { CombatStrategy } from "grimoire-kolmafia";
-import { canAdventure, cliExecute, holiday, mpCost, myMp, use, useSkill } from "kolmafia";
+import { canAdventure, cliExecute, holiday, mpCost, myMp, use, useSkill, visitUrl } from "kolmafia";
 import { Quest } from "../../../engine/task";
 
 const bestRift = () =>
@@ -31,14 +31,16 @@ export const ShadowRealmTask: Quest = {
       name: "Open Shadow Realm",
       after: ["Startup/Guild Pants Unlock", "Startup/Unlock Guild"],
       completed: () => !have($item`closed-circuit pay phone`) || get("_shadowAffinityToday"),
-      do: () =>
+      do: () => {
         ClosedCircuitPayphone.chooseQuest(({ entity }) => {
           if (entity === $monster`shadow spire`) {
             return 1;
           } else {
             return 2;
           }
-        }),
+        });
+        if (holiday().includes("April Fool's Day")) visitUrl("questlog.php?which=7");
+      },
       freeaction: true,
       limit: { tries: 1 },
       effects: $effects`The Ballad of Richie Thingfinder, Chorale of Companionship`,
@@ -98,6 +100,9 @@ export const ShadowRealmTask: Quest = {
       post: () => {
         ClosedCircuitPayphone.submitQuest();
         if (!get("_seadentWaveUsed")) useSkill($skill`Sea *dent: Summon a Wave`);
+      },
+      choices: {
+        1566: 1,
       },
       freeaction: true,
       limit: { soft: 11 },

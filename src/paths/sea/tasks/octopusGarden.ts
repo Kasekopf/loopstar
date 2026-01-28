@@ -132,7 +132,7 @@ export const OctopusGardenTask: Quest = {
       resources: () => {
         return {
           which: Resources.NCForce,
-          benefit: 5
+          benefit: 5,
         };
       },
       outfit: {
