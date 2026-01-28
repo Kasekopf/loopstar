@@ -1,6 +1,6 @@
 import { CombatResources, EngineOptions, Outfit } from "grimoire-kolmafia";
 import { ActiveTask, Engine } from "../../engine/engine";
-import { CombatActions, CombatStrategy } from "../../engine/combat";
+import { CombatActions, CombatStrategy, replaceActions } from "../../engine/combat";
 import {
   $effect,
   $effects,
@@ -8,6 +8,7 @@ import {
   $location,
   $monsters,
   ensureEffect,
+  get,
   have,
   PropertiesManager,
   uneffect,
@@ -28,12 +29,17 @@ import {
   myMaxhp,
   myMaxmp,
   myMp,
+  myTurncount,
   numericModifier,
   restoreHp,
   restoreMp,
   setLocation,
   use,
 } from "kolmafia";
+import { equipFirst } from "../../engine/outfit";
+import { freekillSources } from "../../resources/freekill";
+import { forceNCPossible, forceNCSources } from "../../resources/forcenc";
+import { ROUTE_WAIT_TO_NCFORCE } from "../../route";
 
 export class TheSeaEngine extends Engine {
   constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
@@ -51,6 +57,32 @@ export class TheSeaEngine extends Engine {
   ): void {
     // Add your custom combat behavior
     combat.action("killHard", $monsters`time cop`);
+
+    if (combat.can("killFree"))
+      resources.provide("killFree", equipFirst(outfit, freekillSources));
+
+    if (
+      forceNCPossible() &&
+      !(task.do instanceof Location) &&
+      !get("noncombatForcerActive") &&
+      myTurncount() >= ROUTE_WAIT_TO_NCFORCE
+    ) {
+      if (
+        task.availableTasks?.find((t) => t.tags?.includes("NCForce") && t.name !== task.name) !==
+        undefined
+      ) {
+        const ncforcer = equipFirst(outfit, forceNCSources);
+        if (ncforcer) {
+          combat.macro(ncforcer.do, undefined, true);
+        }
+      }
+    }
+
+    // Upgrade normal kills to free kills if provided
+    if (resources.has("killFree") && !task.boss) {
+      replaceActions(combat, "kill", "killFree");
+      replaceActions(combat, "killItem", "killFree");
+    }
 
     // Let the base engine do its thing
     super.customize(task, outfit, combat, resources);
