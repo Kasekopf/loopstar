@@ -215,6 +215,7 @@ export const ItemTask: Quest = {
     },
     {
       name: "Corral Refract",
+      ready: () => get("_bczRefractedGazeCasts") < 12,
       after: ["Stashbox Trailmap"],
       completed: () => have($item`sea leather`) || have($item`sea cowboy hat`),
       do: $location`The Coral Corral`,
@@ -316,7 +317,7 @@ export const ItemTask: Quest = {
       do: $location`The Dive Bar`,
       combat: new CombatStrategy()
         .macro((): Macro => {
-          return Macro.tryItem($item`sea lasso`).trySkill($skill`McHugeLarge Slash`);
+          return Macro.tryItem($item`sea lasso`);
         }, $monsters`Mer-kin tippler`)
         .kill(),
       outfit: {

@@ -63,7 +63,7 @@ export const ColosseumQuest: Quest = {
       do: () => {
         // equip($item`April Shower Thoughts shield`)
         // useSkill($skill`Simmer`);
-        ensureEffect($effect`Elron's Explosive Etude`);
+        // ensureEffect($effect`Elron's Explosive Etude`);
         ensureEffect($effect`Arched Eyebrow of the Archmage`);
         cliExecute("telescope high");
         cliExecute("monorail");

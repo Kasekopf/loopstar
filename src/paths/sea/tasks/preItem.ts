@@ -277,7 +277,6 @@ export const PreItemTask: Quest = {
           .trySkill($skill`Recall Facts: Monster Habitats`)
           .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .trySkill($skill`Transcendent Olfaction`)
-          .trySkill($skill`McHugeLarge Slash`)
           .trySkill($skill`Lunging Thrust-Smack`)
           .repeat();
       }),
@@ -338,7 +337,7 @@ export const PreItemTask: Quest = {
       peridot: $monster`giant squid`,
       combat: new CombatStrategy()
         .macro((): Macro => {
-          return Macro.trySkill($skill`Transcendent Olfaction`).trySkill($skill`McHugeLarge Slash`);
+          return Macro.trySkill($skill`Transcendent Olfaction`);
         })
         .kill(),
       outfit: {

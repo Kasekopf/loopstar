@@ -21,8 +21,8 @@ const bestRift = () =>
   canAdventure($location`Shadow Rift (The Misspelled Cemetary)`)
     ? $location`Shadow Rift (The Misspelled Cemetary)`
     : canAdventure($location`Shadow Rift (The Nearby Plains)`)
-    ? $location`Shadow Rift (The Nearby Plains)`
-    : $location`Shadow Rift (The Right Side of the Tracks)`;
+      ? $location`Shadow Rift (The Nearby Plains)`
+      : $location`Shadow Rift (The Right Side of the Tracks)`;
 
 export const ShadowRealmTask: Quest = {
   name: "Shadow Realm",
@@ -61,9 +61,9 @@ export const ShadowRealmTask: Quest = {
       after: ["Express Card"],
       completed: () =>
         !have($item`closed-circuit pay phone`) ||
-        (get("_shadowAffinityToday") &&
-          !have($effect`Shadow Affinity`) &&
-          get("encountersUntilSRChoice") !== 0),
+        get("_shadowAffinityToday") ||
+        !have($effect`Shadow Affinity`),
+      prepare: () => ClosedCircuitPayphone.chooseQuest(() => 2),
       do: bestRift(),
       combat: new CombatStrategy()
         .macro((): Macro => {
