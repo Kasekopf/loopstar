@@ -10,11 +10,10 @@ import {
   get,
   have,
   Macro,
-  withChoice,
 } from "libram";
-import { adv1, haveFamiliar, inHardcore, use, visitUrl } from "kolmafia";
+import { haveFamiliar, inHardcore, use, visitUrl } from "kolmafia";
 import { step } from "grimoire-kolmafia";
-import { Quest } from "../../../engine/task";
+import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import { yellowRayPossible } from "../../../resources/yellowray";
 
@@ -128,8 +127,13 @@ export const OctopusGardenTask: Quest = {
       name: "Do Wreck",
       ready: () => step("questS02Monkees") === 1,
       completed: () => step("questS02Monkees") > 1,
-      do: () => {
-        withChoice(299, 1, () => adv1($location`The Wreck of the Edgar Fitzsimmons`));
+      choices: { 299: 1 },
+      do: () => $location`The Wreck of the Edgar Fitzsimmons`,
+      resources: () => {
+        return {
+          which: Resources.NCForce,
+          benefit: 5
+        };
       },
       outfit: {
         modifier: "mp",
