@@ -21,8 +21,8 @@ const bestRift = () =>
   canAdventure($location`Shadow Rift (The Misspelled Cemetary)`)
     ? $location`Shadow Rift (The Misspelled Cemetary)`
     : canAdventure($location`Shadow Rift (The Nearby Plains)`)
-    ? $location`Shadow Rift (The Nearby Plains)`
-    : $location`Shadow Rift (The Right Side of the Tracks)`;
+      ? $location`Shadow Rift (The Nearby Plains)`
+      : $location`Shadow Rift (The Right Side of the Tracks)`;
 
 export const ShadowRealmTask: Quest = {
   name: "Shadow Realm",
@@ -105,7 +105,7 @@ export const ShadowRealmTask: Quest = {
         1566: 1,
       },
       freeaction: true,
-      limit: { soft: 11 },
+      limit: { turns: 1 },
       outfit: {
         familiar: $familiar`Jill-of-All-Trades`,
         equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, April Shower Thoughts shield, bat wings, toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory, prismatic beret`,

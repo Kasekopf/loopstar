@@ -18,8 +18,8 @@ export const FreeFightZoneTask: Quest = {
             Macro.if_("!monstername burnout", Macro.trySkill($skill`BCZ: Refracted Gaze`))
           )
         )
-        .kill(),
-      limit: { soft: 11 },
+        .killHard(),
+      limit: { turns: 1 },
       outfit: {
         equip: $items`blood cubic zirconia`,
       },
@@ -28,15 +28,16 @@ export const FreeFightZoneTask: Quest = {
       name: "Free Zone Fights",
       ready: () => get("neverendingPartyAlways"),
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
+      combat: new CombatStrategy().killHard(),
       do: $location`The Neverending Party`,
-      limit: { soft: 11 },
+      limit: { turns: 1 },
     },
     {
       name: "Free Fights (Barroom)",
       completed: () => !get("ownsSpeakeasy") || get("_speakeasyFreeFights") >= 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
       combat: new CombatStrategy().killHard(),
-      limit: { soft: 11 },
+      limit: { turns: 1 },
     },
     {
       name: "Free Fights (Leaves)",
@@ -48,7 +49,7 @@ export const FreeFightZoneTask: Quest = {
         BurningLeaves.burnLeaves(11);
       },
       combat: new CombatStrategy().killHard(),
-      limit: { soft: 11 },
+      limit: { turns: 1 },
     },
   ],
 };
