@@ -249,6 +249,7 @@ export const ItemTask: Quest = {
           use($item`Mer-kin hidepaint`);
         }
       },
+      delay: 25,
       limit: { soft: 11 },
     },
     {
