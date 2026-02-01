@@ -6,6 +6,7 @@ const watch = process.argv.some((arg) => ["--watch", "-w"].includes(arg));
 
 const context = await esbuild.context({
   bundle: true,
+  minify: true, // Removes comments, fixes rhino bug
   platform: "node",
   target: "rhino1.7.14",
   external: ["kolmafia"],
