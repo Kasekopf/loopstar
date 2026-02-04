@@ -34,6 +34,7 @@ export const args = Args.create(
           ["aftercore", "Aftercore"],
           ["boris", "Avatar of Boris (Work in Progress)"],
           ["ih8u", "11 Things I Hate About U (Work in Progress)"],
+          ["sea", "11,037 Leagues Under the Sea"],
         ],
         setting: "",
       },
@@ -226,6 +227,11 @@ export const args = Args.create(
     ih8u: Args.group("11 Things I Hate About U (Work in Progress)", {
       ih8uargs: Args.string({
         help: "Extra command-line arguments to be used only in ih8u runs.",
+      }),
+    }),
+    sea: Args.group("11,037 Leagues Under the Sea", {
+      seaargs: Args.string({
+        help: "Extra command-line arguments to be used only in Sea runs.",
       }),
     }),
     aftercore: Args.group("Path: Aftercore", {

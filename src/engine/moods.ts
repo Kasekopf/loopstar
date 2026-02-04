@@ -165,7 +165,7 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
       result["mysticality"].push($effect`Mystically Oiled`);
       result["moxie"].push($effect`Superhuman Sarcasm`);
     }
-    if (saucePotionsAvailable >= 3) {
+    if (saucePotionsAvailable >= 3 && have($item`tomato`)) {
       all_attributes.push($effect`Tomato Power`);
     }
 
