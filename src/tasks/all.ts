@@ -21,6 +21,8 @@ import { Quest, Task } from "../engine/task";
 import { PullQuest } from "./pulls";
 import { LevelingQuest } from "./leveling";
 import { getTasks } from "grimoire-kolmafia";
+import { args } from "../args";
+import { TheSeaQuest } from "../paths/sea/tasks";
 
 const allQuests: Quest[] = [
   PullQuest,
@@ -50,5 +52,6 @@ const allQuests: Quest[] = [
 ];
 
 export function getAllTasks(): Task[] {
-  return getTasks(allQuests);
+  const questsToUse = args.sea ? TheSeaQuest : allQuests;
+  return getTasks(questsToUse);
 }

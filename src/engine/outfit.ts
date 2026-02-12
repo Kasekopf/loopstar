@@ -260,7 +260,7 @@ export function equipCharging(
     (itemAmount($item`star`) < 8 || itemAmount($item`line`) < 7) &&
     !have($item`Richard's star key`) &&
     !get("nsTowerDoorKeysUsed").includes("Richard's star key");
-  if (get("camelSpit") < 100 && (need_bowling_balls || need_star_key)) {
+  if (get("camelSpit") < 100 && (need_bowling_balls || need_star_key) && !args.sea) {
     outfit.equip($familiar`Melodramedary`);
   }
 
@@ -268,7 +268,8 @@ export function equipCharging(
     (!have($item`eleven-foot pole`) ||
       !have($item`ring of Detect Boring Doors`) ||
       !have($item`Pick-O-Matic lockpicks`)) &&
-    keyStrategy.useful(Keys.Dungeon) !== false
+    keyStrategy.useful(Keys.Dungeon) !== false &&
+    !args.sea
   ) {
     outfit.equip($familiar`Gelatinous Cubeling`);
   }
