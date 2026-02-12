@@ -52,6 +52,5 @@ const allQuests: Quest[] = [
 ];
 
 export function getAllTasks(): Task[] {
-  const questsToUse = args.sea ? TheSeaQuest : allQuests;
-  return getTasks(questsToUse);
+  return getTasks(allQuests);
 }
