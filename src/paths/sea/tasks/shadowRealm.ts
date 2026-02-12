@@ -21,8 +21,8 @@ const bestRift = () =>
   canAdventure($location`Shadow Rift (The Misspelled Cemetary)`)
     ? $location`Shadow Rift (The Misspelled Cemetary)`
     : canAdventure($location`Shadow Rift (The Nearby Plains)`)
-      ? $location`Shadow Rift (The Nearby Plains)`
-      : $location`Shadow Rift (The Right Side of the Tracks)`;
+    ? $location`Shadow Rift (The Nearby Plains)`
+    : $location`Shadow Rift (The Right Side of the Tracks)`;
 
 export const ShadowRealmTask: Quest = {
   name: "Shadow Realm",

@@ -37,6 +37,7 @@
     "kolmafia": "^5.28889.0",
     "libram": "^0.11.14",
     "mafia-shared-relay": "^0.0.7",
+    "msr": "npm:mafia-shared-relay",
     "node": "^25.3.0",
     "typescript-eslint": "^8.53.0"
   },

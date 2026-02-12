@@ -1,6 +1,6 @@
 import { Args } from "grimoire-kolmafia";
 import { write } from "kolmafia";
-import { ComponentSetting, generateHTML, handleApiRequest, RelayPage } from "mafia-shared-relay";
+import { ComponentSetting, generateHTML, handleApiRequest, RelayPage } from "msr";
 import { args, supportedWorksheds } from "./args";
 import { $item } from "libram";
 

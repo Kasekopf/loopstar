@@ -10,6 +10,7 @@ import {
   equip,
   equippedItem,
   familiarEquippedEquipment,
+  familiarWeight,
   getWorkshed,
   haveEffect,
   haveEquipped,
@@ -18,6 +19,7 @@ import {
   Location,
   logprint,
   myAdventures,
+  myEffects,
   myFamiliar,
   myHp,
   myLevel,
@@ -55,6 +57,7 @@ import {
   Macro,
   PropertiesManager,
   set,
+  totalFamiliarWeight,
   undelay,
   uneffect,
 } from "libram";
@@ -687,10 +690,12 @@ export class Engine extends BaseEngine<CombatActions, ActiveTask> {
     }
     fixFoldables(outfit);
 
-    const equipped = [...new Set(Slot.all().map((slot) => equippedItem(slot)))];
     if (args.debug.verbose) {
+      const equipped = [...new Set(Slot.all().map((slot) => equippedItem(slot)))];
       print(`Equipped: ${equipped.join(", ")}`);
-      print(`Familiar: ${myFamiliar()}`);
+      print(`Familiar: ${myFamiliar()} (${familiarWeight(myFamiliar())}:${totalFamiliarWeight()})`);
+      const effects = Object.entries(myEffects()).map((v) => `${v[0]} (${v[1]})`);
+      print(`Effects: ${effects.join(", ")}`);
     }
     logModifiers(outfit);
 
