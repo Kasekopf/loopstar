@@ -100,7 +100,7 @@ export const CasualDietQuest: Quest = {
         restoreMp(1);
         cliExecute("numberology 69");
       },
-      limit: { tries: 5 },
+      limit: { tries: 10 },
       freeaction: true,
       withnoadventures: true,
     },
