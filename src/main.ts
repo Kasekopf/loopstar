@@ -32,7 +32,7 @@ import { getChainSources } from "./resources/wanderer";
 const svn_name = "Kasekopf-loop-casual-branches-release";
 
 export function main(command?: string): void {
-  sinceKolmafiaRevision(28726);
+  sinceKolmafiaRevision(28913);
 
   Args.fill(args, command);
 

@@ -26,4 +26,9 @@ export const luckySources: LuckySource[] = [
     prepare: () => useSkill($skill`Aug. 2nd: Find an Eleven-Leaf Clover Day`),
     remaining: () => (AugustScepter.canCast(2) ? 1 : 0),
   },
+  {
+    name: "Heartstone: Luck",
+    prepare: () => useSkill($skill`Heartstone: %luck`),
+    remaining: () => (!get("heartstoneLuckUnlocked") ? 0 : get("_heartstoneLuckUsed") ? 0 : 1),
+  },
 ];

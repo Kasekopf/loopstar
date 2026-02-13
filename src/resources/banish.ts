@@ -142,6 +142,13 @@ const banishSources: BanishSource[] = [
     free: true,
   },
   {
+    name: "Heartstone: Banish",
+    available: () => get("heartstoneBanishUnlocked") && get("_heartstoneBanishUsed") < 5,
+    do: $skill`Heartstone: %banish`,
+    equip: $item`Heartstone`,
+    free: true,
+  },
+  {
     name: "Middle Finger",
     available: () => !get("_mafiaMiddleFingerRingUsed") && have($item`mafia middle finger ring`),
     do: $skill`Show them your ring`,
