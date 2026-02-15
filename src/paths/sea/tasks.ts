@@ -25,3 +25,6 @@ export const TheSeaQuest: Quest[] = [
   WrapupQuest,
   FinalQuest,
 ];
+
+// Aftercore goal to prepare Dad
+export const TestQuest: Quest[] = [OctopusGardenTask];

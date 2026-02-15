@@ -18,7 +18,7 @@ export class CasualInfo implements PathInfo {
   }
 
   active(): boolean {
-    return inCasual();
+    return inCasual() && step("questL13Final") <= 11;
   }
 
   finished(): boolean {

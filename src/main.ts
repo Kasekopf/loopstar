@@ -130,7 +130,7 @@ export function main(command?: string): void {
     return;
   }
   if (!path) throw `You are currently in a path (${myPath()}) which is not supported.`;
-
+  debug(`Path: ${path.name}`);
   const extraArgs = path.args();
   if (extraArgs) {
     Args.fill(args, extraArgs);

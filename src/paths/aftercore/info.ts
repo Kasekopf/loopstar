@@ -13,6 +13,8 @@ import { KnobQuest } from "../../tasks/level5";
 import { MenagerieQuest } from "./menagerie";
 import { myAscensions } from "kolmafia";
 import { DisQuest } from "./dis";
+import { TheSeaEngine } from "../sea/engine";
+import { TestQuest } from "../sea/tasks";
 
 export class AftercoreInfo implements PathInfo {
   name(): string {
@@ -36,6 +38,8 @@ export class AftercoreInfo implements PathInfo {
         return have($item`Cobb's Knob Menagerie key`);
       case "dis":
         return get("lastThingWithNoNameDefeated") === myAscensions();
+      case "seatest":
+        return get("seahorseName") !== "";
       default:
         throw `Unknown goal ${goal}`;
     }
@@ -60,6 +64,8 @@ export class AftercoreInfo implements PathInfo {
         return getTasks([KnobQuest, MenagerieQuest]);
       case "dis":
         return getTasks([DisQuest]);
+      case "seatest":
+        return getTasks(TestQuest);
       default:
         throw `Unknown goal ${goal}`;
     }
@@ -71,7 +77,12 @@ export class AftercoreInfo implements PathInfo {
   }
 
   getEngine(tasks: Task[]): Engine {
-    return new Engine(tasks);
+    switch (args.aftercore.goal) {
+      case "seatest":
+        return new TheSeaEngine(tasks);
+      default:
+        return new Engine(tasks);
+    }
   }
 
   runIntro() {
