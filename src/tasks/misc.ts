@@ -68,6 +68,7 @@ import {
   BurningLeaves,
   byClass,
   byStat,
+  ChateauMantegna,
   CinchoDeMayo,
   Clan,
   ClosedCircuitPayphone,
@@ -884,9 +885,7 @@ export const MiscQuest: Quest = {
       after: [],
       ready: () => get("chateauAvailable") && !underStandard(),
       completed: () => get("_chateauDeskHarvested"),
-      do: (): void => {
-        visitUrl("place.php?whichplace=chateau&action=chateau_desk2");
-      },
+      do: () => ChateauMantegna.harvestDesk(),
       limit: { tries: 1 },
       freeaction: true,
     },
@@ -1764,8 +1763,8 @@ function chooseBestLeprecondo(): number[] {
     myPath() === $path`11 Things I Hate About U` && furnitureFound.has(25)
       ? 25
       : furnitureFound.has(13)
-      ? 13
-      : 0; // Sous vide -> meat% and random food
+        ? 13
+        : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }
