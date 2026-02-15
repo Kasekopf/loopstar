@@ -7,6 +7,7 @@ import {
   $item,
   $location,
   $monsters,
+  $slot,
   ensureEffect,
   get,
   have,
@@ -14,16 +15,12 @@ import {
   uneffect,
 } from "libram";
 import { Task } from "../../engine/task";
-import {
-  applyFirstAvailableFamiliarWaterBreathSource,
-  applyFirstAvailableWaterBreathSource,
-  doFirstAvailableFishySource,
-} from "./util";
 import { SeaActionDefaults } from "./combat";
 import {
   abort,
   cliExecute,
   create,
+  getWorkshed,
   Location,
   myHp,
   myMaxhp,
@@ -40,6 +37,12 @@ import { equipFirst } from "../../engine/outfit";
 import { freekillSources } from "../../resources/freekill";
 import { forceNCPossible, forceNCSources } from "../../resources/forcenc";
 import { ROUTE_WAIT_TO_NCFORCE } from "../../route";
+import {
+  familiarWaterBreathEquips,
+  familiarWaterBreathSources,
+  fishySources,
+  waterBreathSources,
+} from "./util";
 
 export class TheSeaEngine extends Engine {
   constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
@@ -85,11 +88,20 @@ export class TheSeaEngine extends Engine {
 
     // Let the base engine do its thing
     super.customize(task, outfit, combat, resources);
-  }
 
-  override prepare(): void {
-    if (!have($effect`Fishy`)) {
-      doFirstAvailableFishySource();
+    // If we added a generic familiar that cannot breath water,
+    // we need to override the familiar equip and hope nothing too bad happens
+    if (outfit.familiar && !outfit.familiar.underwater) {
+      if (getWorkshed() !== $item`Asdon Martin keyfob (on ring)`) {
+        const famequip = outfit.equips.get($slot`familiar`) ?? $item`none`;
+        if (!familiarWaterBreathEquips.includes(famequip)) {
+          const firstFamiliarWaterBreath = familiarWaterBreathEquips.find((e) => have(e));
+          if (!firstFamiliarWaterBreath) {
+            throw `Unable to provide familiar water breathing for ${task.name}`;
+          }
+          outfit.equips.set($slot`familiar`, firstFamiliarWaterBreath);
+        }
+      }
     }
   }
 
@@ -97,26 +109,33 @@ export class TheSeaEngine extends Engine {
     const outfit = super.createOutfit(task);
 
     const underwater = task.do instanceof Location && task.do.environment === "underwater";
-    const waterbreathingeffects = $effects`Driving Waterproofly, Really Deep Breath, Pumped Stomach, Oxygenated Blood, Pneumatic`;
-
-    if (underwater && waterbreathingeffects.forEach((e) => !have(e))) {
-      // Player breathing
-      if (!applyFirstAvailableWaterBreathSource(outfit)) {
-        throw `Unable to breathe underwater for ${task.name}`;
+    if (underwater) {
+      const playerBreathing = equipFirst(outfit, waterBreathSources);
+      if (!playerBreathing) {
+        throw `Unable to breath underwater for ${task.name}`;
+      }
+      if (playerBreathing.prepare) {
+        outfit.afterDress(playerBreathing.prepare);
       }
 
-      // Familiar breathing
-      if (
-        outfit.familiar &&
-        outfit.familiar.underwater === false &&
-        !have($effect`Driving Waterproofly`)
-      ) {
-        if (!applyFirstAvailableFamiliarWaterBreathSource(outfit)) {
+      const fishy = equipFirst(outfit, fishySources);
+      if (!fishy) {
+        throw `Unable to become fishy`;
+      }
+      if (fishy.prepare) {
+        outfit.afterDress(fishy.prepare);
+      }
+
+      if (outfit.familiar && !outfit.familiar.underwater) {
+        const familiarBreathing = equipFirst(outfit, familiarWaterBreathSources);
+        if (!familiarBreathing) {
           throw `Unable to provide familiar water breathing for ${task.name}`;
+        }
+        if (familiarBreathing.prepare) {
+          outfit.afterDress(familiarBreathing.prepare);
         }
       }
     }
-
     return outfit;
   }
 
@@ -192,6 +211,10 @@ const pearlResists = new Map<Location, string>([
 
 function taskLocation(task: Task): Location | undefined {
   if (task.do instanceof Location) return task.do;
+
+  // Running task.do on most tasks here will cause it to be run twice
+  // Hack a special-case for these two tasks until they are fixed
+  if (!task.name.includes("Do Habs") && !task.name.includes("Get Pearls")) return undefined;
 
   const result = task.do();
   return result instanceof Location ? result : undefined;
