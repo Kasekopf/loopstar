@@ -1582,6 +1582,11 @@ core-js@^3.16.4:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.45.0.tgz#556c2af44a2d9c73ea7b49504392474a9f7c947e"
   integrity sha512-c2KZL9lP4DjkN3hk/an4pWn5b5ZefhRJnAc42n6LJ19kSnbeRbdQZE5dSeE2LBol1OwJD3X1BQvFTAsa8ReeDA==
 
+core-js@^3.47.0:
+  version "3.48.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.48.0.tgz#1f813220a47bbf0e667e3885c36cd6f0593bf14d"
+  integrity sha512-zpEHTy1fjTMZCKLHUZoVeylt9XrzaIN2rbPXEt0k+q7JE5CkCZdo6bNq55bn24a69CH7ErAVLKijxJja4fw+UQ==
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
@@ -1975,11 +1980,6 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-html-entities@^2.5.2:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.6.0.tgz#7c64f1ea3b36818ccae3d3fb48b6974208e984f8"
-  integrity sha512-kig+rMn/QOVRvr7c86gQ8lWXq+Hkv6CbAH1hLu+RG338StTpE8Z0b44SDVaqVu7HGKf27frdmUYEs9hTUX/cLQ==
-
 ignore@^5.2.0:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.3.2.tgz#3cd40e729f3643fd87cb04e50bf0eb722bc596f5"
@@ -2120,11 +2120,12 @@ levn@^0.4.1:
     type-check "~0.4.0"
 
 libram@^0.11.14:
-  version "0.11.14"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.14.tgz#011527aba45e3225809e9f0decaf9b83fcce8325"
-  integrity sha512-EzuyU8fru9rYWnQkaWGcknZJ6JgwLIH+GDI8NbCKgVsA7MuSKE6CU/Do/I18vm/dmgjqSbivzE8wcjKxUDNTAQ==
+  version "0.11.18"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.18.tgz#ee76ab5309d74d735359c78f5b8cabdd085eb565"
+  integrity sha512-ShJ6x/6n/9ZNwqM+w3FdcwBEq4JumGFTwRUy8EY+P7JYRFPCLKxi3vHpRDdOUP8ps9Evbg280RpcFiwpt7h6/w==
   dependencies:
-    html-entities "^2.5.2"
+    core-js "^3.47.0"
+    entities "^7.0.0"
 
 locate-path@^6.0.0:
   version "6.0.0"
