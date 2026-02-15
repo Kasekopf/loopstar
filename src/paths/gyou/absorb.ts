@@ -15,6 +15,7 @@ import {
   myAscensions,
   myDaycount,
   myLocation,
+  myPath,
   numericModifier,
   print,
   putCloset,
@@ -33,6 +34,7 @@ import {
   $location,
   $monster,
   $monsters,
+  $path,
   $skill,
   $skills,
   $slot,
@@ -801,6 +803,8 @@ export class AbsorbState {
     this.ignored = new Set<Monster>();
     this.ignoredSkills = new Set<Skill>();
     this.advAbsorbed = 0;
+
+    if (myPath() !== $path`Grey You`) return;
 
     const charsheet = visitUrl("charsheet.php");
     let match;
