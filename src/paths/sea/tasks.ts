@@ -4,12 +4,13 @@ import { ColosseumQuest } from "./tasks/colosseum";
 import { FreeFightZoneTask } from "./tasks/freeFightZone";
 import { FinalQuest } from "./tasks/final";
 import { ItemTask } from "./tasks/itemRush";
-import { OctopusGardenTask } from "./tasks/octopusGarden";
+import { SeaMonkeeQuest } from "./tasks/seaMonkee";
 import { PreItemTask } from "./tasks/preItem";
 import { ScholarTask } from "./tasks/scholar";
 import { ShadowRealmTask } from "./tasks/shadowRealm";
 import { BuffQuest, StartupQuest } from "./tasks/startup";
 import { WrapupQuest } from "./tasks/wrapup";
+import { SummonsQuest } from "./tasks/summons";
 
 export const TheSeaQuest: Quest[] = [
   TootQuest,
@@ -17,7 +18,8 @@ export const TheSeaQuest: Quest[] = [
   BuffQuest,
   ShadowRealmTask,
   FreeFightZoneTask,
-  OctopusGardenTask,
+  SummonsQuest,
+  SeaMonkeeQuest,
   PreItemTask,
   ItemTask,
   ScholarTask,
@@ -27,4 +29,4 @@ export const TheSeaQuest: Quest[] = [
 ];
 
 // Aftercore goal to prepare Dad
-export const TestQuest: Quest[] = [OctopusGardenTask];
+export const TestQuest: Quest[] = [SeaMonkeeQuest];

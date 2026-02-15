@@ -14,6 +14,7 @@ import {
   AugustScepter,
   BurningLeaves,
   Clan,
+  CursedMonkeyPaw,
   ensureEffect,
   get,
   have,
@@ -328,6 +329,13 @@ export const StartupQuest: Quest = {
           $item`Spooky VHS Tape`
         );
       },
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Acquire shark jumper",
+      completed: () => have($item`shark jumper`) || !CursedMonkeyPaw.have(),
+      do: () => CursedMonkeyPaw.wishFor($item`shark jumper`),
       freeaction: true,
       limit: { tries: 1 },
     },
