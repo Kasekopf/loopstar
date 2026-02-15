@@ -12,6 +12,7 @@ import {
   myFullness,
   myInebriety,
   myLevel,
+  myMeat,
   restoreMp,
   retrieveItem,
   reverseNumberology,
@@ -142,7 +143,7 @@ export const IH8UDietQuest: Quest = {
     {
       name: "Sausage",
       completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
-      ready: () => have($item`magical sausage casing`),
+      ready: () => have($item`magical sausage casing`) && myMeat() >= 5000,
       do: (): void => {
         // Pump-and-grind cannot be used from Left-Hand Man
         if (
