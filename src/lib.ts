@@ -200,30 +200,38 @@ export function stableSort<T>(items: T[], key: (item: T) => number): T[] {
 }
 
 /**
- * Return true if we can possibly fuel the asdon to the required amount.
+ * Return true if we can possibly fuel the Asdon to the required amount.
  */
 export function asdonFualable(amount: number): boolean {
   if (!AsdonMartin.installed()) return false;
-  if (
-    !have($item`forged identification documents`) &&
-    step("questL11Black") < 4 &&
-    myMeat() < 10000
-  )
-    return false; // Save early
-  if (amount <= getFuel()) return true;
 
-  // Use wad of dough with the bugbear outfit
+  const currentFuel = getFuel();
+  if (amount <= currentFuel) return true;
+
+  const needed = amount - currentFuel;
+  const availableMeat = myMeat();
+
+  // ----- Method 1: wad of dough via bugbear outfit -----
   if (have($item`bugbear bungguard`) && have($item`bugbear beanie`)) {
-    return myMeat() >= (amount - getFuel()) * 24 + 1000; // Save 1k meat as buffer
+    const buffer = 1000;
+    const costPerFuel = 24;
+    return availableMeat >= needed * costPerFuel + buffer;
   }
 
-  // Use all-purpose flower if we have enough ascensions
-  if (myAscensions() >= 10 && (have($item`bitchin' meatcar`) || have($item`Desert Bus pass`))) {
-    return myMeat() >= 3000 + (amount - getFuel()) * 14; // 2k for all-purpose flower + save 1k meat as buffer + soda water
+  // ----- Method 2: all-purpose flower -----
+  if (
+    myAscensions() >= 10 &&
+    (have($item`bitchin' meatcar`) || have($item`Desert Bus pass`))
+  ) {
+    const buffer = 1000;
+    const baseCost = 2000; // flower unlock cost
+    const costPerFuel = 14;
+    return availableMeat >= baseCost + needed * costPerFuel + buffer;
   }
 
   return false;
 }
+
 export function tryPlayApriling(modifier: string): void {
   if (!AprilingBandHelmet.have()) return;
 
