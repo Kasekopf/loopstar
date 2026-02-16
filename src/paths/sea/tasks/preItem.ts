@@ -18,18 +18,9 @@ import {
 } from "libram";
 import { step } from "grimoire-kolmafia";
 
-import { abort, adv1, canAdventure, print, useSkill } from "kolmafia";
+import { abort, adv1, canAdventure, print } from "kolmafia";
 import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
-import {
-  countFreeMines,
-  getAsMatrix,
-  getLayoutAsMatrix,
-  Mine,
-  mineCoordinate,
-  MiningCoordinate,
-  visitMine,
-} from "../mining";
 import { bestCopyTarget } from "../util";
 
 export const PreItemTask: Quest = {
@@ -47,121 +38,6 @@ export const PreItemTask: Quest = {
         withChoice(1500, 2, () => adv1($location`Shadow Rift (The Misspelled Cemetary)`, -1, ""));
       },
       freeaction: true,
-      limit: { soft: 11 },
-    },
-    {
-      name: "Kill Miner",
-      ready: () => step("questS02Monkees") >= 4,
-      completed: () => have($item`Mer-kin digpick`),
-      do: $location`Anemone Mine`,
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.step("pickpocket");
-        })
-        .kill(),
-      outfit: {
-        modifier: "item",
-        equip: $items`Monodent of the Sea, Everfull Dart Holster, spring shoes, Peridot of Peril, prismatic beret, shark jumper, toy Cupid bow`,
-      },
-      peridot: $monster`Mer-kin miner`,
-      limit: { soft: 11 },
-    },
-    {
-      name: "Free Mining",
-      ready: () => have($item`Mer-kin digpick`),
-      completed: () => countFreeMines() === 0,
-      do: () => {
-        print("Visiting mine...");
-        visitMine(Mine.ANEMONE);
-        const mineMatrix = getAsMatrix(Mine.ANEMONE);
-        const mineOreMatrix = getLayoutAsMatrix(Mine.ANEMONE);
-        print(mineMatrix.toString());
-        print(mineOreMatrix.toString());
-        for (let y = 5; y >= 1; y--) {
-          if (mineMatrix[y][3] !== "o") {
-            mineCoordinate(Mine.ANEMONE, [3 + 1, y + 1]);
-            return;
-          }
-        }
-
-        // Build list of remaining unmined spots matching criteria
-        const availableCoordinates: MiningCoordinate[] = [];
-
-        for (let x = 0; x < 6; x++) {
-          for (let y = 0; y < 6; y++) {
-            // Skip already mined squares
-            if (mineMatrix[y][x] === "o") continue;
-
-            // Check if sparkly (rows 0-2)
-            if (y <= 2 && mineMatrix[y][x] === "*") {
-              availableCoordinates.push([x, y]);
-              continue;
-            }
-
-            // Check if on row 1 and adjacent to a mined square
-            if (y === 1) {
-              const adjacentMined =
-                (x > 0 && mineMatrix[y][x - 1] === "o") || // left
-                (x < 5 && mineMatrix[y][x + 1] === "o") || // right
-                mineMatrix[y - 1][x] === "o" || // above (row 0)
-                mineMatrix[y + 1][x] === "o"; // below (row 2)
-
-              if (adjacentMined) {
-                availableCoordinates.push([x, y]);
-              }
-            }
-          }
-        }
-
-        // Choose the coordinate with best score
-        let bestCoordinate: MiningCoordinate | null = null;
-        let bestScore = -Infinity;
-
-        for (const [x, y] of availableCoordinates) {
-          let minVinylDistance = 1000;
-          let minVelcroDistance = 1000;
-
-          // Find minimum distance to each type of ore
-          for (let oy = 0; oy < 6; oy++) {
-            for (let ox = 0; ox < 6; ox++) {
-              const cell = mineOreMatrix[oy][ox];
-              const distance = Math.abs(x - ox) + Math.abs(y - oy);
-
-              if (cell.includes("vinyl")) {
-                minVinylDistance = Math.min(minVinylDistance, distance);
-              }
-              if (cell.includes("velcro")) {
-                minVelcroDistance = Math.min(minVelcroDistance, distance);
-              }
-            }
-          }
-
-          // Score based on distances (higher is better)
-          let score = minVinylDistance + minVelcroDistance;
-
-          // Add sparkly bonus
-          const sparklyBonus = mineMatrix[y][x] === "*" ? 2 : 0;
-          score += sparklyBonus;
-
-          if (score > bestScore) {
-            bestScore = score;
-            bestCoordinate = [x, y];
-          }
-        }
-
-        if (bestCoordinate) {
-          mineCoordinate(Mine.ANEMONE, [bestCoordinate[0] + 1, bestCoordinate[1] + 1]);
-        }
-      },
-      outfit: {
-        equip: $items`Mer-kin digpick`,
-        avoid: $items`Peridot of Peril`,
-      },
-      post: () => {
-        if (have($effect`Beaten Up`)) {
-          useSkill($skill`Tongue of the Walrus`);
-        }
-      },
       limit: { soft: 11 },
     },
     {
