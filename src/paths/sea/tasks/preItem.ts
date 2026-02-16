@@ -18,7 +18,7 @@ import {
 } from "libram";
 import { step } from "grimoire-kolmafia";
 
-import { abort, adv1, canAdventure, cliExecute, print, useSkill } from "kolmafia";
+import { abort, adv1, canAdventure, print, useSkill } from "kolmafia";
 import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import {
@@ -30,7 +30,7 @@ import {
   MiningCoordinate,
   visitMine,
 } from "../mining";
-import { bestCopyTarget, grandpaZone } from "../util";
+import { bestCopyTarget } from "../util";
 
 export const PreItemTask: Quest = {
   name: "Pre-Item Run",
@@ -182,40 +182,6 @@ export const PreItemTask: Quest = {
         equip: $items`Mer-kin digpick`,
         avoid: $items`Peridot of Peril`,
       },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Dive Bar Noncombats",
-      after: ["Manual Mining"],
-      ready: () => step("questS02Monkees") >= 4,
-      completed: () => step("questS02Monkees") >= 5,
-      do: grandpaZone(),
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.step("pickpocket").if_(
-            "monstername nurse shark",
-            Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`)
-          );
-        })
-        .kill(),
-      outfit: {
-        modifier: "-combat",
-        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
-        familiar: $familiar`Peace Turkey`,
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Outpost Unlock",
-      after: ["Dive Bar Noncombats"],
-      completed: () => step("questS02Monkees") >= 6,
-      do: () => {
-        cliExecute("grandpa wife");
-      },
-      outfit: {
-        pants: $item`really, really nice swimming trunks`,
-      },
-      freeaction: true,
       limit: { soft: 11 },
     },
     {

@@ -7,6 +7,7 @@ import {
   $item,
   $location,
   $monsters,
+  $path,
   $slot,
   ensureEffect,
   get,
@@ -26,6 +27,7 @@ import {
   myMaxhp,
   myMaxmp,
   myMp,
+  myPath,
   myTurncount,
   numericModifier,
   restoreHp,
@@ -108,8 +110,8 @@ export class TheSeaEngine extends Engine {
   override createOutfit(task: ActiveTask): Outfit {
     const outfit = super.createOutfit(task);
 
-    const underwater = task.do instanceof Location && task.do.environment === "underwater";
-    if (underwater) {
+    const locationUnderwater = task.do instanceof Location && task.do.environment === "underwater";
+    if (task.underwater || locationUnderwater) {
       const playerBreathing = equipFirst(outfit, waterBreathSources);
       if (!playerBreathing) {
         throw `Unable to breath underwater for ${task.name}`;
@@ -142,11 +144,7 @@ export class TheSeaEngine extends Engine {
   override dress(task: ActiveTask, outfit: Outfit): void {
     if (have($effect`Beaten Up`)) abort();
 
-    if (have($item`Grandma's Chartreuse Yarn`)) {
-      cliExecute("grandpa note");
-    }
-
-    if (have($item`whirled peas`, 2)) {
+    if (have($item`whirled peas`, 2) && !have($item`handful of split pea soup`)) {
       create($item`handful of split pea soup`);
     }
 
@@ -221,6 +219,7 @@ function taskLocation(task: Task): Location | undefined {
 }
 
 function ensureResistsForTask(task: Task): void {
+  if (myPath() !== $path`11,037 Leagues Under the Sea`) return;
   const location = taskLocation(task);
   if (!location) return;
 

@@ -1,4 +1,5 @@
 import {
+  $coinmaster,
   $effect,
   $familiar,
   $item,
@@ -7,11 +8,22 @@ import {
   $monster,
   $monsters,
   $skill,
+  $stat,
+  ensureEffect,
   get,
   have,
   Macro,
 } from "libram";
-import { use, visitUrl } from "kolmafia";
+import {
+  buy,
+  cliExecute,
+  closetAmount,
+  itemAmount,
+  myPrimestat,
+  takeCloset,
+  use,
+  visitUrl,
+} from "kolmafia";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
@@ -73,6 +85,7 @@ export const SeaMonkeeQuest: Quest = {
       after: ["Use Wriggling Pellet"],
       completed: () => step("questS02Monkees") > 0,
       do: () => visitUrl("monkeycastle.php?who=1"),
+      underwater: true,
       freeaction: true,
       limit: { tries: 1 },
     },
@@ -102,7 +115,142 @@ export const SeaMonkeeQuest: Quest = {
         visitUrl("monkeycastle.php?who=2");
         visitUrl("monkeycastle.php?who=1");
       },
+      underwater: true,
       freeaction: true,
+      limit: { soft: 11 },
+    },
+    {
+      name: "Grandpa Anemone Mine",
+      after: ["Open Grandpa Zone"],
+      ready: () => myPrimestat() === $stat`Muscle`,
+      completed: () => step("questS02Monkees") >= 5,
+      do: $location`Anemone Mine`,
+      combat: new CombatStrategy().kill(),
+      outfit: {
+        modifier: "-combat",
+        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+        avoid: $items`Mer-kin digpick`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { soft: 20 },
+    },
+    {
+      name: "Grandpa Marinara Trench",
+      after: ["Open Grandpa Zone"],
+      ready: () => myPrimestat() === $stat`Mysticality`,
+      completed: () => step("questS02Monkees") >= 5,
+      do: $location`The Marinara Trench`,
+      combat: new CombatStrategy().kill(),
+      outfit: {
+        modifier: "-combat",
+        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { soft: 20 },
+    },
+    {
+      name: "Grandpa Dive Bar",
+      after: ["Open Grandpa Zone"],
+      ready: () => myPrimestat() === $stat`Moxie`,
+      completed: () => step("questS02Monkees") >= 5,
+      do: $location`The Dive Bar`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.step("pickpocket").if_(
+            "monstername nurse shark",
+            Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`)
+          );
+        })
+        .kill(),
+      outfit: {
+        modifier: "-combat",
+        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+        familiar: $familiar`Peace Turkey`,
+      },
+      limit: { soft: 20 },
+    },
+    {
+      name: "Open Outpost",
+      after: ["Grandpa Anemone Mine", "Grandpa Marinara Trench", "Grandpa Dive Bar"],
+      completed: () => step("questS02Monkees") >= 6,
+      do: () => {
+        cliExecute("grandpa wife");
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Outpost Grandma",
+      after: ["Open Outpost"],
+      completed: () => step("questS02Monkees") >= 9,
+      do: $location`The Mer-Kin Outpost`,
+      combat: new CombatStrategy().banish($monsters`Mer-kin burglar, Mer-kin raider`).kill(),
+      outfit: () => {
+        const result: OutfitSpec = {
+          familiar: $familiar`Peace Turkey`,
+        };
+        if (itemAmount($item`Mer-kin prayerbeads`) < 3) {
+          result.modifier = "item, -combat";
+        } else {
+          result.modifier = "-combat";
+        }
+        return result;
+      },
+      limit: { soft: 20 },
+    },
+    {
+      name: "Grandma Note",
+      after: ["Open Outpost"],
+      ready: () =>
+        have($item`Grandma's Note`) &&
+        have($item`Grandma's Fuchsia Yarn`) &&
+        have($item`Grandma's Chartreuse Yarn`),
+      completed: () => have($item`Grandma's Map`) || step("questS02Monkees") >= 9,
+      do: () => {
+        cliExecute("grandpa note");
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Open Abyss",
+      after: ["Outpost Grandma"],
+      ready: () => itemAmount($item`sand dollar`) + closetAmount($item`sand dollar`) >= 13,
+      completed: () => have($item`black glass`),
+      do: () => {
+        const sandDollarsFromCloset = 13 - itemAmount($item`sand dollar`);
+        if (sandDollarsFromCloset > 0) {
+          takeCloset($item`sand dollar`, sandDollarsFromCloset);
+        }
+        visitUrl("monkeycastle.php?who=1");
+        visitUrl("monkeycastle.php?who=2");
+        buy($coinmaster`Big Brother`, 1, $item`black glass`);
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Abyss",
+      after: ["Open Abyss"],
+      completed: () => step("questS02Monkees") === 999,
+      prepare: () => {
+        if (have($item`comb jelly`)) ensureEffect($effect`Jelly Combed`);
+      },
+      do: $location`The Caliginous Abyss`,
+      combat: new CombatStrategy().killHard($monsters`Peanut`).kill(),
+      outfit: () => {
+        const baseOutfit: OutfitSpec = {
+          familiar: $familiar`Peace Turkey`,
+          equip: $items`old SCUBA tank, black glass, shark jumper, scale-mail underwear`,
+        };
+        if (get("_assertYourAuthorityCast") < 3) {
+          baseOutfit.equip!.push(...$items`Sheriff badge, Sheriff moustache, Sheriff pistol`);
+        }
+        return baseOutfit;
+      },
       limit: { soft: 11 },
     },
   ],

@@ -5,7 +5,6 @@ import {
   $item,
   $items,
   $location,
-  $monsters,
   $skill,
   AprilingBandHelmet,
   AugustScepter,
@@ -13,7 +12,6 @@ import {
   have,
   Macro,
 } from "libram";
-import { OutfitSpec, step } from "grimoire-kolmafia";
 
 import {
   abort,
@@ -49,14 +47,6 @@ function firstGuessWasGood(): boolean {
   } else {
     const firstGuessAmount = get("dreadScrollGuesses").split(",")[0].split(":")[1];
     return parseInt(firstGuessAmount) < 2;
-  }
-}
-
-function readyToAbyss(): boolean {
-  if (get("spookyVHSTapeMonster") !== null) {
-    return get("momSeaMonkeeProgress") < 36;
-  } else {
-    return get("momSeaMonkeeProgress") < 40;
   }
 }
 
@@ -274,36 +264,6 @@ export const ScholarTask: Quest = {
         familiar: $familiar`Red-Nosed Snapper`,
         modifier: "item",
       },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Scholar Abyss",
-      after: ["Get Fishy"],
-      ready: () => readyToAbyss(),
-      completed: () => get("momSeaMonkeeProgress") >= 40,
-      do: $location`The Caliginous Abyss`,
-      combat: new CombatStrategy().killHard($monsters`Peanut`),
-      outfit: () => {
-        const baseOutfit: OutfitSpec = {
-          familiar: $familiar`Peace Turkey`,
-          equip: $items`old SCUBA tank, black glass, shark jumper, scale-mail underwear`,
-        };
-        if (get("_assertYourAuthorityCast") < 3) {
-          baseOutfit.equip!.push(...$items`Sheriff badge, Sheriff moustache, Sheriff pistol`);
-        }
-        return baseOutfit;
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Abyss Mom",
-      after: ["Scholar Abyss"],
-      completed: () => step("questS02Monkees") === 999,
-      do: $location`The Caliginous Abyss`,
-      outfit: {
-        equip: $items`black glass`,
-      },
-      freeaction: true,
       limit: { soft: 11 },
     },
     {
