@@ -4,9 +4,7 @@ import {
   cliExecute,
   getWorkshed,
   Item,
-  Location,
   Monster,
-  myPrimestat,
   mySpleenUse,
   spleenLimit,
   storageAmount,
@@ -18,9 +16,7 @@ import {
   $effects,
   $item,
   $items,
-  $location,
   $monster,
-  $stat,
   AsdonMartin,
   get,
   have,
@@ -162,19 +158,6 @@ export const fishySources: Resource[] = [
     prepare: () => use($item`fish sauce`),
   },
 ];
-
-export function grandpaZone(): Location {
-  switch (myPrimestat()) {
-    case $stat`Muscle`:
-      return $location`Anemone Mine`;
-    case $stat`Moxie`:
-      return $location`The Marinara Trench`;
-    case $stat`Mysticality`:
-      return $location`The Dive Bar`;
-    default:
-      return $location.none;
-  }
-}
 
 export function bestCopyTarget(): Monster {
   if (get("neverendingPartyAlways")) return $monster`sausage goblin`;
