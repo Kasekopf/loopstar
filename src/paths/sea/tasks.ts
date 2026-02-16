@@ -9,8 +9,8 @@ import { PreItemTask } from "./tasks/preItem";
 import { ScholarTask as ScholarQuest } from "./tasks/scholar";
 import { ShadowRealmTask } from "./tasks/shadowRealm";
 import { BuffQuest, StartupQuest } from "./tasks/startup";
-import { WrapupQuest } from "./tasks/wrapup";
-import { SummonsQuest } from "./tasks/summons";
+import { PearlsQuest } from "./tasks/pearls";
+import { SummonsQuest } from "./tasks/merkinGear";
 import { CurrentsQuest } from "./tasks/currents";
 import { SkateParkQuest } from "./tasks/skatepark";
 
@@ -28,7 +28,7 @@ export const TheSeaQuest: Quest[] = [
   ScholarQuest,
   SkateParkQuest,
   ColosseumQuest,
-  WrapupQuest,
+  PearlsQuest,
   FinalQuest,
 ];
 

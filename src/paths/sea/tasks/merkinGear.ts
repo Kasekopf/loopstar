@@ -7,6 +7,7 @@ import {
   $location,
   $monster,
   $skill,
+  ChestMimic,
   have,
   Macro,
 } from "libram";
@@ -15,8 +16,10 @@ import {
   closetAmount,
   inHardcore,
   itemAmount,
+  myHash,
   print,
   retrieveItem,
+  runCombat,
   takeCloset,
   useSkill,
   visitUrl,
@@ -32,6 +35,7 @@ import {
   MiningCoordinate,
   visitMine,
 } from "../mining";
+import { pull } from "../util";
 
 export const SummonsQuest: Quest = {
   name: "Octopus Garden",
@@ -211,22 +215,6 @@ export const SummonsQuest: Quest = {
       limit: { tries: 1 },
     },
     {
-      name: "Get Mer-kin Mask",
-      after: ["Currents/Seahorse"],
-      completed: () =>
-        have($item`crappy Mer-kin mask`) ||
-        have($item`Mer-kin gladiator mask`) ||
-        have($item`Mer-kin scholar mask`),
-      do: () => {
-        retrieveItem($item`aerated diving helmet`);
-        visitUrl("shop.php?whichshop=grandma");
-        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=124&pwd");
-      },
-      underwater: true,
-      freeaction: true,
-      limit: { tries: 1 },
-    },
-    {
       name: "Get Mer-kin Tailpiece",
       after: ["Make Sea Chaps", "Mine Teflon", "Buy Waterlogged Bootstraps", "Currents/Seahorse"],
       completed: () =>
@@ -237,6 +225,71 @@ export const SummonsQuest: Quest = {
         retrieveItem($item`teflon swim fins`);
         visitUrl("shop.php?whichshop=grandma");
         visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=125&pwd");
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Fax diver",
+      ready: () => ChestMimic.have() && $familiar`Chest Mimic`.experience >= 50,
+      completed: () => have($item`aerated diving helmet`) || have($item`rusty rivet`),
+      do: () => {
+        visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=9537`, false, true);
+        visitUrl(
+          `choice.php?pwd&whichchoice=1267&option=1&wish=to fight an unholy diver`,
+          true,
+          true
+        );
+        visitUrl(`main.php`, false);
+        runCombat();
+      },
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.trySkill($skill`%fn, lay an egg`).trySkill($skill`%fn, lay an egg`);
+        })
+        .killFree(),
+      outfit: {
+        modifier: "item",
+        familiar: $familiar`Chest Mimic`,
+        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
+      },
+      limit: { turns: 1 },
+    },
+    {
+      name: "Mimic diver",
+      ready: () => ChestMimic.eggMonsters().has($monster`unholy diver`),
+      completed: () =>
+        have($item`aerated diving helmet`) ||
+        have($item`rusty rivet`, 8) ||
+        have($item`crappy Mer-kin mask`) ||
+        have($item`Mer-kin scholar mask`) ||
+        have($item`Mer-kin gladiator mask`),
+      do: () => {
+        ChestMimic.differentiate($monster`unholy diver`);
+        if (!inHardcore() && itemAmount($item`rusty rivet`) === 7) {
+          pull($item`rusty rivet`);
+        }
+      },
+      combat: new CombatStrategy().killFree(),
+      outfit: {
+        modifier: "item",
+        familiar: $familiar`Grey Goose`,
+        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
+      },
+      limit: { turns: 1 },
+    },
+    {
+      name: "Get Mer-kin Mask",
+      after: ["Fax diver", "Mimic diver", "Currents/Seahorse"],
+      completed: () =>
+        have($item`crappy Mer-kin mask`) ||
+        have($item`Mer-kin gladiator mask`) ||
+        have($item`Mer-kin scholar mask`),
+      do: () => {
+        retrieveItem($item`aerated diving helmet`);
+        visitUrl("shop.php?whichshop=grandma");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=124&pwd");
       },
       underwater: true,
       freeaction: true,
