@@ -13,11 +13,9 @@ import {
 } from "libram";
 
 import {
-  abort,
   buy,
   cliExecute,
   closetAmount,
-  inHardcore,
   itemAmount,
   myHp,
   myMaxhp,
@@ -32,7 +30,6 @@ import {
 } from "kolmafia";
 import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
-import { pull } from "../util";
 
 function getNumMissingClues() {
   let missingClues = 0;
@@ -218,16 +215,11 @@ export const ScholarTask: Quest = {
     {
       name: "Eat nigiri",
       after: ["Get Dreadscroll"],
+      ready: () => have($item`Mer-kin worktea`),
       completed: () => get("dreadScroll7") !== 0,
       do: () => {
-        if (!have($item`Mer-kin worktea`) && !inHardcore()) {
-          pull($item`Mer-kin worktea`);
-        }
         if (!have($item`white rice`)) {
           buy($item`white rice`);
-        }
-        if (!have($item`Mer-kin worktea`)) {
-          abort("Couldn't get worktea for sushi somehow.");
         }
         cliExecute("create slick nigiri");
       },
@@ -237,16 +229,9 @@ export const ScholarTask: Quest = {
     {
       name: "Use knucklebone",
       after: ["Get Dreadscroll"],
+      ready: () => have($item`Mer-kin knucklebone`),
       completed: () => get("dreadScroll4") !== 0,
-      do: () => {
-        if (!have($item`Mer-kin knucklebone`) && !inHardcore()) {
-          pull($item`Mer-kin knucklebone`);
-        }
-        if (!have($item`Mer-kin knucklebone`)) {
-          abort("Couldn't get knucklebone for dreadscroll somehow.");
-        }
-        use($item`Mer-kin knucklebone`);
-      },
+      do: () => use($item`Mer-kin knucklebone`),
       freeaction: true,
       limit: { soft: 11 },
     },
@@ -268,7 +253,7 @@ export const ScholarTask: Quest = {
       },
       outfit: {
         familiar: $familiar`Exotic Parrot`,
-        modifier: "Spooky resistance",
+        modifier: "spooky res",
       },
       freeaction: true,
       limit: { soft: 11 },

@@ -27,7 +27,7 @@ import { underStandard } from "../lib";
  * name: If a list of options is given, what to use for the task (& sim) name.
  * benefit: The number of turns this pull would save or generate.
  * description: Extra text to include in the sim message.
- * disabled: If true, disabled by a flag (for "im reporting).
+ * disabled: If true, disabled by a flag (for sim reporting).
  */
 export type PullSpec = {
   optional?: boolean;

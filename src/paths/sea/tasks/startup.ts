@@ -29,59 +29,19 @@ import {
   drink,
   Effect,
   guildStoreAvailable,
-  inHardcore,
   itemAmount,
   myClass,
-  myDaycount,
   myGardenType,
-  pullsRemaining,
   Skill,
-  storageAmount,
   use,
   useSkill,
   visitUrl,
 } from "kolmafia";
 import { Quest } from "../../../engine/task";
-import { pull } from "../util";
-import { args } from "../../../args";
 
 export const StartupQuest: Quest = {
   name: "Startup",
   tasks: [
-    {
-      name: "Pulls",
-      ready: () => !inHardcore(),
-      completed: () => inHardcore() || pullsRemaining() < 20 || myDaycount() > 1,
-      do: () => {
-        // buyable items
-
-        // pull only items
-        pull($item`pro skateboard`);
-        pull($item`shark jumper`);
-        pull($item`Flash Liquidizer Ultra Dousing Accessory`);
-        pull($item`Spooky VHS Tape`);
-        pull($item`sea lasso`);
-        pull($item`sea cowbell`);
-        pull($item`lodestone`);
-        pull($item`Mer-kin pinkslip`);
-        pull($item`stuffed yam stinkbomb`);
-        pull($item`handful of split pea soup`);
-        pull($item`anchor bomb`);
-        if (storageAmount($item`Platinum Yendorian Express Card`) >= 1)
-          pull($item`Platinum Yendorian Express Card`);
-        pull($item`ink bladder`);
-        pull($item`Mer-kin sneakmask`);
-        pull($item`fishy pipe`);
-        if (!have($item`Platinum Yendorian Express Card`)) {
-          pull($item`minin' dynamite`);
-        }
-        if (!args.resources.speed) {
-          pull($item`scale-mail underwear`);
-        }
-      },
-      freeaction: true,
-      limit: { tries: 1 },
-    },
     {
       name: "Make tunac",
       completed: () => get("_floundryItemCreated"),

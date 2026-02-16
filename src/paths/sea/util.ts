@@ -1,29 +1,6 @@
-import {
-  abort,
-  buyUsingStorage,
-  cliExecute,
-  getWorkshed,
-  Item,
-  Monster,
-  mySpleenUse,
-  spleenLimit,
-  storageAmount,
-  toInt,
-  use,
-} from "kolmafia";
+import { getWorkshed, Monster, mySpleenUse, spleenLimit, use } from "kolmafia";
 import { $effect, $effects, $item, $items, $monster, AsdonMartin, get, have } from "libram";
 import { Resource } from "../../resources/lib";
-
-export function pull(item: Item) {
-  if (get("_roninStoragePulls").split(",").includes(toInt(item).toString())) return;
-  if (storageAmount(item) === 0) {
-    if (!item.tradeable) return;
-    if (buyUsingStorage(item, 1, 15000) === 0) {
-      abort(`Unable to buy desired pull item ${item.name}`);
-    }
-  }
-  cliExecute(`pull ${item.name}`);
-}
 
 export const waterBreathSources: Resource[] = [
   {

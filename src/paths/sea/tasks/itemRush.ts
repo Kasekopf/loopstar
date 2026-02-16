@@ -38,7 +38,6 @@ import {
 } from "kolmafia";
 import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
-import { pull } from "../util";
 
 function haveElementarySchoolRefractItems() {
   let numItems = 0;
@@ -403,7 +402,7 @@ export const ItemTask: Quest = {
           itemAmount($item`Mer-kin cheatsheet`) < itemAmount($item`Mer-kin wordquiz`) &&
           !inHardcore()
         ) {
-          pull($item`Mer-kin cheatsheet`);
+          // pull($item`Mer-kin cheatsheet`);
         }
         use(
           $item`Mer-kin wordquiz`,
@@ -490,7 +489,7 @@ export const ItemTask: Quest = {
       },
       post: () => {
         if (get("dreadScroll5") === 0) {
-          pull($item`Mer-kin killscroll`);
+          // pull($item`Mer-kin killscroll`);
         }
       },
       limit: { soft: 11 },
@@ -515,7 +514,7 @@ export const ItemTask: Quest = {
       },
       post: () => {
         if (get("dreadScroll2") === 0) {
-          pull($item`Mer-kin healscroll`);
+          // pull($item`Mer-kin healscroll`);
         }
       },
       limit: { soft: 11 },

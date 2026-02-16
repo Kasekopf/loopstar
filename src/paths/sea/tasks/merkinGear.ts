@@ -35,7 +35,6 @@ import {
   MiningCoordinate,
   visitMine,
 } from "../mining";
-import { pull } from "../util";
 
 export const SummonsQuest: Quest = {
   name: "Octopus Garden",
@@ -265,12 +264,7 @@ export const SummonsQuest: Quest = {
         have($item`crappy Mer-kin mask`) ||
         have($item`Mer-kin scholar mask`) ||
         have($item`Mer-kin gladiator mask`),
-      do: () => {
-        ChestMimic.differentiate($monster`unholy diver`);
-        if (!inHardcore() && itemAmount($item`rusty rivet`) === 7) {
-          pull($item`rusty rivet`);
-        }
-      },
+      do: () => ChestMimic.differentiate($monster`unholy diver`),
       combat: new CombatStrategy().killFree(),
       outfit: {
         modifier: "item",

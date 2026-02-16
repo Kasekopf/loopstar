@@ -13,8 +13,10 @@ import { PearlsQuest } from "./tasks/pearls";
 import { SummonsQuest } from "./tasks/merkinGear";
 import { CurrentsQuest } from "./tasks/currents";
 import { SkateParkQuest } from "./tasks/skatepark";
+import { SeaPullsQuest } from "./tasks/pulls";
 
 export const TheSeaQuest: Quest[] = [
+  SeaPullsQuest,
   TootQuest,
   StartupQuest,
   BuffQuest,
