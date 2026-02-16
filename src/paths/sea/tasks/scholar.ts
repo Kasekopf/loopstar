@@ -216,44 +216,6 @@ export const ScholarTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Do Skate Park",
-      after: ["Get More Clues"],
-      completed: () => get("skateParkStatus") !== "war",
-      resources: {
-        which: Resources.NCForce,
-        benefit: 5,
-      },
-      do: $location`The Skate Park`,
-      outfit: () => {
-        const equipItems = $items`really\, really nice swimming trunks, Möbius ring`;
-        if (have($item`skate blade`)) {
-          equipItems.push($item`skate blade`);
-        }
-        return {
-          familiar: $familiar`Peace Turkey`,
-          equip: equipItems,
-          modifier: "-combat",
-        };
-      },
-      post: () => {
-        // Otherwise mafia won't update the war status for us
-        visitUrl("sea_skatepark.php");
-      },
-      choices: { 403: 1 },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Get Fishy",
-      after: ["Do Skate Park"],
-      ready: () => get("skateParkStatus") === "ice",
-      completed: () => get("_skateBuff1"),
-      do: () => {
-        visitUrl("sea_skatepark.php?action=state2buff1");
-      },
-      freeaction: true,
-      limit: { soft: 11 },
-    },
-    {
       name: "Finish Dive Bar",
       after: ["Get Fishy"],
       completed: () => get("_unblemishedPearlDiveBar"),
