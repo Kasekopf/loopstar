@@ -68,6 +68,7 @@ import {
   BurningLeaves,
   byClass,
   byStat,
+  ChateauMantegna,
   CinchoDeMayo,
   Clan,
   ClosedCircuitPayphone,
@@ -884,9 +885,7 @@ export const MiscQuest: Quest = {
       after: [],
       ready: () => get("chateauAvailable") && !underStandard(),
       completed: () => get("_chateauDeskHarvested"),
-      do: (): void => {
-        visitUrl("place.php?whichplace=chateau&action=chateau_desk2");
-      },
+      do: () => ChateauMantegna.harvestDesk(),
       limit: { tries: 1 },
       freeaction: true,
     },
