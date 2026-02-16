@@ -6,7 +6,7 @@ import { FinalQuest } from "./tasks/final";
 import { ItemTask } from "./tasks/itemRush";
 import { SeaMonkeeQuest } from "./tasks/seaMonkee";
 import { PreItemTask } from "./tasks/preItem";
-import { ScholarTask } from "./tasks/scholar";
+import { ScholarTask as ScholarQuest } from "./tasks/scholar";
 import { ShadowRealmTask } from "./tasks/shadowRealm";
 import { BuffQuest, StartupQuest } from "./tasks/startup";
 import { WrapupQuest } from "./tasks/wrapup";
@@ -25,7 +25,7 @@ export const TheSeaQuest: Quest[] = [
   PreItemTask,
   ItemTask,
   CurrentsQuest,
-  ScholarTask,
+  ScholarQuest,
   SkateParkQuest,
   ColosseumQuest,
   WrapupQuest,
@@ -33,4 +33,4 @@ export const TheSeaQuest: Quest[] = [
 ];
 
 // Aftercore goal to prepare Dad
-export const TestQuest: Quest[] = [SeaMonkeeQuest, SkateParkQuest, CurrentsQuest, ColosseumQuest];
+export const TestQuest: Quest[] = [SeaMonkeeQuest, SkateParkQuest, CurrentsQuest, ScholarQuest];

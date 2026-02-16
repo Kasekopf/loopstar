@@ -5,6 +5,7 @@ import {
   $item,
   $items,
   $location,
+  $monsters,
   $skill,
   get,
   have,
@@ -15,11 +16,15 @@ import {
   abort,
   buy,
   cliExecute,
+  closetAmount,
   inHardcore,
+  itemAmount,
   myHp,
   myMaxhp,
   myMaxmp,
   myMp,
+  putCloset,
+  takeCloset,
   totalFreeRests,
   use,
   useSkill,
@@ -70,8 +75,137 @@ export const ScholarTask: Quest = {
   name: "Scholar",
   tasks: [
     {
+      name: "Elementary School",
+      after: ["Currents/Seahorse"],
+      completed: () =>
+        (have($item`Mer-kin scholar mask`) || have($item`Mer-kin facecowl`)) &&
+        (have($item`Mer-kin scholar tailpiece`) || have($item`Mer-kin waistrope`)),
+      prepare: () => {
+        // Only use hallpasses once the teacher's lounge is unlocked
+        if (get("merkinElementaryTeacherUnlock")) {
+          if (closetAmount($item`Mer-kin hallpass`) > 0) {
+            takeCloset($item`Mer-kin hallpass`, closetAmount($item`Mer-kin hallpass`));
+          }
+        } else {
+          if (itemAmount($item`Mer-kin hallpass`) > 0) {
+            putCloset(itemAmount($item`Mer-kin hallpass`), $item`Mer-kin hallpass`);
+          }
+        }
+      },
+      do: $location`Mer-kin Elementary School`,
+      choices: {
+        705: 4,
+      },
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.ifNot(
+            "monstername time cop",
+            Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
+          ).skill($skill`BCZ: Refracted Gaze`);
+        })
+        .kill(),
+      resources: () => {
+        if (get("merkinElementaryTeacherUnlock")) return undefined;
+        return {
+          which: Resources.NCForce,
+          benefit: 5,
+        };
+      },
+      outfit: {
+        equip: $items`crappy Mer-kin mask, crappy Mer-kin tailpiece, Monodent of the Sea, blood cubic zirconia, Everfull Dart Holster, McHugeLarge left ski, toy Cupid bow`,
+        modifier: "item",
+      },
+      limit: { soft: 11 },
+    },
+    {
+      name: "Study Wordquiz",
+      after: ["Currents/Seahorse"],
+      ready: () => have($item`Mer-kin wordquiz`) && have($item`Mer-kin cheatsheet`),
+      completed: () => get("merkinVocabularyMastery") >= 60,
+      do: () => use($item`Mer-kin wordquiz`),
+      freeaction: true,
+      limit: { tries: 10 },
+    },
+    {
+      name: "Study Wordquiz Bonus",
+      after: ["Study Wordquiz"],
+      ready: () => have($item`Mer-kin wordquiz`) && have($item`Mer-kin cheatsheet`),
+      completed: () => get("merkinVocabularyMastery") >= 100,
+      do: () => use($item`Mer-kin wordquiz`),
+      freeaction: true,
+      limit: { tries: 10 },
+    },
+    {
+      name: "Outfit",
+      after: ["Elementary School", "Study Wordquiz"],
+      completed: () =>
+        get("yogUrtDefeated") ||
+        (have($item`Mer-kin scholar mask`) && have($item`Mer-kin scholar tailpiece`)),
+      do: () => {
+        visitUrl("shop.php?whichshop=grandma");
+        if (have($item`crappy Mer-kin mask`)) {
+          visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=129&pwd");
+        }
+        if (have($item`crappy Mer-kin tailpiece`)) {
+          visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=130&pwd");
+        }
+      },
+      underwater: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Library Items",
+      after: ["Outfit"],
+      completed: () => {
+        if (!have($item`Mer-kin knucklebone`) && get("dreadScroll4") === 0) return false;
+        if (!have($item`Mer-kin worktea`) && get("dreadScroll7") === 0) return false;
+        return true;
+      },
+      do: $location`Mer-kin Library`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          return Macro.ifNot(
+            "monstername time cop",
+            Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
+          ).skill($skill`BCZ: Refracted Gaze`);
+        })
+        .kill(),
+      outfit: {
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy Cupid bow, Möbius ring, Monodent of the Sea, Everfull Dart Holster, blood cubic zirconia`,
+        modifier: "item",
+      },
+      limit: { soft: 11 },
+    },
+    {
+      name: "Library Scrolls",
+      after: ["Library Items"],
+      completed: () => get("dreadScroll2") !== 0 && get("dreadScroll5") !== 0,
+      do: $location`Mer-kin Library`,
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          const result = new Macro();
+
+          if (get("dreadScroll2") === 0) {
+            result.while_(
+              `hascombatitem 3809 && !match "a magnificent"`,
+              Macro.item($item`Mer-kin healscroll`)
+            );
+          }
+          if (get("dreadScroll5") === 0) {
+            result.while_(`hascombatitem 3594`, Macro.item($item`Mer-kin killscroll`));
+          }
+          return result;
+        }, $monsters`Mer-kin alphabetizer, Mer-kin drifter, Mer-kin researcher`)
+        .kill(),
+      outfit: {
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, toy Cupid bow, Möbius ring, Monodent of the Sea, Everfull Dart Holster, blood cubic zirconia`,
+        modifier: "item",
+      },
+      limit: { soft: 11 },
+    },
+    {
       name: "Get Dreadscroll",
-      after: ["Item Run/Learn scroll words"],
+      after: ["Library Scrolls"],
       completed: () => have($item`Mer-kin dreadscroll`) || get("isMerkinHighPriest"),
       do: $location`Mer-kin Library`,
       outfit: {
@@ -140,6 +274,24 @@ export const ScholarTask: Quest = {
       limit: { soft: 11 },
     },
     {
+      name: "Guess Dreadscroll",
+      after: [
+        "Eat nigiri",
+        "Use knucklebone",
+        "Cast Deep Dark Visions",
+        "Library Scrolls",
+        "Get Dreadscroll",
+      ],
+      ready: () => !have($effect`Deep-Tainted Mind`),
+      completed: () => get("isMerkinHighPriest"),
+      do: () => {
+        use($item`Mer-kin dreadscroll`);
+        visitUrl(`main.php`, false);
+      },
+      freeaction: true,
+      limit: { soft: 11 },
+    },
+    {
       name: "Kill YogUrt",
       ready: () => get("isMerkinHighPriest"),
       completed: () => get("yogUrtDefeated"),
@@ -164,39 +316,9 @@ export const ScholarTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      // Maybe we failed to get killscroll or healscroll clues. We still want to have at least 5 clues to guess.
-      name: "Collect Emergency Dreadscroll Clues",
-      after: ["Eat nigiri", "Use knucklebone", "Cast Deep Dark Visions"],
-      completed: () => getNumMissingClues() <= 3,
-      do: $location`Mer-kin Library`,
-      resources: () => {
-        return {
-          which: Resources.NCForce,
-          benefit: !get("merkinElementaryTeacherUnlock") ? 5 : 0,
-        };
-      },
-      outfit: {
-        familiar: $familiar`Peace Turkey`,
-        equip: $items`Mer-kin scholar tailpiece, Mer-kin scholar mask`,
-        modifier: "-combat",
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Guess Dreadscroll",
-      after: ["Collect Emergency Dreadscroll Clues"],
-      ready: () => have($item`Mer-kin dreadscroll`) && !have($effect`Deep-Tainted Mind`),
-      completed: () => get("isMerkinHighPriest"),
-      do: () => {
-        use($item`Mer-kin dreadscroll`);
-        visitUrl(`main.php`, false);
-      },
-      freeaction: true,
-      limit: { soft: 11 },
-    },
-    {
       name: "Get More Clues",
-      ready: () => have($item`Mer-kin dreadscroll`) && get("dreadScrollGuesses") !== "",
+      after: ["Get Dreadscroll"],
+      ready: () => get("dreadScrollGuesses") !== "",
       completed: () => get("isMerkinHighPriest") || getNumMissingClues() < 3 || firstGuessWasGood(),
       do: $location`Mer-kin Library`,
       resources: () => {
@@ -209,32 +331,6 @@ export const ScholarTask: Quest = {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Mer-kin scholar tailpiece, Mer-kin scholar mask, McHugeLarge left ski`,
         modifier: "-combat",
-      },
-      freeaction: true,
-      limit: { soft: 11 },
-    },
-    {
-      name: "Finish Dive Bar",
-      after: ["Get Fishy"],
-      completed: () => get("_unblemishedPearlDiveBar"),
-      do: $location`The Dive Bar`,
-      combat: new CombatStrategy().kill(),
-      outfit: {
-        equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, shark jumper, toy Cupid bow, really\, really nice swimming trunks`,
-        familiar: $familiar`Red-Nosed Snapper`,
-        modifier: "item",
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Anemone Mine Stalling",
-      after: ["Gymnasium"],
-      completed: () => get("isMerkinHighPriest") || get("_unblemishedPearlAnemoneMine"),
-      do: $location`Anemone Mine`,
-      combat: new CombatStrategy().kill(),
-      outfit: {
-        equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, shark jumper, toy Cupid bow, really\, really nice swimming trunks`,
-        familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
     },

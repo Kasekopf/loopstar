@@ -64,10 +64,8 @@ export const ColosseumQuest: Quest = {
         visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=126&pwd");
         visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=127&pwd");
       },
-      outfit: {
-        equip: [$item`really, really nice swimming trunks`, $item`prismatic beret`],
-        modifier: "+combat",
-      },
+      underwater: true,
+      freeaction: true,
       limit: { tries: 1 },
     },
     {
@@ -124,7 +122,7 @@ export const ColosseumQuest: Quest = {
       },
       outfit: {
         familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, April Shower Thoughts shield, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
+        equip: $items`Mer-kin gladiator mask, Mer-kin gladiator tailpiece, dark porquoise ring, Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, April Shower Thoughts shield`,
       },
       limit: { tries: 1 },
     },
