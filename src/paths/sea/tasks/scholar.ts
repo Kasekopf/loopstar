@@ -6,8 +6,6 @@ import {
   $items,
   $location,
   $skill,
-  AprilingBandHelmet,
-  AugustScepter,
   get,
   have,
   Macro,
@@ -226,32 +224,6 @@ export const ScholarTask: Quest = {
         familiar: $familiar`Red-Nosed Snapper`,
         modifier: "item",
       },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Gymnasium",
-      after: ["Finish Dive Bar", "Get Fishy"],
-      prepare: () => {
-        if (AprilingBandHelmet.canChangeSong()) {
-          AprilingBandHelmet.conduct("Apriling Band Battle Cadence");
-        }
-        if (!have($effect`Hippy Stench`) && have($item`reodorant`)) {
-          use($item`reodorant`);
-        }
-        if (!have($effect`Fresh Breath`) && AugustScepter.canCast(6)) {
-          useSkill($skill`Aug. 6th: Fresh Breath Day!`);
-        }
-      },
-      completed: () =>
-        (have($item`Mer-kin thighguard`) && have($item`Mer-kin headguard`)) ||
-        have($item`Mer-kin gladiator mask`),
-      do: $location`Mer-kin Gymnasium`,
-      outfit: {
-        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, spring shoes`,
-        familiar: $familiar`Jumpsuited Hound Dog`,
-        modifier: "+combat",
-      },
-      choices: { 701: 1 },
       limit: { soft: 11 },
     },
     {

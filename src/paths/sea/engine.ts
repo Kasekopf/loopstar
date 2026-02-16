@@ -161,7 +161,7 @@ export class TheSeaEngine extends Engine {
       restoreHp(myMaxhp());
     }
 
-    if (myMp() < 200 && myMp() < myMaxmp()) {
+    if (myMp() < 240 && myMp() < myMaxmp()) {
       restoreMp(600);
     }
 

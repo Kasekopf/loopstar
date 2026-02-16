@@ -12,7 +12,7 @@ import {
   Macro,
 } from "libram";
 import { Quest } from "../../../engine/task";
-import { cliExecute, itemAmount, myPath, use } from "kolmafia";
+import { cliExecute, itemAmount, myPath, retrieveItem, use, visitUrl } from "kolmafia";
 import { CombatStrategy } from "../../../engine/combat";
 
 export const CurrentsQuest: Quest = {
@@ -159,6 +159,38 @@ export const CurrentsQuest: Quest = {
           }
         }, $monsters`wild seahorse`),
       limit: { soft: 11 },
+    },
+    {
+      name: "Get Mer-kin Mask",
+      after: ["Seahorse"],
+      completed: () =>
+        have($item`crappy Mer-kin mask`) ||
+        have($item`Mer-kin gladiator mask`) ||
+        have($item`Mer-kin scholar mask`),
+      do: () => {
+        retrieveItem($item`aerated diving helmet`);
+        visitUrl("shop.php?whichshop=grandma");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=124&pwd");
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Get Mer-kin Tailpiece",
+      after: ["Seahorse"],
+      completed: () =>
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`),
+      do: () => {
+        retrieveItem($item`teflon swim fins`);
+        visitUrl("shop.php?whichshop=grandma");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=125&pwd");
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { tries: 1 },
     },
   ],
 };

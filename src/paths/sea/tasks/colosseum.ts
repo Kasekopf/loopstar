@@ -4,13 +4,16 @@ import {
   $item,
   $items,
   $location,
+  $path,
   $skill,
+  AprilingBandHelmet,
+  AugustScepter,
   ensureEffect,
   get,
   have,
   Macro,
 } from "libram";
-import { cliExecute, myMaxhp, myMp, restoreHp, useSkill, visitUrl } from "kolmafia";
+import { cliExecute, myMaxhp, myMp, myPath, restoreHp, use, useSkill, visitUrl } from "kolmafia";
 import { CombatStrategy } from "grimoire-kolmafia";
 import { Quest } from "../../../engine/task";
 
@@ -18,15 +21,40 @@ export const ColosseumQuest: Quest = {
   name: "Colosseum",
   tasks: [
     {
-      name: "Get gladiator outfit",
+      name: "Gymnasium",
+      after: ["Currents/Seahorse"],
+      prepare: () => {
+        if (AprilingBandHelmet.canChangeSong()) {
+          AprilingBandHelmet.conduct("Apriling Band Battle Cadence");
+        }
+        if (!have($effect`Hippy Stench`) && have($item`reodorant`)) {
+          use($item`reodorant`);
+        }
+        if (!have($effect`Fresh Breath`) && AugustScepter.canCast(6)) {
+          useSkill($skill`Aug. 6th: Fresh Breath Day!`);
+        }
+      },
+      completed: () =>
+        (have($item`Mer-kin gladiator mask`) || have($item`Mer-kin headguard`)) &&
+        (have($item`Mer-kin gladiator tailpiece`) || have($item`Mer-kin thighguard`)),
+      do: $location`Mer-kin Gymnasium`,
+      outfit: {
+        equip: $items`Mer-kin scholar mask, Mer-kin scholar tailpiece, spring shoes`,
+        familiar: $familiar`Jumpsuited Hound Dog`,
+        modifier: "+combat",
+      },
+      choices: { 701: 1 },
+      limit: { soft: 11 },
+    },
+    {
+      name: "Outfit",
+      after: ["Gymnasium", "Currents/Get Mer-kin Mask", "Currents/Get Mer-kin Tailpiece"],
       ready: () =>
-        have($item`Mer-kin scholar mask`) &&
-        have($item`Mer-kin scholar tailpiece`) &&
-        get("yogUrtDefeated") &&
+        (get("yogUrtDefeated") || myPath() !== $path`11,037 Leagues Under the Sea`) &&
         have($item`Mer-kin thighguard`) &&
         have($item`Mer-kin headguard`),
       completed: () =>
-        get("yogUrtDefeated") &&
+        (get("yogUrtDefeated") || myPath() !== $path`11,037 Leagues Under the Sea`) &&
         have($item`Mer-kin gladiator mask`) &&
         have($item`Mer-kin gladiator tailpiece`),
       do: () => {
@@ -40,17 +68,28 @@ export const ColosseumQuest: Quest = {
         equip: [$item`really, really nice swimming trunks`, $item`prismatic beret`],
         modifier: "+combat",
       },
-      limit: { soft: 11 },
+      limit: { tries: 1 },
     },
     {
       name: "Fights",
-      ready: () => have($item`Mer-kin gladiator mask`) && have($item`Mer-kin gladiator tailpiece`),
-      completed: () => get("lastColosseumRoundWon") >= 12,
+      after: ["Outfit", "Currents/Seahorse"],
+      completed: () => get("isMerkinGladiatorChampion"),
+      prepare: () => {
+        if (get("lastColosseumRoundWon") < 9) return; // easy fights
+        // equip($item`April Shower Thoughts shield`)
+        // useSkill($skill`Simmer`);
+        // ensureEffect($effect`Elron's Explosive Etude`);
+        ensureEffect($effect`Arched Eyebrow of the Archmage`);
+        if (!get("telescopeLookedHigh")) cliExecute("telescope high");
+        cliExecute("monorail");
+        ensureEffect($effect`Glittering Eyelashes`);
+      },
       do: $location`Mer-kin Colosseum`,
       combat: new CombatStrategy().macro((): Macro => {
-        return Macro.trySkillRepeat($skill`Saucegeyser`);
+        if (get("lastColosseumRoundWon") < 9) return Macro.trySkillRepeat($skill`Saucegeyser`);
+        else return Macro.trySkillRepeat($skill`Raise Backup Dancer`);
       }),
-      limit: { soft: 12 },
+      limit: { tries: 16 },
       outfit: {
         modifier: "mysticality",
         familiar: $familiar`Tiny Plastic Santa Claus Skeleton`,
@@ -58,37 +97,8 @@ export const ColosseumQuest: Quest = {
       },
     },
     {
-      name: "Buff for hard fights",
-      after: ["Fights"],
-      completed: () => get("isMerkinGladiatorChampion") || get("telescopeLookedHigh"),
-      do: () => {
-        // equip($item`April Shower Thoughts shield`)
-        // useSkill($skill`Simmer`);
-        // ensureEffect($effect`Elron's Explosive Etude`);
-        ensureEffect($effect`Arched Eyebrow of the Archmage`);
-        cliExecute("telescope high");
-        cliExecute("monorail");
-        cliExecute("buy 5 glittery mascara; use 5 glittery mascara");
-      },
-      limit: { tries: 1 },
-    },
-    {
-      name: "Hard fights",
-      after: ["Buff for hard fights"],
-      completed: () => get("isMerkinGladiatorChampion"),
-      do: $location`Mer-kin Colosseum`,
-      combat: new CombatStrategy().macro((): Macro => {
-        return Macro.trySkillRepeat($skill`Raise Backup Dancer`);
-      }),
-      limit: { soft: 3 },
-      outfit: {
-        modifier: "mysticality",
-        equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, august scepter, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
-      },
-    },
-    {
       name: "Shub",
-      after: ["Hard fights"],
+      after: ["Fights"],
       completed: () => get("shubJigguwattDefeated"),
       prepare: () => {
         // Restore hp and empty mana
@@ -116,7 +126,7 @@ export const ColosseumQuest: Quest = {
         familiar: $familiar`Peace Turkey`,
         equip: $items`Everfull Dart Holster, spring shoes, bat wings, Monodent of the Sea, April Shower Thoughts shield, Mer-kin gladiator mask, Mer-kin gladiator tailpiece`,
       },
-      limit: { soft: 11 },
+      limit: { tries: 1 },
     },
   ],
 };

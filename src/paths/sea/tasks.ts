@@ -33,4 +33,4 @@ export const TheSeaQuest: Quest[] = [
 ];
 
 // Aftercore goal to prepare Dad
-export const TestQuest: Quest[] = [SeaMonkeeQuest, SkateParkQuest, CurrentsQuest];
+export const TestQuest: Quest[] = [SeaMonkeeQuest, SkateParkQuest, CurrentsQuest, ColosseumQuest];
