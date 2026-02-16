@@ -12,6 +12,7 @@ import {
   ensureEffect,
   get,
   have,
+  Macro,
   PropertiesManager,
   uneffect,
 } from "libram";
@@ -104,6 +105,11 @@ export class TheSeaEngine extends Engine {
           outfit.equips.set($slot`familiar`, firstFamiliarWaterBreath);
         }
       }
+    }
+
+    // Train the sea lasso all the time
+    if (!task.freeaction && get("lassoTrainingCount") < 18 && have($item`sea lasso`)) {
+      combat.startingMacro(Macro.tryItem($item`sea lasso`));
     }
   }
 
