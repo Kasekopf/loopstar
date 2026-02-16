@@ -1,4 +1,3 @@
-
 import { $familiar, $items, $location, get } from "libram";
 import { Quest, Resources } from "../../../engine/task";
 import { visitUrl } from "kolmafia";
@@ -38,6 +37,6 @@ export const SkateParkQuest: Quest = {
       freeaction: true,
       underwater: true,
       limit: { tries: 1 },
-    }
-  ]
+    },
+  ],
 };

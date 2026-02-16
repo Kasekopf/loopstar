@@ -11,6 +11,8 @@ import { ShadowRealmTask } from "./tasks/shadowRealm";
 import { BuffQuest, StartupQuest } from "./tasks/startup";
 import { WrapupQuest } from "./tasks/wrapup";
 import { SummonsQuest } from "./tasks/summons";
+import { CurrentsQuest } from "./tasks/currents";
+import { SkateParkQuest } from "./tasks/skatepark";
 
 export const TheSeaQuest: Quest[] = [
   TootQuest,
@@ -22,11 +24,13 @@ export const TheSeaQuest: Quest[] = [
   SeaMonkeeQuest,
   PreItemTask,
   ItemTask,
+  CurrentsQuest,
   ScholarTask,
+  SkateParkQuest,
   ColosseumQuest,
   WrapupQuest,
   FinalQuest,
 ];
 
 // Aftercore goal to prepare Dad
-export const TestQuest: Quest[] = [SeaMonkeeQuest];
+export const TestQuest: Quest[] = [SeaMonkeeQuest, SkateParkQuest, CurrentsQuest];

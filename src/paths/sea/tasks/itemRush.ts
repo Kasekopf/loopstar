@@ -14,7 +14,6 @@ import {
   ChestMimic,
   CursedMonkeyPaw,
   get,
-  getBanishedMonsters,
   have,
   Macro,
   PeridotOfPeril,
@@ -24,7 +23,6 @@ import { step } from "grimoire-kolmafia";
 
 import {
   abort,
-  adv1,
   buy,
   cliExecute,
   closetAmount,
@@ -32,7 +30,6 @@ import {
   itemAmount,
   myHash,
   myMeat,
-  print,
   putCloset,
   retrieveItem,
   runCombat,
@@ -204,95 +201,6 @@ export const ItemTask: Quest = {
       limit: { soft: 11 },
     },
     {
-      name: "Banish 1",
-      completed: () =>
-        get("corralUnlocked") || have($item`Mer-kin lockkey`) || have($item`Mer-kin stashbox`),
-      do: $location`The Mer-Kin Outpost`,
-      combat: new CombatStrategy().banish($monsters`Mer-kin burglar, Mer-kin raider`).kill(),
-      outfit: {
-        familiar: $familiar`Peace Turkey`,
-        modifier: "-combat",
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Get lockkey",
-      after: ["Banish 1"],
-      completed: () =>
-        have($item`Mer-kin lockkey`) || get("corralUnlocked") || have($item`Mer-kin stashbox`),
-      do: $location`The Mer-Kin Outpost`,
-      outfit: {
-        equip: $items`Möbius ring, Everfull Dart Holster, blood cubic zirconia, toy Cupid bow`,
-        modifier: "item, -combat",
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Get stashbox",
-      after: ["Get lockkey"],
-      completed: () =>
-        have($item`Mer-kin stashbox`) || have($item`Mer-kin trailmap`) || get("corralUnlocked"),
-      do: $location`The Mer-Kin Outpost`,
-      outfit: {
-        equip: $items`spring shoes, Everfull Dart Holster, blood cubic zirconia`,
-        familiar: $familiar`Peace Turkey`,
-        modifier: "-combat",
-      },
-      prepare: () => {
-        if (!have($effect`Fresh Scent`) && have($item`deodorant`)) {
-          use($item`deodorant`);
-        }
-        if (!have($effect`Life Goals`) && have($item`Life Goals Pamphlet`)) {
-          use($item`Life Goals Pamphlet`);
-        }
-        if (!have($effect`Colorfully Concealed`) && have($item`Mer-kin hidepaint`)) {
-          use($item`Mer-kin hidepaint`);
-        }
-      },
-      delay: 25,
-      limit: { soft: 11 },
-    },
-    {
-      name: "Stashbox Trailmap",
-      ready: () => have($item`Mer-kin stashbox`) || have($item`Mer-kin trailmap`),
-      completed: () => get("corralUnlocked"),
-      do: () => {
-        if (have($item`Mer-kin stashbox`)) use($item`Mer-kin stashbox`);
-        if (have($item`Mer-kin trailmap`)) use($item`Mer-kin trailmap`);
-        cliExecute("grandpa currents");
-      },
-      outfit: {
-        equip: [$item`really, really nice swimming trunks`],
-        familiar: $familiar`Peace Turkey`,
-        modifier: "-combat",
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Corral Refract",
-      ready: () => get("_bczRefractedGazeCasts") < 12,
-      after: ["Stashbox Trailmap"],
-      completed: () => have($item`sea leather`) || have($item`sea cowboy hat`),
-      do: $location`The Coral Corral`,
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.if_(
-            $monster`Mer-kin rustler`,
-            Macro.skill($skill`Spring Kick`)
-              .skill($skill`Sea *dent: Talk to Some Fish`)
-              .skill($skill`BCZ: Refracted Gaze`)
-              .skill($skill`Do an epic McTwist!`)
-          );
-        })
-        .kill(),
-      outfit: {
-        modifier: "item",
-        equip: $items`Monodent of the Sea, toy Cupid bow, pro skateboard, spring shoes, blood cubic zirconia`,
-      },
-      post: () => use($item`Mer-kin thingpouch`, itemAmount($item`Mer-kin thingpouch`)),
-      limit: { soft: 11 },
-    },
-    {
       name: "Spend sand dollars",
       after: ["Corral Refract"],
       ready: () => have($item`sand dollar`, 50) || have($item`damp old boot`),
@@ -429,91 +337,6 @@ export const ItemTask: Quest = {
       outfit: {
         equip: $items`Monodent of the Sea, Everfull Dart Holster, blood cubic zirconia, shark jumper, sea cowboy hat, sea chaps, old SCUBA tank`,
         familiar: $familiar`Red-Nosed Snapper`,
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Peridot Seahorse",
-      after: ["Remaining Lassoing"],
-      completed: () => PeridotOfPeril.periledToday($location`The Coral Corral`),
-      prepare: () => {
-        if (!have($item`sea lasso`)) {
-          cliExecute("monkeypaw wish sea lasso");
-        }
-        if (!have($item`sea cowbell`, 3)) {
-          cliExecute("monkeypaw wish sea cowbell");
-        }
-        if (!have($item`sea lasso`) || !have($item`sea cowbell`, 3)) {
-          abort("Failed to get enough sea lassos and cowbells.");
-        }
-      },
-      do: $location`The Coral Corral`,
-      combat: new CombatStrategy().macro((): Macro => {
-        return Macro.item([$item`sea cowbell`, $item`sea cowbell`]).item([
-          $item`sea cowbell`,
-          $item`sea lasso`,
-        ]);
-      }, $monsters`wild seahorse`),
-      outfit: {
-        equip: $items`Peridot of Peril, Monodent of the Sea, Everfull Dart Holster, spring shoes`,
-        familiar: $familiar`Peace Turkey`,
-      },
-      peridot: $monster`wild seahorse`,
-      limit: { soft: 11 },
-    },
-    {
-      name: "First Banish",
-      after: ["Peridot Seahorse"],
-      completed: () =>
-        get("seahorseName") !== "" || getBanishedMonsters().has($item`stuffed yam stinkbomb`),
-      do: $location`The Coral Corral`,
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.item([$item`sea cowbell`, $item`sea cowbell`]).item([
-            $item`sea cowbell`,
-            $item`sea lasso`,
-          ]);
-        }, $monsters`wild seahorse`)
-        .banish($monsters`sea cowboy, sea cow`)
-        .killHard(),
-      outfit: {
-        equip: $items`Everfull Dart Holster, spring shoes, Möbius ring`,
-        familiar: $familiar`Peace Turkey`,
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Find that seahorse",
-      after: ["First Banish"],
-      completed: () => get("seahorseName") !== "",
-      do: () => {
-        try {
-          adv1($location`The Coral Corral`);
-        } catch {
-          print("Error while waffling for a seahorse ignored.");
-        }
-      },
-      combat: new CombatStrategy().macro((): Macro => {
-        return Macro.if_(
-          "monstername wild seahorse",
-          Macro.item([$item`sea cowbell`, $item`sea cowbell`]).item([
-            $item`sea cowbell`,
-            $item`sea lasso`,
-          ])
-        )
-          .if_(
-            "monstername wild seahorse",
-            Macro.item([$item`sea cowbell`, $item`sea cowbell`]).item([
-              $item`sea cowbell`,
-              $item`sea lasso`,
-            ])
-          )
-          .tryItem($item`stuffed yam stinkbomb`)
-          .trySkill($skill`Snokebomb`);
-      }),
-      outfit: {
-        equip: $items`Everfull Dart Holster, spring shoes, Möbius ring`,
-        familiar: $familiar`Peace Turkey`,
       },
       limit: { soft: 11 },
     },

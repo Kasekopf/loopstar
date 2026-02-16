@@ -233,6 +233,19 @@ export const SeaMonkeeQuest: Quest = {
       limit: { tries: 1 },
     },
     {
+      name: "Obtain Scale-Mail underwear",
+      after: ["Open Grandpa Zone"],
+      ready: () => have($item`dull fish scale`, 25) && have($item`pristine fish scale`),
+      completed: () => have($item`scale-mail underwear`),
+      do: () => {
+        visitUrl("shop.php?whichshop=grandma");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=132&pwd");
+      },
+      underwater: true,
+      freeaction: true,
+      limit: { soft: 11 },
+    },
+    {
       name: "Abyss",
       after: ["Open Abyss"],
       completed: () => step("questS02Monkees") === 999,

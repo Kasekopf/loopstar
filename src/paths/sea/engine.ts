@@ -108,7 +108,7 @@ export class TheSeaEngine extends Engine {
     }
 
     // Train the sea lasso all the time
-    if (!task.freeaction && get("lassoTrainingCount") < 18 && have($item`sea lasso`)) {
+    if (!task.freeaction && get("lassoTrainingCount") < 20 && have($item`sea lasso`)) {
       combat.startingMacro(Macro.tryItem($item`sea lasso`));
     }
   }

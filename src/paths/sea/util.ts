@@ -11,16 +11,7 @@ import {
   toInt,
   use,
 } from "kolmafia";
-import {
-  $effect,
-  $effects,
-  $item,
-  $items,
-  $monster,
-  AsdonMartin,
-  get,
-  have,
-} from "libram";
+import { $effect, $effects, $item, $items, $monster, AsdonMartin, get, have } from "libram";
 import { Resource } from "../../resources/lib";
 
 export function pull(item: Item) {
