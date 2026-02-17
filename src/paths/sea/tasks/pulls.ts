@@ -200,14 +200,6 @@ const seaAcquires: AcquireSpec[] = [
     price: Prices.Used,
   },
   {
-    what: $item`sea cowbell`,
-    needed: () => {
-      if (get("seahorseName") !== "") return 0;
-      return 3;
-    },
-    price: Prices.Used,
-  },
-  {
     what: $item`Mer-kin hallpass`,
     needed: () => {
       if (args.aftercore.goal !== "hatred") return 0;
@@ -220,7 +212,7 @@ const seaAcquires: AcquireSpec[] = [
     price: Prices.Used,
   },
   {
-    what: $item`Mer-kin hallpass`,
+    what: $item`Mer-kin wordquiz`,
     needed: () => {
       if (args.aftercore.goal !== "hatred") return 0;
       if (!have($item`Mer-kin scholar mask`) || !have($item`Mer-kin scholar tailpiece`)) return 0; // wait
