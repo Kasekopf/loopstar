@@ -258,6 +258,34 @@ const seaAcquires: AcquireSpec[] = [
     price: Prices.Used,
   },
   {
+    what: $item`Mer-kin killscroll`,
+    needed: () => {
+      if (args.aftercore.goal !== "hatred") return 0;
+      if (get("dreadScroll5") !== 0) return 0;
+      return 5;
+    },
+    limit: 5,
+    price: Prices.Used,
+  },
+  {
+    what: $item`Mer-kin healscroll`,
+    needed: () => {
+      if (args.aftercore.goal !== "hatred") return 0;
+      if (get("dreadScroll2") !== 0) return 1; // for the boss
+      return 5;
+    },
+    limit: 5,
+    price: Prices.Used,
+  },
+  {
+    what: $item`soggy used band-aid`,
+    needed: () => {
+      if (args.aftercore.goal !== "hatred") return 0;
+      return 1;
+    },
+    price: Prices.Used,
+  },
+  {
     what: $item`Mer-kin prayerbeads`,
     needed: () => {
       if (args.aftercore.goal !== "hatred") return 0;

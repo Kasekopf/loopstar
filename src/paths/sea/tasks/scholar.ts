@@ -288,8 +288,10 @@ export const ScholarTask: Quest = {
       // eslint-disable-next-line libram/verify-constants
       do: $location`Mer-kin Temple Right Door`,
       combat: new CombatStrategy().macro((): Macro => {
-        return Macro.item($item`Mer-kin healscroll`)
-          .item($item`waterlogged scroll of healing`)
+        return Macro.tryItem($item`Mer-kin healscroll`)
+          .tryItem($item`sea gel`) // in-path only
+          .tryItem($item`waterlogged scroll of healing`) // in-path only
+          .tryItem($item`soggy used band-aid`) // aftercore only
           .trySkillRepeat($skill`Saucegeyser`);
       }),
       outfit: {
