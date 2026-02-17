@@ -215,7 +215,12 @@ export const MerkinGearQuest: Quest = {
     },
     {
       name: "Get Mer-kin Tailpiece",
-      after: ["Currents/Make Sea Chaps", "Mine Teflon", "Buy Waterlogged Bootstraps", "Currents/Seahorse"],
+      after: [
+        "Currents/Make Sea Chaps",
+        "Mine Teflon",
+        "Buy Waterlogged Bootstraps",
+        "Currents/Seahorse",
+      ],
       completed: () =>
         have($item`crappy Mer-kin tailpiece`) ||
         have($item`Mer-kin gladiator tailpiece`) ||

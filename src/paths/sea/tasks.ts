@@ -10,7 +10,7 @@ import { BuffQuest, StartupQuest } from "./tasks/startup";
 import { PearlsQuest } from "./tasks/pearls";
 import { MerkinGearQuest } from "./tasks/merkinGear";
 import { CurrentsQuest } from "./tasks/currents";
-import { SkateParkQuest } from "./tasks/skatepark";
+import { MomQuest, SkateParkQuest } from "./tasks/sidequests";
 import { SeaAcquireQuest, SeaPullQuest } from "./tasks/pulls";
 
 export const TheSeaQuest: Quest[] = [
@@ -30,6 +30,7 @@ export const TheSeaQuest: Quest[] = [
   SkateParkQuest,
   ColosseumQuest,
   PearlsQuest,
+  MomQuest,
   FinalQuest,
 ];
 

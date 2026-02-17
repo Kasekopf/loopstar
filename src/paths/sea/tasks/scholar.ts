@@ -134,7 +134,12 @@ export const ScholarTask: Quest = {
     },
     {
       name: "Outfit",
-      after: ["Elementary School", "Study Wordquiz", "Mer-kin Gear/Get Mer-kin Mask", "Mer-kin Gear/Get Mer-kin Tailpiece"],
+      after: [
+        "Elementary School",
+        "Study Wordquiz",
+        "Mer-kin Gear/Get Mer-kin Mask",
+        "Mer-kin Gear/Get Mer-kin Tailpiece",
+      ],
       completed: () =>
         get("yogUrtDefeated") ||
         (have($item`Mer-kin scholar mask`) && have($item`Mer-kin scholar tailpiece`)),
