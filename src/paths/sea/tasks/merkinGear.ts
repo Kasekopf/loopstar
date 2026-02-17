@@ -47,7 +47,13 @@ export const MerkinGearQuest: Quest = {
         have($item`spitball`) &&
         have($item`Spooky VHS Tape`) &&
         yellowRayPossible(),
-      completed: () => have($item`minin' dynamite`, 2),
+      completed: () =>
+        have($item`minin' dynamite`, 2) ||
+        have($item`teflon ore`) ||
+        have($item`teflon swim fins`) ||
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`),
       do: () => {
         throw `Attempted to summon tetched prospector with no allocation`;
       },
@@ -73,7 +79,13 @@ export const MerkinGearQuest: Quest = {
     {
       name: "Kill Miner",
       after: ["Sea Monkee/Open Grandpa Zone"],
-      completed: () => have($item`Mer-kin digpick`),
+      completed: () =>
+        have($item`Mer-kin digpick`) ||
+        have($item`teflon ore`) ||
+        have($item`teflon swim fins`) ||
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`),
       do: $location`Anemone Mine`,
       combat: new CombatStrategy()
         .macro((): Macro => {

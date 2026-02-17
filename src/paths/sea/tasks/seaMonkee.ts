@@ -44,7 +44,7 @@ export const SeaMonkeeQuest: Quest = {
           equip: $items`Everfull Dart Holster, spring shoes, April Shower Thoughts shield`,
         };
 
-        if (get("rwbMonsterCount") > 0) {
+        if (get("rwbMonsterCount") > 0 && get("rwbMonster") === $monster`Neptune flytrap`) {
           result.familiar = $familiar`Peace Turkey`;
         } else {
           if (

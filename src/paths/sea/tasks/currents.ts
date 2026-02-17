@@ -33,7 +33,7 @@ export const CurrentsQuest: Quest = {
     },
     {
       name: "Outpost Delay",
-      after: ["Outpost Beads"],
+      after: ["Sea Monkee/Outpost Grandma", "Outpost Beads"],
       completed: () =>
         have($item`Mer-kin stashbox`) ||
         have($item`Mer-kin trailmap`) ||
@@ -47,7 +47,7 @@ export const CurrentsQuest: Quest = {
     },
     {
       name: "Outpost Lockkey",
-      after: ["Outpost Delay"],
+      after: ["Sea Monkee/Outpost Grandma", "Outpost Delay"],
       completed: () =>
         have($item`Mer-kin lockkey`) ||
         have($item`Mer-kin stashbox`) ||
@@ -124,7 +124,7 @@ export const CurrentsQuest: Quest = {
     },
     {
       name: "Corral Cowbell",
-      after: ["Corral Leather"],
+      after: ["Open Corral", "Corral Leather"],
       completed: () =>
         (have($item`sea cowbell`, 3) && have($item`sea lasso`)) || get("seahorseName") !== "",
       do: $location`The Coral Corral`,
@@ -137,7 +137,7 @@ export const CurrentsQuest: Quest = {
     },
     {
       name: "Seahorse",
-      after: ["Corral Cowbell"],
+      after: ["Open Corral", "Corral Cowbell"],
       ready: () => get("lassoTrainingCount") >= 20,
       completed: () => get("seahorseName") !== "",
       do: $location`The Coral Corral`,

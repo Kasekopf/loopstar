@@ -86,7 +86,9 @@ export class AftercoreInfo implements PathInfo {
 
   getEngine(tasks: Task[]): Engine {
     switch (args.aftercore.goal) {
-      case "seatest":
+      case "violence":
+      case "hatred":
+      case "loathing":
         return new TheSeaEngine(tasks);
       default:
         return new Engine(tasks);

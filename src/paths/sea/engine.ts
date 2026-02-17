@@ -89,6 +89,13 @@ export class TheSeaEngine extends Engine {
       replaceActions(combat, "killItem", "killFree");
     }
 
+    // Train the sea lasso all the time
+    if (!task.freeaction && get("lassoTrainingCount") < 20 && have($item`sea lasso`)) {
+      combat.startingMacro(Macro.tryItem($item`sea lasso`));
+      outfit.equip($item`sea cowboy hat`);
+      outfit.equip($item`sea chaps`);
+    }
+
     // Let the base engine do its thing
     super.customize(task, outfit, combat, resources);
 
@@ -105,11 +112,6 @@ export class TheSeaEngine extends Engine {
           outfit.equips.set($slot`familiar`, firstFamiliarWaterBreath);
         }
       }
-    }
-
-    // Train the sea lasso all the time
-    if (!task.freeaction && get("lassoTrainingCount") < 20 && have($item`sea lasso`)) {
-      combat.startingMacro(Macro.tryItem($item`sea lasso`));
     }
   }
 
@@ -148,14 +150,18 @@ export class TheSeaEngine extends Engine {
   }
 
   override dress(task: ActiveTask, outfit: Outfit): void {
-    if (have($effect`Beaten Up`)) abort();
+    if (have($effect`Beaten Up`)) {
+      abort(
+        "You are beaten up! Remove the effect, make sure nothing bad just happened, and run again."
+      );
+    }
 
     if (have($item`whirled peas`, 2) && !have($item`handful of split pea soup`)) {
       create($item`handful of split pea soup`);
     }
 
     if (task.do instanceof Location) setLocation(task.do);
-    outfit.dress();
+    super.dress(task, outfit);
 
     if (myHp() < 200 && myHp() < myMaxhp()) {
       restoreHp(myMaxhp());
@@ -181,7 +187,7 @@ export class TheSeaEngine extends Engine {
       effects.forEach(ensureEffect);
     } else if (modifier === "item") {
       $effects`The Sonata of Sneakiness, Ode to Booze`.forEach(uneffect);
-      $effects`Donho's Bubbly Ballad, Fat Leon's Phat Loot Lyric, The Ballad of Richie Thingfinder, `.forEach(
+      $effects`Donho's Bubbly Ballad, Fat Leon's Phat Loot Lyric, The Ballad of Richie Thingfinder`.forEach(
         ensureEffect
       );
     } else if (modifier === "+combat") {
