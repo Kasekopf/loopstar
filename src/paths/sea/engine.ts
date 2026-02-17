@@ -87,10 +87,11 @@ export class TheSeaEngine extends Engine {
     super.customize(task, outfit, combat, resources);
   }
 
-  override prepare(): void {
+  override prepare(task: ActiveTask): void {
     if (!have($effect`Fishy`)) {
       doFirstAvailableFishySource();
     }
+    super.prepare(task);
   }
 
   override createOutfit(task: ActiveTask): Outfit {
