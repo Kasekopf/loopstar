@@ -34,12 +34,21 @@ export const TheSeaQuest: Quest[] = [
   FinalQuest,
 ];
 
-// Aftercore goal to do scholar
-export const TestQuest: Quest[] = [
+// Aftercore goals
+export const ScholarPath: Quest[] = [
   SeaAcquireQuest,
   SeaMonkeeQuest,
-  SkateParkQuest,
   CurrentsQuest,
   MerkinGearQuest,
   ScholarQuest,
 ];
+
+export const GladiatorPath: Quest[] = [
+  SeaAcquireQuest,
+  SeaMonkeeQuest,
+  CurrentsQuest,
+  MerkinGearQuest,
+  ColosseumQuest,
+];
+
+export const DadPath: Quest[] = [SeaAcquireQuest, SeaMonkeeQuest, CurrentsQuest];
