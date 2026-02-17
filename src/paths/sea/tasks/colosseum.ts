@@ -13,7 +13,17 @@ import {
   have,
   Macro,
 } from "libram";
-import { cliExecute, myMaxhp, myMp, myPath, restoreHp, use, useSkill, visitUrl } from "kolmafia";
+import {
+  cliExecute,
+  haveEquipped,
+  myMaxhp,
+  myMp,
+  myPath,
+  restoreHp,
+  use,
+  useSkill,
+  visitUrl,
+} from "kolmafia";
 import { CombatStrategy } from "grimoire-kolmafia";
 import { Quest } from "../../../engine/task";
 
@@ -107,6 +117,11 @@ export const ColosseumQuest: Quest = {
       // eslint-disable-next-line libram/verify-constants
       do: $location`Mer-kin Temple Left Door`,
       combat: new CombatStrategy().macro((): Macro => {
+        if (haveEquipped($item`dark porquoise ring`)) {
+          return Macro.item($item`jam band bootleg`)
+            .attack()
+            .repeat();
+        }
         return Macro.item([$item`jam band bootleg`, $item`jam band bootleg`])
           .item([$item`jam band bootleg`, $item`jam band bootleg`])
           .item([$item`jam band bootleg`, $item`jam band bootleg`])
