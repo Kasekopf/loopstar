@@ -36,8 +36,8 @@ import {
   visitMine,
 } from "../mining";
 
-export const SummonsQuest: Quest = {
-  name: "Octopus Garden",
+export const MerkinGearQuest: Quest = {
+  name: "Mer-kin Gear",
   tasks: [
     {
       name: "Dynamite",
@@ -215,7 +215,7 @@ export const SummonsQuest: Quest = {
     },
     {
       name: "Get Mer-kin Tailpiece",
-      after: ["Make Sea Chaps", "Mine Teflon", "Buy Waterlogged Bootstraps", "Currents/Seahorse"],
+      after: ["Currents/Make Sea Chaps", "Mine Teflon", "Buy Waterlogged Bootstraps", "Currents/Seahorse"],
       completed: () =>
         have($item`crappy Mer-kin tailpiece`) ||
         have($item`Mer-kin gladiator tailpiece`) ||

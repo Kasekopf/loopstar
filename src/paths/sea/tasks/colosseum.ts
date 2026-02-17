@@ -48,7 +48,7 @@ export const ColosseumQuest: Quest = {
     },
     {
       name: "Outfit",
-      after: ["Gymnasium", "Currents/Get Mer-kin Mask", "Currents/Get Mer-kin Tailpiece"],
+      after: ["Gymnasium", "Mer-kin Gear/Get Mer-kin Mask", "Mer-kin Gear/Get Mer-kin Tailpiece"],
       ready: () =>
         (get("yogUrtDefeated") || myPath() !== $path`11,037 Leagues Under the Sea`) &&
         have($item`Mer-kin thighguard`) &&

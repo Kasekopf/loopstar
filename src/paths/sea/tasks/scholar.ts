@@ -134,25 +134,21 @@ export const ScholarTask: Quest = {
     },
     {
       name: "Outfit",
-      after: ["Elementary School", "Study Wordquiz"],
+      after: ["Elementary School", "Study Wordquiz", "Mer-kin Gear/Get Mer-kin Mask", "Mer-kin Gear/Get Mer-kin Tailpiece"],
       completed: () =>
         get("yogUrtDefeated") ||
         (have($item`Mer-kin scholar mask`) && have($item`Mer-kin scholar tailpiece`)),
       do: () => {
         visitUrl("shop.php?whichshop=grandma");
-        if (have($item`crappy Mer-kin mask`)) {
-          visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=129&pwd");
-        }
-        if (have($item`crappy Mer-kin tailpiece`)) {
-          visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=130&pwd");
-        }
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=129&pwd");
+        visitUrl("shop.php?whichshop=grandma&action=buyitem&quantity=1&whichrow=130&pwd");
       },
       underwater: true,
       limit: { tries: 1 },
     },
     {
       name: "Library Items",
-      after: ["Outfit"],
+      after: ["Currents/Seahorse", "Outfit"],
       completed: () => {
         if (!have($item`Mer-kin knucklebone`) && get("dreadScroll4") === 0) return false;
         if (!have($item`Mer-kin worktea`) && get("dreadScroll7") === 0) return false;

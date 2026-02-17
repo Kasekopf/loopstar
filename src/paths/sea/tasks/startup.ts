@@ -273,7 +273,7 @@ export const StartupQuest: Quest = {
     },
     {
       name: "2002",
-      after: ["Pulls"],
+      after: [],
       completed: () => !have($item`2002 Mr. Store Catalog`) || get("_2002MrStoreCreditsCollected"),
       do: () => {
         use($item`2002 Mr. Store Catalog`);

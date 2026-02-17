@@ -2,8 +2,9 @@ import { $item, get, have } from "libram";
 import { getPullTask, PullSpec } from "../../../tasks/pulls";
 import { Quest } from "../../../engine/task";
 import { itemAmount } from "kolmafia";
+import { AcquireSpec, getAcquireTask, Prices } from "../../casual/acquire";
 
-export const seaPulls: PullSpec[] = [
+const seaPulls: PullSpec[] = [
   {
     pull: $item`pro skateboard`,
     benefit: 2,
@@ -131,7 +132,95 @@ export const seaPulls: PullSpec[] = [
   },
 ];
 
-export const SeaPullsQuest: Quest = {
-  name: "Sea Pulls",
+export const SeaPullQuest: Quest = {
+  name: "Sea Pull",
   tasks: seaPulls.map(getPullTask),
+};
+
+const seaAcquires: AcquireSpec[] = [
+  {
+    what: $item`shark jumper`,
+    needed: () => 1,
+    price: Prices.Permanent,
+  },
+  {
+    what: $item`Mer-kin sneakmask`,
+    needed: () => 1,
+    price: Prices.Permanent,
+  },
+  {
+    what: $item`rusty diving helmet`,
+    needed: () => {
+      if (
+        have($item`crappy Mer-kin mask`) ||
+        have($item`Mer-kin scholar mask`) ||
+        have($item`Mer-kin gladiator mask`)
+      )
+        return 0;
+      return 1;
+    },
+    price: Prices.Permanent,
+  },
+  {
+    what: $item`sea chaps`,
+    needed: () => {
+      if (get("lassoTrainingCount") < 20) return 1;
+      if (
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`)
+      )
+        return 0;
+      return 1;
+    },
+    price: Prices.Permanent,
+  },
+  {
+    what: $item`teflon swim fins`,
+    needed: () => {
+      if (
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`)
+      )
+        return 0;
+      return 1;
+    },
+    price: Prices.Permanent,
+  },
+  {
+    what: $item`pristine fish scale`,
+    needed: () => {
+      if (
+        have($item`crappy Mer-kin tailpiece`) ||
+        have($item`Mer-kin scholar tailpiece`) ||
+        have($item`Mer-kin gladiator tailpiece`)
+      )
+        return 0;
+      return 3;
+    },
+    price: Prices.Permanent,
+  },
+  {
+    what: $item`sea lasso`,
+    needed: () => {
+      if (get("lassoTrainingCount") >= 20) return 0;
+      return 1;
+    },
+    limit: 5,
+    price: Prices.Used,
+  },
+  {
+    what: $item`sea cowbell`,
+    needed: () => {
+      if (get("seahorseName") !== "") return 0;
+      return 3;
+    },
+    price: Prices.Used,
+  },
+];
+
+export const SeaAcquireQuest: Quest = {
+  name: "Sea Acquire",
+  tasks: seaAcquires.map(getAcquireTask),
 };

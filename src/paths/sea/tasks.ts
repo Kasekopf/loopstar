@@ -3,30 +3,29 @@ import { TootQuest } from "../../tasks/level1";
 import { ColosseumQuest } from "./tasks/colosseum";
 import { FreeFightZoneTask } from "./tasks/freeFightZone";
 import { FinalQuest } from "./tasks/final";
-import { ItemTask } from "./tasks/itemRush";
 import { SeaMonkeeQuest } from "./tasks/seaMonkee";
-import { PreItemTask } from "./tasks/preItem";
 import { ScholarTask as ScholarQuest } from "./tasks/scholar";
 import { ShadowRealmTask } from "./tasks/shadowRealm";
 import { BuffQuest, StartupQuest } from "./tasks/startup";
 import { PearlsQuest } from "./tasks/pearls";
-import { SummonsQuest } from "./tasks/merkinGear";
+import { MerkinGearQuest } from "./tasks/merkinGear";
 import { CurrentsQuest } from "./tasks/currents";
 import { SkateParkQuest } from "./tasks/skatepark";
-import { SeaPullsQuest } from "./tasks/pulls";
+import { SeaAcquireQuest, SeaPullQuest } from "./tasks/pulls";
 
 export const TheSeaQuest: Quest[] = [
-  SeaPullsQuest,
+  SeaPullQuest,
   TootQuest,
   StartupQuest,
   BuffQuest,
   ShadowRealmTask,
   FreeFightZoneTask,
-  SummonsQuest,
+  MerkinGearQuest,
   SeaMonkeeQuest,
-  PreItemTask,
-  ItemTask,
+  // PreItemTask,
+  // ItemTask,
   CurrentsQuest,
+  MerkinGearQuest,
   ScholarQuest,
   SkateParkQuest,
   ColosseumQuest,
@@ -34,5 +33,12 @@ export const TheSeaQuest: Quest[] = [
   FinalQuest,
 ];
 
-// Aftercore goal to prepare Dad
-export const TestQuest: Quest[] = [SeaMonkeeQuest, SkateParkQuest, CurrentsQuest, ScholarQuest];
+// Aftercore goal to do scholar
+export const TestQuest: Quest[] = [
+  SeaAcquireQuest,
+  SeaMonkeeQuest,
+  SkateParkQuest,
+  CurrentsQuest,
+  MerkinGearQuest,
+  ScholarQuest,
+];

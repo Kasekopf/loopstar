@@ -32,16 +32,17 @@ import { trainSetAvailable } from "../../tasks/misc";
  *    from zero to nonzero at most once during a run.
  * price: The maximum price to spend.
  */
-type AcquireSpec = {
+export type AcquireSpec = {
   what: Item;
   needed: () => number;
   price: Prices | number | (() => number);
+  limit?: number;
 };
 
 /**
  * Symbolic prices, set by arguments (see realizePrice()).
  */
-enum Prices {
+export enum Prices {
   Used, // Something consumed during the run
   Permanent, // Something not consumed during the run
   Adventure, // Something to save 1 adventure
@@ -477,39 +478,40 @@ const acquireSpecs: AcquireSpec[] = [
   },
 ];
 
+export function getAcquireTask(a: AcquireSpec): Task {
+  const limitPvpBonus = args.minor.pvp || hippyStoneBroken() ? 1 : 0;
+
+  return {
+    name: a.what.name,
+    completed: () =>
+      itemAmount(a.what) + equippedAmount(a.what) >= a.needed() ||
+      get(toTempPref(`_failedacquire_${a.what.id}`), false),
+    do: () => {
+      const needed = a.needed();
+      if (needed <= 0) return;
+      if (needed <= itemAmount(a.what) + equippedAmount(a.what)) return;
+      const maxPrice = realizePrice(a.price);
+      const obtained = withProperty("autoBuyPriceLimit", maxPrice, () =>
+        retrieveItem(a.what, needed)
+      );
+      if (!obtained) {
+        debug(`Unable to acquire ${a.what} at ${maxPrice} (cost per: ${retrievePrice(a.what)})`);
+        // Do not try to buy it again today;
+        // the script can manage without it
+        set(toTempPref(`_failedacquire_${a.what.id}`), true);
+      }
+    },
+    freeaction: true,
+    limit: {
+      // If PvP is on, one might be stolen during the run
+      tries: (a.limit ?? 1) + limitPvpBonus,
+    },
+  };
+}
+
 export function getAcquireQuest(): Quest {
   return {
     name: "Acquire",
-    tasks: acquireSpecs.map(
-      (a) =>
-        <Task>{
-          name: a.what.name,
-          completed: () =>
-            itemAmount(a.what) + equippedAmount(a.what) >= a.needed() ||
-            get(toTempPref(`_failedacquire_${a.what.id}`), false),
-          do: () => {
-            const needed = a.needed();
-            if (needed <= 0) return;
-            if (needed <= itemAmount(a.what) + equippedAmount(a.what)) return;
-            const maxPrice = realizePrice(a.price);
-            const obtained = withProperty("autoBuyPriceLimit", maxPrice, () =>
-              retrieveItem(a.what, needed)
-            );
-            if (!obtained) {
-              debug(
-                `Unable to acquire ${a.what} at ${maxPrice} (cost per: ${retrievePrice(a.what)})`
-              );
-              // Do not try to buy it again today;
-              // the script can manage without it
-              set(toTempPref(`_failedacquire_${a.what.id}`), true);
-            }
-          },
-          freeaction: true,
-          limit: {
-            // If PvP is on, one might be stolen during the run
-            tries: args.minor.pvp || hippyStoneBroken() ? 2 : 1,
-          },
-        }
-    ),
+    tasks: acquireSpecs.map(getAcquireTask),
   };
 }
