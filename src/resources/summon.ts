@@ -3,6 +3,7 @@ import {
   chatPrivate,
   cliExecute,
   isOnline,
+  itemAmount,
   Monster,
   myPath,
   reverseNumberology,
@@ -16,6 +17,7 @@ import {
   $path,
   $skill,
   ChateauMantegna,
+  ChestMimic,
   CombatLoversLocket,
   get,
   have,
@@ -31,6 +33,13 @@ type SummonSource = {
   summon: (mon: Monster) => void;
 };
 export const summonSources: SummonSource[] = [
+  {
+    // Only when we already have the mimic egg
+    name: "Mimic Egg",
+    remaining: () => itemAmount($item`mimic egg`),
+    canFight: (mon: Monster) => ChestMimic.eggMonsters().has(mon),
+    summon: (mon: Monster) => ChestMimic.differentiate(mon),
+  },
   {
     name: "Chateau",
     remaining: () => {

@@ -7,18 +7,17 @@ import {
   $location,
   $monster,
   $skill,
-  ChestMimic,
+  get,
   have,
   Macro,
 } from "libram";
 import {
   buy,
   closetAmount,
+  haveEquipped,
   itemAmount,
-  myHash,
   print,
   retrieveItem,
-  runCombat,
   takeCloset,
   useSkill,
   visitUrl,
@@ -33,6 +32,7 @@ import {
   MiningCoordinate,
   visitMine,
 } from "../mining";
+import { getSummonTask } from "../../../tasks/summons";
 
 export const MerkinGearQuest: Quest = {
   name: "Mer-kin Gear",
@@ -207,55 +207,32 @@ export const MerkinGearQuest: Quest = {
       freeaction: true,
       limit: { tries: 1 },
     },
-    {
-      name: "Fax diver",
-      ready: () => ChestMimic.have() && $familiar`Chest Mimic`.experience >= 50,
-      completed: () =>
-        have($item`aerated diving helmet`) ||
-        have($item`rusty rivet`) ||
-        have($item`crappy Mer-kin mask`) ||
-        have($item`Mer-kin scholar mask`) ||
-        have($item`Mer-kin gladiator mask`),
-      do: () => {
-        visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=9537`, false, true);
-        visitUrl(
-          `choice.php?pwd&whichchoice=1267&option=1&wish=to fight an unholy diver`,
-          true,
-          true
-        );
-        visitUrl(`main.php`, false);
-        runCombat();
-      },
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.trySkill($skill`%fn, lay an egg`).trySkill($skill`%fn, lay an egg`);
-        })
-        .killFree(),
-      outfit: {
-        modifier: "item",
-        familiar: $familiar`Chest Mimic`,
-        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
-      },
-      limit: { turns: 1 },
-    },
-    {
-      name: "Mimic diver",
-      ready: () => ChestMimic.eggMonsters().has($monster`unholy diver`),
+    getSummonTask({
+      target: $monster`unholy diver`,
+      benefit: 5,
       completed: () =>
         have($item`aerated diving helmet`) ||
         have($item`rusty rivet`, 8) ||
         have($item`crappy Mer-kin mask`) ||
         have($item`Mer-kin scholar mask`) ||
         have($item`Mer-kin gladiator mask`),
-      do: () => ChestMimic.differentiate($monster`unholy diver`),
-      combat: new CombatStrategy().killFree(),
+      combat: new CombatStrategy()
+        .macro((): Macro => {
+          if (haveEquipped($item`Fourth of May Cosplay Saber`) && get("_saberForceUses") < 5) {
+            return Macro.trySkill($skill`Use the Force`);
+          } else {
+            return Macro.trySkill($skill`%fn, lay an egg`).trySkill($skill`%fn, lay an egg`);
+          }
+        })
+        .kill(),
+      choices: { 1387: 3 },
       outfit: {
         modifier: "item",
-        familiar: $familiar`Grey Goose`,
+        familiar: $familiar`Chest Mimic`,
         equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
       },
-      limit: { turns: 1 },
-    },
+      tries: 5,
+    }),
     {
       name: "Get Mer-kin Mask",
       after: ["Fax diver", "Mimic diver", "Currents/Seahorse"],
