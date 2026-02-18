@@ -212,7 +212,9 @@ export const MerkinGearQuest: Quest = {
       benefit: 5,
       completed: () =>
         have($item`aerated diving helmet`) ||
-        have($item`rusty rivet`, 8) ||
+        (have($item`rusty rivet`, 8) &&
+          have($item`rusty porthole`) &&
+          have($item`rusty broken diving helmet`)) ||
         have($item`crappy Mer-kin mask`) ||
         have($item`Mer-kin scholar mask`) ||
         have($item`Mer-kin gladiator mask`),
