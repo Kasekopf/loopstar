@@ -6,6 +6,7 @@ import {
   $items,
   $location,
   $monsters,
+  $path,
   $skill,
   get,
   have,
@@ -21,6 +22,7 @@ import {
   myMaxhp,
   myMaxmp,
   myMp,
+  myPath,
   putCloset,
   takeCloset,
   totalFreeRests,
@@ -222,6 +224,9 @@ export const ScholarTask: Quest = {
         if (!have($item`white rice`)) {
           buy($item`white rice`);
         }
+        if (!get("hasSushiMat") && have($item`sushi-rolling mat`)) {
+          use($item`sushi-rolling mat`);
+        }
         cliExecute("create slick nigiri");
       },
       freeaction: true,
@@ -282,8 +287,10 @@ export const ScholarTask: Quest = {
       ready: () => get("isMerkinHighPriest"),
       completed: () => get("yogUrtDefeated"),
       prepare: () => {
-        buy($coinmaster`Wet Crap For Sale`, 1, $item`sea gel`);
-        buy($coinmaster`Wet Crap For Sale`, 1, $item`waterlogged scroll of healing`);
+        if (myPath() === $path`11,037 Leagues Under the Sea`) {
+          buy($coinmaster`Wet Crap For Sale`, 1, $item`sea gel`);
+          buy($coinmaster`Wet Crap For Sale`, 1, $item`waterlogged scroll of healing`);
+        }
       },
       // eslint-disable-next-line libram/verify-constants
       do: $location`Mer-kin Temple Right Door`,

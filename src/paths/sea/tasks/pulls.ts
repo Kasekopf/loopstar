@@ -7,6 +7,14 @@ import { args } from "../../../args";
 
 const seaPulls: PullSpec[] = [
   {
+    pull: $item`jam band bootleg`,
+    benefit: 10,
+  },
+  {
+    pull: $item`dark porquoise ring`,
+    benefit: 10,
+  },
+  {
     pull: $item`pro skateboard`,
     benefit: 2,
   },

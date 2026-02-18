@@ -249,7 +249,12 @@ export const MerkinGearQuest: Quest = {
     {
       name: "Fax diver",
       ready: () => ChestMimic.have() && $familiar`Chest Mimic`.experience >= 50,
-      completed: () => have($item`aerated diving helmet`) || have($item`rusty rivet`),
+      completed: () =>
+        have($item`aerated diving helmet`) ||
+        have($item`rusty rivet`) ||
+        have($item`crappy Mer-kin mask`) ||
+        have($item`Mer-kin scholar mask`) ||
+        have($item`Mer-kin gladiator mask`),
       do: () => {
         visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=9537`, false, true);
         visitUrl(
