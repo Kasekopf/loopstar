@@ -14,7 +14,6 @@ import {
 import {
   buy,
   closetAmount,
-  inHardcore,
   itemAmount,
   myHash,
   print,
@@ -26,7 +25,6 @@ import {
 } from "kolmafia";
 import { Quest } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
-import { yellowRayPossible } from "../../../resources/yellowray";
 import {
   getAsMatrix,
   getLayoutAsMatrix,
@@ -39,43 +37,6 @@ import {
 export const MerkinGearQuest: Quest = {
   name: "Mer-kin Gear",
   tasks: [
-    {
-      name: "Dynamite",
-      ready: () =>
-        inHardcore() &&
-        have($item`pocket wish`) &&
-        have($item`spitball`) &&
-        have($item`Spooky VHS Tape`) &&
-        yellowRayPossible(),
-      completed: () =>
-        have($item`minin' dynamite`, 2) ||
-        have($item`teflon ore`) ||
-        have($item`teflon swim fins`) ||
-        have($item`crappy Mer-kin tailpiece`) ||
-        have($item`Mer-kin scholar tailpiece`) ||
-        have($item`Mer-kin gladiator tailpiece`),
-      do: () => {
-        throw `Attempted to summon tetched prospector with no allocation`;
-      },
-      resources: {
-        which: { summon: $monster`tetched prospector` },
-        benefit: 200,
-        required: true,
-      },
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.trySkill($skill`Darts: Throw at %part1`).tryItem([
-            $item`Spooky VHS Tape`,
-            $item`spitball`,
-          ]);
-        })
-        .killHard(),
-      limit: { tries: 2 },
-      outfit: {
-        familiar: $familiar`Peace Turkey`,
-        equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, toy Cupid bow`,
-      },
-    },
     {
       name: "Kill Miner",
       after: ["Sea Monkee/Open Grandpa Zone"],

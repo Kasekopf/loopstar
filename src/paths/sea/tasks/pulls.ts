@@ -72,10 +72,6 @@ const seaPulls: PullSpec[] = [
     benefit: 1,
   },
   {
-    pull: $item`minin' dynamite`,
-    benefit: 1,
-  },
-  {
     pull: $item`scale-mail underwear`,
     benefit: 1,
   },
