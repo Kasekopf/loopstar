@@ -6,13 +6,14 @@ import {
   $location,
   $monster,
   $monsters,
+  $path,
   $skill,
   $stat,
   get,
   have,
   Macro,
 } from "libram";
-import { cliExecute, itemAmount, myPrimestat, use, visitUrl } from "kolmafia";
+import { cliExecute, itemAmount, myPath, myPrimestat, use, visitUrl } from "kolmafia";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
@@ -115,11 +116,15 @@ export const SeaMonkeeQuest: Quest = {
       completed: () => step("questS02Monkees") >= 5,
       do: $location`Anemone Mine`,
       combat: new CombatStrategy().kill(),
-      outfit: {
-        modifier: "-combat",
-        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
-        avoid: $items`Mer-kin digpick`,
-        familiar: $familiar`Peace Turkey`,
+      outfit: () => {
+        const modifier =
+          myPath() === $path`11,037 Leagues Under the Sea` ? "-combat, spooky res" : "-combat";
+        return {
+          modifier: modifier,
+          equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+          avoid: $items`Mer-kin digpick`,
+          familiar: $familiar`Peace Turkey`,
+        };
       },
       limit: { soft: 20 },
     },
@@ -130,10 +135,14 @@ export const SeaMonkeeQuest: Quest = {
       completed: () => step("questS02Monkees") >= 5,
       do: $location`The Marinara Trench`,
       combat: new CombatStrategy().kill(),
-      outfit: {
-        modifier: "-combat",
-        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
-        familiar: $familiar`Peace Turkey`,
+      outfit: () => {
+        const modifier =
+          myPath() === $path`11,037 Leagues Under the Sea` ? "-combat, hot res" : "-combat";
+        return {
+          modifier: modifier,
+          equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+          familiar: $familiar`Peace Turkey`,
+        };
       },
       limit: { soft: 20 },
     },
@@ -143,18 +152,15 @@ export const SeaMonkeeQuest: Quest = {
       ready: () => myPrimestat() === $stat`Moxie`,
       completed: () => step("questS02Monkees") >= 5,
       do: $location`The Dive Bar`,
-      combat: new CombatStrategy()
-        .macro((): Macro => {
-          return Macro.step("pickpocket").if_(
-            "monstername nurse shark",
-            Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`)
-          );
-        })
-        .kill(),
-      outfit: {
-        modifier: "-combat",
-        equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
-        familiar: $familiar`Peace Turkey`,
+      combat: new CombatStrategy().killBanish($monster`nurse shark`).kill(),
+      outfit: () => {
+        const modifier =
+          myPath() === $path`11,037 Leagues Under the Sea` ? "-combat, sleaze res" : "-combat";
+        return {
+          modifier: modifier,
+          equip: $items`Apriling band tuba, Everfull Dart Holster, McHugeLarge left ski, Möbius ring, shark jumper, bat wings, little bitty bathysphere`,
+          familiar: $familiar`Peace Turkey`,
+        };
       },
       limit: { soft: 20 },
     },

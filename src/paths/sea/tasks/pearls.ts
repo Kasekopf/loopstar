@@ -5,6 +5,7 @@ import {
   $location,
   $monsters,
   $skill,
+  $stat,
   BooleanProperty,
   get,
   have,
@@ -12,10 +13,10 @@ import {
   NumericProperty,
 } from "libram";
 
-import { Item, Location, Monster, runChoice, visitUrl } from "kolmafia";
+import { Item, Location, Monster, myPrimestat, runChoice, visitUrl } from "kolmafia";
 import { Quest, Task } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
-import { OutfitSpec } from "grimoire-kolmafia";
+import { OutfitSpec, step } from "grimoire-kolmafia";
 
 const POSSIBLE_HABS = $monsters`kid who is too old to be Trick-or-Treating, suburban security civilian, vandal kid, sausage goblin, Black Crayon Fish`;
 
@@ -27,6 +28,7 @@ type PearlSpec = {
   progress: NumericProperty;
   avoid?: Item[];
   fish?: Monster[];
+  preferwanderer?: () => boolean;
 };
 
 const PEARLS: PearlSpec[] = [
@@ -37,6 +39,7 @@ const PEARLS: PearlSpec[] = [
     obtained: "_unblemishedPearlAnemoneMine",
     progress: "_unblemishedPearlAnemoneMineProgress",
     avoid: $items`Mer-kin digpick`,
+    preferwanderer: () => myPrimestat() !== $stat`Muscle` || step("questS02Monkees") >= 5,
   },
   {
     loc: $location`The Dive Bar`,
@@ -44,6 +47,15 @@ const PEARLS: PearlSpec[] = [
     modifier: "sleaze res",
     obtained: "_unblemishedPearlDiveBar",
     progress: "_unblemishedPearlDiveBarProgress",
+    preferwanderer: () => myPrimestat() !== $stat`Moxie` || step("questS02Monkees") >= 5,
+  },
+  {
+    loc: $location`The Marinara Trench`,
+    after: ["Sea Monkee/Open Grandpa Zone"],
+    modifier: "hot res",
+    obtained: "_unblemishedPearlMarinaraTrench",
+    progress: "_unblemishedPearlMarinaraTrenchProgress",
+    preferwanderer: () => myPrimestat() !== $stat`Mysticality` || step("questS02Monkees") >= 5,
   },
   {
     loc: $location`Madness Reef`,
@@ -52,13 +64,6 @@ const PEARLS: PearlSpec[] = [
     obtained: "_unblemishedPearlMadnessReef",
     progress: "_unblemishedPearlMadnessReefProgress",
     fish: $monsters`jamfish, magic dragonfish, pufferfish`,
-  },
-  {
-    loc: $location`The Marinara Trench`,
-    after: ["Sea Monkee/Open Grandpa Zone"],
-    modifier: "hot res",
-    obtained: "_unblemishedPearlMarinaraTrench",
-    progress: "_unblemishedPearlMarinaraTrenchProgress",
   },
   {
     loc: $location`The Briniest Deepests`,
@@ -131,6 +136,7 @@ export const PearlsQuest: Quest = {
             }
             return result;
           },
+          preferwanderer: p.preferwanderer,
           delay: 10,
           limit: { soft: 20 },
         }
