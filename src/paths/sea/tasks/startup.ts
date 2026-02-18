@@ -9,17 +9,22 @@ import {
   $location,
   $phylum,
   $skill,
+  $slots,
   AprilingBandHelmet,
   AsdonMartin,
   AugustScepter,
   BurningLeaves,
+  byClass,
+  CinchoDeMayo,
   Clan,
   CursedMonkeyPaw,
   ensureEffect,
   get,
   have,
   MayamCalendar,
+  PrismaticBeret,
   Snapper,
+  unequip,
 } from "libram";
 import {
   autosell,
@@ -28,16 +33,30 @@ import {
   cliExecute,
   drink,
   Effect,
+  equip,
+  equippedItem,
   guildStoreAvailable,
   itemAmount,
+  myAdventures,
   myClass,
   myGardenType,
+  myHash,
+  myHp,
+  myMaxhp,
+  myMaxmp,
+  myMeat,
+  myMp,
+  numericModifier,
   Skill,
+  totalFreeRests,
   use,
   useSkill,
   visitUrl,
 } from "kolmafia";
 import { Quest } from "../../../engine/task";
+import { Guards, step } from "grimoire-kolmafia";
+import { swapEquipmentForMp } from "../../../engine/moods";
+import { underStandard } from "../../../lib";
 
 export const StartupQuest: Quest = {
   name: "Startup",
@@ -298,6 +317,125 @@ export const StartupQuest: Quest = {
       do: () => CursedMonkeyPaw.wishFor($item`shark jumper`),
       freeaction: true,
       limit: { tries: 1 },
+    },
+    {
+      name: "Cincho Rest",
+      after: [],
+      ready: () => CinchoDeMayo.currentCinch() + CinchoDeMayo.cinchRestoredBy() <= 100,
+      completed: () => !have($item`Cincho de Mayo`) || get("timesRested") >= totalFreeRests(),
+      do: () => {
+        if (get("chateauAvailable") && !underStandard()) {
+          visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+          return;
+        }
+
+        // For other sources, we cannot rest with full HP and MP.
+        // First, try burning 1 MP with a starting skill.
+        if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
+          const drainer = byClass({
+            "Seal Clubber": $skill`Seal Clubbing Frenzy`,
+            "Turtle Tamer": $skill`Patience of the Tortoise`,
+            Pastamancer: $skill`Manicotti Meditation`,
+            Sauceror: $skill`Sauce Contemplation`,
+            "Disco Bandit": $skill`Disco Aerobics`,
+            "Accordion Thief": $skill`Moxie of the Mariachi`,
+            default: $skill`none`,
+          });
+          if (drainer !== $skill`none`) {
+            useSkill(drainer);
+          } else {
+            // Next, try putting on some extra gear for max MP
+            swapEquipmentForMp(myMaxmp() + 1);
+          }
+        }
+
+        // Finally, try unequiping some existing gear that provides MP/HP and re-equip it
+        if (myMp() === myMaxmp() && myHp() === myMaxhp()) {
+          for (const slot of $slots`shirt, acc1, acc2, acc3, pants, back, hat`) {
+            const item = equippedItem(slot);
+            if (
+              numericModifier(item, "Maximum HP") >= 0 &&
+              numericModifier(item, "Maximum MP") >= 0
+            ) {
+              unequip(slot);
+              equip(item, slot);
+            }
+          }
+        }
+
+        if (get("getawayCampsiteUnlocked") && !underStandard()) {
+          visitUrl("place.php?whichplace=campaway&action=campaway_tentclick");
+        } else {
+          visitUrl("campground.php?action=rest");
+        }
+      },
+      limit: {
+        tries: 60, // Round off at a cincho usage
+        guard: Guards.create(
+          () => myAdventures(),
+          (adv) => myAdventures() === adv // Assert we did not use an adventure
+        ),
+      },
+      freeaction: true,
+    },
+    {
+      name: "Buy scuba gear",
+      ready: () => myMeat() > 10000,
+      completed: () => have($item`old SCUBA tank`),
+      do: () => {
+        visitUrl("place.php?whichplace=sea_oldman&action=oldman_oldman");
+        visitUrl(
+          `place.php?whichplace=sea_oldman&action=oldman_oldman&preaction=buytank&pwd=${myHash()}`,
+          true
+        );
+      },
+      limit: { tries: 1 },
+    },
+    {
+      name: "Buy goggles",
+      after: ["Sea Monkee/Wreck of the Edgar Fitzsimmons"],
+      ready: () => have($item`sand penny`, 100),
+      completed: () => have($item`undersea surveying goggles`),
+      do: () => {
+        buy($coinmaster`Wet Crap For Sale`, 1, $item`undersea surveying goggles`);
+      },
+      underwater: true,
+      limit: { tries: 1 },
+    },
+    {
+      name: "Collect Buffs",
+      ready: () =>
+        get("_unblemishedPearlMarinaraTrench") &&
+        have($item`teflon ore`) &&
+        !have($item`ink bladder`) &&
+        step("questS02Monkees") < 10 &&
+        get("_beretBuskingUses") === 0,
+      completed: () => get("_beretBuskingUses") > 0,
+      do: () => {
+        cliExecute("buy paper-plate-mail pants");
+        cliExecute("buy alpha-mail pants");
+        cliExecute("buy chain-mail monokini");
+        PrismaticBeret.buskAt(220);
+        PrismaticBeret.buskAt(230);
+        PrismaticBeret.buskAt(350);
+        PrismaticBeret.buskAt(280);
+        if (have($item`scale-mail underwear`)) {
+          PrismaticBeret.buskAt(470);
+        }
+        if (AugustScepter.canCast(7)) {
+          useSkill($skill`Aug. 7th: Lighthouse Day!`);
+        }
+        cliExecute("genie effect frosty");
+        cliExecute("alliedradio effect intel");
+        if (!have($effect`Party Soundtrack`)) {
+          cliExecute("cast party soundtrack");
+        }
+        if (have($item`lump of loyal latite`)) {
+          use($item`lump of loyal latite`);
+        }
+        useSkill($skill`Steely-Eyed Squint`);
+      },
+      limit: { soft: 11 },
     },
   ],
 };

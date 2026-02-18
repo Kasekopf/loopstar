@@ -1,6 +1,5 @@
 import {
   $coinmaster,
-  $effect,
   $familiar,
   $item,
   $items,
@@ -9,14 +8,12 @@ import {
   $monsters,
   $skill,
   AprilingBandHelmet,
-  AugustScepter,
   BloodCubicZirconia,
   CursedMonkeyPaw,
   get,
   have,
   Macro,
   PeridotOfPeril,
-  PrismaticBeret,
 } from "libram";
 import { step } from "grimoire-kolmafia";
 
@@ -27,13 +24,10 @@ import {
   closetAmount,
   inHardcore,
   itemAmount,
-  myHash,
-  myMeat,
   putCloset,
   retrieveItem,
   takeCloset,
   use,
-  useSkill,
   visitUrl,
 } from "kolmafia";
 import { Quest, Resources } from "../../../engine/task";
@@ -90,63 +84,6 @@ function doneWithScholarRefract() {
 export const ItemTask: Quest = {
   name: "Item Run",
   tasks: [
-    {
-      name: "Collect Buffs",
-      ready: () =>
-        get("_unblemishedPearlMarinaraTrench") &&
-        have($item`teflon ore`) &&
-        !have($item`ink bladder`) &&
-        step("questS02Monkees") < 10 &&
-        get("_beretBuskingUses") === 0,
-      completed: () => get("_beretBuskingUses") > 0,
-      do: () => {
-        cliExecute("buy paper-plate-mail pants");
-        cliExecute("buy alpha-mail pants");
-        cliExecute("buy chain-mail monokini");
-        PrismaticBeret.buskAt(220);
-        PrismaticBeret.buskAt(230);
-        PrismaticBeret.buskAt(350);
-        PrismaticBeret.buskAt(280);
-        if (have($item`scale-mail underwear`)) {
-          PrismaticBeret.buskAt(470);
-        }
-        if (AugustScepter.canCast(7)) {
-          useSkill($skill`Aug. 7th: Lighthouse Day!`);
-        }
-        cliExecute("genie effect frosty");
-        cliExecute("alliedradio effect intel");
-        if (!have($effect`Party Soundtrack`)) {
-          cliExecute("cast party soundtrack");
-        }
-        if (have($item`lump of loyal latite`)) {
-          use($item`lump of loyal latite`);
-        }
-        useSkill($skill`Steely-Eyed Squint`);
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Buy scuba gear",
-      ready: () => myMeat() > 10000,
-      completed: () => have($item`old SCUBA tank`),
-      do: () => {
-        visitUrl("place.php?whichplace=sea_oldman&action=oldman_oldman");
-        visitUrl(
-          `place.php?whichplace=sea_oldman&action=oldman_oldman&preaction=buytank&pwd=${myHash()}`,
-          true
-        );
-      },
-      limit: { soft: 11 },
-    },
-    {
-      name: "Buy goggles",
-      ready: () => have($item`sand penny`, 100),
-      completed: () => have($item`undersea surveying goggles`),
-      do: () => {
-        buy($coinmaster`Wet Crap For Sale`, 1, $item`undersea surveying goggles`);
-      },
-      limit: { soft: 11 },
-    },
     {
       name: "Spend sand dollars",
       after: ["Corral Refract"],

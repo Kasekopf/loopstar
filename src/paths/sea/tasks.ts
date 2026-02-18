@@ -1,7 +1,6 @@
 import { Quest } from "../../engine/task";
 import { TootQuest } from "../../tasks/level1";
 import { ColosseumQuest } from "./tasks/colosseum";
-import { FreeFightZoneTask } from "./tasks/freeFightZone";
 import { FinalQuest } from "./tasks/final";
 import { SeaMonkeeQuest } from "./tasks/seaMonkee";
 import { ScholarTask as ScholarQuest } from "./tasks/scholar";
@@ -19,7 +18,7 @@ export const TheSeaQuest: Quest[] = [
   StartupQuest,
   BuffQuest,
   ShadowRealmTask,
-  FreeFightZoneTask,
+  // FreeFightZoneTask,
   MerkinGearQuest,
   SeaMonkeeQuest,
   // PreItemTask,
