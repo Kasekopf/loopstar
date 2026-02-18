@@ -115,7 +115,7 @@ export const CurrentsQuest: Quest = {
       limit: { tries: 1 },
     },
     {
-      name: "Make Sea Chaps",
+      name: "Make Cowboy Hat",
       after: ["Corral Leather"],
       completed: () => have($item`sea cowboy hat`),
       do: () => cliExecute("create sea cowboy hat"),

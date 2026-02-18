@@ -8,6 +8,7 @@ import { getTasks } from "grimoire-kolmafia";
 import { Engine } from "../../engine/engine";
 import { TheSeaQuest } from "./tasks";
 import { TheSeaEngine } from "./engine";
+import { seaRoute } from "./route";
 
 export class TheSeaInfo implements PathInfo {
   name(): string {
@@ -31,7 +32,7 @@ export class TheSeaInfo implements PathInfo {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoute(route: string[]): string[] {
-    return [];
+    return seaRoute;
   }
 
   getEngine(tasks: Task[]): Engine {

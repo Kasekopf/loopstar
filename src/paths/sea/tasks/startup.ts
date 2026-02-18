@@ -389,6 +389,7 @@ export const StartupQuest: Quest = {
           true
         );
       },
+      freeaction: true,
       limit: { tries: 1 },
     },
     {
@@ -399,6 +400,7 @@ export const StartupQuest: Quest = {
       do: () => {
         buy($coinmaster`Wet Crap For Sale`, 1, $item`undersea surveying goggles`);
       },
+      freeaction: true,
       underwater: true,
       limit: { tries: 1 },
     },
@@ -435,6 +437,7 @@ export const StartupQuest: Quest = {
         }
         useSkill($skill`Steely-Eyed Squint`);
       },
+      freeaction: true,
       limit: { soft: 11 },
     },
   ],

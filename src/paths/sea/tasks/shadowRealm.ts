@@ -56,7 +56,8 @@ export const ShadowRealmTask: Quest = {
         useSkill($skill`Bind Spice Ghost`, numCasts);
         use($item`Platinum Yendorian Express Card`);
       },
-      limit: { soft: 11 },
+      freeaction: true,
+      limit: { tries: 1 },
     },
     {
       name: "Shadow Realm Fights",
@@ -104,7 +105,6 @@ export const ShadowRealmTask: Quest = {
       choices: {
         1566: 1,
       },
-      freeaction: true,
       limit: { turns: 1 },
       outfit: {
         familiar: $familiar`Jill-of-All-Trades`,

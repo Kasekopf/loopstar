@@ -90,7 +90,7 @@ export const MomQuest: Quest = {
     },
     {
       name: "Abyss",
-      after: ["Open Abyss"],
+      after: ["Open Abyss", "Obtain Scale-Mail underwear"],
       completed: () => step("questS02Monkees") === 999,
       prepare: () => {
         if (have($item`comb jelly`)) ensureEffect($effect`Jelly Combed`);

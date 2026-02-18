@@ -237,7 +237,7 @@ export const MerkinGearQuest: Quest = {
     }),
     {
       name: "Get Mer-kin Mask",
-      after: ["Fax diver", "Mimic diver", "Currents/Seahorse"],
+      after: ["Unholy Diver", "Currents/Seahorse"],
       completed: () =>
         have($item`crappy Mer-kin mask`) ||
         have($item`Mer-kin gladiator mask`) ||
