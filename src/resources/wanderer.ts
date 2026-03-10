@@ -1,11 +1,13 @@
 import { DelayedMacro, OutfitSpec } from "grimoire-kolmafia";
 import {
   familiarWeight,
+  getProperty,
   haveEquipped,
   Item,
   Monster,
   myAdventures,
   myFamiliar,
+  myParadoxicity,
   myPath,
   totalTurnsPlayed,
 } from "kolmafia";
@@ -219,6 +221,24 @@ export const wandererSources: WandererSource[] = [
       return result;
     },
     possible: () => haveEquipped($item`Kramco Sausage-o-Matic™`),
+    chainable: true,
+  },
+
+  {
+    name: "Time Cop",
+    available: () => have($item`Möbius ring`) && get("_timeCopsFoughtToday", 0) < 11,
+    equip: $item`Möbius ring`,
+    monsters: [$monster`time cop`],
+    chance: () => 0.4 / (1 + Math.exp(-0.3 * (myParadoxicity() - 16))),
+    possible: () => haveEquipped($item`Möbius ring`),
+    chainable: true,
+  },
+  {
+    name: "Ewe",
+    available: () => myPath() === $path`11 Things I Hate About U`,
+    monsters: [$monster`ewe`],
+    chance: () => getProperty("eweItem").split(",").length * 0.1,
+    possible: () => getProperty("eweItem").split(",").length > 0,
     chainable: true,
   },
 ];
