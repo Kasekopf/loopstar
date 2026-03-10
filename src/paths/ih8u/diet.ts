@@ -12,6 +12,7 @@ import {
   myFullness,
   myInebriety,
   myLevel,
+  myMeat,
   restoreMp,
   retrieveItem,
   reverseNumberology,
@@ -142,7 +143,8 @@ export const IH8UDietQuest: Quest = {
     {
       name: "Sausage",
       completed: () => !have($item`Kramco Sausage-o-Matic™`) || get("_sausagesEaten") >= 23,
-      ready: () => have($item`magical sausage casing`),
+      ready: () =>
+        have($item`magical sausage casing`) && myMeat() - 3000 >= 111 * (get("_sausagesEaten") + 1),
       do: (): void => {
         // Pump-and-grind cannot be used from Left-Hand Man
         if (
@@ -152,11 +154,23 @@ export const IH8UDietQuest: Quest = {
           useFamiliar($familiar`Left-Hand Man`);
           equip($slot`familiar`, $item`none`);
         }
-        const toEat = clamp(
-          itemAmount($item`magical sausage casing`),
-          0,
-          23 - get("_sausagesEaten")
-        );
+
+        const already = get("_sausagesEaten");
+        const maxDaily = 23 - already;
+        const casings = itemAmount($item`magical sausage casing`);
+        const availableMeat = Math.max(0, myMeat() - 3000);
+
+        let affordable = 0;
+        let runningCost = 0;
+
+        for (let i = 1; i <= maxDaily; i++) {
+          const cost = 111 * (already + i);
+          if (runningCost + cost > availableMeat) break;
+          runningCost += cost;
+          affordable++;
+        }
+
+        const toEat = clamp(Math.min(casings, affordable), 0, maxDaily);
         eat(toEat, $item`magical sausage`);
       },
       limit: { tries: 23 },
