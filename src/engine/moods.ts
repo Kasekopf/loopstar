@@ -116,7 +116,11 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
   }
 
   if (myClass() !== $class`Pastamancer`) {
-    result["init"].push($effect`Whispering Strands`);
+    if (have($item`legendary pasta wand`)) {
+      result["init"].push($effect`Legendary Whispering Strands`);
+    } else {
+      result["init"].push($effect`Whispering Strands`);
+    }
   }
 
   if (
