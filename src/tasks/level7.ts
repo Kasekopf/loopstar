@@ -361,7 +361,9 @@ const Nook: Task[] = [
     prepare: tuneCape,
     priority: () => Priorities.Free,
     ready: () =>
-      have($item`Archaeologist's Spade`) && get("_archSpadeDigs", 0) < 11 && get("lastAdventure") === $location`The Defiled Nook`,
+      have($item`Archaeologist's Spade`) &&
+      get("_archSpadeDigs", 0) < 11 &&
+      get("lastAdventure") === $location`The Defiled Nook`,
     completed: () => get("_archSpadeDigs", 0) >= 11,
     do: () => {
       directlyUse($item`Archaeologist's Spade`);
@@ -394,7 +396,7 @@ const Nook: Task[] = [
         $monster`party skelteon`
       ),
     freeaction: true,
-    limit: { tries: 11 }
+    limit: { tries: 11 },
   },
   {
     name: "Nook Eye", // In case we get eyes from outside sources (Nostalgia)
