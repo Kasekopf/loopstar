@@ -1,5 +1,6 @@
 import {
   adv1,
+  availableChoiceOptions,
   cliExecute,
   haveEquipped,
   Item,
@@ -7,6 +8,7 @@ import {
   myClass,
   myTurncount,
   numericModifier,
+  runChoice,
   toUrl,
   visitUrl,
 } from "kolmafia";
@@ -25,6 +27,7 @@ import {
   AutumnAton,
   BeachComb,
   DaylightShavings,
+  directlyUse,
   ensureEffect,
   FloristFriar,
   get,
@@ -352,6 +355,46 @@ const Nook: Task[] = [
     limit: {
       soft: 37,
     },
+  },
+  {
+    name: "Use Archaeologist's Spade",
+    prepare: tuneCape,
+    priority: () => Priorities.Free,
+    ready: () =>
+      have($item`Archaeologist's Spade`) && get("_archSpadeDigs", 0) < 11 && get("lastAdventure") === $location`The Defiled Nook`,
+    completed: () => get("_archSpadeDigs", 0) >= 11,
+    do: () => {
+      directlyUse($item`Archaeologist's Spade`);
+      while ("3" in availableChoiceOptions()) {
+        runChoice(3);
+      }
+      visitUrl("main.php");
+    },
+    combat: new CombatStrategy()
+      .macro(
+        () =>
+          Macro.externalIf(
+            get("lastCopyableMonster") === $monster`spiny skelelton`,
+            Macro.trySkill($skill`Feel Nostalgic`)
+          ),
+        $monster`toothy sklelton`
+      )
+      .macro(
+        () =>
+          Macro.externalIf(
+            get("lastCopyableMonster") === $monster`toothy sklelton`,
+            Macro.trySkill($skill`Feel Nostalgic`)
+          ),
+        $monster`spiny skelelton`
+      )
+      .macro(slay_macro, $monsters`spiny skelelton, toothy sklelton`)
+      .kill($monsters`spiny skelelton, toothy sklelton`)
+      .macro(
+        new Macro().trySkill($skill`Fire Extinguisher: Zone Specific`),
+        $monster`party skelteon`
+      ),
+    freeaction: true,
+    limit: { tries: 11 }
   },
   {
     name: "Nook Eye", // In case we get eyes from outside sources (Nostalgia)
