@@ -1,9 +1,13 @@
 import {
   cliExecute,
   containsText,
+  getProperty,
   haveEquipped,
   itemAmount,
   myDaycount,
+  myHash,
+  runChoice,
+  splitString,
   use,
   visitUrl,
 } from "kolmafia";
@@ -122,6 +126,44 @@ export const GiantQuest: Quest = {
           return Macro.skill($skill`Feel Envy`).step(killMacro());
         }, $monster`Burly Sidekick`)
         .forceItems($monster`Quiet Healer`),
+    },
+    {
+      name: "Airship (Baseball)",
+      after: ["Grow Beanstalk", "Airship YR Healer"],
+      ready: () => prepareSomeFishCurveball(),
+      completed: () => have($item`S.O.C.K.`) || get("_baseballInnings") >= 3,
+      prepare: () => {
+        prepareSomeFishCurveball();
+      },
+      do: $location`The Penultimate Fantasy Airship`,
+      choices: { 182: 1 },
+      post: () => {
+        if (have($effect`Temporary Amnesia`)) {
+          cliExecute("uneffect Temporary Amnesia");
+        }
+      },
+      outfit: () => {
+        return {
+          weapon: $item`Monodent of the Sea`,
+          offhand: $item`Baseball Diamond`,
+          back: $item`bat wings`,
+        };
+      },
+      limit: { soft: 50 },
+      delay: () => {
+        if (have($item`bat wings`)) {
+          if (have($item`Plastic Wrap Immateria`)) return 20;
+          if (have($item`Gauze Immateria`)) return 16;
+          return 12;
+        } else {
+          if (have($item`Plastic Wrap Immateria`)) return 25;
+          if (have($item`Gauze Immateria`)) return 20;
+          return 15;
+        }
+      },
+      combat: new CombatStrategy().macro(() =>
+        Macro.skill($skill`Sea *dent: Talk to Some Fish`).step(killMacro())
+      ),
     },
     {
       name: "Airship",
@@ -281,3 +323,42 @@ export const GiantQuest: Quest = {
     },
   ],
 };
+
+function prepareSomeFishCurveball(): boolean {
+  // Already done with baseball for the day
+  if (get("_baseballInnings") >= 3) return false;
+
+  // Already have a curveball fight pending
+  if (get("_curveballFightsLeft", 0) > 0) return false;
+
+  const lineup = splitString(getProperty("baseballTeam"), ",");
+
+  // Need a full lineup
+  if (lineup.length < 9) return false;
+
+  const fishId = $monster`some fish`.id.toString();
+
+  // Find Some Fish in slots 3-9 (indices 2-8)
+  let fishSlot = -1;
+  for (let i = 2; i < 9; i++) {
+    if (lineup[i] === fishId) {
+      fishSlot = i + 1; // convert to 1-based slot number
+      break;
+    }
+  }
+
+  if (fishSlot === -1) return false;
+
+  // Start baseball
+  visitUrl(`inventory.php?pwd=${myHash()}&action=pball`);
+
+  // Throw curveball (choice 3) at Some Fish, ordinary pitch (choice 4) elsewhere
+  for (let slot = 1; slot <= 9; slot++) {
+    runChoice(slot === fishSlot ? 3 : 4);
+  }
+
+  // Finish inning
+  runChoice(6);
+
+  return get("_curveballMonster") === $monster`some fish`;
+}

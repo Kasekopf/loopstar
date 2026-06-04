@@ -1,6 +1,5 @@
 import {
   adv1,
-  availableChoiceOptions,
   cliExecute,
   haveEquipped,
   Item,
@@ -367,34 +366,13 @@ const Nook: Task[] = [
     completed: () => get("_archSpadeDigs", 0) >= 11,
     do: () => {
       directlyUse($item`Archaeologist's Spade`);
-      while ("3" in availableChoiceOptions()) {
-        runChoice(3);
-      }
-      visitUrl("main.php");
+      runChoice(3);
     },
-    combat: new CombatStrategy()
-      .macro(
-        () =>
-          Macro.externalIf(
-            get("lastCopyableMonster") === $monster`spiny skelelton`,
-            Macro.trySkill($skill`Feel Nostalgic`)
-          ),
-        $monster`toothy sklelton`
-      )
-      .macro(
-        () =>
-          Macro.externalIf(
-            get("lastCopyableMonster") === $monster`toothy sklelton`,
-            Macro.trySkill($skill`Feel Nostalgic`)
-          ),
-        $monster`spiny skelelton`
-      )
-      .macro(slay_macro, $monsters`spiny skelelton, toothy sklelton`)
-      .kill($monsters`spiny skelelton, toothy sklelton`)
-      .macro(
-        new Macro().trySkill($skill`Fire Extinguisher: Zone Specific`),
-        $monster`party skelteon`
-      ),
+    outfit: (): OutfitSpec => {
+      const result = { equip: tryCape($item`antique machete`, $item`gravy boat`) } as OutfitSpec;
+      return result;
+    },
+    combat: new CombatStrategy().macro(slay_macro),
     freeaction: true,
     limit: { tries: 11 },
   },
