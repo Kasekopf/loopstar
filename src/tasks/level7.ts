@@ -363,7 +363,7 @@ const Nook: Task[] = [
       have($item`Archaeologist's Spade`) &&
       get("_archSpadeDigs", 0) < 11 &&
       get("lastAdventure") === $location`The Defiled Nook`,
-    completed: () => get("_archSpadeDigs", 0) >= 11 || get("cyrptAlcoveEvilness") <= 13,
+    completed: () => get("_archSpadeDigs", 0) >= 11 || get("cyrptNookEvilness") <= 13,
     do: () => {
       directlyUse($item`Archaeologist's Spade`);
       runChoice(3);
