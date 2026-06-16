@@ -339,6 +339,8 @@ export function equipDefaults(
 
   outfit.equip($familiar`Blood-Faced Volleyball`); // default
 
+  outfit.equip($item`Baseball Diamond`);
+
   if (!freecombat) outfit.equip($item`mafia thumb ring`);
   if (atLevel(11)) outfit.equip($item`lucky gold ring`);
 

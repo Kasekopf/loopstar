@@ -7,6 +7,7 @@ import {
   myClass,
   myTurncount,
   numericModifier,
+  runChoice,
   toUrl,
   visitUrl,
 } from "kolmafia";
@@ -25,6 +26,7 @@ import {
   AutumnAton,
   BeachComb,
   DaylightShavings,
+  directlyUse,
   ensureEffect,
   FloristFriar,
   get,
@@ -352,6 +354,27 @@ const Nook: Task[] = [
     limit: {
       soft: 37,
     },
+  },
+  {
+    name: "Use Archaeologist's Spade",
+    prepare: tuneCape,
+    priority: () => Priorities.Free,
+    ready: () =>
+      have($item`Archaeologist's Spade`) &&
+      get("_archSpadeDigs", 0) < 11 &&
+      get("lastAdventure") === $location`The Defiled Nook`,
+    completed: () => get("_archSpadeDigs", 0) >= 11 || get("cyrptNookEvilness") <= 13,
+    do: () => {
+      directlyUse($item`Archaeologist's Spade`);
+      runChoice(3);
+    },
+    outfit: (): OutfitSpec => {
+      const result = { equip: tryCape($item`antique machete`, $item`gravy boat`) } as OutfitSpec;
+      return result;
+    },
+    combat: new CombatStrategy().macro(slay_macro),
+    freeaction: true,
+    limit: { tries: 11 },
   },
   {
     name: "Nook Eye", // In case we get eyes from outside sources (Nostalgia)
