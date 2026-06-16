@@ -107,10 +107,15 @@ export const GiantQuest: Quest = {
       outfit: () => {
         const turns = $location`The Penultimate Fantasy Airship`.turnsSpent;
         if (forceItemPossible())
-          return { modifier: turns < 5 ? "-combat" : undefined, equip: $items`bat wings` };
+          return {
+            modifier: turns < 5 ? "-combat" : undefined,
+            equip: $items`bat wings`,
+            weapon: $item`Monodent of the Sea`,
+          };
         else
           return {
             modifier: turns < 5 ? "-combat, item" : "item",
+            weapon: $item`Monodent of the Sea`,
             equip: $items`bat wings`,
             avoid: $items`broken champagne bottle`,
           };
@@ -178,8 +183,17 @@ export const GiantQuest: Quest = {
       orbtargets: () => [],
       outfit: () => {
         const turns = $location`The Penultimate Fantasy Airship`.turnsSpent;
-        if (turns < 5) return {};
-        return { modifier: "-combat", equip: $items`bat wings` };
+        if (turns < 5)
+          return {
+            weapon: $item`Monodent of the Sea`,
+            offhand: $item`Baseball Diamond`,
+          };
+        return {
+          weapon: $item`Monodent of the Sea`,
+          offhand: $item`Baseball Diamond`,
+          modifier: "-combat",
+          equip: $items`bat wings`,
+        };
       },
       limit: { soft: 50 },
       delay: () => {
@@ -199,7 +213,7 @@ export const GiantQuest: Quest = {
             return Macro.skill($skill`Feel Envy`).step(killMacro());
           if (get("shockingLickCharges") > 0) return Macro.skill($skill`Shocking Lick`);
         }
-        return new Macro();
+        return Macro.skill($skill`Sea *dent: Talk to Some Fish`).runaway();
       }, $monster`Burly Sidekick`),
     },
     {
