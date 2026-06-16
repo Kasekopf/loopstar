@@ -4,7 +4,7 @@ import prettier from "eslint-config-prettier";
 import libram, { verifyConstantsSinceRevision } from "eslint-plugin-libram";
 import { defineConfig } from "eslint/config";
 
-const VERIFY_CONSTANTS_SINCE = 29040; // feat: parse pasta thrall xp from charpane 
+const VERIFY_CONSTANTS_SINCE = 29040; // feat: parse pasta thrall xp from charpane
 
 await verifyConstantsSinceRevision(VERIFY_CONSTANTS_SINCE);
 
