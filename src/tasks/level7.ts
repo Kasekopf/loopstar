@@ -41,6 +41,10 @@ import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { tryPlayApriling } from "../lib";
 import { args } from "../args";
 
+const crimboSkeleton = () =>
+  // eslint-disable-next-line libram/verify-constants
+  args.minor.profitfamiliar ? $familiar`Skeleton of Crimbo Past` : undefined;
+
 function tuneCape(): void {
   if (
     have($item`unwrapped knock-off retro superhero cape`) &&
@@ -121,6 +125,7 @@ const Alcove: Task[] = [
           backupcamera: "init",
           parka: "pterodactyl",
         },
+        familiar: crimboSkeleton(),
       };
     },
     // Modern zmobie does not show up in orb
@@ -169,6 +174,7 @@ const Cranny: Task[] = [
         ),
         modifier: "-combat, ML",
         modes: { umbrella: "cocoon" },
+        familiar: crimboSkeleton(),
       };
     },
     choices: { 523: 4 },
@@ -238,7 +244,10 @@ const Niche: Task[] = [
       if (get("rwbMonsterCount") <= 1) {
         // Cast it the first time, or maintain it
         result.familiar = $familiar`Patriotic Eagle`;
+      } else {
+        result.familiar = crimboSkeleton();
       }
+
       return result;
     },
     combat: new CombatStrategy()
@@ -309,11 +318,13 @@ const Nook: Task[] = [
         return {
           equip: $items`gravy boat, industrial fire extinguisher`,
           modifier: "item 500max",
+          familiar: crimboSkeleton(),
         };
       else
         return {
           equip: tryCape($item`antique machete`, $item`gravy boat`, $item`deft pirate hook`),
           modifier: "item 500max",
+          familiar: crimboSkeleton(),
         };
     },
     choices: { 155: 5, 1429: 1 },
