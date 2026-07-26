@@ -14,6 +14,7 @@ import { Quest, Resources } from "../../../engine/task";
 import { buy, closetAmount, itemAmount, takeCloset, visitUrl } from "kolmafia";
 import { OutfitSpec, step } from "grimoire-kolmafia";
 import { CombatStrategy } from "../../../engine/combat";
+import { Priorities } from "../../../engine/priority";
 
 export const SkateParkQuest: Quest = {
   name: "Skate Park",
@@ -95,6 +96,7 @@ export const MomQuest: Quest = {
       prepare: () => {
         if (have($item`comb jelly`)) ensureEffect($effect`Jelly Combed`);
       },
+      priority: () => (have($effect`Jelly Combed`) ? Priorities.MinorEffect : Priorities.None),
       do: $location`The Caliginous Abyss`,
       combat: new CombatStrategy().killHard($monsters`Peanut`).kill(),
       outfit: () => {

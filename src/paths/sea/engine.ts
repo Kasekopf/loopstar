@@ -90,7 +90,13 @@ export class TheSeaEngine extends Engine {
     }
 
     // Train the sea lasso all the time
-    if (!task.freeaction && get("lassoTrainingCount") < 20 && have($item`sea lasso`)) {
+    const locationUnderwater = task.do instanceof Location && task.do.environment === "underwater";
+    if (
+      !task.freeaction &&
+      get("lassoTrainingCount") < 20 &&
+      have($item`sea lasso`) &&
+      locationUnderwater
+    ) {
       combat.startingMacro(Macro.tryItem($item`sea lasso`));
       outfit.equip($item`sea cowboy hat`);
       outfit.equip($item`sea chaps`);
@@ -101,7 +107,7 @@ export class TheSeaEngine extends Engine {
 
     // If we added a generic familiar that cannot breath water,
     // we need to override the familiar equip and hope nothing too bad happens
-    if (outfit.familiar && !outfit.familiar.underwater) {
+    if (locationUnderwater && outfit.familiar && !outfit.familiar.underwater) {
       if (getWorkshed() !== $item`Asdon Martin keyfob (on ring)`) {
         const famequip = outfit.equips.get($slot`familiar`) ?? $item`none`;
         if (!familiarWaterBreathEquips.includes(famequip)) {
@@ -121,27 +127,18 @@ export class TheSeaEngine extends Engine {
     const locationUnderwater = task.do instanceof Location && task.do.environment === "underwater";
     if (task.underwater || locationUnderwater) {
       const playerBreathing = equipFirst(outfit, waterBreathSources);
-      if (!playerBreathing) {
-        throw `Unable to breath underwater for ${task.name}`;
-      }
-      if (playerBreathing.prepare) {
+      if (playerBreathing?.prepare) {
         outfit.afterDress(playerBreathing.prepare);
       }
 
       const fishy = equipFirst(outfit, fishySources);
-      if (!fishy) {
-        throw `Unable to become fishy`;
-      }
-      if (fishy.prepare) {
+      if (fishy?.prepare) {
         outfit.afterDress(fishy.prepare);
       }
 
       if (outfit.familiar && !outfit.familiar.underwater) {
         const familiarBreathing = equipFirst(outfit, familiarWaterBreathSources);
-        if (!familiarBreathing) {
-          throw `Unable to provide familiar water breathing for ${task.name}`;
-        }
-        if (familiarBreathing.prepare) {
+        if (familiarBreathing?.prepare) {
           outfit.afterDress(familiarBreathing.prepare);
         }
       }
@@ -162,6 +159,9 @@ export class TheSeaEngine extends Engine {
 
     if (task.do instanceof Location) setLocation(task.do);
     super.dress(task, outfit);
+
+    const locationUnderwater = task.do instanceof Location && task.do.environment === "underwater";
+    if (locationUnderwater && !have($effect`Fishy`)) abort("Unable to find a good fishy source");
 
     if (myHp() < 200 && myHp() < myMaxhp()) {
       restoreHp(myMaxhp());

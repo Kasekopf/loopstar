@@ -24,6 +24,7 @@ export const CurrentsQuest: Quest = {
       completed: () => have($item`Mer-kin prayerbeads`, 3),
       do: $location`The Mer-Kin Outpost`,
       combat: new CombatStrategy().banish($monsters`Mer-kin burglar, Mer-kin raider`).kill(),
+      orbtargets: () => undefined,
       outfit: {
         familiar: $familiar`Peace Turkey`,
         modifier: "item",
@@ -64,10 +65,9 @@ export const CurrentsQuest: Quest = {
         have($item`Mer-kin stashbox`) || have($item`Mer-kin trailmap`) || get("corralUnlocked"),
       do: $location`The Mer-Kin Outpost`,
       outfit: {
-        familiar: $familiar`Peace Turkey`,
         modifier: "-combat",
       },
-      combat: new CombatStrategy().kill(),
+      combat: new CombatStrategy().ignore(),
       limit: { soft: 20 },
     },
     {

@@ -19,7 +19,6 @@ export const TheSeaQuest: Quest[] = [
   BuffQuest,
   ShadowRealmTask,
   // FreeFightZoneTask,
-  MerkinGearQuest,
   SeaMonkeeQuest,
   // PreItemTask,
   // ItemTask,

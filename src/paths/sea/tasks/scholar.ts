@@ -78,7 +78,8 @@ export const ScholarTask: Quest = {
       after: ["Currents/Seahorse"],
       completed: () =>
         (have($item`Mer-kin scholar mask`) || have($item`Mer-kin facecowl`)) &&
-        (have($item`Mer-kin scholar tailpiece`) || have($item`Mer-kin waistrope`)),
+        (have($item`Mer-kin scholar tailpiece`) || have($item`Mer-kin waistrope`)) &&
+        get("merkinVocabularyMastery") >= 60,
       prepare: () => {
         // Only use hallpasses once the teacher's lounge is unlocked
         if (get("merkinElementaryTeacherUnlock")) {
@@ -102,6 +103,7 @@ export const ScholarTask: Quest = {
             Macro.trySkill($skill`Sea *dent: Talk to Some Fish`)
           ).skill($skill`BCZ: Refracted Gaze`);
         })
+        .banish($monsters`Mer-kin punisher, Mer-kin teacher`)
         .kill(),
       resources: () => {
         if (get("merkinElementaryTeacherUnlock")) return undefined;
@@ -284,7 +286,7 @@ export const ScholarTask: Quest = {
     },
     {
       name: "Kill YogUrt",
-      ready: () => get("isMerkinHighPriest"),
+      after: ["Guess Dreadscroll"],
       completed: () => get("yogUrtDefeated"),
       prepare: () => {
         if (myPath() === $path`11,037 Leagues Under the Sea`) {

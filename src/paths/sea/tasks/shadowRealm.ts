@@ -48,6 +48,7 @@ export const ShadowRealmTask: Quest = {
     },
     {
       name: "Express Card",
+      ready: () => have($effect`Fishy`) || !have($item`Monodent of the Sea`),
       completed: () => !have($item`Platinum Yendorian Express Card`) || get("expressCardUsed"),
       do: () => {
         use($item`lodestone`);
@@ -64,8 +65,7 @@ export const ShadowRealmTask: Quest = {
       after: ["Open Shadow Realm"],
       completed: () =>
         !have($item`closed-circuit pay phone`) ||
-        get("_shadowAffinityToday") ||
-        !have($effect`Shadow Affinity`),
+        (get("_shadowAffinityToday") && !have($effect`Shadow Affinity`)),
       prepare: () => ClosedCircuitPayphone.chooseQuest(() => 2),
       do: bestRift(),
       combat: new CombatStrategy()
@@ -105,7 +105,7 @@ export const ShadowRealmTask: Quest = {
       choices: {
         1566: 1,
       },
-      limit: { turns: 1 },
+      limit: { tries: 20 },
       outfit: {
         familiar: $familiar`Jill-of-All-Trades`,
         equip: $items`Everfull Dart Holster, spring shoes, Monodent of the Sea, April Shower Thoughts shield, bat wings, toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory, prismatic beret`,
@@ -118,6 +118,7 @@ export const ShadowRealmTask: Quest = {
       do: () => {
         cliExecute("use map to a candy-rich block");
       },
+      choices: { 804: 2 },
       freeaction: true,
       limit: { soft: 11 },
     },

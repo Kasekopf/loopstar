@@ -10,6 +10,7 @@ import {
   get,
   have,
   Macro,
+  set,
 } from "libram";
 import {
   buy,
@@ -62,6 +63,7 @@ export const MerkinGearQuest: Quest = {
     },
     {
       name: "Mine Teflon",
+      after: ["Kill Miner"],
       ready: () => have($item`Mer-kin digpick`),
       completed: () =>
         have($item`teflon ore`) ||
@@ -218,6 +220,7 @@ export const MerkinGearQuest: Quest = {
         have($item`crappy Mer-kin mask`) ||
         have($item`Mer-kin scholar mask`) ||
         have($item`Mer-kin gladiator mask`),
+      prepare: () => set("choiceAdventure1387", 3),
       combat: new CombatStrategy()
         .macro((): Macro => {
           if (haveEquipped($item`Fourth of May Cosplay Saber`) && get("_saberForceUses") < 5) {
@@ -231,7 +234,7 @@ export const MerkinGearQuest: Quest = {
       outfit: {
         modifier: "item",
         familiar: $familiar`Chest Mimic`,
-        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory`,
+        equip: $items`toy Cupid bow, Flash Liquidizer Ultra Dousing Accessory, Fourth of May Cosplay Saber`,
       },
       tries: 5,
     }),

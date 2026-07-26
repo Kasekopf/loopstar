@@ -460,7 +460,7 @@ const nonAprilBuffs = new Map<Effect, Skill>([
   [$effect`Leash of Linguini`, $skill`Leash of Linguini`],
   [$effect`Singer's Faithful Ocelot`, $skill`Singer's Faithful Ocelot`],
   [$effect`Springy Fusilli`, $skill`Springy Fusilli`],
-  [$effect`Only Dogs Love a Drunken Sailor`, $skill`Only Dogs Love a Drunken Sailor`],
+  // [$effect`Only Dogs Love a Drunken Sailor`, $skill`Only Dogs Love a Drunken Sailor`],
 ]);
 
 export const BuffQuest: Quest = {

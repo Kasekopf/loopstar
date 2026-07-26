@@ -67,7 +67,8 @@ const PEARLS: PearlSpec[] = [
   },
   {
     loc: $location`The Briniest Deepests`,
-    after: [],
+    // Technically this could be earlier, but we'd rather save the wanderers for other zones
+    after: ["Sea Monkee/Open Grandpa Zone"],
     modifier: "cold res",
     obtained: "_unblemishedPearlTheBriniestDeepests",
     progress: "_unblemishedPearlTheBriniestDeepestsProgress",

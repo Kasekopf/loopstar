@@ -192,6 +192,7 @@ export const SeaMonkeeQuest: Quest = {
         }
         return result;
       },
+      orbtargets: () => undefined,
       limit: { soft: 20 },
     },
     {
