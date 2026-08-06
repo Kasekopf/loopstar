@@ -1409,10 +1409,11 @@ export const MiscQuest: Quest = {
     {
       name: "Check Florist",
       after: ["Mosquito/Start"],
-      completed: () => get("floristFriarChecked"),
+      completed: () => get(toTempPref("floristChecked"), false),
       do: () => {
         floristAvailable();
         cliExecute("ash florist_available()");
+        set(toTempPref("floristChecked"), true);
       },
       freeaction: true,
       limit: { tries: 1 },
