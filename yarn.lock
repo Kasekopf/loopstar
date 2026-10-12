@@ -1139,6 +1139,18 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@mikro-orm/core@^7.0.14":
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/@mikro-orm/core/-/core-7.2.5.tgz#37d533a6010babe7c18d4be68779e3080e3bb376"
+  integrity sha512-YF2q2Druxw4PQf/DoN1jZgYZdWfgQUWZWEapXIs0Oc/mC5HvD21nVncruDz2qMitmihro1oPhb9gI4LR5u8BEw==
+
+"@mikro-orm/sql@^7.0.14":
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/@mikro-orm/sql/-/sql-7.2.5.tgz#c711f0159bd76c9085fde3d2a0843df50a12c52c"
+  integrity sha512-sXctGMJ/QKeugdX3xKltKXVeHavkuGuo/LhH0In1htw+uylAXjyzxzsO8rTb/sS+Ay3tZaaB/Y2eK5dCl4ZAVw==
+  dependencies:
+    kysely "0.29.6"
+
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.3.tgz#323d72dd25103d0c4fbdce89dadf574a787b1f9b"
@@ -1164,6 +1176,11 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@sqlite.org/sqlite-wasm@~3.51.2-build9":
+  version "3.51.2-build9"
+  resolved "https://registry.yarnpkg.com/@sqlite.org/sqlite-wasm/-/sqlite-wasm-3.51.2-build9.tgz#e61d88382a952f557450342d139134a429609b9e"
+  integrity sha512-tj2Sa6X4gVZqS9SiT2xlEeChSUklSGq8Hz6zKNbHW6NRiGyrSXiFcspnrWru1wPBT76RX/VxweESKxawCxfDxg==
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.11"
@@ -1582,6 +1599,11 @@ core-js@^3.16.4:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.45.0.tgz#556c2af44a2d9c73ea7b49504392474a9f7c947e"
   integrity sha512-c2KZL9lP4DjkN3hk/an4pWn5b5ZefhRJnAc42n6LJ19kSnbeRbdQZE5dSeE2LBol1OwJD3X1BQvFTAsa8ReeDA==
 
+core-js@^3.47.0, core-js@^3.50.0:
+  version "3.50.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.50.0.tgz#a18646fcb0097650189b4504c803e887bcae4c0a"
+  integrity sha512-BRWgOLKkFeCgRudR6zrs8p9XJZcE14grzKMMssoYrk6krtuEZ7MTKPIY5RzOnqsEKIR9kst7wNzphttraT+Yqw==
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
@@ -1596,10 +1618,16 @@ cross-spawn@^7.0.6:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-data-of-loathing@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/data-of-loathing/-/data-of-loathing-2.6.2.tgz#b3f12d348dba44e4e3b4e892f36c2938d40bc1ee"
-  integrity sha512-/cldchEU08vJTx0HTP7Cxl1yMOuWfQa9yPFcOFfOzxdPyPsp8/L9ZtmTqWuJyL80rVz+gZa2GyLGQ24oLbxaaQ==
+data-of-loathing@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/data-of-loathing/-/data-of-loathing-3.2.2.tgz#3e0ce2686d45f8226c2b3d13d3365c6e581f5f46"
+  integrity sha512-jdOdSySUswEhwmqSGHWyvuwxqnFu6+AW2m11oHgkwbrq53jEKhXjcj75xHQMESbg3loBb1TAJ8qvPoDhGBBzxA==
+  dependencies:
+    "@mikro-orm/core" "^7.0.14"
+    "@mikro-orm/sql" "^7.0.14"
+    "@sqlite.org/sqlite-wasm" "~3.51.2-build9"
+    env-paths "^4.0.0"
+    kysely "^0.28.17"
 
 debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4, debug@^4.4.1:
   version "4.4.1"
@@ -1638,9 +1666,16 @@ electron-to-chromium@^1.5.173:
   integrity sha512-m1xWB3g7vJ6asIFz+2pBUbq3uGmfmln1M9SSvBe4QIFWYrRHylP73zL/3nMjDmwz8V+1xAXQDfBd6+HPW0WvDQ==
 
 entities@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/entities/-/entities-7.0.0.tgz#2ae4e443f3f17d152d3f5b0f79b932c1e59deb7a"
-  integrity sha512-FDWG5cmEYf2Z00IkYRhbFrwIwvdFKH07uV8dvNy0omp/Qb1xcyCWp2UDtcwJF4QZZvk0sLudP6/hAu42TaqVhQ==
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-7.0.1.tgz#26e8a88889db63417dcb9a1e79a3f1bc92b5976b"
+  integrity sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==
+
+env-paths@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-4.0.0.tgz#d0bb1f84a81d2542581bf7b7e8085d0683b39097"
+  integrity sha512-pxP8eL2SwwaTRi/KHYwLYXinDs7gL3jxFcBYmEdYfZmZXbaVDvdppd0XBU8qVz03rDfKZMXg1omHCbsJjZrMsw==
+  dependencies:
+    is-safe-filename "^0.1.0"
 
 esbuild-plugin-babel@^0.2.3:
   version "0.2.3"
@@ -1693,12 +1728,12 @@ eslint-config-prettier@^10.1.8:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-10.1.8.tgz#15734ce4af8c2778cc32f0b01b37b0b5cd1ecb97"
   integrity sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==
 
-eslint-plugin-libram@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.5.3.tgz#287dae19267ccad78c44145229afaac9165fb616"
-  integrity sha512-F2mLTf5T1OxP9VX8tA8gRSJJqHVHihCoJKTJEDOwYgEDuexeoxaBnnroc2lCYdvsCn1H+DFKFsYsL7zJFsfsrg==
+eslint-plugin-libram@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.6.0.tgz#1a6d7cee8f603767d29c5ba49f4d9c890ba2178f"
+  integrity sha512-mFj5n0KdBBUl2liJuEINJbbDX6zb25KdcpJvvRY+GSlMLMHdIIKVz4UqyWEVOFk6ovetAgNk5LrmQNG8uXS1kg==
   dependencies:
-    data-of-loathing "^2.6.2"
+    data-of-loathing "^3.2.2"
     entities "^7.0.0"
 
 eslint-scope@^5.1.1:
@@ -1898,10 +1933,10 @@ function-bind@^1.1.2:
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.2.tgz#2c02d864d97f3ea6c8830c464cbd11ab6eab7a1c"
   integrity sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==
 
-garbo-lib@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/garbo-lib/-/garbo-lib-1.0.2.tgz#fcba5efb37f9a8e4fc051f802c4f1aef4d010395"
-  integrity sha512-hwB70pLiuDGVs8Iva7M9jsxbI5fQRPVf/yKzJShHFgzf8vjkZu3q92O+tt2FGLTMOO1mE7VcGRnedQ0GPuBj3A==
+garbo-lib@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/garbo-lib/-/garbo-lib-1.0.3.tgz#e31dff51f616e2bb59d513f285706b4b6a6845b2"
+  integrity sha512-V6XWYXHCUlR7m7QZZv30XJFlxdF0+8JJQUV4qFSzNq0Z/LrKiVQydygQqFR8mU9AXLckZqgmaf7guOxSqOuy2Q==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -1956,12 +1991,12 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
-grimoire-kolmafia@^0.3.31:
-  version "0.3.33"
-  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.33.tgz#b56fa60cba48aea3fde88d68090ed2174a607b78"
-  integrity sha512-yidkJES1IKMAGuqAw8OLgX7p/XBcdDNXs2yt6zjP640ZgwFQKfLgxm42pdK/dt9WGzlSKMjIwrosndsENnOBNQ==
+grimoire-kolmafia@^0.3.35:
+  version "0.3.35"
+  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.35.tgz#0dc556a4a533afd015b8218e8a5a66cae7ea0b66"
+  integrity sha512-Q5Cfn+abMbbXFs0XgVy10/gj5u1p7ER/TUKMIThxy2uVcl8g/4aRschCYQcsXWFSFz7JY29g7UbPdm0yi6qoZQ==
   dependencies:
-    core-js "^3.16.4"
+    core-js "^3.50.0"
 
 has-flag@^4.0.0:
   version "4.0.0"
@@ -1974,11 +2009,6 @@ hasown@^2.0.2:
   integrity sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==
   dependencies:
     function-bind "^1.1.2"
-
-html-entities@^2.5.2:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.6.0.tgz#7c64f1ea3b36818ccae3d3fb48b6974208e984f8"
-  integrity sha512-kig+rMn/QOVRvr7c86gQ8lWXq+Hkv6CbAH1hLu+RG338StTpE8Z0b44SDVaqVu7HGKf27frdmUYEs9hTUX/cLQ==
 
 ignore@^5.2.0:
   version "5.3.2"
@@ -2047,6 +2077,11 @@ is-number@^7.0.0:
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
+is-safe-filename@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/is-safe-filename/-/is-safe-filename-0.1.1.tgz#fb22eead097c614c47aa674de5d79a1648a53e66"
+  integrity sha512-4SrR7AdnY11LHfDKTZY1u6Ga3RuxZdl3YKWWShO5iyuG5h8QS4GD2tOb04peBJ5I7pXbR+CGBNEhTcwK+FzN3g==
+
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
@@ -2106,10 +2141,20 @@ keyv@^4.5.4:
   dependencies:
     json-buffer "3.0.1"
 
-kolmafia@^5.28889.0:
-  version "5.28889.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.28889.0.tgz#8d760dc68fe0adbb61661e01a7a5785fa9456cb1"
-  integrity sha512-j38hFACHQm4F09hlXtN/zlUVYua5yQIhYn6GsqIa87yhqMMc/Opv5QOJTN/QGu8cT83QWHHubKBswxPLWBhyMA==
+kolmafia@^5.29363.0:
+  version "5.29363.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.29363.0.tgz#1eebff9c86bb032403810908e679e9346e56981d"
+  integrity sha512-On4X0UbjnvQuKQcAQHc788E1xb0zRWHl6uYfqN7xzfJZbT7OfFBb7IrT+P+42Gc//ErhxRdNZ4TtIkSdj49KkA==
+
+kysely@0.29.6:
+  version "0.29.6"
+  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.29.6.tgz#f3af9a818a5a6def8e63fbc32ffb773346be911a"
+  integrity sha512-hHaB8C/rfzDDtr/t8YZwxAuPJTT0zHyaPoVzcXwDYhYNAgH/4sIfVhi/XLLIY+bL/FqaIJnjATDbi8ObSELmxg==
+
+kysely@^0.28.17:
+  version "0.28.17"
+  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.28.17.tgz#cb8c74696b911a43c595f752b653b90ed56d42b9"
+  integrity sha512-nbD8lB9EB3wNdMhOCdx5Li8DxnLbvKByylRLcJ1h+4SkrowVeECAyZlyiKMThF7xFdRz0jSQ2MoJr+wXux2y0Q==
 
 levn@^0.4.1:
   version "0.4.1"
@@ -2119,12 +2164,13 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libram@^0.11.14:
-  version "0.11.14"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.14.tgz#011527aba45e3225809e9f0decaf9b83fcce8325"
-  integrity sha512-EzuyU8fru9rYWnQkaWGcknZJ6JgwLIH+GDI8NbCKgVsA7MuSKE6CU/Do/I18vm/dmgjqSbivzE8wcjKxUDNTAQ==
+libram@^0.11.37:
+  version "0.11.37"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.37.tgz#4368497222637535a0b27f45cd757c801e1773d4"
+  integrity sha512-5tDVkJf6PhckZknSSijr3i1nm27bfEycUlL+RNj/S15lOv1O2aaGkK3wYH2KW3giHd7vsdBoiDfSJJaHZnXvpA==
   dependencies:
-    html-entities "^2.5.2"
+    core-js "^3.47.0"
+    entities "^7.0.0"
 
 locate-path@^6.0.0:
   version "6.0.0"
