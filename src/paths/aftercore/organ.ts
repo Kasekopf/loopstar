@@ -48,6 +48,8 @@ export const OrganQuest: Quest = {
       name: "Arena",
       after: ["Start"],
       completed: (): boolean => {
+        // Held items (e.g. in aftercore) must not count until the quest has started
+        if (step("questM10Azazel") < 0) return false;
         if (step("questM10Azazel") === 999) return true;
         if (have($item`Azazel's unicorn`)) return true;
 
@@ -102,7 +104,7 @@ export const OrganQuest: Quest = {
     {
       name: "Comedy Club",
       after: ["Start"],
-      completed: () => have($item`observational glasses`),
+      completed: () => step("questM10Azazel") >= 0 && have($item`observational glasses`),
       priority: () => {
         if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
           return Priorities.GoodDarts;
