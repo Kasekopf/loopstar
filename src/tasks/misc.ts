@@ -1372,11 +1372,12 @@ export const MiscQuest: Quest = {
         }
         retrieveItem($item`forest canopy bed`);
         use($item`forest canopy bed`); // This doesn't actually use the bed, but mafia doesn't recognize it's in the campground without this
+
         visitUrl(
           `inv_use.php?whichitem=${$item`forest canopy bed`.id}&pwd&confirm=true&which=3`, // need confirmation input url now that furnishings are permanent
         );
       },
-      limit: { tries: 1 },
+      limit: { tries: 2 },
       freeaction: true,
     },
     {
