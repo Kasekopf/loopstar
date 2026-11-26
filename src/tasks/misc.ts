@@ -1371,9 +1371,13 @@ export const MiscQuest: Quest = {
           use($item`Frobozz Real-Estate Company Instant House (TM)`);
         }
         retrieveItem($item`forest canopy bed`);
-        use($item`forest canopy bed`);
+        use($item`forest canopy bed`); // This doesn't actually use the bed, but mafia doesn't recognize it's in the campground without this
+
+        visitUrl(
+          `inv_use.php?whichitem=${$item`forest canopy bed`.id}&pwd&confirm=true&which=3`, // need confirmation input url now that furnishings are permanent
+        );
       },
-      limit: { tries: 1 },
+      limit: { tries: 2 },
       freeaction: true,
     },
     {
@@ -1763,8 +1767,8 @@ function chooseBestLeprecondo(): number[] {
     myPath() === $path`11 Things I Hate About U` && furnitureFound.has(25)
       ? 25
       : furnitureFound.has(13)
-      ? 13
-      : 0; // Sous vide -> meat% and random food
+        ? 13
+        : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }
