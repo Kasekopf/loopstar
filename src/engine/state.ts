@@ -58,7 +58,11 @@ const BANISH_ACTIONS = new Set<CombatActions>(["banish", "ignoreSoftBanish", "ki
  * A version of libram getBanishedMonsters that maintains the banishing turncounts.
  */
 function getBanishedMonsters(): Map<Item | Skill, [Monster, number][]> {
-  const entries = multiSplit("banishedMonsters", ":", ":", [toMonster, banishSource, Number]);
+  const entries = multiSplit<[Monster, Item | Skill, number]>("banishedMonsters", ":", ":", [
+    toMonster,
+    banishSource,
+    Number,
+  ]);
   const banishUsages = new Map<Item | Skill, [Monster, number][]>();
   for (const entry of entries) {
     if (banishUsages.has(entry[1])) banishUsages.get(entry[1])?.push([entry[0], entry[2]]);

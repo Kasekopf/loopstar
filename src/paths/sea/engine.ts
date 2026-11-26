@@ -42,7 +42,7 @@ import { forceNCPossible, forceNCSources } from "../../resources/forcenc";
 import { ROUTE_WAIT_TO_NCFORCE } from "../../route";
 
 export class TheSeaEngine extends Engine {
-  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, void, ActiveTask> = {}) {
     if (!options.combat_defaults) {
       options.combat_defaults = new SeaActionDefaults();
     }
@@ -100,7 +100,7 @@ export class TheSeaEngine extends Engine {
     const underwater = task.do instanceof Location && task.do.environment === "underwater";
     const waterbreathingeffects = $effects`Driving Waterproofly, Really Deep Breath, Pumped Stomach, Oxygenated Blood, Pneumatic`;
 
-    if (underwater && waterbreathingeffects.forEach((e) => !have(e))) {
+    if (underwater && waterbreathingeffects.every((e) => !have(e))) {
       // Player breathing
       if (!applyFirstAvailableWaterBreathSource(outfit)) {
         throw `Unable to breathe underwater for ${task.name}`;

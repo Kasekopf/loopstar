@@ -97,7 +97,7 @@ const getAccessibleSparklesForIndex = (state: string, index: number) => {
       if (x < 0 || x > 5 || y < 0 || y > 5) return null;
       return x * 6 + y;
     })
-    .filter((i) => i !== null)
+    .filter((i): i is number => i !== null)
     .filter((i) => state[i] === "*")
     .map(stateIndexToCoord);
 };

@@ -115,7 +115,7 @@ export type ActiveTask = Task & {
 };
 
 export class Engine extends BaseEngine<CombatActions, ActiveTask> {
-  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, void, ActiveTask> = {}) {
     if (!options.combat_defaults) options.combat_defaults = new MyActionDefaults();
     super(tasks, options);
   }

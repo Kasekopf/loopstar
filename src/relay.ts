@@ -1,6 +1,6 @@
 import { Args } from "grimoire-kolmafia";
 import { write } from "kolmafia";
-import { ComponentSetting, generateHTML, handleApiRequest, RelayPage } from "msr";
+import { generateHTML, handleApiRequest, RelayDropdown, RelayPage, RelaySetting } from "msr";
 import { args, supportedWorksheds } from "./args";
 import { $item } from "libram";
 
@@ -18,28 +18,36 @@ function convertArgsToHtml(): RelayPage[] {
     (key, name: string) => {
       if (key.setting === "" || key.hidden) return;
 
-      const component: ComponentSetting = {
-        type: "string",
+      const base = {
         name: key.key ?? name,
         description: key.help || "No Description Provided",
         preference: key.setting ?? `${metadata.scriptName}_${key.key ?? name}`,
         default: "default" in key ? `${key["default"]}` : undefined,
       };
 
+      let component: RelaySetting | RelayDropdown;
       if (key.valueHelpName === "FLAG" || key.valueHelpName === "BOOLEAN") {
-        component.type = "boolean";
+        component = { ...base, type: "boolean" };
       } else if (name === "workshed" || name === "swapworkshed") {
         // Hardcoded hack; show workshed options
-        component.type = "dropdown";
-        component.dropdown = supportedWorksheds.map((i) => {
-          const name = i === $item`none` ? "none" : i.name;
-          return { display: name, value: name };
-        });
+        component = {
+          ...base,
+          type: "dropdown",
+          dropdown: supportedWorksheds.map((i) => {
+            const name = i === $item`none` ? "none" : i.name;
+            return { display: name, value: name };
+          }),
+        };
       } else if (key.options !== undefined) {
-        component.type = "dropdown";
-        component.dropdown = key.options.map(([k, desc]) => {
-          return { display: desc ?? k, value: k };
-        });
+        component = {
+          ...base,
+          type: "dropdown",
+          dropdown: key.options.map(([k, desc]) => {
+            return { display: desc ?? k, value: k };
+          }),
+        };
+      } else {
+        component = { ...base, type: "string" };
       }
       pages[pages.length - 1].components.push(component);
     },
