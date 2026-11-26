@@ -48,7 +48,7 @@ import { getRunawaySources } from "../../resources/runaway";
 import { ChainSource } from "../../resources/wanderer";
 
 export class GyouEngine extends Engine {
-  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, void, ActiveTask> = {}) {
     if (!options.combat_defaults) options.combat_defaults = new GyouActionDefaults();
     super(tasks, options);
   }

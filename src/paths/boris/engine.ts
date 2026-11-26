@@ -21,7 +21,7 @@ import { getModifiersFrom } from "../../engine/outfit";
 import { args } from "../../args";
 
 export class BorisEngine extends Engine {
-  constructor(tasks: Task[], options: EngineOptions<CombatActions, ActiveTask> = {}) {
+  constructor(tasks: Task[], options: EngineOptions<CombatActions, void, ActiveTask> = {}) {
     if (!options.combat_defaults) options.combat_defaults = new BorisActionDefaults();
     super(tasks, options);
   }
