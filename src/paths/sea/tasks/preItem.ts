@@ -10,13 +10,13 @@ import {
   ChestMimic,
   ClosedCircuitPayphone,
   get,
+  getStep,
   have,
   Macro,
   PeridotOfPeril,
   set,
   withChoice,
 } from "libram";
-import { step } from "grimoire-kolmafia";
 
 import { abort, adv1, canAdventure, cliExecute, print, useSkill } from "kolmafia";
 import { Quest } from "../../../engine/task";
@@ -41,8 +41,8 @@ export const PreItemTask: Quest = {
         ClosedCircuitPayphone.have() &&
         !ClosedCircuitPayphone.rufusTarget() &&
         have($item`Rufus's shadow lodestone`) &&
-        step("questS02Monkees") >= 4,
-      completed: () => have($effect`Shadow Waters`) || step("questS02Monkees") >= 5,
+        getStep("questS02Monkees") >= 4,
+      completed: () => have($effect`Shadow Waters`) || getStep("questS02Monkees") >= 5,
       do: () => {
         withChoice(1500, 2, () => adv1($location`Shadow Rift (The Misspelled Cemetary)`, -1, ""));
       },
@@ -51,7 +51,7 @@ export const PreItemTask: Quest = {
     },
     {
       name: "Kill Miner",
-      ready: () => step("questS02Monkees") >= 4,
+      ready: () => getStep("questS02Monkees") >= 4,
       completed: () => have($item`Mer-kin digpick`),
       do: $location`Anemone Mine`,
       combat: new CombatStrategy()
@@ -187,8 +187,8 @@ export const PreItemTask: Quest = {
     {
       name: "Dive Bar Noncombats",
       after: ["Manual Mining"],
-      ready: () => step("questS02Monkees") >= 4,
-      completed: () => step("questS02Monkees") >= 5,
+      ready: () => getStep("questS02Monkees") >= 4,
+      completed: () => getStep("questS02Monkees") >= 5,
       do: grandpaZone(),
       combat: new CombatStrategy()
         .macro((): Macro => {
@@ -208,7 +208,7 @@ export const PreItemTask: Quest = {
     {
       name: "Outpost Unlock",
       after: ["Dive Bar Noncombats"],
-      completed: () => step("questS02Monkees") >= 6,
+      completed: () => getStep("questS02Monkees") >= 6,
       do: () => {
         cliExecute("grandpa wife");
       },
@@ -222,7 +222,7 @@ export const PreItemTask: Quest = {
       name: "Outpost Freerun",
       after: ["Outpost Unlock"],
       completed: () => have($item`Mer-kin lockkey`) || get("seahorseName") !== "",
-      ready: () => !have($effect`Everything Looks Green`) && step("questS02Monkees") >= 6,
+      ready: () => !have($effect`Everything Looks Green`) && getStep("questS02Monkees") >= 6,
       do: $location`The Mer-Kin Outpost`,
       combat: new CombatStrategy()
         .macro((): Macro => {

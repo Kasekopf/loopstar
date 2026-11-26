@@ -1,4 +1,4 @@
-import { $items, $path, $skill, set } from "libram";
+import { $items, $path, $skill, getStep, set } from "libram";
 import { PathInfo } from "../pathinfo";
 import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
@@ -6,7 +6,7 @@ import { myPath, runChoice, visitUrl } from "kolmafia";
 import { smolDeltas, SmolQuest } from "./tasks";
 import { SmolPullQuest, smolPulls } from "./pulls";
 import { SmolEngine } from "./engine";
-import { getTasks, step } from "grimoire-kolmafia";
+import { getTasks } from "grimoire-kolmafia";
 import { buildPullRequirements, Requirement, RequirementCategory } from "../../sim";
 import { args } from "../../args";
 
@@ -20,7 +20,7 @@ export class SmolInfo implements PathInfo {
   }
 
   finished(): boolean {
-    return step("questL13Final") > 11;
+    return getStep("questL13Final") > 11;
   }
 
   getTasks(tasks: Task[]): Task[] {

@@ -1,6 +1,6 @@
-import { getTasks, step } from "grimoire-kolmafia";
+import { getTasks } from "grimoire-kolmafia";
 import { myPath } from "kolmafia";
-import { $familiar, $path } from "libram";
+import { $familiar, $path, getStep } from "libram";
 import { args } from "../../args";
 import { findAndMerge, Task } from "../../engine/task";
 import { Requirement, RequirementCategory } from "../../sim";
@@ -20,7 +20,7 @@ export class IH8UInfo implements PathInfo {
   }
 
   finished(): boolean {
-    return step("questL13Final") > 11;
+    return getStep("questL13Final") > 11;
   }
 
   getTasks(tasks: Task[]): Task[] {

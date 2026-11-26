@@ -3,13 +3,13 @@ import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { inCasual } from "kolmafia";
 import { getAcquireQuest } from "./acquire";
-import { getTasks, step } from "grimoire-kolmafia";
+import { getTasks } from "grimoire-kolmafia";
 import { casualDeltas, CasualQuest } from "./tasks";
 import { OrganQuest } from "../aftercore/organ";
 import { CasualDietQuest } from "./diet";
 import { args } from "../../args";
 import { Requirement } from "../../sim";
-import { $skill, have } from "libram";
+import { $skill, getStep, have } from "libram";
 import { casualRoute } from "./route";
 
 export class CasualInfo implements PathInfo {
@@ -22,7 +22,9 @@ export class CasualInfo implements PathInfo {
   }
 
   finished(): boolean {
-    return step("questL13Final") > 11 && (!args.casual.steelorgan || have($skill`Liver of Steel`));
+    return (
+      getStep("questL13Final") > 11 && (!args.casual.steelorgan || have($skill`Liver of Steel`))
+    );
   }
 
   getTasks(tasks: Task[]): Task[] {

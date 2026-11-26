@@ -14,6 +14,7 @@ import {
   $monster,
   $skill,
   BeachComb,
+  getStep,
   have,
   Macro,
   SourceTerminal,
@@ -23,7 +24,6 @@ import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { Quest } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { customRestoreMp, ensureWithMPSwaps } from "../engine/moods";
 import { args } from "../args";
 
@@ -34,7 +34,7 @@ export const TavernQuest: Quest = {
       name: "Start",
       after: ["Mosquito/Finish"],
       ready: () => atLevel(3),
-      completed: () => step("questL03Rat") >= 0,
+      completed: () => getStep("questL03Rat") >= 0,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -43,7 +43,7 @@ export const TavernQuest: Quest = {
     {
       name: "Tavernkeep",
       after: ["Start"],
-      completed: () => step("questL03Rat") >= 1,
+      completed: () => getStep("questL03Rat") >= 1,
       do: () => visitUrl("tavern.php?place=barkeep"),
       limit: { tries: 1 },
       freeaction: true,
@@ -51,7 +51,7 @@ export const TavernQuest: Quest = {
     {
       name: "Basement",
       after: ["Tavernkeep"],
-      completed: () => step("questL03Rat") >= 2,
+      completed: () => getStep("questL03Rat") >= 2,
       prepare: () => {
         if (have($skill`Saucestorm`)) {
           // Gain some +spelldmg if we can to help kill the rat kings
@@ -143,7 +143,7 @@ export const TavernQuest: Quest = {
     {
       name: "Finish",
       after: ["Basement"],
-      completed: () => step("questL03Rat") === 999,
+      completed: () => getStep("questL03Rat") === 999,
       do: () => visitUrl("tavern.php?place=barkeep"),
       limit: { tries: 1 },
       freeaction: true,

@@ -26,11 +26,12 @@ import {
   $monsters,
   $skill,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Quest, Resources, Task } from "../engine/task";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { cosmicBowlingBallReady } from "../lib";
@@ -52,7 +53,7 @@ const Temple: Task[] = [
     completed: () =>
       have($item`tree-holed coin`) ||
       have($item`Spooky Temple map`) ||
-      step("questM16Temple") === 999,
+      getStep("questM16Temple") === 999,
     do: $location`The Spooky Forest`,
     resources: {
       which: Resources.NCForce,
@@ -68,7 +69,7 @@ const Temple: Task[] = [
     prepare: () => {
       tryPlayApriling("-combat");
     },
-    completed: () => have($item`Spooky Temple map`) || step("questM16Temple") === 999,
+    completed: () => have($item`Spooky Temple map`) || getStep("questM16Temple") === 999,
     do: $location`The Spooky Forest`,
     resources: {
       which: Resources.NCForce,
@@ -84,7 +85,7 @@ const Temple: Task[] = [
     prepare: () => {
       tryPlayApriling("-combat");
     },
-    completed: () => have($item`Spooky-Gro fertilizer`) || step("questM16Temple") === 999,
+    completed: () => have($item`Spooky-Gro fertilizer`) || getStep("questM16Temple") === 999,
     do: $location`The Spooky Forest`,
     resources: {
       which: Resources.NCForce,
@@ -100,7 +101,7 @@ const Temple: Task[] = [
     prepare: () => {
       tryPlayApriling("-combat");
     },
-    completed: () => have($item`spooky sapling`) || step("questM16Temple") === 999,
+    completed: () => have($item`spooky sapling`) || getStep("questM16Temple") === 999,
     do: $location`The Spooky Forest`,
     resources: {
       which: Resources.NCForce,
@@ -113,7 +114,7 @@ const Temple: Task[] = [
   {
     name: "Open Temple",
     after: ["Forest Coin", "Forest Map", "Forest Sapling", "Forest Fertilizer"],
-    completed: () => step("questM16Temple") === 999,
+    completed: () => getStep("questM16Temple") === 999,
     do: () => use($item`Spooky Temple map`),
     limit: { tries: 1 },
     freeaction: true,
@@ -124,7 +125,7 @@ const Temple: Task[] = [
     completed: () =>
       itemAmount($item`stone wool`) >= 2 ||
       (itemAmount($item`stone wool`) === 1 && have($item`the Nostril of the Serpent`)) ||
-      step("questL11Worship") >= 3,
+      getStep("questL11Worship") >= 3,
     do: $location`The Hidden Temple`,
     outfit: () => {
       if (have($item`industrial fire extinguisher`) && get("_fireExtinguisherCharge") >= 10)
@@ -163,7 +164,7 @@ const Temple: Task[] = [
   {
     name: "Temple Nostril",
     after: ["Open Temple", "Temple Wool"],
-    completed: () => have($item`the Nostril of the Serpent`) || step("questL11Worship") >= 3,
+    completed: () => have($item`the Nostril of the Serpent`) || getStep("questL11Worship") >= 3,
     do: $location`The Hidden Temple`,
     choices: { 579: 2, 582: 1 },
     effects: $effects`Stone-Faced`,
@@ -172,7 +173,7 @@ const Temple: Task[] = [
   {
     name: "Open City",
     after: ["Temple Nostril", "Macguffin/Diary"],
-    completed: () => step("questL11Worship") >= 3,
+    completed: () => getStep("questL11Worship") >= 3,
     do: () => {
       visitUrl("adventure.php?snarfblat=280");
       manualChoice(582, 2);
@@ -362,7 +363,7 @@ const Office: Task[] = [
       .killHard($monster`ancient protector spirit (The Hidden Office Building)`)
       .ignore()
       .macro(() => {
-        const palindome_dudes_done = have(Item.get(7262)) || step("questL11Palindome") >= 3;
+        const palindome_dudes_done = have(Item.get(7262)) || getStep("questL11Palindome") >= 3;
         if (
           get("banishedPhyla").includes("beast") &&
           officeBanishesDone() &&
@@ -373,7 +374,7 @@ const Office: Task[] = [
         return new Macro();
       }),
     outfit: () => {
-      const palindome_dudes_done = have(Item.get(7262)) || step("questL11Palindome") >= 3;
+      const palindome_dudes_done = have(Item.get(7262)) || getStep("questL11Palindome") >= 3;
       if (get("banishedPhyla").includes("beast") && officeBanishesDone() && palindome_dudes_done)
         return { familiar: $familiar`Patriotic Eagle` };
       return {};
@@ -666,7 +667,7 @@ export const HiddenQuest: Quest = {
     {
       name: "Boss",
       after: ["Finish Office", "Finish Apartment", "Finish Hospital", "Finish Bowling"],
-      completed: () => step("questL11Worship") === 999,
+      completed: () => getStep("questL11Worship") === 999,
       do: $location`A Massive Ziggurat`,
       outfit: {
         equip: $items`antique machete`,

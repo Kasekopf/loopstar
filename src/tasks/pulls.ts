@@ -10,11 +10,20 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
-import { $familiar, $item, $items, $skill, AprilingBandHelmet, get, have, set } from "libram";
+import {
+  $familiar,
+  $item,
+  $items,
+  $skill,
+  AprilingBandHelmet,
+  get,
+  getStep,
+  have,
+  set,
+} from "libram";
 import { args, toTempPref } from "../args";
 import { Priorities } from "../engine/priority";
 import { Quest, Resources, Task } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { Keys, keyStrategy } from "./keys";
 import { trainSetAvailable } from "./misc";
 import { underStandard } from "../lib";
@@ -104,7 +113,7 @@ export const pulls: PullSpec[] = [
       )
         return false;
       if (have($item`Deck of Every Card`)) return false;
-      if (step("questL08Trapper") >= 2) return false;
+      if (getStep("questL08Trapper") >= 2) return false;
       const ore = get("trapperOre");
       if (!ore) return undefined;
       return itemAmount(ore) < 3;
@@ -116,15 +125,15 @@ export const pulls: PullSpec[] = [
     pull: $item`1,970 carat gold`,
     useful: () => {
       if (underStandard()) return false;
-      if (myMeat() < 500 && step("questM05Toot") > 0 && !have($item`letter from King Ralph XI`))
+      if (myMeat() < 500 && getStep("questM05Toot") > 0 && !have($item`letter from King Ralph XI`))
         return true;
       if (
         myMeat() < 4000 &&
-        step("questL11Black") === 2 &&
+        getStep("questL11Black") === 2 &&
         !have($item`forged identification documents`)
       )
         return true;
-      if (step("questL11Black") > 2) return false;
+      if (getStep("questL11Black") > 2) return false;
       return undefined;
     },
     benefit: 70,
@@ -132,8 +141,9 @@ export const pulls: PullSpec[] = [
   {
     pull: $item`1952 Mickey Mantle card`,
     useful: () => {
-      if (have($item`forged identification documents`) || step("questL11Black") >= 4) return false;
-      if (step("questL11Black") >= 2 && myTurncount() >= 200) return true;
+      if (have($item`forged identification documents`) || getStep("questL11Black") >= 4)
+        return false;
+      if (getStep("questL11Black") >= 2 && myTurncount() >= 200) return true;
       return undefined;
     },
     benefit: 70,
@@ -186,7 +196,7 @@ export const pulls: PullSpec[] = [
       ),
     benefit: 10,
   },
-  { pull: $item`blackberry galoshes`, useful: () => step("questL11Black") < 2, benefit: 9.01 },
+  { pull: $item`blackberry galoshes`, useful: () => getStep("questL11Black") < 2, benefit: 9.01 },
   // {
   //   pull: $item`Buddy Bjorn`,
   //   useful: () => yellowSubmarinePossible(true),
@@ -196,7 +206,7 @@ export const pulls: PullSpec[] = [
   {
     pull: $item`killing jar`,
     useful: () => {
-      if (step("questM20Necklace") < 4) return undefined;
+      if (getStep("questM20Necklace") < 4) return undefined;
       return (
         !have($familiar`Melodramedary`) &&
         (get("gnasirProgress") & 4) === 0 &&
@@ -236,7 +246,7 @@ export const pulls: PullSpec[] = [
   {
     pull: $item`wet stew`,
     useful: () =>
-      step("questL11Palindome") < 5 &&
+      getStep("questL11Palindome") < 5 &&
       !have($item`wet stunt nut stew`) &&
       !have($item`wet stew`) &&
       (!have($item`lion oil`) || !have($item`bird rib`)),

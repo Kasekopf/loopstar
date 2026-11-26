@@ -23,11 +23,11 @@ import {
   Counter,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Quest, ResourceRequest, Resources } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel, haveHugeLarge } from "../lib";
@@ -42,7 +42,7 @@ export const McLargeHugeQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(8),
-      completed: () => step("questL08Trapper") !== -1,
+      completed: () => getStep("questL08Trapper") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -51,7 +51,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Trapper Request",
       after: ["Start"],
-      completed: () => step("questL08Trapper") >= 1,
+      completed: () => getStep("questL08Trapper") >= 1,
       do: () => visitUrl("place.php?whichplace=mclargehuge&action=trappercabin"),
       limit: { tries: 1 },
       freeaction: true,
@@ -60,7 +60,7 @@ export const McLargeHugeQuest: Quest = {
       name: "Clover Ore",
       after: ["Trapper Request", "Pull/Ore", "Misc/Hermit Clover"],
       completed: () =>
-        step("questL08Trapper") >= 2 ||
+        getStep("questL08Trapper") >= 2 ||
         itemAmount(get("trapperOre", $item`none`)) >= 3 ||
         (itemAmount($item`asbestos ore`) >= 3 &&
           itemAmount($item`chrome ore`) >= 3 &&
@@ -97,7 +97,7 @@ export const McLargeHugeQuest: Quest = {
       ready: () =>
         Counter.get("Spooky VHS Tape Monster") === 0 ||
         get("spookyVHSTapeMonster") !== $monster`dairy goat`,
-      completed: () => itemAmount($item`goat cheese`) >= 3 || step("questL08Trapper") >= 2,
+      completed: () => itemAmount($item`goat cheese`) >= 3 || getStep("questL08Trapper") >= 2,
       do: $location`The Goatlet`,
       outfit: () => {
         const equip = $items`deft pirate hook`;
@@ -136,7 +136,7 @@ export const McLargeHugeQuest: Quest = {
       name: "Trapper Return",
       after: ["Goatlet", "Pull/Ore", "Summon/Mountain Man", "Clover Ore"],
       ready: () => itemAmount(get("trapperOre", $item`none`)) >= 3, // Checked here since there is no task for Trainset ores
-      completed: () => step("questL08Trapper") >= 2,
+      completed: () => getStep("questL08Trapper") >= 2,
       do: () => visitUrl("place.php?whichplace=mclargehuge&action=trappercabin"),
       limit: { tries: 1 },
       freeaction: true,
@@ -149,7 +149,7 @@ export const McLargeHugeQuest: Quest = {
         (have($item`eXtreme mittens`) &&
           have($item`snowboarder pants`) &&
           have($item`eXtreme scarf`)) ||
-        step("questL08Trapper") >= 3,
+        getStep("questL08Trapper") >= 3,
       do: $location`The eXtreme Slope`,
       outfit: { equip: $items`candy cane sword cane`, modifier: "item, -combat" },
       choices: () => {
@@ -169,7 +169,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Extreme Snowboard Initial",
       after: ["Trapper Return", "Extreme Outfit"],
-      completed: () => get("currentExtremity") >= 1 || step("questL08Trapper") >= 3,
+      completed: () => get("currentExtremity") >= 1 || getStep("questL08Trapper") >= 3,
       do: $location`The eXtreme Slope`,
       outfit: () => {
         if (haveHugeLarge())
@@ -187,7 +187,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Extreme Snowboard",
       after: ["Trapper Return", "Extreme Outfit", "Extreme Snowboard Initial"],
-      completed: () => get("currentExtremity") >= 3 || step("questL08Trapper") >= 3,
+      completed: () => get("currentExtremity") >= 3 || getStep("questL08Trapper") >= 3,
       do: $location`The eXtreme Slope`,
       outfit: () => {
         if (haveHugeLarge())
@@ -212,7 +212,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Climb",
       after: ["Trapper Return", "Extreme Snowboard"],
-      completed: () => step("questL08Trapper") >= 3,
+      completed: () => getStep("questL08Trapper") >= 3,
       do: (): void => {
         visitUrl("place.php?whichplace=mclargehuge&action=cloudypeak");
       },
@@ -233,7 +233,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Peak",
       after: ["Climb"],
-      completed: () => step("questL08Trapper") >= 5,
+      completed: () => getStep("questL08Trapper") >= 5,
       ready: () => coldPlanner.maximumPossible(true) >= 5,
       prepare: () => {
         if (numericModifier("cold resistance") < 5) ensureEffect($effect`Red Door Syndrome`);
@@ -254,7 +254,7 @@ export const McLargeHugeQuest: Quest = {
     {
       name: "Finish",
       after: ["Peak"],
-      completed: () => step("questL08Trapper") === 999,
+      completed: () => getStep("questL08Trapper") === 999,
       do: () => visitUrl("place.php?whichplace=mclargehuge&action=trappercabin"),
       limit: { tries: 1 },
       freeaction: true,
@@ -264,7 +264,7 @@ export const McLargeHugeQuest: Quest = {
 
 // Get the number of ores needed from non-trainset places
 export function oresNeeded(): number {
-  if (step("questL08Trapper") >= 2) return 0;
+  if (getStep("questL08Trapper") >= 2) return 0;
   if (trainSetAvailable()) return 0;
   let ore_needed = 3;
   const ore = get("trapperOre");

@@ -1,4 +1,3 @@
-import { step } from "grimoire-kolmafia";
 import {
   ceil,
   equippedAmount,
@@ -14,6 +13,7 @@ import {
   $items,
   clamp,
   get,
+  getStep,
   have,
   MayamCalendar,
   set,
@@ -82,9 +82,9 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`sonar-in-a-biscuit`,
     needed: () => {
-      if (step("questL04Bat") >= 3) return 0;
-      if (step("questL04Bat") >= 2 || have($item`bat wings`)) return 1;
-      if (step("questL04Bat") >= 1) return 2;
+      if (getStep("questL04Bat") >= 3) return 0;
+      if (getStep("questL04Bat") >= 2 || have($item`bat wings`)) return 1;
+      if (getStep("questL04Bat") >= 1) return 2;
       return 3;
     },
     price: Prices.Used,
@@ -94,13 +94,13 @@ const acquireSpecs: AcquireSpec[] = [
     (i) =>
       <AcquireSpec>{
         what: i,
-        needed: () => (step("questL05Goblin") === 999 ? 0 : 1),
+        needed: () => (getStep("questL05Goblin") === 999 ? 0 : 1),
         price: Prices.Permanent,
       }
   ),
   {
     what: $item`Knob Goblin perfume`,
-    needed: () => (step("questL05Goblin") === 999 ? 0 : 1),
+    needed: () => (getStep("questL05Goblin") === 999 ? 0 : 1),
     price: Prices.Used,
   },
   // L7
@@ -122,7 +122,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`goat cheese`,
     needed: () => {
-      if (step("questL08Trapper") >= 2) return 0;
+      if (getStep("questL08Trapper") >= 2) return 0;
       return 3;
     },
     price: Prices.Used,
@@ -132,7 +132,7 @@ const acquireSpecs: AcquireSpec[] = [
       <AcquireSpec>{
         what: ore,
         needed: () => {
-          if (step("questL08Trapper") >= 2) return 0;
+          if (getStep("questL08Trapper") >= 2) return 0;
           if (get("trapperOre") !== ore) return 0;
           return 3;
         },
@@ -147,7 +147,7 @@ const acquireSpecs: AcquireSpec[] = [
         needed: () => {
           if (haveHugeLarge()) return 0;
           if (have($item`McHugeLarge duffel bag`)) return 0;
-          if (step("questL08Trapper") >= 3) return 0;
+          if (getStep("questL08Trapper") >= 3) return 0;
           return 1;
         },
         price: Prices.Permanent,
@@ -157,7 +157,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`structural ember`,
     needed: () => {
-      if (step("questL09Topping") >= 1) return 0;
+      if (getStep("questL09Topping") >= 1) return 0;
       if (get("_structuralEmberUsed")) return 0;
       return 1;
     },
@@ -166,7 +166,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`snow boards`,
     needed: () => {
-      if (step("questL09Topping") >= 1) return 0;
+      if (getStep("questL09Topping") >= 1) return 0;
       // Wait for other sources to finish
       if (trainSetAvailable()) return 0;
       if (!get("_structuralEmberUsed")) return 0;
@@ -209,37 +209,37 @@ const acquireSpecs: AcquireSpec[] = [
     what: $item`enchanted bean`,
     needed: () => {
       if (have($item`bat wings`)) return 0;
-      if (step("questL10Garbage") >= 1) return 0;
+      if (getStep("questL10Garbage") >= 1) return 0;
       return 1;
     },
     price: Prices.Used,
   },
   {
     what: $item`amulet of extreme plot significance`,
-    needed: () => (step("questL10Garbage") >= 8 ? 0 : 1),
+    needed: () => (getStep("questL10Garbage") >= 8 ? 0 : 1),
     price: Prices.Permanent,
   },
   {
     what: $item`Mohawk wig`,
-    needed: () => (step("questL10Garbage") >= 10 ? 0 : 1),
+    needed: () => (getStep("questL10Garbage") >= 10 ? 0 : 1),
     price: Prices.Permanent,
   },
   // L11
   {
     what: $item`blackberry galoshes`,
-    needed: () => (step("questL11Black") >= 2 ? 0 : 1),
+    needed: () => (getStep("questL11Black") >= 2 ? 0 : 1),
     price: Prices.Permanent,
   },
   // L11 Hidden City
   {
     what: $item`Spooky-Gro fertilizer`,
-    needed: () => (step("questM16Temple") === 999 ? 0 : 1),
+    needed: () => (getStep("questM16Temple") === 999 ? 0 : 1),
     price: Prices.Used,
   },
   {
     what: $item`stone wool`,
     needed: () => {
-      if (step("questL11Worship") >= 3) return 0;
+      if (getStep("questL11Worship") >= 3) return 0;
       if (have($item`the Nostril of the Serpent`)) return 1;
       return 2;
     },
@@ -248,7 +248,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`antique machete`,
     needed: () => {
-      if (step("questL11Worship") < 999) return 1;
+      if (getStep("questL11Worship") < 999) return 1;
       if (
         have($item`unwrapped knock-off retro superhero cape`) &&
         !(
@@ -283,7 +283,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`glark cable`,
     needed: () => {
-      if (step("questL11Ron") >= 5) return 0;
+      if (getStep("questL11Ron") >= 5) return 0;
       return clamp(5 - get("_glarkCableUses"), 0, 5);
     },
     price: Prices.Adventure,
@@ -291,7 +291,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`disposable instant camera`,
     needed: () => {
-      if (have($item`photograph of a dog`) || step("questL11Palindome") >= 3) return 0;
+      if (have($item`photograph of a dog`) || getStep("questL11Palindome") >= 3) return 0;
       return 1;
     },
     price: Prices.Used,
@@ -299,7 +299,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`wet stew`,
     needed: () => {
-      if (step("questL11Palindome") < 5 && !have($item`wet stunt nut stew`)) return 1;
+      if (getStep("questL11Palindome") < 5 && !have($item`wet stunt nut stew`)) return 1;
       return 0;
     },
     price: Prices.Used,
@@ -307,7 +307,7 @@ const acquireSpecs: AcquireSpec[] = [
   {
     what: $item`stunt nuts`,
     needed: () => {
-      if (step("questL11Palindome") < 5 && !have($item`wet stunt nut stew`)) return 1;
+      if (getStep("questL11Palindome") < 5 && !have($item`wet stunt nut stew`)) return 1;
       return 0;
     },
     price: Prices.Used,
@@ -346,7 +346,7 @@ const acquireSpecs: AcquireSpec[] = [
     what: $item`seal tooth`,
     needed: () => {
       if (get("sidequestJunkyardCompleted") !== "none") return 0;
-      if (step("questL12War") === 999) return 0;
+      if (getStep("questL12War") === 999) return 0;
       return 1;
     },
     price: Prices.Permanent,
@@ -355,7 +355,7 @@ const acquireSpecs: AcquireSpec[] = [
     (i) =>
       <AcquireSpec>{
         what: i,
-        needed: () => (step("questL12War") === 999 ? 0 : 1),
+        needed: () => (getStep("questL12War") === 999 ? 0 : 1),
         price: Prices.Permanent,
       }
   ),
@@ -435,12 +435,12 @@ const acquireSpecs: AcquireSpec[] = [
   ),
   {
     what: $item`gauze garter`,
-    needed: () => (step("questL13Final") > 10 ? 0 : 10),
+    needed: () => (getStep("questL13Final") > 10 ? 0 : 10),
     price: Prices.Used,
   },
   {
     what: $item`Wand of Nagamar`,
-    needed: () => (step("questL13Final") > 11 ? 0 : 1),
+    needed: () => (getStep("questL13Final") > 11 ? 0 : 1),
     price: Prices.Used,
   },
   // Misc Helpful Items

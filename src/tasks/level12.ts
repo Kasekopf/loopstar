@@ -29,6 +29,7 @@ import {
   AutumnAton,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
   set,
@@ -36,7 +37,7 @@ import {
   uneffect,
 } from "libram";
 import { Priority, Quest, Resources, Task } from "../engine/task";
-import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
+import { Guards, OutfitSpec } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel, debug, flyersDone, tryWish } from "../lib";
@@ -594,13 +595,13 @@ const Nuns: Task[] = [
 
 export const WarQuest: Quest = {
   name: "War",
-  completed: () => step("questL12War") === 999,
+  completed: () => getStep("questL12War") === 999,
   tasks: [
     {
       name: "Start",
       after: [],
       ready: () => atLevel(12) && councilSafe(),
-      completed: () => step("questL12War") !== -1,
+      completed: () => getStep("questL12War") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       freeaction: true,
@@ -667,7 +668,7 @@ export const WarQuest: Quest = {
       name: "Enrage",
       after: ["Start", "Misc/Unlock Island", "Misc/Unlock Island Submarine", "Outfit Frat"],
       ready: () => myBasestat($stat`mysticality`) >= 70,
-      completed: () => step("questL12War") >= 1,
+      completed: () => getStep("questL12War") >= 1,
       prepare: () => {
         // Restore a bit more HP than usual
         if (myHp() < 80 && myHp() < myMaxhp()) restoreHp(myMaxhp() < 80 ? myMaxhp() : 80);
@@ -812,7 +813,7 @@ export const WarQuest: Quest = {
     {
       name: "Boss Hippie",
       after: ["Clear"],
-      completed: () => step("questL12War") === 999,
+      completed: () => getStep("questL12War") === 999,
       outfit: () =>
         <OutfitSpec>{
           equip: $items`beer helmet, distressed denim pants, bejeweled pledge pin`,

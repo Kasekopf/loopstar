@@ -25,11 +25,12 @@ import {
   BeachComb,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Quest, Resources, Task } from "../engine/task";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { globalStateCache } from "../engine/state";
@@ -40,7 +41,9 @@ import { args } from "../args";
 function shenItem(item: Item) {
   return (
     get("shenQuestItem") === item &&
-    (step("questL11Shen") === 1 || step("questL11Shen") === 3 || step("questL11Shen") === 5)
+    (getStep("questL11Shen") === 1 ||
+      getStep("questL11Shen") === 3 ||
+      getStep("questL11Shen") === 5)
   );
 }
 
@@ -48,7 +51,7 @@ const Copperhead: Task[] = [
   {
     name: "Copperhead Start",
     after: ["Macguffin/Diary"],
-    completed: () => step("questL11Shen") >= 1,
+    completed: () => getStep("questL11Shen") >= 1,
     do: $location`The Copperhead Club`,
     choices: { 1074: 1 },
     limit: { tries: 1 },
@@ -57,8 +60,10 @@ const Copperhead: Task[] = [
     name: "Copperhead",
     after: ["Copperhead Start"],
     ready: () =>
-      step("questL11Shen") === 2 || step("questL11Shen") === 4 || step("questL11Shen") === 6,
-    completed: () => step("questL11Shen") === 999,
+      getStep("questL11Shen") === 2 ||
+      getStep("questL11Shen") === 4 ||
+      getStep("questL11Shen") === 6,
+    completed: () => getStep("questL11Shen") === 999,
     prepare: () => {
       if (have($item`crappy waiter disguise`))
         ensureEffect($effect`Crappily Disguised as a Waiter`);
@@ -93,10 +98,10 @@ const Copperhead: Task[] = [
     after: ["Copperhead Start", "Bat/Use Sonar 1"],
     ready: () => shenItem($item`The Stankara Stone`),
     completed: () =>
-      step("questL11Shen") === 999 ||
+      getStep("questL11Shen") === 999 ||
       have($item`The Stankara Stone`) ||
-      (myDaycount() === 1 && step("questL11Shen") > 1) ||
-      step("questL04Bat") >= 3,
+      (myDaycount() === 1 && getStep("questL11Shen") > 1) ||
+      getStep("questL04Bat") >= 3,
     do: $location`The Batrat and Ratbat Burrow`,
     combat: new CombatStrategy().killHard($monster`Batsnake`).killItem(),
     outfit: { modifier: "item", avoid: $items`broken champagne bottle` },
@@ -108,9 +113,9 @@ const Copperhead: Task[] = [
     after: ["Copperhead Start", "Bat/Use Sonar 1", "Bat Snake Sonar"],
     ready: () => shenItem($item`The Stankara Stone`),
     completed: () =>
-      step("questL11Shen") === 999 ||
+      getStep("questL11Shen") === 999 ||
       have($item`The Stankara Stone`) ||
-      (myDaycount() === 1 && step("questL11Shen") > 1),
+      (myDaycount() === 1 && getStep("questL11Shen") > 1),
     do: $location`The Batrat and Ratbat Burrow`,
     combat: new CombatStrategy().killHard($monster`Batsnake`),
     limit: { soft: 10 },
@@ -122,9 +127,9 @@ const Copperhead: Task[] = [
     after: ["Copperhead Start", "McLargeHuge/Trapper Return"],
     ready: () => shenItem($item`The First Pizza`) && !get("noncombatForcerActive"),
     completed: () =>
-      step("questL11Shen") === 999 ||
+      getStep("questL11Shen") === 999 ||
       have($item`The First Pizza`) ||
-      (myDaycount() === 1 && step("questL11Shen") > 3),
+      (myDaycount() === 1 && getStep("questL11Shen") > 3),
     prepare: () => {
       restoreHp(myMaxhp());
     },
@@ -147,15 +152,15 @@ const Copperhead: Task[] = [
     after: ["Copperhead Start", "Giant/Ground"],
     ready: () =>
       shenItem($item`Murphy's Rancid Black Flag`) && !have($item`steam-powered model rocketship`),
-    completed: () => step("questL11Shen") === 999 || have($item`Murphy's Rancid Black Flag`),
+    completed: () => getStep("questL11Shen") === 999 || have($item`Murphy's Rancid Black Flag`),
     do: $location`The Castle in the Clouds in the Sky (Top Floor)`,
     outfit: { equip: $items`Mohawk wig`, modifier: "-combat" },
     choices: () => {
       return {
         675: have($item`model airship`) ? 4 : 2,
         676: 4,
-        677: step("questL10Garbage") >= 10 ? 2 : have($item`model airship`) ? 1 : 4,
-        678: step("questL10Garbage") >= 10 ? 3 : 1,
+        677: getStep("questL10Garbage") >= 10 ? 2 : have($item`model airship`) ? 1 : 4,
+        678: getStep("questL10Garbage") >= 10 ? 3 : 1,
         679: 1,
         1431: haveEquipped($item`Mohawk wig`) ? 4 : 1,
       };
@@ -170,7 +175,7 @@ const Copperhead: Task[] = [
     after: ["Copperhead Start", "Giant/Ground"],
     ready: () =>
       shenItem($item`Murphy's Rancid Black Flag`) && have($item`steam-powered model rocketship`),
-    completed: () => step("questL11Shen") === 999 || have($item`Murphy's Rancid Black Flag`),
+    completed: () => getStep("questL11Shen") === 999 || have($item`Murphy's Rancid Black Flag`),
     do: $location`The Castle in the Clouds in the Sky (Top Floor)`,
     choices: { 675: 4, 676: 4, 677: 1, 678: 1, 679: 1, 1431: 4 },
     outfit: { modifier: "+combat" },
@@ -183,7 +188,7 @@ const Copperhead: Task[] = [
     name: "Sleaze Star Snake",
     after: ["Copperhead Start", "Giant/Unlock HITS"],
     ready: () => shenItem($item`The Eye of the Stars`),
-    completed: () => step("questL11Shen") === 999 || have($item`The Eye of the Stars`),
+    completed: () => getStep("questL11Shen") === 999 || have($item`The Eye of the Stars`),
     do: $location`The Hole in the Sky`,
     combat: new CombatStrategy().killHard($monster`The Snake With Like Ten Heads`),
     limit: { soft: 10 },
@@ -193,7 +198,8 @@ const Copperhead: Task[] = [
     name: "Sleaze Frat Snake",
     after: ["Copperhead Start"],
     ready: () => shenItem($item`The Lacrosse Stick of Lacoronado`),
-    completed: () => step("questL11Shen") === 999 || have($item`The Lacrosse Stick of Lacoronado`),
+    completed: () =>
+      getStep("questL11Shen") === 999 || have($item`The Lacrosse Stick of Lacoronado`),
     do: $location`The Smut Orc Logging Camp`,
     combat: new CombatStrategy().killHard($monster`The Frattlesnake`),
     limit: { soft: 10 },
@@ -202,8 +208,8 @@ const Copperhead: Task[] = [
   {
     name: "Spooky Snake Precrypt",
     after: ["Copperhead Start"],
-    ready: () => shenItem($item`The Shield of Brook`) && step("questL07Cyrptic") < 999,
-    completed: () => step("questL11Shen") === 999 || have($item`The Shield of Brook`),
+    ready: () => shenItem($item`The Shield of Brook`) && getStep("questL07Cyrptic") < 999,
+    completed: () => getStep("questL11Shen") === 999 || have($item`The Shield of Brook`),
     do: $location`The Unquiet Garves`,
     combat: new CombatStrategy().killHard($monster`Snakeleton`),
     limit: { soft: 10 },
@@ -212,8 +218,8 @@ const Copperhead: Task[] = [
   {
     name: "Spooky Snake Postcrypt",
     after: ["Copperhead Start"],
-    ready: () => shenItem($item`The Shield of Brook`) && step("questL07Cyrptic") === 999,
-    completed: () => step("questL11Shen") === 999 || have($item`The Shield of Brook`),
+    ready: () => shenItem($item`The Shield of Brook`) && getStep("questL07Cyrptic") === 999,
+    completed: () => getStep("questL11Shen") === 999 || have($item`The Shield of Brook`),
     do: $location`The VERY Unquiet Garves`,
     combat: new CombatStrategy().killHard($monster`Snakeleton`),
     limit: { soft: 10 },
@@ -225,7 +231,7 @@ const Zepplin: Task[] = [
   {
     name: "Protesters Start",
     after: ["Macguffin/Diary"],
-    completed: () => step("questL11Ron") >= 1,
+    completed: () => getStep("questL11Ron") >= 1,
     do: $location`A Mob of Zeppelin Protesters`,
     combat: new CombatStrategy().killHard($monster`The Nuge`),
     choices: { 856: 1, 857: 1, 858: 1, 866: 2, 1432: 1 },
@@ -238,7 +244,7 @@ const Zepplin: Task[] = [
     ready: () =>
       itemAmount($item`11-leaf clover`) > cloversToSave() ||
       have($item`Flamin' Whatshisname`) ||
-      step("questL11Shen") === 999,
+      getStep("questL11Shen") === 999,
     prepare: () => {
       if (have($item`lynyrd musk`)) ensureEffect($effect`Musky`);
       if (!have($item`candy cane sword cane`)) tryWish($effect`Dirty Pear`);
@@ -289,7 +295,7 @@ const Zepplin: Task[] = [
   {
     name: "Protesters Finish",
     after: ["Protesters"],
-    completed: () => step("questL11Ron") >= 2,
+    completed: () => getStep("questL11Ron") >= 2,
     do: $location`A Mob of Zeppelin Protesters`,
     combat: new CombatStrategy().killHard($monster`The Nuge`),
     choices: { 856: 1, 857: 1, 858: 1, 866: 2, 1432: 1 },
@@ -299,7 +305,7 @@ const Zepplin: Task[] = [
   {
     name: "Zepplin",
     after: ["Protesters Finish"],
-    completed: () => step("questL11Ron") >= 5,
+    completed: () => getStep("questL11Ron") >= 5,
     prepare: () => {
       if (have($item`Red Zeppelin ticket`)) return;
       visitUrl("woods.php");
@@ -349,7 +355,7 @@ const Dome: Task[] = [
   {
     name: "Palindome Dog",
     after: ["Talisman", "Manor/Bedroom Camera"],
-    completed: () => have($item`photograph of a dog`) || step("questL11Palindome") >= 3,
+    completed: () => have($item`photograph of a dog`) || getStep("questL11Palindome") >= 3,
     prepare: () => tuneSnapper($phylum`dudes`),
     do: $location`Inside the Palindome`,
     outfit: () => {
@@ -378,7 +384,7 @@ const Dome: Task[] = [
   {
     name: "Palindome Dudes",
     after: ["Palindome Dog"],
-    completed: () => have(Item.get(7262)) || step("questL11Palindome") >= 3,
+    completed: () => have(Item.get(7262)) || getStep("questL11Palindome") >= 3,
     do: $location`Inside the Palindome`,
     prepare: () => tuneSnapper($phylum`dudes`),
     outfit: () => {
@@ -407,7 +413,7 @@ const Dome: Task[] = [
       (have($item`photograph of a red nugget`) &&
         have($item`photograph of God`) &&
         have($item`photograph of an ostrich egg`)) ||
-      step("questL11Palindome") >= 3,
+      getStep("questL11Palindome") >= 3,
     do: $location`Inside the Palindome`,
     outfit: () => {
       if (have($item`stunt nuts`))
@@ -427,7 +433,9 @@ const Dome: Task[] = [
     after: ["Palindome Dog", "Palindome Dudes", "Palindome Photos"],
     do: $location`Inside the Palindome`,
     completed: () =>
-      have($item`stunt nuts`) || have($item`wet stunt nut stew`) || step("questL11Palindome") >= 5,
+      have($item`stunt nuts`) ||
+      have($item`wet stunt nut stew`) ||
+      getStep("questL11Palindome") >= 5,
     outfit: {
       equip: $items`Talisman o' Namsilat`,
       modifier: "item",
@@ -444,7 +452,7 @@ const Dome: Task[] = [
     ready: () =>
       $effects`Once-Cursed, Twice-Cursed, Thrice-Cursed`.find((e) => have(e)) === undefined ||
       get("hiddenApartmentProgress") >= 7,
-    completed: () => step("questL11Palindome") >= 3,
+    completed: () => getStep("questL11Palindome") >= 3,
     do: () => {
       if (have(Item.get(7262))) use(Item.get(7262));
       visitUrl("place.php?whichplace=palindome&action=pal_droffice");
@@ -467,7 +475,7 @@ const Dome: Task[] = [
       (have($item`bird rib`) && have($item`lion oil`)) ||
       have($item`wet stew`) ||
       have($item`wet stunt nut stew`) ||
-      step("questL11Palindome") >= 5,
+      getStep("questL11Palindome") >= 5,
     ready: () =>
       !get("banishedPhyla").includes("beast") ||
       (have($item`Peridot of Peril`) &&
@@ -499,7 +507,7 @@ const Dome: Task[] = [
   {
     name: "Open Alarm",
     after: ["Alarm Gem", "Palindome Nuts", "Grove"],
-    completed: () => step("questL11Palindome") >= 5,
+    completed: () => getStep("questL11Palindome") >= 5,
     do: () => {
       if (!have($item`wet stunt nut stew`)) create($item`wet stunt nut stew`);
       visitUrl("place.php?whichplace=palindome&action=pal_mrlabel");
@@ -519,7 +527,7 @@ export const PalindomeQuest: Quest = {
     {
       name: "Boss",
       after: ["Open Alarm"],
-      completed: () => step("questL11Palindome") === 999,
+      completed: () => getStep("questL11Palindome") === 999,
       do: (): void => {
         visitUrl("place.php?whichplace=palindome&action=pal_drlabel");
         runChoice(-1);

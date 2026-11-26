@@ -17,13 +17,13 @@ import {
   $monsters,
   $skill,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { CombatStrategy, killMacro } from "../engine/combat";
 import { atLevel } from "../lib";
 import { Quest, Resources } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { tryPlayApriling } from "../lib";
@@ -36,7 +36,7 @@ export const GiantQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(10),
-      completed: () => step("questL10Garbage") !== -1,
+      completed: () => getStep("questL10Garbage") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -45,7 +45,7 @@ export const GiantQuest: Quest = {
     {
       name: "Get Bean",
       after: ["Bat/Use Sonar 2"],
-      completed: () => have($item`enchanted bean`) || step("questL10Garbage") >= 1,
+      completed: () => have($item`enchanted bean`) || getStep("questL10Garbage") >= 1,
       do: $location`The Beanbat Chamber`,
       outfit: {
         modifier: "item",
@@ -63,7 +63,7 @@ export const GiantQuest: Quest = {
     {
       name: "Grow Beanstalk",
       after: ["Start", "Get Bean"],
-      completed: () => step("questL10Garbage") >= 1,
+      completed: () => getStep("questL10Garbage") >= 1,
       do: () => use($item`enchanted bean`),
       outfit: { equip: $items`spring shoes` },
       limit: { tries: 1 },
@@ -167,7 +167,7 @@ export const GiantQuest: Quest = {
         containsText(
           $location`The Castle in the Clouds in the Sky (Basement)`.noncombatQueue,
           "Mess Around with Gym"
-        ) || step("questL10Garbage") >= 8,
+        ) || getStep("questL10Garbage") >= 8,
       prepare: () => {
         tryPlayApriling("-combat");
       },
@@ -198,7 +198,7 @@ export const GiantQuest: Quest = {
     {
       name: "Basement Finish",
       after: ["Basement Search"],
-      completed: () => step("questL10Garbage") >= 8,
+      completed: () => getStep("questL10Garbage") >= 8,
       do: $location`The Castle in the Clouds in the Sky (Basement)`,
       outfit: { equip: $items`amulet of extreme plot significance` },
       choices: { 670: 4 },
@@ -208,7 +208,7 @@ export const GiantQuest: Quest = {
       name: "Ground",
       after: ["Basement Finish"],
       prepare: () => tryPlayApriling("-combat"),
-      completed: () => step("questL10Garbage") >= 9,
+      completed: () => getStep("questL10Garbage") >= 9,
       do: $location`The Castle in the Clouds in the Sky (Ground Floor)`,
       choices: { 672: 3, 673: 3, 674: 3, 1026: 2 },
       outfit: () => {
@@ -223,7 +223,7 @@ export const GiantQuest: Quest = {
       after: ["Ground", "Tower/Wall of Meat"],
       completed: () =>
         have($item`electric boning knife`) ||
-        step("questL13Final") > 8 ||
+        getStep("questL13Final") > 8 ||
         have($item`Great Wolf's rocket launcher`) ||
         have($skill`Garbage Nova`),
       do: $location`The Castle in the Clouds in the Sky (Ground Floor)`,
@@ -236,7 +236,7 @@ export const GiantQuest: Quest = {
       name: "Top Floor",
       after: ["Ground", "Palindome/Hot Snake Precastle"],
       prepare: () => tryPlayApriling("-combat"),
-      completed: () => step("questL10Garbage") >= 10,
+      completed: () => getStep("questL10Garbage") >= 10,
       do: $location`The Castle in the Clouds in the Sky (Top Floor)`,
       outfit: { equip: $items`Mohawk wig`, modifier: "-combat" },
       orbtargets: () => [],
@@ -257,7 +257,7 @@ export const GiantQuest: Quest = {
       name: "Finish",
       after: ["Top Floor"],
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
-      completed: () => step("questL10Garbage") === 999,
+      completed: () => getStep("questL10Garbage") === 999,
       do: () => visitUrl("council.php"),
       limit: { soft: 10 },
       freeaction: true,
@@ -267,7 +267,7 @@ export const GiantQuest: Quest = {
       after: ["Top Floor"],
       completed: () =>
         have($item`steam-powered model rocketship`) ||
-        ((myDaycount() === 1 || step("questL11Shen") === 999) &&
+        ((myDaycount() === 1 || getStep("questL11Shen") === 999) &&
           ((have($item`star chart`) &&
             itemAmount($item`star`) >= 8 &&
             itemAmount($item`line`) >= 7) ||

@@ -8,11 +8,11 @@ import {
   $skill,
   CursedMonkeyPaw,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { haveFamiliar, inHardcore, use, visitUrl } from "kolmafia";
-import { step } from "grimoire-kolmafia";
 import { Quest, Resources } from "../../../engine/task";
 import { CombatStrategy } from "../../../engine/combat";
 import { yellowRayPossible } from "../../../resources/yellowray";
@@ -54,7 +54,7 @@ export const OctopusGardenTask: Quest = {
     {
       name: "Blast Garden",
       ready: () => have($item`minin' dynamite`),
-      completed: () => step("questS02Monkees") >= 0 || !haveFamiliar($familiar`Patriotic Eagle`),
+      completed: () => getStep("questS02Monkees") >= 0 || !haveFamiliar($familiar`Patriotic Eagle`),
       do: $location`An Octopus's Garden`,
       combat: new CombatStrategy()
         .macro((): Macro => {
@@ -75,7 +75,7 @@ export const OctopusGardenTask: Quest = {
       after: ["Blast Garden"],
       completed: () =>
         have($item`wriggling flytrap pellet`) ||
-        step("questS02Monkees") >= 0 ||
+        getStep("questS02Monkees") >= 0 ||
         get("rwbMonsterCount") < 1,
       do: $location`An Octopus's Garden`,
       outfit: {
@@ -87,7 +87,7 @@ export const OctopusGardenTask: Quest = {
     {
       name: "Unlucky Garden",
       after: ["More Garden"],
-      completed: () => have($item`wriggling flytrap pellet`) || step("questS02Monkees") >= 0,
+      completed: () => have($item`wriggling flytrap pellet`) || getStep("questS02Monkees") >= 0,
       do: $location`An Octopus's Garden`,
       combat: new CombatStrategy()
         .macro((): Macro => {
@@ -105,15 +105,15 @@ export const OctopusGardenTask: Quest = {
     {
       name: "Use Wriggling Pellet",
       ready: () => have($item`wriggling flytrap pellet`),
-      completed: () => step("questS02Monkees") >= 0,
+      completed: () => getStep("questS02Monkees") >= 0,
       do: () => use($item`wriggling flytrap pellet`),
       freeaction: true,
       limit: { soft: 1 },
     },
     {
       name: "Turn in Quest",
-      ready: () => step("questS02Monkees") === 0,
-      completed: () => step("questS02Monkees") > 0,
+      ready: () => getStep("questS02Monkees") === 0,
+      completed: () => getStep("questS02Monkees") > 0,
       do: () => {
         visitUrl("monkeycastle.php?who=1");
       },
@@ -125,8 +125,8 @@ export const OctopusGardenTask: Quest = {
     },
     {
       name: "Do Wreck",
-      ready: () => step("questS02Monkees") === 1,
-      completed: () => step("questS02Monkees") > 1,
+      ready: () => getStep("questS02Monkees") === 1,
+      completed: () => getStep("questS02Monkees") > 1,
       choices: { 299: 1 },
       do: () => $location`The Wreck of the Edgar Fitzsimmons`,
       resources: () => {
@@ -145,7 +145,7 @@ export const OctopusGardenTask: Quest = {
     {
       name: "Talk to brothers",
       ready: () => get("bigBrotherRescued"),
-      completed: () => step("questS02Monkees") >= 4,
+      completed: () => getStep("questS02Monkees") >= 4,
       do: () => {
         visitUrl("monkeycastle.php?who=1");
         visitUrl("monkeycastle.php?who=2");

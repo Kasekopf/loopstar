@@ -1,10 +1,9 @@
 import { visitUrl } from "kolmafia";
-import { $item, $items, $location, $skill, clamp, get, have } from "libram";
+import { $item, $items, $location, $skill, clamp, get, getStep, have } from "libram";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
 import { councilSafe } from "./level12";
 import { Quest, ResourceRequest, Resources } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { tryPlayApriling } from "../lib";
 
 export const FriarQuest: Quest = {
@@ -14,7 +13,7 @@ export const FriarQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(6),
-      completed: () => step("questL06Friar") !== -1,
+      completed: () => getStep("questL06Friar") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -32,7 +31,7 @@ export const FriarQuest: Quest = {
           return { score: -2, reason: "Still need latte here" };
         else return Priorities.None;
       },
-      completed: () => have($item`box of birthday candles`) || step("questL06Friar") === 999,
+      completed: () => have($item`box of birthday candles`) || getStep("questL06Friar") === 999,
       prepare: () => {
         tryPlayApriling("-combat");
       },
@@ -54,7 +53,7 @@ export const FriarQuest: Quest = {
     {
       name: "Neck",
       after: ["Start"],
-      completed: () => have($item`dodecagram`) || step("questL06Friar") === 999,
+      completed: () => have($item`dodecagram`) || getStep("questL06Friar") === 999,
       prepare: () => {
         tryPlayApriling("-combat");
       },
@@ -83,7 +82,7 @@ export const FriarQuest: Quest = {
           return { score: -2, reason: "Still need latte here" };
         else return Priorities.None;
       },
-      completed: () => have($item`eldritch butterknife`) || step("questL06Friar") === 999,
+      completed: () => have($item`eldritch butterknife`) || getStep("questL06Friar") === 999,
       prepare: () => {
         tryPlayApriling("-combat");
       },
@@ -105,7 +104,7 @@ export const FriarQuest: Quest = {
     {
       name: "Finish",
       after: ["Heart", "Elbow", "Neck"],
-      completed: () => step("questL06Friar") === 999,
+      completed: () => getStep("questL06Friar") === 999,
       do: () => visitUrl("friars.php?action=ritual&pwd"),
       limit: { tries: 1 },
       freeaction: true,

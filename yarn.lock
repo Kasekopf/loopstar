@@ -1991,10 +1991,10 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
-grimoire-kolmafia@^0.3.35:
-  version "0.3.35"
-  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.35.tgz#0dc556a4a533afd015b8218e8a5a66cae7ea0b66"
-  integrity sha512-Q5Cfn+abMbbXFs0XgVy10/gj5u1p7ER/TUKMIThxy2uVcl8g/4aRschCYQcsXWFSFz7JY29g7UbPdm0yi6qoZQ==
+grimoire-kolmafia@^0.3.36:
+  version "0.3.36"
+  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.36.tgz#00fa7a3dd2cf60c96f3715c78ab02c5d6634a0ea"
+  integrity sha512-PC99U/UfFGFEpcuJbIZbq3NFwonw8mFnLrMLO4lvUpwPubWkcW2Zl9VE6eLZcDYj+huxvosw7g2p3rd/DNypdw==
   dependencies:
     core-js "^3.50.0"
 
@@ -2141,10 +2141,10 @@ keyv@^4.5.4:
   dependencies:
     json-buffer "3.0.1"
 
-kolmafia@^5.29363.0:
-  version "5.29363.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.29363.0.tgz#1eebff9c86bb032403810908e679e9346e56981d"
-  integrity sha512-On4X0UbjnvQuKQcAQHc788E1xb0zRWHl6uYfqN7xzfJZbT7OfFBb7IrT+P+42Gc//ErhxRdNZ4TtIkSdj49KkA==
+kolmafia@^5.29481.0:
+  version "5.29481.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.29481.0.tgz#a9f5a92d4b761e29f5d8d6157a209fdb8cbf7d0c"
+  integrity sha512-FK8p+ijGDEh94KGVgmvHGLTiqoUEWYfEtJf3vHehcpuZr1t+a2TRTunSGBng2sZBtO+xTdkgdCr5EFm4kcg1mg==
 
 kysely@0.29.6:
   version "0.29.6"
@@ -2164,10 +2164,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libram@^0.11.40:
-  version "0.11.40"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.40.tgz#97e6ee44e545f32657a180303ac0079b73998ef1"
-  integrity sha512-2PktYH4m41922Lqg8QeaDG+tgSsGgsaKk1oozkIejejCmmVFBg1SNaSIQHCUdNXY9IUHWn+ynLenbMVbulOPCQ==
+libram@^0.11.43:
+  version "0.11.43"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.11.43.tgz#4acee0e5201ad618285221ed7c4e8a3b5fbb8aa1"
+  integrity sha512-ijcR15IpVfNfD5VL9MzrJ4tKrZoFg3TOP4ETEjWzzDMLe2emjtMlRusB6im+UFrZqGnXG2MFeY6ffxyCsbDDhw==
   dependencies:
     core-js "^3.47.0"
     entities "^7.0.0"
@@ -2195,11 +2195,6 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
-
-mafia-shared-relay@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/mafia-shared-relay/-/mafia-shared-relay-0.0.7.tgz#1a0d333ebeed8cdbb4506360376099108c72d95b"
-  integrity sha512-sz5a+5tlI7u8eMasVVUdItPq5VdekLx6cDYCCbIjqhiFLluCE+0I1IqZ4n0JDzwLuiUZmAcsIq0VZfAp9WlbKA==
 
 make-dir@^2.1.0:
   version "2.1.0"
@@ -2246,7 +2241,7 @@ ms@^2.1.3:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-"msr@npm:mafia-shared-relay":
+"msr@npm:mafia-shared-relay@^0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/mafia-shared-relay/-/mafia-shared-relay-0.0.9.tgz#a231d5a45a8c992efd0deb0bec5edd4531d78031"
   integrity sha512-xU96YhV9aWvY2aF17/CHt5uPRCrwxFVOXuP0F1pWYy3QeIPsrDZ4I463oV6wAgqWYvhUfh/Gtl0cuZU237dJrQ==

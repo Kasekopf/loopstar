@@ -39,6 +39,7 @@ import {
   $stat,
   AutumnAton,
   get,
+  getStep,
   have,
   Macro,
   undelay,
@@ -49,7 +50,6 @@ import { Priorities } from "../../engine/priority";
 import { CombatStrategy } from "../../engine/combat";
 import { globalAbsorbState } from "./absorb";
 import { globalStateCache } from "../../engine/state";
-import { step } from "grimoire-kolmafia";
 import { args } from "../../args";
 import { Keys, keyStrategy } from "../../tasks/keys";
 import { getPullTask, PullSpec } from "../../tasks/pulls";
@@ -702,7 +702,7 @@ export const GyouQuest: Quest = {
       after: [],
       ready: () =>
         ((inHardcore() && myAdventures() < 20 && myTurncount() >= 50) ||
-          step("questL11Worship") >= 3) &&
+          getStep("questL11Worship") >= 3) &&
         familiarWeight($familiar`Grey Goose`) < 6,
       completed: () => get("_clanFortuneBuffUsed") || !have($item`Clan VIP Lounge key`),
       do: () => {

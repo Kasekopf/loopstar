@@ -48,6 +48,7 @@ import {
   get,
   getActiveSongs,
   getSongLimit,
+  getStep,
   have,
   isSong,
   set,
@@ -56,7 +57,6 @@ import {
 } from "libram";
 import { asdonFualable } from "../lib";
 import { underStandard } from "../lib";
-import { step } from "grimoire-kolmafia";
 import { toTempPref } from "../args";
 
 const aprilShieldEffects = new Map<Effect, Skill>([
@@ -89,7 +89,7 @@ function getRelevantEffects(): { [modifier: string]: Effect[] } {
   };
   const all_attributes = [] as Effect[];
 
-  if (step("questM20Necklace") === 999) {
+  if (getStep("questM20Necklace") === 999) {
     // Start considering good -combat buffs
     if (
       have($item`Clan VIP Lounge key`) &&

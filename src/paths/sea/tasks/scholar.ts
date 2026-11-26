@@ -10,10 +10,11 @@ import {
   AprilingBandHelmet,
   AugustScepter,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 
 import {
   abort,
@@ -298,7 +299,7 @@ export const ScholarTask: Quest = {
     {
       name: "Abyss Mom",
       after: ["Scholar Abyss"],
-      completed: () => step("questS02Monkees") === 999,
+      completed: () => getStep("questS02Monkees") === 999,
       do: $location`The Caliginous Abyss`,
       outfit: {
         equip: $items`black glass`,

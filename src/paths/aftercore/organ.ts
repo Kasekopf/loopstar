@@ -1,4 +1,3 @@
-import { step } from "grimoire-kolmafia";
 import { drink, getWorkshed, haveEquipped, Item, itemAmount, toInt, visitUrl } from "kolmafia";
 import {
   $effect,
@@ -10,6 +9,7 @@ import {
   $skill,
   AsdonMartin,
   ensureEffect,
+  getStep,
   have,
   Macro,
 } from "libram";
@@ -24,7 +24,7 @@ export const OrganQuest: Quest = {
     {
       name: "Start",
       after: ["Friar/Finish"],
-      completed: () => step("questM10Azazel") >= 0,
+      completed: () => getStep("questM10Azazel") >= 0,
       do: (): void => {
         visitUrl("pandamonium.php?action=temp");
         visitUrl("pandamonium.php?action=sven");
@@ -35,7 +35,7 @@ export const OrganQuest: Quest = {
     {
       name: "Tutu",
       after: ["Start"],
-      completed: () => have($item`Azazel's tutu`) || step("questM10Azazel") === 999,
+      completed: () => have($item`Azazel's tutu`) || getStep("questM10Azazel") === 999,
       acquire: [
         { item: $item`imp air`, num: 5 },
         { item: $item`bus pass`, num: 5 },
@@ -48,8 +48,8 @@ export const OrganQuest: Quest = {
       name: "Arena",
       after: ["Start"],
       completed: (): boolean => {
-        if (step("questM10Azazel") < 0) return false;
-        if (step("questM10Azazel") === 999) return true;
+        if (getStep("questM10Azazel") < 0) return false;
+        if (getStep("questM10Azazel") === 999) return true;
         if (have($item`Azazel's unicorn`)) return true;
 
         const count = (items: Item[]) => items.reduce((sum, item) => sum + itemAmount(item), 0);
@@ -82,7 +82,7 @@ export const OrganQuest: Quest = {
     {
       name: "Unicorn",
       after: ["Arena"],
-      completed: () => have($item`Azazel's unicorn`) || step("questM10Azazel") === 999,
+      completed: () => have($item`Azazel's unicorn`) || getStep("questM10Azazel") === 999,
       do: (): void => {
         const goals: { [name: string]: Item[] } = {
           Bognort: $items`giant marshmallow, gin-soaked blotter paper`,
@@ -103,7 +103,7 @@ export const OrganQuest: Quest = {
     {
       name: "Comedy Club",
       after: ["Start"],
-      completed: () => step("questM10Azazel") >= 0 && have($item`observational glasses`),
+      completed: () => getStep("questM10Azazel") >= 0 && have($item`observational glasses`),
       priority: () => {
         if (have($item`Everfull Dart Holster`) && !have($effect`Everything Looks Red`)) {
           return Priorities.GoodDarts;
@@ -139,7 +139,7 @@ export const OrganQuest: Quest = {
     {
       name: "Lollipop",
       after: ["Comedy Club"],
-      completed: () => have($item`Azazel's lollipop`) || step("questM10Azazel") === 999,
+      completed: () => have($item`Azazel's lollipop`) || getStep("questM10Azazel") === 999,
       do: () => visitUrl("pandamonium.php?action=mourn&preaction=observe"),
       outfit: { equip: $items`observational glasses` },
       limit: { tries: 1 },
@@ -147,7 +147,7 @@ export const OrganQuest: Quest = {
     {
       name: "Azazel",
       after: ["Tutu", "Unicorn", "Lollipop"],
-      completed: () => step("questM10Azazel") === 999,
+      completed: () => getStep("questM10Azazel") === 999,
       do: () => visitUrl("pandamonium.php?action=temp"),
       limit: { tries: 1 },
     },

@@ -59,6 +59,7 @@ import {
   ensureEffect,
   FloristFriar,
   get,
+  getStep,
   have,
   Macro,
   MayamCalendar,
@@ -73,7 +74,7 @@ import { castWithMpSwaps, ensureWithMPSwaps, fillHp } from "../../engine/moods";
 import { Priorities } from "../../engine/priority";
 import { Station } from "libram/dist/resources/2022/TrainSet";
 import { haveOre, trainSetAvailable } from "../../tasks/misc";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import {
   atLevel,
   haveFlorest,
@@ -902,7 +903,7 @@ export const BorisQuest: Quest = {
       priority: () => (have($effect`Crunchy Steps`) ? Priorities.MinorEffect : Priorities.None),
       completed: () =>
         (have($item`ninja rope`) && have($item`ninja carabiner`) && have($item`ninja crampons`)) ||
-        step("questL08Trapper") >= 3,
+        getStep("questL08Trapper") >= 3,
       prepare: () => {
         fillHp();
         tryPlayApriling("+combat");
@@ -1081,7 +1082,7 @@ export const BorisQuest: Quest = {
         have($item`bird rib`) ||
         have($item`wet stew`) ||
         have($item`wet stunt nut stew`) ||
-        step("questL11Palindome") >= 5,
+        getStep("questL11Palindome") >= 5,
       do: () => {
         CursedMonkeyPaw.wishFor($item`bird rib`);
       },
@@ -1155,7 +1156,7 @@ export const BorisQuest: Quest = {
       completed: () =>
         !have($item`Kremlin's Greatest Briefcase`) ||
         numericModifier($item`Kremlin's Greatest Briefcase`, "Combat Rate") > 0 ||
-        step("questL08Trapper") >= 3 ||
+        getStep("questL08Trapper") >= 3 ||
         get("_kgbClicksUsed") >= 22 ||
         myDaycount() > 1,
       do: () => {
@@ -1182,7 +1183,7 @@ export const BorisQuest: Quest = {
       name: "Library YR",
       after: ["Manor/Billiards"],
       completed: () =>
-        step("questM20Necklace") >= 4 ||
+        getStep("questM20Necklace") >= 4 ||
         have($item`killing jar`) ||
         (get("gnasirProgress") & 4) !== 0,
       do: $location`The Haunted Library`,
@@ -1287,7 +1288,7 @@ export const BorisQuest: Quest = {
       name: "Closet Unusables",
       priority: () => Priorities.Always,
       completed: () =>
-        step("questL13Final") > 5 || ITEMS_TO_CLOSET.find((i) => have(i)) === undefined,
+        getStep("questL13Final") > 5 || ITEMS_TO_CLOSET.find((i) => have(i)) === undefined,
       do: () => {
         for (const item of ITEMS_TO_CLOSET) {
           if (have(item)) putCloset(item);
@@ -1315,7 +1316,7 @@ export const BorisQuest: Quest = {
       completed: () =>
         $location`The Bandit Crossroads`.turnsSpent >= 5 ||
         !(get("frAlways") || get("_frToday")) ||
-        step("questL13Final") > 5,
+        getStep("questL13Final") > 5,
       priority: () => {
         if (
           have($item`Everfull Dart Holster`) &&
@@ -1560,7 +1561,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Kitchen",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`loosening powder`) || step("questL11Manor") >= 3,
+      completed: () => have($item`loosening powder`) || getStep("questL11Manor") >= 3,
       do: $location`The Haunted Kitchen`,
       choices: { 893: 2 },
       limit: { tries: 10 },
@@ -1569,7 +1570,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Conservatory",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`powdered castoreum`) || step("questL11Manor") >= 3,
+      completed: () => have($item`powdered castoreum`) || getStep("questL11Manor") >= 3,
       do: $location`The Haunted Conservatory`,
       choices: { 899: 2 },
       limit: { tries: 10 },
@@ -1578,7 +1579,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Bathroom",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`drain dissolver`) || step("questL11Manor") >= 3,
+      completed: () => have($item`drain dissolver`) || getStep("questL11Manor") >= 3,
       do: $location`The Haunted Bathroom`,
       choices: { 881: 1, 105: 1, 892: 1 },
       limit: { tries: 10 },
@@ -1587,7 +1588,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Gallery",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`triple-distilled turpentine`) || step("questL11Manor") >= 3,
+      completed: () => have($item`triple-distilled turpentine`) || getStep("questL11Manor") >= 3,
       do: $location`The Haunted Gallery`,
       choices: { 914: 2, 89: 6, 896: 1 },
       limit: { tries: 10 },
@@ -1596,7 +1597,8 @@ export const SlowManorQuest: Quest = {
     {
       name: "Laboratory",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`detartrated anhydrous sublicalc`) || step("questL11Manor") >= 3,
+      completed: () =>
+        have($item`detartrated anhydrous sublicalc`) || getStep("questL11Manor") >= 3,
       do: $location`The Haunted Laboratory`,
       choices: { 903: 2 },
       limit: { tries: 10 },
@@ -1605,7 +1607,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Storage Room",
       after: ["Manor/Learn Recipe"],
-      completed: () => have($item`triatomaceous dust`) || step("questL11Manor") >= 3,
+      completed: () => have($item`triatomaceous dust`) || getStep("questL11Manor") >= 3,
       do: $location`The Haunted Storage Room`,
       choices: { 890: 1 },
       limit: { tries: 10 },
@@ -1614,7 +1616,7 @@ export const SlowManorQuest: Quest = {
     {
       name: "Blow Wall",
       after: ["Kitchen", "Conservatory", "Bathroom", "Gallery", "Laboratory", "Storage Room"],
-      completed: () => step("questL11Manor") >= 3,
+      completed: () => getStep("questL11Manor") >= 3,
       do: () => visitUrl("place.php?whichplace=manor4&action=manor4_chamberwall"),
       limit: { tries: 1 },
       freeaction: true,

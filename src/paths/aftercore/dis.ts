@@ -8,17 +8,17 @@ import {
   $monster,
   $phylum,
   get,
+  getStep,
   Macro,
   Snapper,
 } from "libram";
-import { step } from "grimoire-kolmafia";
-import { StringProperty } from "libram/dist/propertyTypes";
+import { QuestProperty } from "libram/dist/propertyTypes";
 import { CombatStrategy } from "../../engine/combat";
 import { Quest, Task } from "../../engine/task";
 
 type SubQuest = {
   name: string;
-  quest: StringProperty;
+  quest: QuestProperty;
   location: Location;
   item: Item;
   choices: { enableBosses: number; firstBoss: number; secondBoss: number };
@@ -98,7 +98,7 @@ const disFactory = (subquest: SubQuest): Task[] => [
     ready: () => get("lastThingWithNoNameDefeated") < myAscensions(),
     combat: subquest.combat,
     choices: { [subquest.choices.enableBosses]: 1 },
-    completed: () => step(subquest.quest) >= 0,
+    completed: () => getStep(subquest.quest) >= 0,
     do: subquest.location,
     effects: [$effect`Dis Abled`],
     limit: { soft: 30 },
@@ -109,7 +109,7 @@ const disFactory = (subquest: SubQuest): Task[] => [
     after: [`Enable ${subquest.name} Bosses`],
     combat: subquest.combat,
     choices: { [subquest.choices.firstBoss]: 1 },
-    completed: () => step(subquest.quest) >= 1,
+    completed: () => getStep(subquest.quest) >= 1,
     do: subquest.location,
     effects: [$effect`Dis Abled`],
     limit: { soft: 5 },
@@ -121,7 +121,7 @@ const disFactory = (subquest: SubQuest): Task[] => [
     acquire: [{ item: subquest.item, num: 6 }],
     combat: subquest.combat,
     boss: true,
-    completed: () => step(subquest.quest) >= 2,
+    completed: () => getStep(subquest.quest) >= 2,
     do: subquest.location,
     effects: [
       $effect`Dis Abled`,
@@ -139,7 +139,7 @@ const disFactory = (subquest: SubQuest): Task[] => [
     after: [`Hunt First ${subquest.name} Boss`],
     combat: subquest.combat,
     choices: { [subquest.choices.secondBoss]: 1 },
-    completed: () => step(subquest.quest) >= 3,
+    completed: () => getStep(subquest.quest) >= 3,
     do: subquest.location,
     effects: [$effect`Dis Abled`],
     limit: { soft: 5 },
@@ -151,7 +151,7 @@ const disFactory = (subquest: SubQuest): Task[] => [
     acquire: [{ item: subquest.item, num: 6 }],
     combat: subquest.combat,
     boss: true,
-    completed: () => step(subquest.quest) === 999,
+    completed: () => getStep(subquest.quest) === 999,
     do: subquest.location,
     effects: [
       $effect`Dis Abled`,

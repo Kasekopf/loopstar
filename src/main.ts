@@ -16,8 +16,8 @@ import {
 } from "kolmafia";
 import { Engine } from "./engine/engine";
 import { convertMilliseconds, debug, getMonsters } from "./lib";
-import { get, set, sinceKolmafiaRevision } from "libram";
-import { Args, step } from "grimoire-kolmafia";
+import { get, getStep, set, sinceKolmafiaRevision } from "libram";
+import { Args } from "grimoire-kolmafia";
 import { checkRequirements } from "./sim";
 import { lastCommitHash } from "./_git_commit";
 import { args, toTempPref } from "./args";
@@ -122,7 +122,7 @@ export function main(command?: string): void {
 
   // Load the engine for this path
   const path = getActivePath();
-  if (step("questL13Final") === 999 && !args.aftercore.goal) {
+  if (getStep("questL13Final") === 999 && !args.aftercore.goal) {
     debug("");
     debug(
       'This script is designed to be run while inside of a run, but your run is complete! Run "loopstar help" for script options.'

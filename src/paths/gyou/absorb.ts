@@ -39,12 +39,13 @@ import {
   ensureEffect,
   get,
   getBanishedMonsters,
+  getStep,
   have,
   Macro,
   set,
 } from "libram";
 import { Quest, Task } from "../../engine/task";
-import { Limit, step } from "grimoire-kolmafia";
+import { Limit } from "grimoire-kolmafia";
 import { args, toTempPref } from "../../args";
 import { coldPlanner, stenchPlanner } from "../../engine/outfit";
 import { Priorities } from "../../engine/priority";
@@ -157,7 +158,7 @@ const absorbTasks: AbsorbTask[] = [
   {
     do: $location`The Dark Heart of the Woods`,
     after: ["Friar/Heart"],
-    ready: () => step("questL06Friar") < 999,
+    ready: () => getStep("questL06Friar") < 999,
     outfit: () => {
       if (have($item`latte lovers member's mug`) && !get("latteUnlocks").includes("wing")) {
         return { equip: $items`latte lovers member's mug, miniature crystal ball` };
@@ -168,12 +169,12 @@ const absorbTasks: AbsorbTask[] = [
   {
     do: $location`The Dark Neck of the Woods`,
     after: ["Friar/Neck"],
-    ready: () => step("questL06Friar") < 999,
+    ready: () => getStep("questL06Friar") < 999,
   },
   {
     do: $location`The Dark Elbow of the Woods`,
     after: ["Friar/Elbow"],
-    ready: () => step("questL06Friar") < 999,
+    ready: () => getStep("questL06Friar") < 999,
     outfit: () => {
       if (have($item`latte lovers member's mug`) && !get("latteUnlocks").includes("vitamins")) {
         return { equip: $items`latte lovers member's mug, miniature crystal ball` };
@@ -184,7 +185,7 @@ const absorbTasks: AbsorbTask[] = [
   {
     do: $location`Pandamonium Slums`,
     prepare: () => {
-      if (step("questM10Azazel") === -1) {
+      if (getStep("questM10Azazel") === -1) {
         visitUrl("pandamonium.php?action=temp");
         visitUrl("pandamonium.php?action=sven");
       }
@@ -194,7 +195,7 @@ const absorbTasks: AbsorbTask[] = [
   {
     do: $location`The Laugh Floor`,
     prepare: () => {
-      if (step("questM10Azazel") === -1) {
+      if (getStep("questM10Azazel") === -1) {
         visitUrl("pandamonium.php?action=temp");
         visitUrl("pandamonium.php?action=sven");
       }
@@ -204,7 +205,7 @@ const absorbTasks: AbsorbTask[] = [
   {
     do: $location`Infernal Rackets Backstage`,
     prepare: () => {
-      if (step("questM10Azazel") === -1) {
+      if (getStep("questM10Azazel") === -1) {
         visitUrl("pandamonium.php?action=temp");
         visitUrl("pandamonium.php?action=sven");
       }
@@ -468,7 +469,7 @@ const absorbTasks: AbsorbTask[] = [
   },
   {
     prepare: () => {
-      if (step("questM17Babies") === -1)
+      if (getStep("questM17Babies") === -1)
         visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
     },
     do: $location`The Haunted Storage Room`,
@@ -477,7 +478,7 @@ const absorbTasks: AbsorbTask[] = [
   },
   {
     prepare: () => {
-      if (step("questM17Babies") === -1)
+      if (getStep("questM17Babies") === -1)
         visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
     },
     do: $location`The Haunted Nursery`,
@@ -486,7 +487,7 @@ const absorbTasks: AbsorbTask[] = [
   },
   {
     prepare: () => {
-      if (step("questM17Babies") === -1)
+      if (getStep("questM17Babies") === -1)
         visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
     },
     do: $location`The Haunted Laboratory`,
@@ -557,7 +558,7 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`The Old Landfill`,
     after: ["Mosquito/Start"],
     prepare: () => {
-      if (step("questM19Hippy") === -1) {
+      if (getStep("questM19Hippy") === -1) {
         visitUrl("place.php?whichplace=woods&action=woods_smokesignals");
         visitUrl("choice.php?pwd=&whichchoice=798&option=1");
         visitUrl("choice.php?pwd=&whichchoice=798&option=2");
@@ -573,7 +574,7 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`The Skeleton Store`,
     after: [],
     prepare: () => {
-      if (step("questM23Meatsmith") === -1) {
+      if (getStep("questM23Meatsmith") === -1) {
         visitUrl("shop.php?whichshop=meatsmith");
         visitUrl("shop.php?whichshop=meatsmith&action=talk");
         runChoice(1);
@@ -585,7 +586,7 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`The Overgrown Lot`,
     after: [],
     prepare: () => {
-      if (step("questM24Doc") === -1) {
+      if (getStep("questM24Doc") === -1) {
         visitUrl("shop.php?whichshop=doc");
         visitUrl("shop.php?whichshop=doc&action=talk");
         runChoice(1);
@@ -597,7 +598,7 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`Madness Bakery`,
     after: [],
     prepare: () => {
-      if (step("questM25Armorer") === -1) {
+      if (getStep("questM25Armorer") === -1) {
         visitUrl("shop.php?whichshop=armory");
         visitUrl("shop.php?whichshop=armory&action=talk");
         visitUrl("choice.php?pwd=&whichchoice=1065&option=1");
@@ -621,7 +622,7 @@ const absorbTasks: AbsorbTask[] = [
     do: $location`The Bugbear Pen`,
     ready: () => knollAvailable(),
     prepare: () => {
-      if (step("questM03Bugbear") === -1) {
+      if (getStep("questM03Bugbear") === -1) {
         visitUrl("place.php?whichplace=knoll_friendly&action=dk_mayor");
       }
     },
@@ -949,7 +950,7 @@ export class AbsorbState {
     }
 
     // Ignore skills after the NS is defeated
-    if (step("questL13Final") > 11) {
+    if (getStep("questL13Final") > 11) {
       for (const monster of usefulSkills.values()) {
         this.ignored.add(monster);
       }
@@ -1118,7 +1119,7 @@ export const AdvAbsorbQuest: Quest = {
         ready: () => {
           if (task.ready && !task.ready()) return false;
           if (myDaycount() > 1) return true;
-          if (step("questL13Final") > 11) return false;
+          if (getStep("questL13Final") > 11) return false;
 
           const allReprocesses = globalAbsorbState.remainingReprocess(task.do);
           if (allReprocesses.length === 0) return false;

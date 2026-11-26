@@ -1,6 +1,6 @@
-import { getTasks, step } from "grimoire-kolmafia";
+import { getTasks } from "grimoire-kolmafia";
 import { myPath, runChoice, Skill, visitUrl } from "kolmafia";
-import { $familiar, $item, $monster, $path, get, set } from "libram";
+import { $familiar, $item, $monster, $path, get, getStep, set } from "libram";
 import { PathInfo } from "../pathinfo";
 import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
@@ -22,7 +22,7 @@ export class GyouInfo implements PathInfo {
   }
 
   finished(): boolean {
-    return step("questL13Final") > 11;
+    return getStep("questL13Final") > 11;
   }
 
   getTasks(tasks: Task[]): Task[] {

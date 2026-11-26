@@ -15,12 +15,12 @@ import {
   CursedMonkeyPaw,
   get,
   getBanishedMonsters,
+  getStep,
   have,
   Macro,
   PeridotOfPeril,
   PrismaticBeret,
 } from "libram";
-import { step } from "grimoire-kolmafia";
 
 import {
   abort,
@@ -102,7 +102,7 @@ export const ItemTask: Quest = {
         get("_unblemishedPearlMarinaraTrench") &&
         have($item`teflon ore`) &&
         !have($item`ink bladder`) &&
-        step("questS02Monkees") < 10 &&
+        getStep("questS02Monkees") < 10 &&
         get("_beretBuskingUses") === 0,
       completed: () => get("_beretBuskingUses") > 0,
       do: () => {
@@ -296,14 +296,14 @@ export const ItemTask: Quest = {
       name: "Spend sand dollars",
       after: ["Corral Refract"],
       ready: () => have($item`sand dollar`, 50) || have($item`damp old boot`),
-      completed: () => have($item`black glass`) && step("questS01OldGuy") === 999,
+      completed: () => have($item`black glass`) && getStep("questS01OldGuy") === 999,
       do: () => {
         visitUrl("monkeycastle.php?who=1");
         visitUrl("monkeycastle.php?who=2");
         if (!have($item`black glass`) && have($item`sand dollar`, 13)) {
           buy($coinmaster`Big Brother`, 1, $item`black glass`);
         }
-        if (!have($item`damp old boot`) && step("questS01OldGuy") < 999) {
+        if (!have($item`damp old boot`) && getStep("questS01OldGuy") < 999) {
           buy($coinmaster`Big Brother`, 1, $item`damp old boot`);
         }
         if (have($item`damp old boot`)) {

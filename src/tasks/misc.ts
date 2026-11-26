@@ -77,6 +77,7 @@ import {
   ensureEffect,
   get,
   getSaleValue,
+  getStep,
   have,
   haveInCampground,
   Macro,
@@ -89,7 +90,7 @@ import {
   unequip,
 } from "libram";
 import { Quest, Task } from "../engine/task";
-import { Guards, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
+import { Guards, Outfit, OutfitSpec } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { Engine } from "../engine/engine";
 import { Keys, keyStrategy } from "./keys";
@@ -159,7 +160,7 @@ export const MiscQuest: Quest = {
       name: "Island Scrip",
       after: ["Unlock Beach"],
       ready: () =>
-        (myMeat() >= 6000 || (step("questL11Black") >= 4 && myMeat() >= meatBuffer + 500)) &&
+        (myMeat() >= 6000 || (getStep("questL11Black") >= 4 && myMeat() >= meatBuffer + 500)) &&
         myAdventures() >= 20 &&
         !yellowSubmarinePossible(),
       completed: () =>
@@ -375,33 +376,33 @@ export const MiscQuest: Quest = {
         if (get("questPAGhost") === "unstarted") return false;
         switch (get("ghostLocation")) {
           case $location`Cobb's Knob Treasury`:
-            return step("questL05Goblin") >= 1;
+            return getStep("questL05Goblin") >= 1;
           case $location`The Haunted Conservatory`:
-            return step("questM20Necklace") >= 0;
+            return getStep("questM20Necklace") >= 0;
           case $location`The Haunted Gallery`:
-            return step("questM21Dance") >= 1;
+            return getStep("questM21Dance") >= 1;
           case $location`The Haunted Kitchen`:
-            return step("questM20Necklace") >= 0;
+            return getStep("questM20Necklace") >= 0;
           case $location`The Haunted Wine Cellar`:
-            return step("questL11Manor") >= 1;
+            return getStep("questL11Manor") >= 1;
           case $location`The Icy Peak`:
-            return step("questL08Trapper") === 999;
+            return getStep("questL08Trapper") === 999;
           case $location`Inside the Palindome`:
             return have($item`Talisman o' Namsilat`);
           case $location`The Old Landfill`:
-            return myBasestat(myPrimestat()) >= 25 && step("questL02Larva") >= 0;
+            return myBasestat(myPrimestat()) >= 25 && getStep("questL02Larva") >= 0;
           case $location`Madness Bakery`:
           case $location`The Overgrown Lot`:
           case $location`The Skeleton Store`:
             return true; // Can freely start quest
           case $location`The Smut Orc Logging Camp`:
             return (
-              step("questL09Topping") >= 0 &&
+              getStep("questL09Topping") >= 0 &&
               // Wait until Blech House is cleared
               get("smutOrcNoncombatProgress") < 15
             );
           case $location`The Spooky Forest`:
-            return step("questL02Larva") >= 0;
+            return getStep("questL02Larva") >= 0;
         }
         return false;
       },
@@ -409,14 +410,14 @@ export const MiscQuest: Quest = {
         // Start quests if needed
         switch (get("ghostLocation")) {
           case $location`Madness Bakery`:
-            if (step("questM25Armorer") === -1) {
+            if (getStep("questM25Armorer") === -1) {
               visitUrl("shop.php?whichshop=armory");
               visitUrl("shop.php?whichshop=armory&action=talk");
               visitUrl("choice.php?pwd=&whichchoice=1065&option=1");
             }
             return;
           case $location`The Old Landfill`:
-            if (step("questM19Hippy") === -1) {
+            if (getStep("questM19Hippy") === -1) {
               visitUrl("place.php?whichplace=woods&action=woods_smokesignals");
               visitUrl("choice.php?pwd=&whichchoice=798&option=1");
               visitUrl("choice.php?pwd=&whichchoice=798&option=2");
@@ -426,14 +427,14 @@ export const MiscQuest: Quest = {
               putCloset($item`funky junk key`, itemAmount($item`funky junk key`));
             return;
           case $location`The Overgrown Lot`:
-            if (step("questM24Doc") === -1) {
+            if (getStep("questM24Doc") === -1) {
               visitUrl("shop.php?whichshop=doc");
               visitUrl("shop.php?whichshop=doc&action=talk");
               runChoice(1);
             }
             return;
           case $location`The Skeleton Store`:
-            if (step("questM23Meatsmith") === -1) {
+            if (getStep("questM23Meatsmith") === -1) {
               visitUrl("shop.php?whichshop=meatsmith");
               visitUrl("shop.php?whichshop=meatsmith&action=talk");
               runChoice(1);
@@ -536,16 +537,16 @@ export const MiscQuest: Quest = {
         };
 
         // Make progress in the Spooky Forest if needed
-        if (!have($item`Spooky Temple map`) && step("questM16Temple") < 999) {
+        if (!have($item`Spooky Temple map`) && getStep("questM16Temple") < 999) {
           if (!have($item`tree-holed coin`)) {
             return { ...result, 502: 2, 505: 2 };
           }
           return { ...result, 502: 3, 506: 3 };
         }
-        if (!have($item`Spooky-Gro fertilizer`) && step("questM16Temple") < 999) {
+        if (!have($item`Spooky-Gro fertilizer`) && getStep("questM16Temple") < 999) {
           return { ...result, 502: 3, 506: 2 };
         }
-        if (step("questL02Larva") < 1) {
+        if (getStep("questL02Larva") < 1) {
           return { ...result, 502: 2, 505: 1 };
         }
         // Otherwise, skip it (through the tree-holed coin path)
@@ -706,8 +707,8 @@ export const MiscQuest: Quest = {
           have($item`skeletal skiff`) ||
           have($item`yellow submarine`)) &&
           getWorkshed() === $item`TakerSpace letter of Marque`) ||
-        (step("questL08Trapper") >= 2 &&
-          step("questL09Topping") >= 1 &&
+        (getStep("questL08Trapper") >= 2 &&
+          getStep("questL09Topping") >= 1 &&
           getWorkshed() === $item`model train set`),
       completed: () =>
         !have(args.major.swapworkshed) || get("_workshedItemUsed") || myTurncount() >= 1000,
@@ -791,10 +792,10 @@ export const MiscQuest: Quest = {
         )
           zones.push($location`Sonofa Beach`);
 
-        if (itemAmount($item`goat cheese`) < 3 && step("questL08Trapper") < 2)
+        if (itemAmount($item`goat cheese`) < 3 && getStep("questL08Trapper") < 2)
           zones.push($location`The Goatlet`);
 
-        if (step("questL09Topping") < 1) {
+        if (getStep("questL09Topping") < 1) {
           zones.push($location`The Smut Orc Logging Camp`);
         }
 
@@ -832,7 +833,7 @@ export const MiscQuest: Quest = {
       ready: () =>
         have($item`filthy corduroys`) &&
         have($item`filthy knitted dread sack`) &&
-        step("questL12War") < 1,
+        getStep("questL12War") < 1,
       completed: () =>
         !have($familiar`Robortender`) ||
         have($item`grapefruit`) ||
@@ -1074,7 +1075,7 @@ export const MiscQuest: Quest = {
       name: "Eldritch Tentacle",
       after: ["Keys/Star Key", "Crypt/Cranny"],
       ready: () => get("questL02Larva") !== "unstarted",
-      completed: () => get("_eldritchTentacleFought") || step("questL13Final") > -1,
+      completed: () => get("_eldritchTentacleFought") || getStep("questL13Final") > -1,
       do: () => {
         visitUrl("place.php?whichplace=forestvillage&action=fv_scientist", false);
         runChoice(1);
@@ -1307,7 +1308,7 @@ export const MiscQuest: Quest = {
       after: [],
       ready: () => myMeat() >= meatBuffer + 500,
       completed: () =>
-        !have($skill`Blood Bubble`) || step("questL13Final") > 10 || have($effect`Blood Bubble`),
+        !have($skill`Blood Bubble`) || getStep("questL13Final") > 10 || have($effect`Blood Bubble`),
       do: () => {
         useSkill($skill`Blood Bubble`, Math.floor((myHp() - 1) / 30));
         fillHp();
@@ -1322,7 +1323,7 @@ export const MiscQuest: Quest = {
       after: [],
       ready: () => myMeat() >= meatBuffer + 500,
       completed: () =>
-        !have($skill`Blood Bond`) || step("questL13Final") > 10 || have($effect`Blood Bond`),
+        !have($skill`Blood Bond`) || getStep("questL13Final") > 10 || have($effect`Blood Bond`),
       do: () => {
         useSkill($skill`Blood Bond`, Math.floor((myHp() - 1) / 30));
         fillHp();
@@ -1336,7 +1337,7 @@ export const MiscQuest: Quest = {
       name: "Leaf Resin",
       ready: () =>
         BurningLeaves.have() && BurningLeaves.numberOfLeaves() >= 50 && !have($effect`Resined`),
-      completed: () => step("questL12War") === 999, // Stop near the end of the run
+      completed: () => getStep("questL12War") === 999, // Stop near the end of the run
       acquire: [{ item: $item`distilled resin` }],
       do: () => use($item`distilled resin`),
       limit: { tries: 5, unready: true },
@@ -1374,7 +1375,7 @@ export const MiscQuest: Quest = {
         use($item`forest canopy bed`); // This doesn't actually use the bed, but mafia doesn't recognize it's in the campground without this
 
         visitUrl(
-          `inv_use.php?whichitem=${$item`forest canopy bed`.id}&pwd&confirm=true&which=3`, // need confirmation input url now that furnishings are permanent
+          `inv_use.php?whichitem=${$item`forest canopy bed`.id}&pwd&confirm=true&which=3` // need confirmation input url now that furnishings are permanent
         );
       },
       limit: { tries: 2 },
@@ -1638,7 +1639,7 @@ export function teleportitisTask(engine: Engine, tasks: Task[]): Task {
   choices[783] = 6;
   choices[785] = 6;
   choices[787] = 6;
-  if (step("questL11Worship") >= 3) {
+  if (getStep("questL11Worship") >= 3) {
     // Escape the hidden heart of the hidden temple
     choices[580] = 3;
   }
@@ -1674,7 +1675,7 @@ export function teleportitisTask(engine: Engine, tasks: Task[]): Task {
     post: () => {
       // Some tracking is broken when we encounter it with teleportitis
       if (get("lastEncounter") === "Having a Ball in the Ballroom") set("questM21Dance", "step4");
-      if (get("lastEncounter") === "Too Much Humanity" && step("questL11Ron") < 1)
+      if (get("lastEncounter") === "Too Much Humanity" && getStep("questL11Ron") < 1)
         set("questL11Ron", "step1");
     },
     outfit: { equip: $items`antique machete` },
@@ -1697,7 +1698,7 @@ export const removeTeleportitis = {
 };
 
 export function haveOre() {
-  if (step("questL08Trapper") >= 2) return true;
+  if (getStep("questL08Trapper") >= 2) return true;
   const ore = get("trapperOre");
   if (ore) {
     return itemAmount(ore) >= 3;
@@ -1767,8 +1768,8 @@ function chooseBestLeprecondo(): number[] {
     myPath() === $path`11 Things I Hate About U` && furnitureFound.has(25)
       ? 25
       : furnitureFound.has(13)
-        ? 13
-        : 0; // Sous vide -> meat% and random food
+      ? 13
+      : 0; // Sous vide -> meat% and random food
 
   return [f1, f2, f3, f4];
 }

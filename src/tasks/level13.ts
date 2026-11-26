@@ -22,13 +22,13 @@ import {
   BeachComb,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel, tryWish } from "../lib";
 import { Quest, Resources, Task } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { customRestoreMp, ensureWithMPSwaps, fillHp } from "../engine/moods";
 import { args } from "../args";
 
@@ -385,7 +385,7 @@ const Door: Task[] = [
       "Digital Lock",
       "Skeleton Lock",
     ],
-    completed: () => step("questL13Final") > 5,
+    completed: () => getStep("questL13Final") > 5,
     do: () => visitUrl("place.php?whichplace=nstower_door&action=ns_doorknob"),
     limit: { tries: 1 },
     freeaction: true,
@@ -482,7 +482,7 @@ export const TowerQuest: Quest = {
         "War/Boss Hippie",
       ],
       ready: () => atLevel(13),
-      completed: () => step("questL13Final") !== -1,
+      completed: () => getStep("questL13Final") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       freeaction: true,
@@ -492,7 +492,7 @@ export const TowerQuest: Quest = {
     {
       name: "Coronation",
       after: ["Speed Boss", "Stat Boss", "Element Boss"],
-      completed: () => step("questL13Final") > 2,
+      completed: () => getStep("questL13Final") > 2,
       do: (): void => {
         visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
         runChoice(-1);
@@ -503,7 +503,7 @@ export const TowerQuest: Quest = {
     {
       name: "Frank",
       after: ["Coronation"],
-      completed: () => step("questL13Final") > 3,
+      completed: () => getStep("questL13Final") > 3,
       do: (): void => {
         visitUrl("place.php?whichplace=nstower&action=ns_02_coronation");
         runChoice(-1);
@@ -514,7 +514,7 @@ export const TowerQuest: Quest = {
     {
       name: "Maze",
       after: ["Frank"],
-      completed: () => step("questL13Final") > 4,
+      completed: () => getStep("questL13Final") > 4,
       prepare: () => {
         fillHp();
       },
@@ -534,7 +534,7 @@ export const TowerQuest: Quest = {
       completed: () =>
         have($item`beehive`) ||
         (have($familiar`Shorter-Order Cook`) && have($item`June cleaver`)) ||
-        step("questL13Final") > 6,
+        getStep("questL13Final") > 6,
       do: $location`The Black Forest`,
       choices: {
         923: 1,
@@ -552,7 +552,7 @@ export const TowerQuest: Quest = {
         if (have($item`handful of hand chalk`)) ensureEffect($effect`Chalky Hand`);
         fillHp();
       },
-      completed: () => step("questL13Final") > 6,
+      completed: () => getStep("questL13Final") > 6,
       do: $location`Tower Level 1`,
       outfit: {
         familiar: $familiar`Shorter-Order Cook`,
@@ -575,7 +575,7 @@ export const TowerQuest: Quest = {
       prepare: () => {
         fillHp();
       },
-      completed: () => step("questL13Final") > 7,
+      completed: () => getStep("questL13Final") > 7,
       do: $location`Tower Level 2`,
       outfit: () => {
         if (have($familiar`Trick-or-Treating Tot`) && have($item`li'l pirate costume`)) {
@@ -597,7 +597,7 @@ export const TowerQuest: Quest = {
     {
       name: "Wall of Bones",
       after: ["Wall of Meat", "Giant/Ground Knife"],
-      completed: () => step("questL13Final") > 8,
+      completed: () => getStep("questL13Final") > 8,
       acquire: [
         { item: $item`meteorb`, optional: true, useful: () => have($item`metal meteoroid`) },
       ],
@@ -639,7 +639,7 @@ export const TowerQuest: Quest = {
     {
       name: "Mirror",
       after: ["Wall of Bones", "Wand"],
-      completed: () => step("questL13Final") > 9,
+      completed: () => getStep("questL13Final") > 9,
       do: $location`Tower Level 4`,
       choices: { 1015: 2 },
       limit: { tries: 1 },
@@ -649,7 +649,7 @@ export const TowerQuest: Quest = {
       name: "Shadow",
       after: ["Mirror"],
       prepare: () => fillHp(),
-      completed: () => step("questL13Final") > 10,
+      completed: () => getStep("questL13Final") > 10,
       do: $location`Tower Level 5`,
       outfit: () => ({
         equip: $items`unwrapped knock-off retro superhero cape, Jurassic Parka, attorney's badge`,
@@ -667,7 +667,7 @@ export const TowerQuest: Quest = {
     {
       name: "Naughty Sorceress",
       after: ["Shadow"],
-      completed: () => step("questL13Final") > 11,
+      completed: () => getStep("questL13Final") > 11,
       do: $location`The Naughty Sorceress' Chamber`,
       outfit: { modifier: "muscle", equip: $items`June cleaver` },
       combat: new CombatStrategy()

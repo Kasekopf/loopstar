@@ -38,12 +38,13 @@ import {
   clamp,
   DaylightShavings,
   get,
+  getStep,
   have,
   maxBy,
 } from "libram";
 import { Resource } from "../resources/lib";
 import { Keys, keyStrategy } from "../tasks/keys";
-import { Modes, Outfit, OutfitSpec, step } from "grimoire-kolmafia";
+import { Modes, Outfit, OutfitSpec } from "grimoire-kolmafia";
 import { atLevel, garboAverageValue, garboValue, haveLoathingLegion } from "../lib";
 import { args } from "../args";
 
@@ -612,7 +613,7 @@ export class ElementalPlanner {
     let res = 0;
     if (
       with_black_paint &&
-      (have($effect`Red Door Syndrome`) || (myMeat() >= 1000 && step("questL11Black") >= 2))
+      (have($effect`Red Door Syndrome`) || (myMeat() >= 1000 && getStep("questL11Black") >= 2))
     )
       res += 2;
     for (const option of this.options) {

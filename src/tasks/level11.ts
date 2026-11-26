@@ -30,13 +30,14 @@ import {
   DaylightShavings,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
   set,
   uneffect,
 } from "libram";
 import { Quest, Task } from "../engine/task";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel, debug, haveLoathingIdolMicrophone } from "../lib";
@@ -52,7 +53,7 @@ const Diary: Task[] = [
     prepare: () => {
       tryPlayApriling("+combat");
     },
-    completed: () => step("questL11Black") >= 2,
+    completed: () => getStep("questL11Black") >= 2,
     do: $location`The Black Forest`,
     post: () => {
       if (have($effect`Really Quite Poisoned`)) uneffect($effect`Really Quite Poisoned`);
@@ -106,7 +107,7 @@ const Diary: Task[] = [
     name: "Buy Documents",
     after: ["Forest"],
     ready: () => myMeat() >= 5000,
-    completed: () => have($item`forged identification documents`) || step("questL11Black") >= 4,
+    completed: () => have($item`forged identification documents`) || getStep("questL11Black") >= 4,
     do: (): void => {
       visitUrl("woods.php");
       visitUrl("shop.php?whichshop=blackmarket");
@@ -120,10 +121,10 @@ const Diary: Task[] = [
     name: "Diary",
     after: ["Buy Documents", "Misc/Unlock Beach"],
     ready: () => myMeat() >= 500,
-    completed: () => step("questL11Black") >= 4,
+    completed: () => getStep("questL11Black") >= 4,
     do: $location`The Shore, Inc. Travel Agency`,
     post: (): void => {
-      if (step("questL11Black") < 4) {
+      if (getStep("questL11Black") < 4) {
         debug("Possible mafia diary desync detected; refreshing...");
         cliExecute("refresh all");
         if (have($item`your father's MacGuffin diary`)) use($item`your father's MacGuffin diary`);
@@ -139,7 +140,7 @@ const Desert: Task[] = [
   {
     name: "Scrip",
     after: ["Misc/Unlock Beach", "Misc/Unlock Island"],
-    ready: () => myMeat() >= 6000 || (step("questL11Black") >= 4 && myMeat() >= 500),
+    ready: () => myMeat() >= 6000 || (getStep("questL11Black") >= 4 && myMeat() >= 500),
     completed: () => have($item`Shore Inc. Ship Trip Scrip`) || have($item`UV-resistant compass`),
     do: $location`The Shore, Inc. Travel Agency`,
     outfit: () => {
@@ -343,7 +344,7 @@ const Pyramid: Task[] = [
   {
     name: "Open Pyramid",
     after: ["Desert", "Oasis", "Oasis Drum", "Manor/Boss", "Palindome/Boss", "Hidden City/Boss"],
-    completed: () => step("questL11Pyramid") >= 0,
+    completed: () => getStep("questL11Pyramid") >= 0,
     do: () => visitUrl("place.php?whichplace=desertbeach&action=db_pyramid1"),
     limit: { tries: 1 },
     freeaction: true,
@@ -351,7 +352,7 @@ const Pyramid: Task[] = [
   {
     name: "Upper Chamber",
     after: ["Open Pyramid"],
-    completed: () => step("questL11Pyramid") >= 1,
+    completed: () => getStep("questL11Pyramid") >= 1,
     do: $location`The Upper Chamber`,
     outfit: { modifier: "+combat" },
     limit: { turns: 6 },
@@ -451,7 +452,7 @@ const Pyramid: Task[] = [
     name: "Boss",
     after: ["Use Bomb"],
     ready: () => myAdventures() >= 7,
-    completed: () => step("questL11Pyramid") === 999,
+    completed: () => getStep("questL11Pyramid") === 999,
     do: () => visitUrl("place.php?whichplace=pyramid&action=pyramid_state1a"),
     post: () => {
       // Autunmaton returning is not properly tracked
@@ -475,7 +476,7 @@ export const MacguffinQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(11),
-      completed: () => step("questL11MacGuffin") !== -1,
+      completed: () => getStep("questL11MacGuffin") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       freeaction: true,
@@ -487,7 +488,7 @@ export const MacguffinQuest: Quest = {
       name: "Finish",
       after: ["Boss"],
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
-      completed: () => step("questL11MacGuffin") === 999,
+      completed: () => getStep("questL11MacGuffin") === 999,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       freeaction: true,

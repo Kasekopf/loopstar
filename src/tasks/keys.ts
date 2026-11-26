@@ -34,6 +34,7 @@ import {
   ensureEffect,
   FloristFriar,
   get,
+  getStep,
   have,
   Macro,
   set,
@@ -42,7 +43,6 @@ import {
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { Quest, Task } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { args, toTempPref } from "../args";
 import { trainSetAvailable } from "./misc";
 import { haveFlorest, underStandard } from "../lib";
@@ -100,7 +100,7 @@ const heroKeys: KeyTask[] = [
       get("_lastDailyDungeonRoom") < 10 &&
       !get("candyCaneSwordDailyDungeon", false),
     ready: () =>
-      step("questL13Final") !== -1 ||
+      getStep("questL13Final") !== -1 ||
       (have($item`Pick-O-Matic lockpicks`) &&
         have($item`ring of Detect Boring Doors`) &&
         have($item`eleven-foot pole`)),
@@ -189,7 +189,7 @@ const heroKeys: KeyTask[] = [
 function dailyDungeonTask(): Omit<Task, "completed" | "name" | "after"> {
   return {
     ready: () =>
-      step("questL13Final") !== -1 ||
+      getStep("questL13Final") !== -1 ||
       (have($item`Pick-O-Matic lockpicks`) &&
         have($item`ring of Detect Boring Doors`) &&
         have($item`eleven-foot pole`)),
@@ -349,7 +349,7 @@ export const KeysQuest: Quest = {
       name: "Skeleton Key",
       after: ["Crypt/Nook Boss", "Tower/Start"],
       prepare: () => {
-        if (step("questM23Meatsmith") === -1) {
+        if (getStep("questM23Meatsmith") === -1) {
           visitUrl("shop.php?whichshop=meatsmith");
           visitUrl("shop.php?whichshop=meatsmith&action=talk");
           runChoice(1);

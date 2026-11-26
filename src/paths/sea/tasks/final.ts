@@ -10,11 +10,11 @@ import {
   getActiveSongs,
   getSongCount,
   getSongLimit,
+  getStep,
   have,
   Macro,
   uneffect,
 } from "libram";
-import { step } from "grimoire-kolmafia";
 import {
   buy,
   cliExecute,
@@ -55,8 +55,8 @@ export const FinalQuest: Quest = {
         pearlsReady() &&
         get("shubJigguwattDefeated") &&
         get("yogUrtDefeated") &&
-        step("questS02Monkees") === 999,
-      completed: () => step("questL13Final") === 999,
+        getStep("questS02Monkees") === 999,
+      completed: () => getStep("questL13Final") === 999,
       prepare: () => {
         // buy($coinmaster`Wet Crap For Sale`, 1, $item`scroll of sea strength`);
         // Actually, seems like the coinmaster only has sand penny stuff

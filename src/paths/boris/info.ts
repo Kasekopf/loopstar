@@ -2,11 +2,11 @@ import { PathInfo } from "../pathinfo";
 import { findAndMerge, Task } from "../../engine/task";
 import { Engine } from "../../engine/engine";
 import { myPath } from "kolmafia";
-import { getTasks, step } from "grimoire-kolmafia";
+import { getTasks } from "grimoire-kolmafia";
 import { Requirement } from "../../sim";
 import { borisRoute } from "./route";
 import { borisDeltas, BorisDietQuest, BorisQuest, SlowManorQuest } from "./tasks";
-import { $path } from "libram";
+import { $path, getStep } from "libram";
 import { args } from "../../args";
 import { BorisEngine } from "./engine";
 
@@ -20,7 +20,7 @@ export class BorisInfo implements PathInfo {
   }
 
   finished(): boolean {
-    return step("questL13Final") > 11;
+    return getStep("questL13Final") > 11;
   }
 
   getTasks(tasks: Task[]): Task[] {

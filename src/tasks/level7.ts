@@ -28,11 +28,12 @@ import {
   ensureEffect,
   FloristFriar,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Priority, Quest, Task } from "../engine/task";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel, haveFlorest, haveLoathingIdolMicrophone } from "../lib";
 import { Priorities } from "../engine/priority";
@@ -132,7 +133,7 @@ const Alcove: Task[] = [
   {
     name: "Alcove Boss",
     after: ["Start", "Alcove"],
-    completed: () => get("cyrptAlcoveEvilness") === 0 && step("questL07Cyrptic") !== -1,
+    completed: () => get("cyrptAlcoveEvilness") === 0 && getStep("questL07Cyrptic") !== -1,
     do: $location`The Defiled Alcove`,
     combat: new CombatStrategy().killHard(),
     boss: true,
@@ -194,7 +195,7 @@ const Cranny: Task[] = [
   {
     name: "Cranny Boss",
     after: ["Start", "Cranny"],
-    completed: () => get("cyrptCrannyEvilness") === 0 && step("questL07Cyrptic") !== -1,
+    completed: () => get("cyrptCrannyEvilness") === 0 && getStep("questL07Cyrptic") !== -1,
     do: $location`The Defiled Cranny`,
     combat: new CombatStrategy().killHard(),
     boss: true,
@@ -267,7 +268,7 @@ const Niche: Task[] = [
   {
     name: "Niche Boss",
     after: ["Start", "Niche"],
-    completed: () => get("cyrptNicheEvilness") === 0 && step("questL07Cyrptic") !== -1,
+    completed: () => get("cyrptNicheEvilness") === 0 && getStep("questL07Cyrptic") !== -1,
     do: $location`The Defiled Niche`,
     combat: new CombatStrategy().killHard(),
     boss: true,
@@ -367,7 +368,7 @@ const Nook: Task[] = [
   {
     name: "Nook Boss",
     after: ["Start", "Nook", "Nook Eye"],
-    completed: () => get("cyrptNookEvilness") === 0 && step("questL07Cyrptic") !== -1,
+    completed: () => get("cyrptNookEvilness") === 0 && getStep("questL07Cyrptic") !== -1,
     do: $location`The Defiled Nook`,
     combat: new CombatStrategy().killHard(),
     boss: true,
@@ -382,7 +383,7 @@ export const CryptQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(7),
-      completed: () => step("questL07Cyrptic") !== -1,
+      completed: () => getStep("questL07Cyrptic") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -395,7 +396,7 @@ export const CryptQuest: Quest = {
     {
       name: "Bonerdagon",
       after: ["Start", "Alcove Boss", "Cranny Boss", "Niche Boss", "Nook Boss"],
-      completed: () => step("questL07Cyrptic") >= 1,
+      completed: () => getStep("questL07Cyrptic") >= 1,
       do: () => {
         adv1($location`Haert of the Cyrpt`, -1, "");
         if (get("lastEncounter") !== "The Bonerdagon")
@@ -410,7 +411,7 @@ export const CryptQuest: Quest = {
       name: "Finish",
       after: ["Start", "Bonerdagon"],
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
-      completed: () => step("questL07Cyrptic") === 999,
+      completed: () => getStep("questL07Cyrptic") === 999,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       freeaction: true,

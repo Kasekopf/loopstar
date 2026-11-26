@@ -32,12 +32,11 @@
   "dependencies": {
     "core-js": "^3.16.4",
     "garbo-lib": "^1.0.3",
-    "grimoire-kolmafia": "^0.3.35",
+    "grimoire-kolmafia": "^0.3.36",
     "jiti": "^2.6.1",
-    "kolmafia": "^5.29363.0",
-    "libram": "^0.11.37",
-    "mafia-shared-relay": "^0.0.7",
-    "msr": "npm:mafia-shared-relay",
+    "kolmafia": "^5.29481.0",
+    "libram": "^0.11.43",
+    "msr": "npm:mafia-shared-relay@^0.0.9",
     "node": "^25.3.0",
     "typescript-eslint": "^8.53.0"
   },

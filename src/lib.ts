@@ -1,4 +1,4 @@
-import { DelayedMacro, Guards, step } from "grimoire-kolmafia";
+import { DelayedMacro, Guards } from "grimoire-kolmafia";
 import {
   appearanceRates,
   cliExecute,
@@ -30,6 +30,7 @@ import {
   AsdonMartin,
   clamp,
   get,
+  getStep,
   getTodaysHolidayWanderers,
   have,
   Macro,
@@ -99,7 +100,7 @@ export function tuneSnapper(phylum: Phylum) {
 
 let cachedHaveFlorest: boolean | undefined = undefined;
 export function haveFlorest(): boolean {
-  if (step("questL02Larva") === -1) return false; // we cannot check yet
+  if (getStep("questL02Larva") === -1) return false; // we cannot check yet
   if (cachedHaveFlorest === undefined) {
     const village = visitUrl("forestvillage.php");
     cachedHaveFlorest = village.includes("action=fv_friar");
@@ -206,7 +207,7 @@ export function asdonFualable(amount: number): boolean {
   if (!AsdonMartin.installed()) return false;
   if (
     !have($item`forged identification documents`) &&
-    step("questL11Black") < 4 &&
+    getStep("questL11Black") < 4 &&
     myMeat() < 10000
   )
     return false; // Save early

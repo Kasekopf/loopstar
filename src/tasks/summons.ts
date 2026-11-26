@@ -7,13 +7,13 @@ import {
   $monster,
   $skill,
   get,
+  getStep,
   have,
   Macro,
   SourceTerminal,
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { Quest, Task } from "../engine/task";
-import { step } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { fillHp } from "../engine/moods";
 import { oresNeeded } from "./level8";
@@ -173,7 +173,7 @@ const summonTargets: SummonTarget[] = [
     completed: () =>
       itemAmount($item`stone wool`) >= 2 ||
       (itemAmount($item`stone wool`) === 1 && have($item`the Nostril of the Serpent`)) ||
-      step("questL11Worship") >= 3 ||
+      getStep("questL11Worship") >= 3 ||
       (have($item`Deck of Every Card`) && get("_deckCardsDrawn") === 0),
     outfit: { modifier: "item" },
     combat: new CombatStrategy().killItem(),

@@ -8,11 +8,12 @@ import {
   $skill,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Quest } from "../engine/task";
-import { Outfit, step } from "grimoire-kolmafia";
+import { Outfit } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
@@ -26,7 +27,7 @@ export const BatQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(4),
-      completed: () => step("questL04Bat") !== -1,
+      completed: () => getStep("questL04Bat") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -95,7 +96,7 @@ export const BatQuest: Quest = {
     {
       name: "Get Sonar 1",
       after: [],
-      completed: () => step("questL04Bat") + itemAmount($item`sonar-in-a-biscuit`) >= 1,
+      completed: () => getStep("questL04Bat") + itemAmount($item`sonar-in-a-biscuit`) >= 1,
       do: $location`Guano Junction`,
       ready: () => stenchPlanner.maximumPossible(true) >= 1,
       prepare: () => {
@@ -125,7 +126,7 @@ export const BatQuest: Quest = {
     {
       name: "Use Sonar 1",
       after: ["Get Sonar 1"],
-      completed: () => step("questL04Bat") >= 1,
+      completed: () => getStep("questL04Bat") >= 1,
       do: () => use($item`sonar-in-a-biscuit`),
       limit: { tries: 3 },
       freeaction: true,
@@ -133,12 +134,12 @@ export const BatQuest: Quest = {
     {
       name: "Get Sonar 2",
       after: ["Use Sonar 1"],
-      completed: () => step("questL04Bat") + itemAmount($item`sonar-in-a-biscuit`) >= 2,
+      completed: () => getStep("questL04Bat") + itemAmount($item`sonar-in-a-biscuit`) >= 2,
       priority: () => {
         if (
-          step("questL11Shen") === 999 ||
+          getStep("questL11Shen") === 999 ||
           have($item`The Stankara Stone`) ||
-          (myDaycount() === 1 && step("questL11Shen") > 1)
+          (myDaycount() === 1 && getStep("questL11Shen") > 1)
         )
           return Priorities.None;
         return Priorities.BadMood;
@@ -156,7 +157,7 @@ export const BatQuest: Quest = {
     {
       name: "Use Sonar 2",
       after: ["Get Sonar 2"],
-      completed: () => step("questL04Bat") >= 2,
+      completed: () => getStep("questL04Bat") >= 2,
       do: () => use($item`sonar-in-a-biscuit`),
       limit: { tries: 3 },
       freeaction: true,
@@ -164,7 +165,7 @@ export const BatQuest: Quest = {
     {
       name: "Get Sonar 3",
       after: ["Use Sonar 2"],
-      completed: () => step("questL04Bat") + itemAmount($item`sonar-in-a-biscuit`) >= 3,
+      completed: () => getStep("questL04Bat") + itemAmount($item`sonar-in-a-biscuit`) >= 3,
       prepare: () => {
         if (numericModifier("stench resistance") < 1) ensureEffect($effect`Red Door Syndrome`);
         if (numericModifier("stench resistance") < 1)
@@ -178,7 +179,7 @@ export const BatQuest: Quest = {
     {
       name: "Use Sonar 3",
       after: ["Get Sonar 3"],
-      completed: () => step("questL04Bat") >= 3,
+      completed: () => getStep("questL04Bat") >= 3,
       do: () => use($item`sonar-in-a-biscuit`),
       limit: { tries: 3 },
       freeaction: true,
@@ -186,7 +187,7 @@ export const BatQuest: Quest = {
     {
       name: "Boss Bat",
       after: ["Bat/Use Sonar 3"],
-      completed: () => step("questL04Bat") >= 4,
+      completed: () => getStep("questL04Bat") >= 4,
       do: $location`The Boss Bat's Lair`,
       combat: new CombatStrategy().killHard($monster`Boss Bat`).ignore(),
       ignoreforbreathitin: true,
@@ -197,7 +198,7 @@ export const BatQuest: Quest = {
       name: "Finish",
       after: ["Boss Bat"],
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
-      completed: () => step("questL04Bat") === 999,
+      completed: () => getStep("questL04Bat") === 999,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       freeaction: true,

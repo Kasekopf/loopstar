@@ -28,11 +28,12 @@ import {
   AutumnAton,
   ensureEffect,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Priority, Quest, Resources, Task } from "../engine/task";
-import { Guards, OutfitSpec, step } from "grimoire-kolmafia";
+import { Guards, OutfitSpec } from "grimoire-kolmafia";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
 import { Priorities } from "../engine/priority";
@@ -348,7 +349,7 @@ export const ChasmQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(9),
-      completed: () => step("questL09Topping") !== -1,
+      completed: () => getStep("questL09Topping") !== -1,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -358,7 +359,7 @@ export const ChasmQuest: Quest = {
       name: "Bat Wings Bridge Parts",
       after: ["Start"],
       ready: () => have($item`bat wings`) && get("chasmBridgeProgress") >= 25,
-      completed: () => step("questL09Topping") >= 1,
+      completed: () => getStep("questL09Topping") >= 1,
       do: () => {
         visitUrl(`place.php?whichplace=orc_chasm&action=bridge${get("chasmBridgeProgress")}`); // use existing materials
         visitUrl("place.php?whichplace=orc_chasm&action=bridge_jump");
@@ -388,9 +389,9 @@ export const ChasmQuest: Quest = {
           get("smutOrcNoncombatProgress") < 15) ||
         have($effect`Red Door Syndrome`) ||
         myMeat() >= 1000,
-      completed: () => step("questL09Topping") >= 1,
+      completed: () => getStep("questL09Topping") >= 1,
       prepare: () => {
-        if (get("smutOrcNoncombatProgress") >= 15 && step("questL11Black") >= 2) {
+        if (get("smutOrcNoncombatProgress") >= 15 && getStep("questL11Black") >= 2) {
           ensureEffect($effect`Red Door Syndrome`);
           ensureEffect($effect`Butt-Rock Hair`);
         }
@@ -453,7 +454,7 @@ export const ChasmQuest: Quest = {
             have($item`messy butt joint`) ||
             have($item`thick caulk`))) ||
         have($item`snow boards`),
-      completed: () => step("questL09Topping") >= 1,
+      completed: () => getStep("questL09Topping") >= 1,
       do: () => {
         visitUrl(`place.php?whichplace=orc_chasm&action=bridge${get("chasmBridgeProgress")}`); // use existing materials
       },
@@ -463,7 +464,7 @@ export const ChasmQuest: Quest = {
     {
       name: "Start Peaks",
       after: ["Bridge", "Bat Wings Bridge Parts", "Bridge Parts"],
-      completed: () => step("questL09Topping") >= 2,
+      completed: () => getStep("questL09Topping") >= 2,
       do: () => {
         visitUrl("place.php?whichplace=highlands&action=highlands_dude");
         council();
@@ -477,7 +478,7 @@ export const ChasmQuest: Quest = {
     {
       name: "Finish",
       after: ["ABoo Peak", "Oil Peak", "Twin Init", "Twin Init Search"],
-      completed: () => step("questL09Topping") === 999,
+      completed: () => getStep("questL09Topping") === 999,
       do: () => {
         visitUrl("place.php?whichplace=highlands&action=highlands_dude");
         council();

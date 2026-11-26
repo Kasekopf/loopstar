@@ -9,11 +9,12 @@ import {
   $monsters,
   $skill,
   get,
+  getStep,
   have,
   Macro,
 } from "libram";
 import { Quest } from "../engine/task";
-import { OutfitSpec, step } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import { Priorities } from "../engine/priority";
 import { CombatStrategy } from "../engine/combat";
 import { atLevel } from "../lib";
@@ -26,7 +27,7 @@ export const KnobQuest: Quest = {
       name: "Start",
       after: [],
       ready: () => atLevel(5),
-      completed: () => step("questL05Goblin") >= 0,
+      completed: () => getStep("questL05Goblin") >= 0,
       do: () => visitUrl("council.php"),
       limit: { tries: 1 },
       priority: () => (councilSafe() ? Priorities.None : Priorities.BadMood),
@@ -35,7 +36,7 @@ export const KnobQuest: Quest = {
     {
       name: "Outskirts",
       after: [],
-      completed: () => have($item`Knob Goblin Encryption Key`) || step("questL05Goblin") > 0,
+      completed: () => have($item`Knob Goblin Encryption Key`) || getStep("questL05Goblin") > 0,
       outfit: () => {
         // Maintain this buff during snojo
         if (have($effect`Super Skill`))
@@ -51,7 +52,7 @@ export const KnobQuest: Quest = {
     {
       name: "Open Knob",
       after: ["Start", "Outskirts"],
-      completed: () => step("questL05Goblin") >= 1,
+      completed: () => getStep("questL05Goblin") >= 1,
       do: () => use($item`Cobb's Knob map`),
       limit: { tries: 1 },
       freeaction: true,
@@ -93,7 +94,7 @@ export const KnobQuest: Quest = {
       completed: () =>
         have($effect`Knob Goblin Perfume`) ||
         have($item`Knob Goblin perfume`) ||
-        step("questL05Goblin") === 999,
+        getStep("questL05Goblin") === 999,
       do: $location`Cobb's Knob Harem`,
       outfit: { equip: $items`Knob Goblin harem veil, Knob Goblin harem pants` },
       limit: { tries: 2 }, // Allow for Cobb's Knob lab key
@@ -102,7 +103,7 @@ export const KnobQuest: Quest = {
       name: "King",
       after: ["Open Knob", "Harem", "Perfume"],
       priority: () => (have($effect`Knob Goblin Perfume`) ? Priorities.Effect : Priorities.None),
-      completed: () => step("questL05Goblin") === 999,
+      completed: () => getStep("questL05Goblin") === 999,
       do: $location`Throne Room`,
       combat: new CombatStrategy().killHard(),
       outfit: {
